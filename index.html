@@ -513,19 +513,79 @@ function renderTrackerSetup(){return`<div class="tracker-setup">
     <div class="team-add-wrap"><input type="number" class="team-add-in" id="trackAdd" placeholder="Team #" onkeydown="if(event.key==='Enter')addTrackedTeam()"/><button class="add-btn" onclick="addTrackedTeam()">+ Add</button></div>
   </div>
 </div>`;}
+// Per-team card view mode: 'all' | 'last10' | 'trimmed'
+const CARD_MODE = {};
+
+function calcPhaseStats(matches, mode) {
+  // matches is the full s.matches array (already filtered)
+  let ms = [...matches];
+  if (ms.length === 0) return { avgS:0, avgA:0, avgTl:0, avgEg:0, n:0 };
+
+  if (mode === 'last10') {
+    ms = ms.slice(-10);
+  } else if (mode === 'trimmed') {
+    // Need at least 5 matches to trim meaningfully (remove 2 high + 2 low = 4)
+    if (ms.length > 4) {
+      const sorted = [...ms].sort((a, b) => a.my - b.my);
+      ms = sorted.slice(2, sorted.length - 2);
+    }
+  }
+
+  const n = ms.length || 1;
+  const avgS  = ms.reduce((s,m) => s + m.my, 0) / n;
+  const auVals = ms.map(m => m.au).filter(v => v !== null);
+  const tlVals = ms.map(m => m.tl).filter(v => v !== null);
+  const egVals = ms.map(m => m.eg).filter(v => v !== null);
+  const avgA  = auVals.length ? auVals.reduce((s,v) => s+v, 0) / auVals.length : 0;
+  const avgTl = tlVals.length ? tlVals.reduce((s,v) => s+v, 0) / tlVals.length : 0;
+  const avgEg = egVals.length ? egVals.reduce((s,v) => s+v, 0) / egVals.length : 0;
+  return { avgS, avgA, avgTl, avgEg, n: ms.length };
+}
+
 function renderTPCard(t){
   const fM=filteredMatches();const s=teamStatsF(t.k,fM);
-  const phases=[{l:'Total Avg',v:s.avgS,mx:120,cl:'bg',col:'var(--green)'},{l:'Auto',v:s.avgA,mx:40,cl:'bb',col:'var(--blue)'},{l:'Teleop',v:s.avgTl,mx:80,cl:'btl',col:'#00c8aa'},{l:'Endgame',v:s.avgEg,mx:30,cl:'bo',col:'var(--orange)'}];
-  const wpt=s.n?Math.round(s.wins/s.n*100):0;const hasData=(s.wins+s.losses+s.ties)>0;
+  const mode = CARD_MODE[t.n] || 'all';
+  const hasData=(s.wins+s.losses+s.ties)>0;
+  const wpt=s.n?Math.round(s.wins/s.n*100):0;
+
+  // Compute stats for current mode
+  const cs = mode === 'all'
+    ? { avgS:s.avgS, avgA:s.avgA, avgTl:s.avgTl, avgEg:s.avgEg, n:s.n }
+    : calcPhaseStats(s.matches, mode);
+
+  const modeLabel = mode === 'last10'
+    ? `Last ${Math.min(10, s.matches.length)} matches`
+    : mode === 'trimmed'
+    ? `Trimmed avg (−2 high/low, n=${cs.n})`
+    : `All matches (n=${s.n})`;
+
+  const phases=[
+    {l:'Total Avg', v:cs.avgS, mx:120, cl:'bg',  col:'var(--green)'},
+    {l:'Auto',      v:cs.avgA, mx:40,  cl:'bb',  col:'var(--blue)'},
+    {l:'Teleop',    v:cs.avgTl,mx:80,  cl:'btl', col:'#00c8aa'},
+    {l:'Endgame',   v:cs.avgEg,mx:30,  cl:'bo',  col:'var(--orange)'}
+  ];
+
+  const btnStyle = (m) => m === mode
+    ? `background:var(--green);color:#030803;border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;letter-spacing:.08em;padding:4px 9px;border-radius:4px;cursor:pointer;text-transform:uppercase`
+    : `background:transparent;color:var(--text3);border:1px solid var(--border2);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 9px;border-radius:4px;cursor:pointer;text-transform:uppercase`;
+
   return`<div class="tpc featured">
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
       <div class="tpn">${t.n}</div>
       <div><div class="tpname">${t.name}</div><div class="tpmeta">District Rank #${t.rank}${ACTIVE_FILTER.size?' · filtered view':''}</div>
       <div class="tprec">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate`:'No match data yet'}</div></div>
     </div>
-    ${hasData?`<div class="tp-ph">${phases.map(p=>`<div class="tp-phr"><div class="tp-phl">${p.l}</div><div class="bt"><div class="bf ${p.cl}" style="width:${Math.min(p.v/p.mx*100,100)}%"></div></div><div class="tp-phv" style="color:${p.col}">${p.v.toFixed(1)}</div></div>`).join('')}</div>
+    ${hasData?`
+    <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap">
+      <button style="${btnStyle('all')}" onclick="CARD_MODE[${t.n}]='all';renderTm()">All</button>
+      <button style="${btnStyle('last10')}" onclick="CARD_MODE[${t.n}]='last10';renderTm()">Last 10</button>
+      <button style="${btnStyle('trimmed')}" onclick="CARD_MODE[${t.n}]='trimmed';renderTm()">Trimmed</button>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);align-self:center;margin-left:3px">${modeLabel}</span>
+    </div>
+    <div class="tp-ph">${phases.map(p=>`<div class="tp-phr"><div class="tp-phl">${p.l}</div><div class="bt"><div class="bf ${p.cl}" style="width:${Math.min(p.v/p.mx*100,100)}%"></div></div><div class="tp-phv" style="color:${p.col}">${p.v.toFixed(1)}</div></div>`).join('')}</div>
     <div class="mhl">Match History${ACTIVE_FILTER.size?' (filtered)':''}</div>
-    <div class="mhd">${s.matches.slice(-20).map(mx=>`<div class="mhdot m${mx.res[0]}" title="${mx.m._esh} QM${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
+    <div class="mhd">${s.matches.map(mx=>`<div class="mhdot m${mx.res[0]}" title="${mx.m._esh} QM${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
     :`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No match data in current filter.</div>`}
     <div style="margin-top:12px"><button class="add-btn" style="background:transparent;border:1px solid var(--loss);color:var(--loss);font-size:11px;padding:4px 10px" onclick="removeTrackedTeam(${t.n})">Remove</button></div>
   </div>`;}
