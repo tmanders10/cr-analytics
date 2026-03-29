@@ -356,9 +356,13 @@ function evQmF(ek,fM){return fM.filter(m=>m._ev===ek&&m.comp_level==='qm');}
 function evAvgScoreF(ek,fM){let s=0,c=0;evQmF(ek,fM).forEach(m=>{if((m.alliances?.red?.score??-1)>=0){s+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){s+=m.alliances.blue.score;c++;}});return c?s/c:0;}
 function evMaxF(ek,fM){let mx=0;evQmF(ek,fM).forEach(m=>{if((m.alliances?.red?.score||0)>mx)mx=m.alliances.red.score;if((m.alliances?.blue?.score||0)>mx)mx=m.alliances.blue.score;});return mx;}
 function evAvgPhF(ek,ph,fM){const v=[];evQmF(ek,fM).forEach(m=>['red','blue'].forEach(a=>{const x=phS(m,a,ph);if(x!==null)v.push(x);}));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;}
-function teamStatsF(tk,fM){
+// matchType: 'qm' | 'po' | 'all'
+function teamStatsF(tk,fM,matchType='qm'){
   const s={wins:0,losses:0,ties:0,tot:0,aT:0,tlT:0,egT:0,matches:[]};
-  fM.filter(m=>m.comp_level==='qm').forEach(m=>{
+  const filtered = matchType==='qm' ? fM.filter(m=>m.comp_level==='qm')
+                 : matchType==='po' ? fM.filter(m=>m.comp_level!=='qm')
+                 : fM;
+  filtered.forEach(m=>{
     const red=m.alliances?.red?.team_keys||[],blue=m.alliances?.blue?.team_keys||[];
     let al=null;if(red.includes(tk))al='red';else if(blue.includes(tk))al='blue';if(!al)return;
     const opp=al==='red'?'blue':'red';
@@ -515,22 +519,20 @@ function renderTrackerSetup(){return`<div class="tracker-setup">
 </div>`;}
 // Per-team card view mode: 'all' | 'last10' | 'trimmed'
 const CARD_MODE = {};
+// Per-team card match type: 'qm' | 'po' | 'all'
+const CARD_TYPE = {};
 
 function calcPhaseStats(matches, mode) {
-  // matches is the full s.matches array (already filtered)
   let ms = [...matches];
   if (ms.length === 0) return { avgS:0, avgA:0, avgTl:0, avgEg:0, n:0 };
-
   if (mode === 'last10') {
     ms = ms.slice(-10);
   } else if (mode === 'trimmed') {
-    // Need at least 5 matches to trim meaningfully (remove 2 high + 2 low = 4)
     if (ms.length > 4) {
       const sorted = [...ms].sort((a, b) => a.my - b.my);
       ms = sorted.slice(2, sorted.length - 2);
     }
   }
-
   const n = ms.length || 1;
   const avgS  = ms.reduce((s,m) => s + m.my, 0) / n;
   const auVals = ms.map(m => m.au).filter(v => v !== null);
@@ -543,12 +545,14 @@ function calcPhaseStats(matches, mode) {
 }
 
 function renderTPCard(t){
-  const fM=filteredMatches();const s=teamStatsF(t.k,fM);
+  const fM=filteredMatches();
   const mode = CARD_MODE[t.n] || 'all';
+  const mtype = CARD_TYPE[t.n] || 'qm';
+  const s=teamStatsF(t.k, fM, mtype);
   const hasData=(s.wins+s.losses+s.ties)>0;
   const wpt=s.n?Math.round(s.wins/s.n*100):0;
 
-  // Compute stats for current mode
+  // Compute stats for current avg mode
   const cs = mode === 'all'
     ? { avgS:s.avgS, avgA:s.avgA, avgTl:s.avgTl, avgEg:s.avgEg, n:s.n }
     : calcPhaseStats(s.matches, mode);
@@ -559,6 +563,8 @@ function renderTPCard(t){
     ? `Trimmed avg (−2 high/low, n=${cs.n})`
     : `All matches (n=${s.n})`;
 
+  const mtypeLabel = mtype==='qm' ? 'Qualifiers' : mtype==='po' ? 'Playoffs' : 'All Matches';
+
   const phases=[
     {l:'Total Avg', v:cs.avgS, mx:120, cl:'bg',  col:'var(--green)'},
     {l:'Auto',      v:cs.avgA, mx:40,  cl:'bb',  col:'var(--blue)'},
@@ -566,28 +572,42 @@ function renderTPCard(t){
     {l:'Endgame',   v:cs.avgEg,mx:30,  cl:'bo',  col:'var(--orange)'}
   ];
 
-  const btnStyle = (m) => m === mode
+  const btnStyle = (active) => active
     ? `background:var(--green);color:#030803;border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;letter-spacing:.08em;padding:4px 9px;border-radius:4px;cursor:pointer;text-transform:uppercase`
     : `background:transparent;color:var(--text3);border:1px solid var(--border2);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 9px;border-radius:4px;cursor:pointer;text-transform:uppercase`;
+
+  // dot background by result AND match type
+  const dotClass = mx => mx.res==='win'?'mw':mx.res==='loss'?'ml':'mt';
+  const dotBorder = mx => mx.m.comp_level!=='qm' ? 'outline:1px solid rgba(255,140,66,.6);outline-offset:-1px;' : '';
 
   return`<div class="tpc featured">
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
       <div class="tpn">${t.n}</div>
       <div><div class="tpname">${t.name}</div><div class="tpmeta">District Rank #${t.rank}${ACTIVE_FILTER.size?' · filtered view':''}</div>
-      <div class="tprec">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate`:'No match data yet'}</div></div>
+      <div class="tprec">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
     </div>
     ${hasData?`
-    <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap">
-      <button style="${btnStyle('all')}" onclick="CARD_MODE[${t.n}]='all';renderTm()">All</button>
-      <button style="${btnStyle('last10')}" onclick="CARD_MODE[${t.n}]='last10';renderTm()">Last 10</button>
-      <button style="${btnStyle('trimmed')}" onclick="CARD_MODE[${t.n}]='trimmed';renderTm()">Trimmed</button>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);align-self:center;margin-left:3px">${modeLabel}</span>
+    <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Type:</span>
+      <button style="${btnStyle(mtype==='qm')}"  onclick="CARD_TYPE[${t.n}]='qm'; CARD_MODE[${t.n}]=CARD_MODE[${t.n}]||'all'; renderTm()">Quals</button>
+      <button style="${btnStyle(mtype==='po')}"  onclick="CARD_TYPE[${t.n}]='po'; CARD_MODE[${t.n}]=CARD_MODE[${t.n}]||'all'; renderTm()">Playoffs</button>
+      <button style="${btnStyle(mtype==='all')}" onclick="CARD_TYPE[${t.n}]='all'; CARD_MODE[${t.n}]=CARD_MODE[${t.n}]||'all'; renderTm()">All</button>
+    </div>
+    <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Avg:</span>
+      <button style="${btnStyle(mode==='all')}"     onclick="CARD_MODE[${t.n}]='all';renderTm()">All</button>
+      <button style="${btnStyle(mode==='last10')}"  onclick="CARD_MODE[${t.n}]='last10';renderTm()">Last 10</button>
+      <button style="${btnStyle(mode==='trimmed')}" onclick="CARD_MODE[${t.n}]='trimmed';renderTm()">Trimmed</button>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-left:2px">${modeLabel}</span>
     </div>
     <div class="tp-ph">${phases.map(p=>`<div class="tp-phr"><div class="tp-phl">${p.l}</div><div class="bt"><div class="bf ${p.cl}" style="width:${Math.min(p.v/p.mx*100,100)}%"></div></div><div class="tp-phv" style="color:${p.col}">${p.v.toFixed(1)}</div></div>`).join('')}</div>
-    <div class="mhl">Match History${ACTIVE_FILTER.size?' (filtered)':''}</div>
-    <div class="mhd">${s.matches.map(mx=>`<div class="mhdot m${mx.res[0]}" title="${mx.m._esh} QM${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
-    :`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No match data in current filter.</div>`}
-    <div style="margin-top:12px"><button class="add-btn" style="background:transparent;border:1px solid var(--loss);color:var(--loss);font-size:11px;padding:4px 10px" onclick="removeTrackedTeam(${t.n})">Remove</button></div>
+    <div class="mhl">Match History — ${mtypeLabel}${ACTIVE_FILTER.size?' (filtered)':''}</div>
+    <div class="mhd">${s.matches.map(mx=>`<div class="mhdot ${dotClass(mx)}" style="${dotBorder(mx)}" title="${mx.m._esh} ${mx.m.comp_level==='qm'?'QM':'PO'}${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
+    :`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No ${mtypeLabel.toLowerCase()} data in current filter.</div>`}
+    <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
+      <button class="add-btn" style="background:transparent;border:1px solid var(--loss);color:var(--loss);font-size:11px;padding:4px 10px" onclick="removeTrackedTeam(${t.n})">Remove</button>
+      ${mtype==='all'?`<span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,230,100,.15);outline:1px solid rgba(255,140,66,.6);vertical-align:middle;margin-right:3px"></span>playoff match</span>`:''}
+    </div>
   </div>`;}
 function renderTmTable(teams){return`<table><thead><tr><th>Rank</th><th>Team</th><th class="r">W</th><th class="r">L</th><th class="r">T</th><th class="r">Avg Score</th><th class="r" style="color:var(--blue)">Avg Auto</th><th class="r">Avg Teleop</th><th class="r" style="color:var(--orange)">Avg Endgame</th><th></th></tr></thead>
   <tbody>${teams.map(t=>`<tr class="${isTr(t.key)?'hl':''}">
