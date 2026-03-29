@@ -1,0 +1,11 @@
+{
+  "name": "cr-analytics",
+  "version": "1.0.0",
+  "description": "Circuit Runners FRC Analytics Dashboard",
+  "scripts": {
+    "refresh": "node scripts/refresh-data.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
