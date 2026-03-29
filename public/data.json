@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-03-29T20:59:31.970Z",
+  "fetchedAt": "2026-03-29T21:17:03.898Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -45831,15 +45831,6 @@
     }
   ],
   "teams": {
-    "frc6905": {
-      "city": "Alpharetta",
-      "country": "USA",
-      "key": "frc6905",
-      "name": "ToDo Robotics/Wendy's at Macfarland Road/Chick-fil-a at Macfarland Road&Alpharetta High School",
-      "nickname": "Raiders of the ARC- TEAR-A-BYTE",
-      "state_prov": "Georgia",
-      "team_number": 6905
-    },
     "frc2974": {
       "city": "Marietta",
       "country": "USA",
@@ -45848,15 +45839,6 @@
       "nickname": "Walton Robotics",
       "state_prov": "Georgia",
       "team_number": 2974
-    },
-    "frc7676": {
-      "city": "Thomson",
-      "country": "USA",
-      "key": "frc7676",
-      "name": "John Deere/Comcast/Argosy Foundation/Wyatt Construction/Online Metals&Thomson High School",
-      "nickname": "THS RoboDogs",
-      "state_prov": "Georgia",
-      "team_number": 7676
     },
     "frc8761": {
       "city": "Adairsville",
@@ -45867,14 +45849,14 @@
       "state_prov": "Georgia",
       "team_number": 8761
     },
-    "frc1002": {
-      "city": "Marietta",
+    "frc6829": {
+      "city": "Suwanee",
       "country": "USA",
-      "key": "frc1002",
-      "name": "NCR/RW Smith Company/Lockheed Martin/StartProto/Parker's 3D Prints/Chick-fil-A/Sevaa Group/Wheeler Magnet Foundation Center For Advanced Studies/NASA/Farm Burger&Joseph Wheeler High School",
-      "nickname": "CircuitRunners Robotics",
+      "key": "frc6829",
+      "name": "Gene Haas Foundation/Boeing/BoldVu by MRI/Nordson/PMMI/Rambus/Online Metals&Family/Community",
+      "nickname": "Ignite Robotics",
       "state_prov": "Georgia",
-      "team_number": 1002
+      "team_number": 6829
     },
     "frc1746": {
       "city": "Cumming",
@@ -45885,14 +45867,23 @@
       "state_prov": "Georgia",
       "team_number": 1746
     },
-    "frc8866": {
+    "frc6905": {
       "city": "Alpharetta",
       "country": "USA",
-      "key": "frc8866",
-      "name": "Comcast&Innovation Academy Stem Magnet High School",
-      "nickname": "Innovation Robotics",
+      "key": "frc6905",
+      "name": "ToDo Robotics/Wendy's at Macfarland Road/Chick-fil-a at Macfarland Road&Alpharetta High School",
+      "nickname": "Raiders of the ARC- TEAR-A-BYTE",
       "state_prov": "Georgia",
-      "team_number": 8866
+      "team_number": 6905
+    },
+    "frc1002": {
+      "city": "Marietta",
+      "country": "USA",
+      "key": "frc1002",
+      "name": "NCR/RW Smith Company/Lockheed Martin/StartProto/Parker's 3D Prints/Chick-fil-A/Sevaa Group/Wheeler Magnet Foundation Center For Advanced Studies/NASA/Farm Burger&Joseph Wheeler High School",
+      "nickname": "CircuitRunners Robotics",
+      "state_prov": "Georgia",
+      "team_number": 1002
     },
     "frc5900": {
       "city": "Dalton",
@@ -45903,15 +45894,6 @@
       "state_prov": "Georgia",
       "team_number": 5900
     },
-    "frc6829": {
-      "city": "Suwanee",
-      "country": "USA",
-      "key": "frc6829",
-      "name": "Gene Haas Foundation/Boeing/BoldVu by MRI/Nordson/PMMI/Rambus/Online Metals&Family/Community",
-      "nickname": "Ignite Robotics",
-      "state_prov": "Georgia",
-      "team_number": 6829
-    },
     "frc6919": {
       "city": "Albany",
       "country": "USA",
@@ -45921,6 +45903,42 @@
       "state_prov": "Georgia",
       "team_number": 6919
     },
+    "frc7676": {
+      "city": "Thomson",
+      "country": "USA",
+      "key": "frc7676",
+      "name": "John Deere/Comcast/Argosy Foundation/Wyatt Construction/Online Metals&Thomson High School",
+      "nickname": "THS RoboDogs",
+      "state_prov": "Georgia",
+      "team_number": 7676
+    },
+    "frc8866": {
+      "city": "Alpharetta",
+      "country": "USA",
+      "key": "frc8866",
+      "name": "Comcast&Innovation Academy Stem Magnet High School",
+      "nickname": "Innovation Robotics",
+      "state_prov": "Georgia",
+      "team_number": 8866
+    },
+    "frc6772": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc6772",
+      "name": "Marist School",
+      "nickname": "The Marist Manta Rays",
+      "state_prov": "Georgia",
+      "team_number": 6772
+    },
+    "frc8736": {
+      "city": "Marietta",
+      "country": "USA",
+      "key": "frc8736",
+      "name": "Family/Community",
+      "nickname": "The Mechanisms",
+      "state_prov": "Georgia",
+      "team_number": 8736
+    },
     "frc10376": {
       "city": "Augusta",
       "country": "USA",
@@ -45929,15 +45947,6 @@
       "nickname": "Plutonium Panthers",
       "state_prov": "Georgia",
       "team_number": 10376
-    },
-    "frc3329": {
-      "city": "Kingsland",
-      "country": "USA",
-      "key": "frc3329",
-      "name": "Lockheed Martin/DoD STEM - SWFLANT/Camden County Rotary International&Camden Co High School",
-      "nickname": "Wildbots",
-      "state_prov": "Georgia",
-      "team_number": 3329
     },
     "frc5608": {
       "city": "Marietta",
@@ -45957,32 +45966,14 @@
       "state_prov": "Georgia",
       "team_number": 11214
     },
-    "frc10338": {
-      "city": "Cairo",
+    "frc3329": {
+      "city": "Kingsland",
       "country": "USA",
-      "key": "frc10338",
-      "name": "Cairo High School",
-      "nickname": "10338 - CircuitMakers",
+      "key": "frc3329",
+      "name": "Lockheed Martin/DoD STEM - SWFLANT/Camden County Rotary International&Camden Co High School",
+      "nickname": "Wildbots",
       "state_prov": "Georgia",
-      "team_number": 10338
-    },
-    "frc8736": {
-      "city": "Marietta",
-      "country": "USA",
-      "key": "frc8736",
-      "name": "Family/Community",
-      "nickname": "The Mechanisms",
-      "state_prov": "Georgia",
-      "team_number": 8736
-    },
-    "frc5219": {
-      "city": "Douglasville",
-      "country": "USA",
-      "key": "frc5219",
-      "name": "Comcast/Johnson Research & Development/Allison-Smith Company/System Technology Works, LLC/D & A Transportation/GAFIRST/Future Seekers, Inc.&Future Seekers, Inc.",
-      "nickname": "TeknoSquad 5219",
-      "state_prov": "Georgia",
-      "team_number": 5219
+      "team_number": 3329
     },
     "frc6887": {
       "city": "Dalton",
@@ -45993,6 +45984,24 @@
       "state_prov": "Georgia",
       "team_number": 6887
     },
+    "frc10338": {
+      "city": "Cairo",
+      "country": "USA",
+      "key": "frc10338",
+      "name": "Cairo High School",
+      "nickname": "10338 - CircuitMakers",
+      "state_prov": "Georgia",
+      "team_number": 10338
+    },
+    "frc5219": {
+      "city": "Douglasville",
+      "country": "USA",
+      "key": "frc5219",
+      "name": "Comcast/Johnson Research & Development/Allison-Smith Company/System Technology Works, LLC/D & A Transportation/GAFIRST/Future Seekers, Inc.&Future Seekers, Inc.",
+      "nickname": "TeknoSquad 5219",
+      "state_prov": "Georgia",
+      "team_number": 5219
+    },
     "frc4026": {
       "city": "Decatur",
       "country": "USA",
@@ -46001,24 +46010,6 @@
       "nickname": "Decatur Robotics",
       "state_prov": "Georgia",
       "team_number": 4026
-    },
-    "frc6772": {
-      "city": "Atlanta",
-      "country": "USA",
-      "key": "frc6772",
-      "name": "Marist School",
-      "nickname": "The Marist Manta Rays",
-      "state_prov": "Georgia",
-      "team_number": 6772
-    },
-    "frc832": {
-      "city": "Roswell",
-      "country": "USA",
-      "key": "frc832",
-      "name": "Honeywell/Siemans/92 Threads/Roswell High School Robotics Booster Club, Inc/Fulton County Schools/JCTM/Novelis&Roswell High School&Family/Community",
-      "nickname": "OSCAR",
-      "state_prov": "Georgia",
-      "team_number": 832
     },
     "frc6712": {
       "city": "Chatsworth",
@@ -46029,6 +46020,15 @@
       "state_prov": "Georgia",
       "team_number": 6712
     },
+    "frc9477": {
+      "city": "Suwanee",
+      "country": "USA",
+      "key": "frc9477",
+      "name": "Forsyth County Schools/Automation Direct/NASA/Argosy Foundation/Gene Haas Foundation/The Goli Family/Lambert Robotics Booster Association&Lambert High School",
+      "nickname": "Lambda (λ)",
+      "state_prov": "Georgia",
+      "team_number": 9477
+    },
     "frc6023": {
       "city": "Atlanta",
       "country": "USA",
@@ -46037,33 +46037,6 @@
       "nickname": "DISCBOTS",
       "state_prov": "Georgia",
       "team_number": 6023
-    },
-    "frc7451": {
-      "city": "Cumming",
-      "country": "USA",
-      "key": "frc7451",
-      "name": "AutomationDirect.com/Forsyth County Schools/Rosati's/DoDSTEM/Gene Haas Foundation/Novelis/T&D Machine Handling Inc./HC Robotics&Alliance Academy for Innovation",
-      "nickname": "AvengerRobotics",
-      "state_prov": "Georgia",
-      "team_number": 7451
-    },
-    "frc7514": {
-      "city": "Atlanta",
-      "country": "USA",
-      "key": "frc7514",
-      "name": "Johnson STEM Activity Center/Novelis/STEM Atlanta Women/Southern Black Girls & Women Consortium/Vela Education Fund/Comcast/Urban Outsourcing/Dispersive Technologies&Family/Community",
-      "nickname": "EVE Robotics",
-      "state_prov": "Georgia",
-      "team_number": 7514
-    },
-    "frc4112": {
-      "city": "Cumming ",
-      "country": "USA",
-      "key": "frc4112",
-      "name": "AutomationDirect/Schneider Electric/NASA/Gene Haas Foundation/PTC/Fabricators Inc./Bhatia Family/Hershey Foundation&South Forsyth High School",
-      "nickname": "EagleBots",
-      "state_prov": "Georgia",
-      "team_number": 4112
     },
     "frc9770": {
       "city": "Atlanta",
@@ -46074,23 +46047,23 @@
       "state_prov": "Georgia",
       "team_number": 9770
     },
-    "frc9477": {
-      "city": "Suwanee",
+    "frc832": {
+      "city": "Roswell",
       "country": "USA",
-      "key": "frc9477",
-      "name": "Forsyth County Schools/Automation Direct/NASA/Argosy Foundation/Gene Haas Foundation/The Goli Family/Lambert Robotics Booster Association&Lambert High School",
-      "nickname": "Lambda (λ)",
+      "key": "frc832",
+      "name": "Honeywell/Siemans/92 Threads/Roswell High School Robotics Booster Club, Inc/Fulton County Schools/JCTM/Novelis&Roswell High School&Family/Community",
+      "nickname": "OSCAR",
       "state_prov": "Georgia",
-      "team_number": 9477
+      "team_number": 832
     },
-    "frc4730": {
-      "city": "Albany",
+    "frc7451": {
+      "city": "Cumming",
       "country": "USA",
-      "key": "frc4730",
-      "name": "SWE/Department of Education/Dougherty County Schools System/Women in Technology/Albany Technical College&Monroe Comprehensive HS",
-      "nickname": "Terminators",
+      "key": "frc7451",
+      "name": "AutomationDirect.com/Forsyth County Schools/Rosati's/DoDSTEM/Gene Haas Foundation/Novelis/T&D Machine Handling Inc./HC Robotics&Alliance Academy for Innovation",
+      "nickname": "AvengerRobotics",
       "state_prov": "Georgia",
-      "team_number": 4730
+      "team_number": 7451
     },
     "frc8849": {
       "city": "Alpharetta",
@@ -46101,86 +46074,32 @@
       "state_prov": "Georgia",
       "team_number": 8849
     },
-    "frc9561": {
-      "city": "Dawsonville",
+    "frc4730": {
+      "city": "Albany",
       "country": "USA",
-      "key": "frc9561",
-      "name": "CBG Consulting/Haas Foundation/Spicer Group/Universal Servo/Atlanta Gear Works/Huey Family/MESH Automation/BTD Manufacturing&Dawson Co High School",
-      "nickname": "Dawson Dinos",
+      "key": "frc4730",
+      "name": "SWE/Department of Education/Dougherty County Schools System/Women in Technology/Albany Technical College&Monroe Comprehensive HS",
+      "nickname": "Terminators",
       "state_prov": "Georgia",
-      "team_number": 9561
+      "team_number": 4730
     },
-    "frc5651": {
+    "frc4112": {
+      "city": "Cumming ",
+      "country": "USA",
+      "key": "frc4112",
+      "name": "AutomationDirect/Schneider Electric/NASA/Gene Haas Foundation/PTC/Fabricators Inc./Bhatia Family/Hershey Foundation&South Forsyth High School",
+      "nickname": "EagleBots",
+      "state_prov": "Georgia",
+      "team_number": 4112
+    },
+    "frc7514": {
       "city": "Atlanta",
       "country": "USA",
-      "key": "frc5651",
-      "name": "GE Energy (Power and Water) & Maynard Jackson High School",
-      "nickname": "Maynard Jackson RoboJags",
+      "key": "frc7514",
+      "name": "Johnson STEM Activity Center/Novelis/STEM Atlanta Women/Southern Black Girls & Women Consortium/Vela Education Fund/Comcast/Urban Outsourcing/Dispersive Technologies&Family/Community",
+      "nickname": "EVE Robotics",
       "state_prov": "Georgia",
-      "team_number": 5651
-    },
-    "frc1833": {
-      "city": "Cumming",
-      "country": "USA",
-      "key": "frc1833",
-      "name": "Advanced Instrument Technologies/Microsoft/Automation Direct/Jones Utilities Construction, Inc./NASA/Ignite Wireless/Banks Bookkeeping/Lead Coverage/Price Industries/BoldVu by MRI/Intuitive Foundation Grant/ADP/Cobb Community Foundation/Allstate/Conway & Owen/Gene Haas Foundation Grant/Agilox/PTC Grant/Thrifty Bot/Atlanta Creative Graphics Inc/Hopewell Designs, Inc/TAG Inc/Intuitive Foundation Grant/Trent Callan/Formlabs/David and Mary Kelton/Avery Banks/Kelton Holdings/Empower Sports Chiropractic&Family/Community",
-      "nickname": "Team BEAN",
-      "state_prov": "Georgia",
-      "team_number": 1833
-    },
-    "frc8100": {
-      "city": "Grayson",
-      "country": "USA",
-      "key": "frc8100",
-      "name": "Gwinnett County Public Schools/Alternative Home Care/The Law Office Of B. Kanu&Grayson High School",
-      "nickname": "Grayson Robotics",
-      "state_prov": "Georgia",
-      "team_number": 8100
-    },
-    "frc1771": {
-      "city": "Suwanee",
-      "country": "USA",
-      "key": "frc1771",
-      "name": "Family/Community & North Gwinnett High School",
-      "nickname": "North Gwinnett Robotics",
-      "state_prov": "Georgia",
-      "team_number": 1771
-    },
-    "frc11174": {
-      "city": "Alpharetta",
-      "country": "USA",
-      "key": "frc11174",
-      "name": "Denmark High School",
-      "nickname": "Danes Robotics",
-      "state_prov": "Georgia",
-      "team_number": 11174
-    },
-    "frc8815": {
-      "city": "Statesboro",
-      "country": "USA",
-      "key": "frc8815",
-      "name": "Bulloch Academy & Trinity Christian School & Statesboro STEAM Ccat Academy & Southeast Bulloch High School & Statesboro High School",
-      "nickname": "Barnstormers",
-      "state_prov": "Georgia",
-      "team_number": 8815
-    },
-    "frc1648": {
-      "city": "Atlanta",
-      "country": "USA",
-      "key": "frc1648",
-      "name": "Novelis/T.R. & N. Reddy Foundation/Factory Automation Systems/In Memory of Shanna Jackson/ClearPoint Strategy/Northside Hospital/Professor Bug/Gene Haas Foundation/Kinematek/Midtown High School PTSO/State Representative Stacey Evans/Dematic/REV Robotics/Equipment Controls/Earthly Dynamics/Liz Dawg/IEEE/Pelle Development Group/King of Pops&Midtown High School",
-      "nickname": "G3 Robotics",
-      "state_prov": "Georgia",
-      "team_number": 1648
-    },
-    "frc4189": {
-      "city": "Jefferson",
-      "country": "USA",
-      "key": "frc4189",
-      "name": "OMNIMETRIX LLC & Jefferson High School",
-      "nickname": "Chargers",
-      "state_prov": "Georgia",
-      "team_number": 4189
+      "team_number": 7514
     },
     "frc9480": {
       "city": "Flowery Branch",
@@ -46191,23 +46110,86 @@
       "state_prov": "Georgia",
       "team_number": 9480
     },
-    "frc4468": {
-      "city": "Atlanta",
+    "frc9561": {
+      "city": "Dawsonville",
       "country": "USA",
-      "key": "frc4468",
-      "name": "GE Volunteers/H.B. Fuller/Johnson Research & Development/Gate 6 Solutions/SOLIDWORKS/Novelis/Invention Studio at Georgia Tech/Automation Direct/Fastenal&Fernbank Science Center",
-      "nickname": "Fernbank LINKS",
+      "key": "frc9561",
+      "name": "CBG Consulting/Haas Foundation/Spicer Group/Universal Servo/Atlanta Gear Works/Huey Family/MESH Automation/BTD Manufacturing&Dawson Co High School",
+      "nickname": "Dawson Dinos",
       "state_prov": "Georgia",
-      "team_number": 4468
+      "team_number": 9561
     },
-    "frc6340": {
+    "frc1771": {
+      "city": "Suwanee",
+      "country": "USA",
+      "key": "frc1771",
+      "name": "Family/Community & North Gwinnett High School",
+      "nickname": "North Gwinnett Robotics",
+      "state_prov": "Georgia",
+      "team_number": 1771
+    },
+    "frc4189": {
+      "city": "Jefferson",
+      "country": "USA",
+      "key": "frc4189",
+      "name": "OMNIMETRIX LLC & Jefferson High School",
+      "nickname": "Chargers",
+      "state_prov": "Georgia",
+      "team_number": 4189
+    },
+    "frc5651": {
       "city": "Atlanta",
       "country": "USA",
-      "key": "frc6340",
-      "name": "Gas South&Marist School",
-      "nickname": "The Marist Manatees",
+      "key": "frc5651",
+      "name": "GE Energy (Power and Water) & Maynard Jackson High School",
+      "nickname": "Maynard Jackson RoboJags",
       "state_prov": "Georgia",
-      "team_number": 6340
+      "team_number": 5651
+    },
+    "frc1648": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc1648",
+      "name": "Novelis/T.R. & N. Reddy Foundation/Factory Automation Systems/In Memory of Shanna Jackson/ClearPoint Strategy/Northside Hospital/Professor Bug/Gene Haas Foundation/Kinematek/Midtown High School PTSO/State Representative Stacey Evans/Dematic/REV Robotics/Equipment Controls/Earthly Dynamics/Liz Dawg/IEEE/Pelle Development Group/King of Pops&Midtown High School",
+      "nickname": "G3 Robotics",
+      "state_prov": "Georgia",
+      "team_number": 1648
+    },
+    "frc8815": {
+      "city": "Statesboro",
+      "country": "USA",
+      "key": "frc8815",
+      "name": "Bulloch Academy & Trinity Christian School & Statesboro STEAM Ccat Academy & Southeast Bulloch High School & Statesboro High School",
+      "nickname": "Barnstormers",
+      "state_prov": "Georgia",
+      "team_number": 8815
+    },
+    "frc11174": {
+      "city": "Alpharetta",
+      "country": "USA",
+      "key": "frc11174",
+      "name": "Denmark High School",
+      "nickname": "Danes Robotics",
+      "state_prov": "Georgia",
+      "team_number": 11174
+    },
+    "frc8100": {
+      "city": "Grayson",
+      "country": "USA",
+      "key": "frc8100",
+      "name": "Gwinnett County Public Schools/Alternative Home Care/The Law Office Of B. Kanu&Grayson High School",
+      "nickname": "Grayson Robotics",
+      "state_prov": "Georgia",
+      "team_number": 8100
+    },
+    "frc1833": {
+      "city": "Cumming",
+      "country": "USA",
+      "key": "frc1833",
+      "name": "Advanced Instrument Technologies/Microsoft/Automation Direct/Jones Utilities Construction, Inc./NASA/Ignite Wireless/Banks Bookkeeping/Lead Coverage/Price Industries/BoldVu by MRI/Intuitive Foundation Grant/ADP/Cobb Community Foundation/Allstate/Conway & Owen/Gene Haas Foundation Grant/Agilox/PTC Grant/Thrifty Bot/Atlanta Creative Graphics Inc/Hopewell Designs, Inc/TAG Inc/Intuitive Foundation Grant/Trent Callan/Formlabs/David and Mary Kelton/Avery Banks/Kelton Holdings/Empower Sports Chiropractic&Family/Community",
+      "nickname": "Team BEAN",
+      "state_prov": "Georgia",
+      "team_number": 1833
     },
     "frc9057": {
       "city": "Atlanta",
@@ -46218,15 +46200,6 @@
       "state_prov": "Georgia",
       "team_number": 9057
     },
-    "frc9522": {
-      "city": "Flowery Branch",
-      "country": "USA",
-      "key": "frc9522",
-      "name": "The Gene Haas Foundation/Argosy Foundation/State Farm/Lanier Periodontics&Flowery Branch High School",
-      "nickname": "Archimedes",
-      "state_prov": "Georgia",
-      "team_number": 9522
-    },
     "frc5074": {
       "city": "Norcross",
       "country": "USA",
@@ -46236,32 +46209,14 @@
       "state_prov": "Georgia",
       "team_number": 5074
     },
-    "frc4509": {
-      "city": "Sugar Hill",
+    "frc1261": {
+      "city": "Suwanee",
       "country": "USA",
-      "key": "frc4509",
-      "name": "State Farm IT/Haas Foundation/Gwinnett County Public Schools&Lanier High School",
-      "nickname": "Mechanical Bulls",
+      "key": "frc1261",
+      "name": "The Motorola Solutions Foundation/Gwinnett County Public Schools/ViaSat/Gene Haas Foundation/Nordson/Mouser Electronics/Intuitive/Price Industries/Howard Brothers Hardware&Peachtree Ridge High School",
+      "nickname": "Robo Lions Team1261",
       "state_prov": "Georgia",
-      "team_number": 4509
-    },
-    "frc1795": {
-      "city": "Atlanta",
-      "country": "USA",
-      "key": "frc1795",
-      "name": "Comcast/Legacy Professional Services/Our Legacy Investment Group/Vandorvel Inc./Purpose Built Schools Atlanta/Johnson STEM Activity Center/State Farm/Argosy Foundation&Carver Early College High Sch&Carver High School",
-      "nickname": "Carver Clutch",
-      "state_prov": "Georgia",
-      "team_number": 1795
-    },
-    "frc3091": {
-      "city": "Atlanta",
-      "country": "USA",
-      "key": "frc3091",
-      "name": "100 Black Men of Atlanta, Inc./Johnson STEM Activity Center/Georgia Power Company/Atlanta Gas Light/EMC/Johnson Research and Development Co., Inc./Lockheed Martin/AT&T/Delta Airlines&100 Black Men of Atlanta",
-      "nickname": "100 Scholars",
-      "state_prov": "Georgia",
-      "team_number": 3091
+      "team_number": 1261
     },
     "frc2415": {
       "city": "Atlanta",
@@ -46272,14 +46227,59 @@
       "state_prov": "Georgia",
       "team_number": 2415
     },
-    "frc1261": {
-      "city": "Suwanee",
+    "frc3091": {
+      "city": "Atlanta",
       "country": "USA",
-      "key": "frc1261",
-      "name": "The Motorola Solutions Foundation/Gwinnett County Public Schools/ViaSat/Gene Haas Foundation/Nordson/Mouser Electronics/Intuitive/Price Industries/Howard Brothers Hardware&Peachtree Ridge High School",
-      "nickname": "Robo Lions Team1261",
+      "key": "frc3091",
+      "name": "100 Black Men of Atlanta, Inc./Johnson STEM Activity Center/Georgia Power Company/Atlanta Gas Light/EMC/Johnson Research and Development Co., Inc./Lockheed Martin/AT&T/Delta Airlines&100 Black Men of Atlanta",
+      "nickname": "100 Scholars",
       "state_prov": "Georgia",
-      "team_number": 1261
+      "team_number": 3091
+    },
+    "frc4509": {
+      "city": "Sugar Hill",
+      "country": "USA",
+      "key": "frc4509",
+      "name": "State Farm IT/Haas Foundation/Gwinnett County Public Schools&Lanier High School",
+      "nickname": "Mechanical Bulls",
+      "state_prov": "Georgia",
+      "team_number": 4509
+    },
+    "frc6340": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc6340",
+      "name": "Gas South&Marist School",
+      "nickname": "The Marist Manatees",
+      "state_prov": "Georgia",
+      "team_number": 6340
+    },
+    "frc1795": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc1795",
+      "name": "Comcast/Legacy Professional Services/Our Legacy Investment Group/Vandorvel Inc./Purpose Built Schools Atlanta/Johnson STEM Activity Center/State Farm/Argosy Foundation&Carver Early College High Sch&Carver High School",
+      "nickname": "Carver Clutch",
+      "state_prov": "Georgia",
+      "team_number": 1795
+    },
+    "frc4468": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc4468",
+      "name": "GE Volunteers/H.B. Fuller/Johnson Research & Development/Gate 6 Solutions/SOLIDWORKS/Novelis/Invention Studio at Georgia Tech/Automation Direct/Fastenal&Fernbank Science Center",
+      "nickname": "Fernbank LINKS",
+      "state_prov": "Georgia",
+      "team_number": 4468
+    },
+    "frc9522": {
+      "city": "Flowery Branch",
+      "country": "USA",
+      "key": "frc9522",
+      "name": "The Gene Haas Foundation/Argosy Foundation/State Farm/Lanier Periodontics&Flowery Branch High School",
+      "nickname": "Archimedes",
+      "state_prov": "Georgia",
+      "team_number": 9522
     },
     "frc7538": {
       "city": "Lawrenceville",
@@ -46299,23 +46299,14 @@
       "state_prov": "Georgia",
       "team_number": 8577
     },
-    "frc6910": {
-      "city": "Hoschton",
+    "frc4701": {
+      "city": "Savannah",
       "country": "USA",
-      "key": "frc6910",
-      "name": "Gwinnett County Public Schools/Gene Haas Foundation/ABEV/Chick-fil-A Hamilton Mill&Mill Creek High School",
-      "nickname": "Mill Creek Steel Talons",
+      "key": "frc4701",
+      "name": "Honeywell/Aloha Pools/Panda Restaurant/Savannah Navy League/Georgia Tech Savannah CEISMC/New Fu Kitchen & Supply Inc.&Herchel V Jenkins High School",
+      "nickname": "Warriors (Team W.I.R.E.)",
       "state_prov": "Georgia",
-      "team_number": 6910
-    },
-    "frc8865": {
-      "city": "Dacula",
-      "country": "USA",
-      "key": "frc8865",
-      "name": "Gwinnett County Public Schools/Gene Haas Foundation/Arconic Foundation/Publix Supermarkets&Dacula High School",
-      "nickname": "Dacula Droids",
-      "state_prov": "Georgia",
-      "team_number": 8865
+      "team_number": 4701
     },
     "frc1683": {
       "city": "Johns Creek",
@@ -46335,14 +46326,32 @@
       "state_prov": "Georgia",
       "team_number": 3318
     },
-    "frc4701": {
-      "city": "Savannah",
+    "frc5293": {
+      "city": "Duluth",
       "country": "USA",
-      "key": "frc4701",
-      "name": "Honeywell/Aloha Pools/Panda Restaurant/Savannah Navy League/Georgia Tech Savannah CEISMC/New Fu Kitchen & Supply Inc.&Herchel V Jenkins High School",
-      "nickname": "Warriors (Team W.I.R.E.)",
+      "key": "frc5293",
+      "name": "Gwinnett County Public Schools/Price Industries/Gene Haas Foundation/Kimberly-Clark/Novelis/Automation Direct&Duluth High School",
+      "nickname": "Metal Crusaders",
       "state_prov": "Georgia",
-      "team_number": 4701
+      "team_number": 5293
+    },
+    "frc8865": {
+      "city": "Dacula",
+      "country": "USA",
+      "key": "frc8865",
+      "name": "Gwinnett County Public Schools/Gene Haas Foundation/Arconic Foundation/Publix Supermarkets&Dacula High School",
+      "nickname": "Dacula Droids",
+      "state_prov": "Georgia",
+      "team_number": 8865
+    },
+    "frc10482": {
+      "city": "Athens",
+      "country": "USA",
+      "key": "frc10482",
+      "name": "Argosy Foundation&Family/Community",
+      "nickname": "BuzzBots",
+      "state_prov": "Georgia",
+      "team_number": 10482
     },
     "frc6705": {
       "city": "Dunwoody",
@@ -46353,23 +46362,59 @@
       "state_prov": "Georgia",
       "team_number": 6705
     },
-    "frc5293": {
-      "city": "Duluth",
+    "frc6910": {
+      "city": "Hoschton",
       "country": "USA",
-      "key": "frc5293",
-      "name": "Gwinnett County Public Schools/Price Industries/Gene Haas Foundation/Kimberly-Clark/Novelis/Automation Direct&Duluth High School",
-      "nickname": "Metal Crusaders",
+      "key": "frc6910",
+      "name": "Gwinnett County Public Schools/Gene Haas Foundation/ABEV/Chick-fil-A Hamilton Mill&Mill Creek High School",
+      "nickname": "Mill Creek Steel Talons",
       "state_prov": "Georgia",
-      "team_number": 5293
+      "team_number": 6910
     },
-    "frc10482": {
-      "city": "Athens",
+    "frc7104": {
+      "city": "Savannah",
       "country": "USA",
-      "key": "frc10482",
-      "name": "Argosy Foundation&Family/Community",
-      "nickname": "BuzzBots",
+      "key": "frc7104",
+      "name": "DoD STEM/International Paper/Chatles.Anderson Jr and family/The Ganem Family/The McKinney Family/Keith Parker&Benedictine Military School",
+      "nickname": "The Bot Brothers",
       "state_prov": "Georgia",
-      "team_number": 10482
+      "team_number": 7104
+    },
+    "frc9582": {
+      "city": "Conyers",
+      "country": "USA",
+      "key": "frc9582",
+      "name": "Heritage High School",
+      "nickname": "HHS NASA Snaggbotics",
+      "state_prov": "Georgia",
+      "team_number": 9582
+    },
+    "frc3344": {
+      "city": "Fayetteville",
+      "country": "USA",
+      "key": "frc3344",
+      "name": "Caterpillar Inc/QTS/Aberdeen Advisors/Fayette County Schools&Whitewater High School",
+      "nickname": "Space Dragons",
+      "state_prov": "Georgia",
+      "team_number": 3344
+    },
+    "frc5828": {
+      "city": "Albany",
+      "country": "USA",
+      "key": "frc5828",
+      "name": "Gear Up Dougherty County/Argosy / Hack Club/Dougherty County School System/The 4C Academy&Westover Comprehensive HS",
+      "nickname": "Flying Riots",
+      "state_prov": "Georgia",
+      "team_number": 5828
+    },
+    "frc4188": {
+      "city": "Columbus",
+      "country": "USA",
+      "key": "frc4188",
+      "name": "Bradley-Turner Foundation/CHS Alumni Association/Aflac/Ebco Battery/WestCoast Products/Mathnasium/Muscogee County School District/DoD STEM/Flint Energies/JROTC/Pantone 294/Harris County Sheriff's Office&Family/Community",
+      "nickname": "Columbus Space Program",
+      "state_prov": "Georgia",
+      "team_number": 4188
     },
     "frc3815": {
       "city": "Cumming",
@@ -46389,14 +46434,14 @@
       "state_prov": "Georgia",
       "team_number": 1414
     },
-    "frc4188": {
-      "city": "Columbus",
+    "frc3635": {
+      "city": "Perry",
       "country": "USA",
-      "key": "frc4188",
-      "name": "Bradley-Turner Foundation/CHS Alumni Association/Aflac/Ebco Battery/WestCoast Products/Mathnasium/Muscogee County School District/DoD STEM/Flint Energies/JROTC/Pantone 294/Harris County Sheriff's Office&Family/Community",
-      "nickname": "Columbus Space Program",
+      "key": "frc3635",
+      "name": "DoD STEM/Booz Allen Hamilton/BAE/GA Power&Perry High School&Northside High School&Warner Robins High School&Houston Co High School&Veterans High School&Houston Co Career Academy",
+      "nickname": "Flying Legion",
       "state_prov": "Georgia",
-      "team_number": 4188
+      "team_number": 3635
     },
     "frc5109": {
       "city": "Johns Creek",
@@ -46407,15 +46452,6 @@
       "state_prov": "Georgia",
       "team_number": 5109
     },
-    "frc7104": {
-      "city": "Savannah",
-      "country": "USA",
-      "key": "frc7104",
-      "name": "DoD STEM/International Paper/Chatles.Anderson Jr and family/The Ganem Family/The McKinney Family/Keith Parker&Benedictine Military School",
-      "nickname": "The Bot Brothers",
-      "state_prov": "Georgia",
-      "team_number": 7104
-    },
     "frc4240": {
       "city": "Albany",
       "country": "USA",
@@ -46425,50 +46461,14 @@
       "state_prov": "Georgia",
       "team_number": 4240
     },
-    "frc5828": {
-      "city": "Albany",
+    "frc9086": {
+      "city": "Richmond Hill",
       "country": "USA",
-      "key": "frc5828",
-      "name": "Gear Up Dougherty County/Argosy / Hack Club/Dougherty County School System/The 4C Academy&Westover Comprehensive HS",
-      "nickname": "Flying Riots",
+      "key": "frc9086",
+      "name": "Publix/Coastal Electric Cooperative&Richmond Hill High School",
+      "nickname": "Wildcat Robotics",
       "state_prov": "Georgia",
-      "team_number": 5828
-    },
-    "frc3635": {
-      "city": "Perry",
-      "country": "USA",
-      "key": "frc3635",
-      "name": "DoD STEM/Booz Allen Hamilton/BAE/GA Power&Perry High School&Northside High School&Warner Robins High School&Houston Co High School&Veterans High School&Houston Co Career Academy",
-      "nickname": "Flying Legion",
-      "state_prov": "Georgia",
-      "team_number": 3635
-    },
-    "frc3344": {
-      "city": "Fayetteville",
-      "country": "USA",
-      "key": "frc3344",
-      "name": "Caterpillar Inc/QTS/Aberdeen Advisors/Fayette County Schools&Whitewater High School",
-      "nickname": "Space Dragons",
-      "state_prov": "Georgia",
-      "team_number": 3344
-    },
-    "frc9582": {
-      "city": "Conyers",
-      "country": "USA",
-      "key": "frc9582",
-      "name": "Heritage High School",
-      "nickname": "HHS NASA Snaggbotics",
-      "state_prov": "Georgia",
-      "team_number": 9582
-    },
-    "frc6925": {
-      "city": "College Park",
-      "country": "USA",
-      "key": "frc6925",
-      "name": "Woodward Academy",
-      "nickname": "W.A.Robotics",
-      "state_prov": "Georgia",
-      "team_number": 6925
+      "team_number": 9086
     },
     "frc8080": {
       "city": "Canton",
@@ -46479,14 +46479,14 @@
       "state_prov": "Georgia",
       "team_number": 8080
     },
-    "frc9086": {
-      "city": "Richmond Hill",
+    "frc6925": {
+      "city": "College Park",
       "country": "USA",
-      "key": "frc9086",
-      "name": "Publix/Coastal Electric Cooperative&Richmond Hill High School",
-      "nickname": "Wildcat Robotics",
+      "key": "frc6925",
+      "name": "Woodward Academy",
+      "nickname": "W.A.Robotics",
       "state_prov": "Georgia",
-      "team_number": 9086
+      "team_number": 6925
     },
     "frc4459": {
       "city": "Lithia Springs",
@@ -46502,1399 +46502,1399 @@
     "frc832": {
       "2026gadal": {
         "total": 21.79,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.14,
+        "teleop": 11.27,
+        "endgame": 3.38,
         "sd": 7.96,
-        "norm": null
+        "norm": 1449
       },
       "2026gacol": {
         "total": 40.57,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 10.7,
+        "teleop": 22.68,
+        "endgame": 7.19,
         "sd": 13.3,
-        "norm": null
+        "norm": 1508
       },
       "2026gacmp": {
         "total": 40.57,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 10.7,
+        "teleop": 22.68,
+        "endgame": 7.19,
         "sd": 13.3,
-        "norm": null
+        "norm": 1508
       }
     },
     "frc1002": {
       "2026gadal": {
         "total": 93.87,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 14.09,
+        "teleop": 50.78,
+        "endgame": 28.99,
         "sd": 19.57,
-        "norm": null
+        "norm": 1634
       },
       "2026gaalb": {
         "total": 148.98,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 31.09,
+        "teleop": 83.02,
+        "endgame": 34.88,
         "sd": 23.01,
-        "norm": null
+        "norm": 1724
       }
     },
     "frc1746": {
       "2026gadal": {
         "total": 29.64,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.47,
+        "teleop": 13.77,
+        "endgame": 9.41,
         "sd": 6.06,
-        "norm": null
+        "norm": 1477
       },
       "2026gagai": {
         "total": 29.64,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.47,
+        "teleop": 13.77,
+        "endgame": 9.41,
         "sd": 6.06,
-        "norm": null
+        "norm": 1477
       }
     },
     "frc2974": {
       "2026gadal": {
         "total": 92.86,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 17.13,
+        "teleop": 48.57,
+        "endgame": 27.17,
         "sd": 15.96,
-        "norm": null
+        "norm": 1632
       },
       "2026gacol": {
         "total": 149.52,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 26.14,
+        "teleop": 84.25,
+        "endgame": 39.13,
         "sd": 24.34,
-        "norm": null
+        "norm": 1725
       },
       "2026gacmp": {
         "total": 149.52,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 26.14,
+        "teleop": 84.25,
+        "endgame": 39.13,
         "sd": 24.34,
-        "norm": null
+        "norm": 1725
       }
     },
     "frc3329": {
       "2026gadal": {
         "total": 43.98,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.56,
+        "teleop": 29.4,
+        "endgame": 10.01,
         "sd": 9.49,
-        "norm": null
+        "norm": 1517
       },
       "2026gacol": {
         "total": 41.66,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.49,
+        "teleop": 24.03,
+        "endgame": 9.15,
         "sd": 12.16,
-        "norm": null
+        "norm": 1511
       }
     },
     "frc4026": {
       "2026gadal": {
         "total": 50.48,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 11.93,
+        "teleop": 29.89,
+        "endgame": 8.65,
         "sd": 6.86,
-        "norm": null
+        "norm": 1533
       },
       "2026gacol": {
         "total": 83.51,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 21.18,
+        "teleop": 45.99,
+        "endgame": 16.34,
         "sd": 18.53,
-        "norm": null
+        "norm": 1610
       },
       "2026gacmp": {
         "total": 83.51,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 21.18,
+        "teleop": 45.99,
+        "endgame": 16.34,
         "sd": 18.53,
-        "norm": null
+        "norm": 1610
       }
     },
     "frc4112": {
       "2026gadal": {
         "total": 31.66,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.7,
+        "teleop": 15.09,
+        "endgame": 10.87,
         "sd": 8.96,
-        "norm": null
+        "norm": 1483
       },
       "2026gacol": {
         "total": 27.71,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.34,
+        "teleop": 14.1,
+        "endgame": 6.27,
         "sd": 11.17,
-        "norm": null
+        "norm": 1470
       }
     },
     "frc4730": {
       "2026gadal": {
         "total": 28.36,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.96,
+        "teleop": 13.09,
+        "endgame": 10.31,
         "sd": 8.64,
-        "norm": null
+        "norm": 1473
       },
       "2026gaalb": {
         "total": 20.11,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.35,
+        "teleop": 8.96,
+        "endgame": 6.8,
         "sd": 14.84,
-        "norm": null
+        "norm": 1442
       }
     },
     "frc5219": {
       "2026gadal": {
         "total": 9.5,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.7,
+        "teleop": 0,
+        "endgame": 4.8,
         "sd": 7.7,
-        "norm": null
+        "norm": 1391
       },
       "2026gagai": {
         "total": 9.5,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.7,
+        "teleop": 0,
+        "endgame": 4.8,
         "sd": 7.7,
-        "norm": null
+        "norm": 1391
       }
     },
     "frc5608": {
       "2026gadal": {
         "total": 12.21,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.79,
+        "teleop": 2.23,
+        "endgame": 4.18,
         "sd": 6.44,
-        "norm": null
+        "norm": 1406
       },
       "2026gacol": {
         "total": 17.67,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.04,
+        "teleop": 5.32,
+        "endgame": 4.31,
         "sd": 6.73,
-        "norm": null
+        "norm": 1432
       }
     },
     "frc5900": {
       "2026gadal": {
         "total": 26.31,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.09,
+        "teleop": 12.28,
+        "endgame": 7.94,
         "sd": 12.61,
-        "norm": null
+        "norm": 1466
       },
       "2026gacol": {
         "total": 27.69,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.32,
+        "teleop": 14.58,
+        "endgame": 7.8,
         "sd": 9.57,
-        "norm": null
+        "norm": 1470
       }
     },
     "frc6023": {
       "2026gadal": {
         "total": 29.08,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.8,
+        "teleop": 16.56,
+        "endgame": 2.72,
         "sd": 13.98,
-        "norm": null
+        "norm": 1475
       },
       "2026gaalb": {
         "total": 31.72,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.95,
+        "teleop": 20.84,
+        "endgame": 6.94,
         "sd": 13.95,
-        "norm": null
+        "norm": 1483
       }
     },
     "frc6712": {
       "2026gadal": {
         "total": -0.96,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.83,
+        "teleop": -5.09,
+        "endgame": -2.7,
         "sd": 12.11,
-        "norm": null
+        "norm": 1328
       },
       "2026gagai": {
         "total": -0.96,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.83,
+        "teleop": -5.09,
+        "endgame": -2.7,
         "sd": 12.11,
-        "norm": null
+        "norm": 1328
       }
     },
     "frc6772": {
       "2026gadal": {
         "total": 46.85,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 10.84,
+        "teleop": 20.51,
+        "endgame": 15.5,
         "sd": 8.98,
-        "norm": null
+        "norm": 1524
       },
       "2026gacol": {
         "total": 52.28,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 13.13,
+        "teleop": 25.61,
+        "endgame": 13.53,
         "sd": 15.13,
-        "norm": null
+        "norm": 1537
       }
     },
     "frc6829": {
       "2026gadal": {
         "total": 78.52,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.5,
+        "teleop": 45.55,
+        "endgame": 27.46,
         "sd": 17.42,
-        "norm": null
+        "norm": 1599
       },
       "2026gacol": {
         "total": 97.36,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.62,
+        "teleop": 64.67,
+        "endgame": 23.07,
         "sd": 12.47,
-        "norm": null
+        "norm": 1640
       },
       "2026gacmp": {
         "total": 97.36,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.62,
+        "teleop": 64.67,
+        "endgame": 23.07,
         "sd": 12.47,
-        "norm": null
+        "norm": 1640
       }
     },
     "frc6887": {
       "2026gadal": {
         "total": 21.76,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.58,
+        "teleop": 12.66,
+        "endgame": 2.52,
         "sd": 7.64,
-        "norm": null
+        "norm": 1449
       },
       "2026gacol": {
         "total": 26.85,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.84,
+        "teleop": 13.71,
+        "endgame": 5.3,
         "sd": 9.24,
-        "norm": null
+        "norm": 1468
       }
     },
     "frc6905": {
       "2026gadal": {
         "total": 4.81,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.55,
+        "teleop": 0.5,
+        "endgame": -0.24,
         "sd": 12.35,
-        "norm": null
+        "norm": 1364
       },
       "2026gaalb": {
         "total": 29.05,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.02,
+        "teleop": 17.16,
+        "endgame": 3.86,
         "sd": 17.02,
-        "norm": null
+        "norm": 1475
       }
     },
     "frc6919": {
       "2026gadal": {
         "total": 100.9,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 21.93,
+        "teleop": 58.08,
+        "endgame": 20.89,
         "sd": 16.09,
-        "norm": null
+        "norm": 1646
       },
       "2026gaalb": {
         "total": 115.2,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 24.21,
+        "teleop": 57.14,
+        "endgame": 33.85,
         "sd": 23.38,
-        "norm": null
+        "norm": 1667
       }
     },
     "frc7451": {
       "2026gadal": {
         "total": 49.17,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.01,
+        "teleop": 28.39,
+        "endgame": 12.77,
         "sd": 10.52,
-        "norm": null
+        "norm": 1529
       },
       "2026gacol": {
         "total": 38.14,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.27,
+        "teleop": 20.75,
+        "endgame": 9.13,
         "sd": 11.75,
-        "norm": null
+        "norm": 1501
       },
       "2026gacmp": {
         "total": 38.14,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.27,
+        "teleop": 20.75,
+        "endgame": 9.13,
         "sd": 11.75,
-        "norm": null
+        "norm": 1501
       }
     },
     "frc7514": {
       "2026gadal": {
         "total": 10.09,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.6,
+        "teleop": 4.48,
+        "endgame": 2.01,
         "sd": 13.4,
-        "norm": null
+        "norm": 1394
       },
       "2026gaalb": {
         "total": 36.21,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.58,
+        "teleop": 19.83,
+        "endgame": 8.8,
         "sd": 15.28,
-        "norm": null
+        "norm": 1496
       }
     },
     "frc7676": {
       "2026gadal": {
         "total": 4.83,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.71,
+        "teleop": 0.56,
+        "endgame": 0.56,
         "sd": 6.98,
-        "norm": null
+        "norm": 1364
       },
       "2026gacol": {
         "total": 9.21,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.85,
+        "teleop": 3.29,
+        "endgame": 0.07,
         "sd": 11.49,
-        "norm": null
+        "norm": 1390
       }
     },
     "frc8736": {
       "2026gadal": {
         "total": 33.54,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.13,
+        "teleop": 16.87,
+        "endgame": 9.54,
         "sd": 8.07,
-        "norm": null
+        "norm": 1488
       },
       "2026gaalb": {
         "total": 25.92,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.32,
+        "teleop": 8.92,
+        "endgame": 7.68,
         "sd": 11.53,
-        "norm": null
+        "norm": 1464
       }
     },
     "frc8761": {
       "2026gadal": {
         "total": 9.96,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.14,
+        "teleop": 2.05,
+        "endgame": 4.77,
         "sd": 7.77,
-        "norm": null
+        "norm": 1394
       },
       "2026gagai": {
         "total": 9.96,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.14,
+        "teleop": 2.05,
+        "endgame": 4.77,
         "sd": 7.77,
-        "norm": null
+        "norm": 1394
       }
     },
     "frc8849": {
       "2026gadal": {
         "total": 13.15,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 1.52,
+        "teleop": 5.03,
+        "endgame": 6.61,
         "sd": 11.84,
-        "norm": null
+        "norm": 1410
       },
       "2026gagai": {
         "total": 13.15,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 1.52,
+        "teleop": 5.03,
+        "endgame": 6.61,
         "sd": 11.84,
-        "norm": null
+        "norm": 1410
       }
     },
     "frc8866": {
       "2026gadal": {
         "total": 32.5,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.22,
+        "teleop": 17.36,
+        "endgame": 5.92,
         "sd": 7.46,
-        "norm": null
+        "norm": 1485
       },
       "2026gaalb": {
         "total": 55.12,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 14.14,
+        "teleop": 28.98,
+        "endgame": 12.01,
         "sd": 15.31,
-        "norm": null
+        "norm": 1544
       }
     },
     "frc9477": {
       "2026gadal": {
         "total": 55.33,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.7,
+        "teleop": 38.29,
+        "endgame": 9.33,
         "sd": 12.64,
-        "norm": null
+        "norm": 1544
       },
       "2026gaalb": {
         "total": 43.18,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.5,
+        "teleop": 23.56,
+        "endgame": 10.12,
         "sd": 13.2,
-        "norm": null
+        "norm": 1514
       }
     },
     "frc9480": {
       "2026gadal": {
         "total": 19.2,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.02,
+        "teleop": 11.75,
+        "endgame": 1.43,
         "sd": 5.14,
-        "norm": null
+        "norm": 1439
       },
       "2026gacol": {
         "total": 35.53,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.31,
+        "teleop": 19.7,
+        "endgame": 9.53,
         "sd": 9.93,
-        "norm": null
+        "norm": 1494
       }
     },
     "frc9770": {
       "2026gadal": {
         "total": 7.91,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.37,
+        "teleop": 1.36,
+        "endgame": 3.19,
         "sd": 11.42,
-        "norm": null
+        "norm": 1382
       },
       "2026gacol": {
         "total": 14.42,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.51,
+        "teleop": 3.07,
+        "endgame": 5.84,
         "sd": 7.87,
-        "norm": null
+        "norm": 1417
       }
     },
     "frc10338": {
       "2026gadal": {
         "total": 25.96,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.89,
+        "teleop": 12.35,
+        "endgame": 9.72,
         "sd": 6.36,
-        "norm": null
+        "norm": 1465
       },
       "2026gaalb": {
         "total": 13.17,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.33,
+        "teleop": 3.88,
+        "endgame": 6.95,
         "sd": 16.07,
-        "norm": null
+        "norm": 1411
       }
     },
     "frc10376": {
       "2026gadal": {
         "total": 22.4,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.64,
+        "teleop": 14.24,
+        "endgame": 2.52,
         "sd": 7.11,
-        "norm": null
+        "norm": 1452
       },
       "2026gacol": {
         "total": 31.52,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.97,
+        "teleop": 17.58,
+        "endgame": 4.97,
         "sd": 10.32,
-        "norm": null
+        "norm": 1482
       }
     },
     "frc11214": {
       "2026gadal": {
         "total": 17.34,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.48,
+        "teleop": 6.92,
+        "endgame": 0.93,
         "sd": 8.12,
-        "norm": null
+        "norm": 1430
       },
       "2026gaalb": {
         "total": 12.62,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.5,
+        "teleop": 3.74,
+        "endgame": 4.39,
         "sd": 14.98,
-        "norm": null
+        "norm": 1408
       }
     },
     "frc1261": {
       "2026gagwi": {
         "total": 65.93,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 22.13,
+        "teleop": 30.83,
+        "endgame": 12.96,
         "sd": 20.09,
-        "norm": null
+        "norm": 1569
       },
       "2026gaalb": {
         "total": 81.73,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 23.05,
+        "teleop": 39,
+        "endgame": 19.67,
         "sd": 11.44,
-        "norm": null
+        "norm": 1606
       }
     },
     "frc1648": {
       "2026gagwi": {
         "total": 73.37,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 18.07,
+        "teleop": 40.31,
+        "endgame": 14.99,
         "sd": 21.09,
-        "norm": null
+        "norm": 1587
       },
       "2026gaalb": {
         "total": 67.74,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 17.79,
+        "teleop": 40.17,
+        "endgame": 9.78,
         "sd": 15.5,
-        "norm": null
+        "norm": 1574
       }
     },
     "frc1683": {
       "2026gagwi": {
         "total": 67.18,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 18.1,
+        "teleop": 37.98,
+        "endgame": 11.09,
         "sd": 23.28,
-        "norm": null
+        "norm": 1572
       },
       "2026gagai": {
         "total": 67.18,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 18.1,
+        "teleop": 37.98,
+        "endgame": 11.09,
         "sd": 23.28,
-        "norm": null
+        "norm": 1572
       }
     },
     "frc1771": {
       "2026gagwi": {
         "total": 179.77,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 46.73,
+        "teleop": 99.25,
+        "endgame": 33.79,
         "sd": 32.38,
-        "norm": null
+        "norm": 1780
       },
       "2026gaalb": {
         "total": 152.56,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 38.06,
+        "teleop": 81.99,
+        "endgame": 32.51,
         "sd": 25.69,
-        "norm": null
+        "norm": 1731
       }
     },
     "frc1795": {
       "2026gagwi": {
         "total": 6.78,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.71,
+        "teleop": 3.48,
+        "endgame": -0.4,
         "sd": 9.22,
-        "norm": null
+        "norm": 1376
       },
       "2026gagai": {
         "total": 6.78,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.71,
+        "teleop": 3.48,
+        "endgame": -0.4,
         "sd": 9.22,
-        "norm": null
+        "norm": 1376
       }
     },
     "frc1833": {
       "2026gagwi": {
         "total": 196.85,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 37.33,
+        "teleop": 119.05,
+        "endgame": 40.47,
         "sd": 25.95,
-        "norm": null
+        "norm": 1812
       },
       "2026gagai": {
         "total": 196.85,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 37.33,
+        "teleop": 119.05,
+        "endgame": 40.47,
         "sd": 25.95,
-        "norm": null
+        "norm": 1812
       }
     },
     "frc2415": {
       "2026gagwi": {
         "total": 11.81,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.95,
+        "teleop": 3.05,
+        "endgame": 2.8,
         "sd": 13.18,
-        "norm": null
+        "norm": 1404
       },
       "2026gagai": {
         "total": 11.81,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.95,
+        "teleop": 3.05,
+        "endgame": 2.8,
         "sd": 13.18,
-        "norm": null
+        "norm": 1404
       }
     },
     "frc3091": {
       "2026gagwi": {
         "total": 13.51,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.65,
+        "teleop": 5.45,
+        "endgame": 4.41,
         "sd": 8.84,
-        "norm": null
+        "norm": 1412
       },
       "2026gaalb": {
         "total": 24.21,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.75,
+        "teleop": 9.95,
+        "endgame": 6.51,
         "sd": 12.51,
-        "norm": null
+        "norm": 1458
       }
     },
     "frc3318": {
       "2026gagwi": {
         "total": 25.56,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.5,
+        "teleop": 10.06,
+        "endgame": 6.01,
         "sd": 19.28,
-        "norm": null
+        "norm": 1463
       },
       "2026gagai": {
         "total": 25.56,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.5,
+        "teleop": 10.06,
+        "endgame": 6.01,
         "sd": 19.28,
-        "norm": null
+        "norm": 1463
       }
     },
     "frc4189": {
       "2026gagwi": {
         "total": 51.48,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 13.09,
+        "teleop": 23.24,
+        "endgame": 15.16,
         "sd": 25.93,
-        "norm": null
+        "norm": 1535
       },
       "2026gagai": {
         "total": 51.48,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 13.09,
+        "teleop": 23.24,
+        "endgame": 15.16,
         "sd": 25.93,
-        "norm": null
+        "norm": 1535
       }
     },
     "frc4468": {
       "2026gagwi": {
         "total": 32.26,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.09,
+        "teleop": 14.59,
+        "endgame": 8.58,
         "sd": 23.31,
-        "norm": null
+        "norm": 1485
       },
       "2026gacol": {
         "total": 21.51,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.15,
+        "teleop": 9.61,
+        "endgame": 4.76,
         "sd": 14.88,
-        "norm": null
+        "norm": 1448
       }
     },
     "frc4509": {
       "2026gagwi": {
         "total": 26.34,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.99,
+        "teleop": 15.12,
+        "endgame": 3.23,
         "sd": 8.72,
-        "norm": null
+        "norm": 1466
       },
       "2026gagai": {
         "total": 26.34,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.99,
+        "teleop": 15.12,
+        "endgame": 3.23,
         "sd": 8.72,
-        "norm": null
+        "norm": 1466
       },
       "2026gacmp": {
         "total": 26.34,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.99,
+        "teleop": 15.12,
+        "endgame": 3.23,
         "sd": 8.72,
-        "norm": null
+        "norm": 1466
       }
     },
     "frc4701": {
       "2026gagwi": {
         "total": 11.3,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.15,
+        "teleop": 3.67,
+        "endgame": 4.49,
         "sd": 10.45,
-        "norm": null
+        "norm": 1401
       },
       "2026gaalb": {
         "total": 9.28,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.76,
+        "teleop": 1.22,
+        "endgame": 3.3,
         "sd": 16.39,
-        "norm": null
+        "norm": 1390
       }
     },
     "frc5074": {
       "2026gagwi": {
         "total": 16.16,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.21,
+        "teleop": 7.22,
+        "endgame": 5.73,
         "sd": 16.41,
-        "norm": null
+        "norm": 1425
       },
       "2026gaalb": {
         "total": 26.94,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.83,
+        "teleop": 8.39,
+        "endgame": 12.72,
         "sd": 12.53,
-        "norm": null
+        "norm": 1468
       }
     },
     "frc5109": {
       "2026gagwi": {
         "total": 32.07,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.87,
+        "teleop": 17.29,
+        "endgame": 8.91,
         "sd": 8.24,
-        "norm": null
+        "norm": 1484
       },
       "2026gaalb": {
         "total": 58.16,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 13.13,
+        "teleop": 33.4,
+        "endgame": 11.64,
         "sd": 17.77,
-        "norm": null
+        "norm": 1551
       }
     },
     "frc5293": {
       "2026gagwi": {
         "total": 24.84,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.02,
+        "teleop": 17.58,
+        "endgame": 0.24,
         "sd": 9.02,
-        "norm": null
+        "norm": 1461
       },
       "2026gagai": {
         "total": 24.84,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.02,
+        "teleop": 17.58,
+        "endgame": 0.24,
         "sd": 9.02,
-        "norm": null
+        "norm": 1461
       }
     },
     "frc5651": {
       "2026gagwi": {
         "total": 12.4,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.26,
+        "teleop": 6.66,
+        "endgame": -0.53,
         "sd": 7.07,
-        "norm": null
+        "norm": 1407
       },
       "2026gagai": {
         "total": 12.4,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.26,
+        "teleop": 6.66,
+        "endgame": -0.53,
         "sd": 7.07,
-        "norm": null
+        "norm": 1407
       }
     },
     "frc6340": {
       "2026gagwi": {
         "total": 40.93,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.33,
+        "teleop": 21.16,
+        "endgame": 11.45,
         "sd": 9.64,
-        "norm": null
+        "norm": 1509
       },
       "2026gagai": {
         "total": 40.93,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.33,
+        "teleop": 21.16,
+        "endgame": 11.45,
         "sd": 9.64,
-        "norm": null
+        "norm": 1509
       }
     },
     "frc6705": {
       "2026gagwi": {
         "total": 38.11,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.67,
+        "teleop": 20.99,
+        "endgame": 12.45,
         "sd": 14.19,
-        "norm": null
+        "norm": 1501
       },
       "2026gagai": {
         "total": 38.11,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.67,
+        "teleop": 20.99,
+        "endgame": 12.45,
         "sd": 14.19,
-        "norm": null
+        "norm": 1501
       }
     },
     "frc6910": {
       "2026gagwi": {
         "total": 7.6,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.19,
+        "teleop": -0.46,
+        "endgame": 5.88,
         "sd": 10.68,
-        "norm": null
+        "norm": 1380
       },
       "2026gaalb": {
         "total": 22.68,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.16,
+        "teleop": 10.61,
+        "endgame": 7.9,
         "sd": 12.8,
-        "norm": null
+        "norm": 1453
       }
     },
     "frc7538": {
       "2026gagwi": {
         "total": 4.93,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.6,
+        "teleop": 2.41,
+        "endgame": -2.08,
         "sd": 9.88,
-        "norm": null
+        "norm": 1365
       },
       "2026gaalb": {
         "total": 4.17,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.6,
+        "teleop": -2.06,
+        "endgame": -0.36,
         "sd": 10.3,
-        "norm": null
+        "norm": 1360
       }
     },
     "frc8100": {
       "2026gagwi": {
         "total": 11.52,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.44,
+        "teleop": 3.46,
+        "endgame": 2.63,
         "sd": 10.33,
-        "norm": null
+        "norm": 1402
       },
       "2026gaalb": {
         "total": 18.18,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.34,
+        "teleop": 6.1,
+        "endgame": 5.73,
         "sd": 12.3,
-        "norm": null
+        "norm": 1434
       }
     },
     "frc8577": {
       "2026gagwi": {
         "total": 18.74,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.98,
+        "teleop": 10.79,
+        "endgame": 4.97,
         "sd": 14.88,
-        "norm": null
+        "norm": 1437
       },
       "2026gagai": {
         "total": 18.74,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.98,
+        "teleop": 10.79,
+        "endgame": 4.97,
         "sd": 14.88,
-        "norm": null
+        "norm": 1437
       }
     },
     "frc8815": {
       "2026gagwi": {
         "total": 0.12,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 1.3,
+        "teleop": -1.02,
+        "endgame": -0.16,
         "sd": 9.99,
-        "norm": null
+        "norm": 1335
       },
       "2026gagai": {
         "total": 0.12,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 1.3,
+        "teleop": -1.02,
+        "endgame": -0.16,
         "sd": 9.99,
-        "norm": null
+        "norm": 1335
       }
     },
     "frc8865": {
       "2026gagwi": {
         "total": 13.76,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.5,
+        "teleop": 5.61,
+        "endgame": 4.64,
         "sd": 11.57,
-        "norm": null
+        "norm": 1414
       },
       "2026gagai": {
         "total": 13.76,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.5,
+        "teleop": 5.61,
+        "endgame": 4.64,
         "sd": 11.57,
-        "norm": null
+        "norm": 1414
       }
     },
     "frc9057": {
       "2026gagwi": {
         "total": 24.92,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.66,
+        "teleop": 10.53,
+        "endgame": 6.72,
         "sd": 20.47,
-        "norm": null
+        "norm": 1461
       },
       "2026gacol": {
         "total": 7.56,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.12,
+        "teleop": -1.6,
+        "endgame": 3.05,
         "sd": 9.56,
-        "norm": null
+        "norm": 1380
       }
     },
     "frc9522": {
       "2026gagwi": {
         "total": 12.16,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.76,
+        "teleop": 5.04,
+        "endgame": 2.36,
         "sd": 10.01,
-        "norm": null
+        "norm": 1405
       },
       "2026gagai": {
         "total": 12.16,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.76,
+        "teleop": 5.04,
+        "endgame": 2.36,
         "sd": 10.01,
-        "norm": null
+        "norm": 1405
       }
     },
     "frc9561": {
       "2026gagwi": {
         "total": 6.9,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.97,
+        "teleop": 2.64,
+        "endgame": 1.3,
         "sd": 12.29,
-        "norm": null
+        "norm": 1376
       },
       "2026gagai": {
         "total": 6.9,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.97,
+        "teleop": 2.64,
+        "endgame": 1.3,
         "sd": 12.29,
-        "norm": null
+        "norm": 1376
       }
     },
     "frc10482": {
       "2026gagwi": {
         "total": 24.59,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.34,
+        "teleop": 13.36,
+        "endgame": 5.89,
         "sd": 9.24,
-        "norm": null
+        "norm": 1460
       },
       "2026gagai": {
         "total": 24.59,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.34,
+        "teleop": 13.36,
+        "endgame": 5.89,
         "sd": 9.24,
-        "norm": null
+        "norm": 1460
       }
     },
     "frc11174": {
       "2026gagwi": {
         "total": 14.62,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.76,
+        "teleop": 7.62,
+        "endgame": 4.24,
         "sd": 17.86,
-        "norm": null
+        "norm": 1418
       },
       "2026gagai": {
         "total": 14.62,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.76,
+        "teleop": 7.62,
+        "endgame": 4.24,
         "sd": 17.86,
-        "norm": null
+        "norm": 1418
       }
     },
     "frc1414": {
       "2026gacol": {
         "total": 41.74,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.61,
+        "teleop": 20.01,
+        "endgame": 13.11,
         "sd": 18.19,
-        "norm": null
+        "norm": 1511
       },
       "2026gagai": {
         "total": 41.74,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.61,
+        "teleop": 20.01,
+        "endgame": 13.11,
         "sd": 18.19,
-        "norm": null
+        "norm": 1511
       }
     },
     "frc3344": {
       "2026gacol": {
         "total": 16.53,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.52,
+        "teleop": 5.67,
+        "endgame": 5.33,
         "sd": 10.17,
-        "norm": null
+        "norm": 1427
       },
       "2026gagai": {
         "total": 16.53,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.52,
+        "teleop": 5.67,
+        "endgame": 5.33,
         "sd": 10.17,
-        "norm": null
+        "norm": 1427
       }
     },
     "frc3635": {
       "2026gacol": {
         "total": 41.31,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.93,
+        "teleop": 23.6,
+        "endgame": 10.78,
         "sd": 7.47,
-        "norm": null
+        "norm": 1510
       },
       "2026gaalb": {
         "total": 55.7,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.73,
+        "teleop": 28.86,
+        "endgame": 19.11,
         "sd": 15.03,
-        "norm": null
+        "norm": 1545
       }
     },
     "frc3815": {
       "2026gacol": {
         "total": 20.95,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.59,
+        "teleop": 9.84,
+        "endgame": 2.52,
         "sd": 13.92,
-        "norm": null
+        "norm": 1446
       },
       "2026gagai": {
         "total": 20.95,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.59,
+        "teleop": 9.84,
+        "endgame": 2.52,
         "sd": 13.92,
-        "norm": null
+        "norm": 1446
       }
     },
     "frc4188": {
       "2026gacol": {
         "total": 87.57,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 19.72,
+        "teleop": 48.99,
+        "endgame": 18.86,
         "sd": 24.26,
-        "norm": null
+        "norm": 1620
       },
       "2026gaalb": {
         "total": 110.9,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 22.81,
+        "teleop": 64.93,
+        "endgame": 23.16,
         "sd": 19.92,
-        "norm": null
+        "norm": 1661
       },
       "2026gacmp": {
         "total": 110.9,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 22.81,
+        "teleop": 64.93,
+        "endgame": 23.16,
         "sd": 19.92,
-        "norm": null
+        "norm": 1661
       }
     },
     "frc4240": {
       "2026gacol": {
         "total": 16.25,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.8,
+        "teleop": 4.47,
+        "endgame": 1.98,
         "sd": 10.58,
-        "norm": null
+        "norm": 1426
       },
       "2026gaalb": {
         "total": 23.64,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 11.75,
+        "teleop": 10.09,
+        "endgame": 1.8,
         "sd": 16.62,
-        "norm": null
+        "norm": 1456
       }
     },
     "frc4459": {
       "2026gacol": {
         "total": 19.35,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.18,
+        "teleop": 11.03,
+        "endgame": 2.14,
         "sd": 17.72,
-        "norm": null
+        "norm": 1439
       },
       "2026gagai": {
         "total": 19.35,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 6.18,
+        "teleop": 11.03,
+        "endgame": 2.14,
         "sd": 17.72,
-        "norm": null
+        "norm": 1439
       }
     },
     "frc5828": {
       "2026gacol": {
         "total": 17.87,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.23,
+        "teleop": 9.51,
+        "endgame": 1.13,
         "sd": 9.06,
-        "norm": null
+        "norm": 1433
       },
       "2026gaalb": {
         "total": 19.95,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.92,
+        "teleop": 6.37,
+        "endgame": 4.66,
         "sd": 14.27,
-        "norm": null
+        "norm": 1442
       }
     },
     "frc6925": {
       "2026gacol": {
         "total": 53.77,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 12.01,
+        "teleop": 30.9,
+        "endgame": 10.86,
         "sd": 9.25,
-        "norm": null
+        "norm": 1541
       },
       "2026gaalb": {
         "total": 54.92,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 8.48,
+        "teleop": 31.82,
+        "endgame": 14.61,
         "sd": 14.85,
-        "norm": null
+        "norm": 1543
       }
     },
     "frc7104": {
       "2026gacol": {
         "total": 18.85,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 5.41,
+        "teleop": 8.74,
+        "endgame": 4.69,
         "sd": 8.74,
-        "norm": null
+        "norm": 1437
       },
       "2026gaalb": {
         "total": 24.48,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 9.02,
+        "teleop": 6.9,
+        "endgame": 8.56,
         "sd": 13.34,
-        "norm": null
+        "norm": 1459
       }
     },
     "frc9086": {
       "2026gacol": {
         "total": 14.53,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.31,
+        "teleop": 6.16,
+        "endgame": 6.06,
         "sd": 4.49,
-        "norm": null
+        "norm": 1417
       },
       "2026gagai": {
         "total": 14.53,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 2.31,
+        "teleop": 6.16,
+        "endgame": 6.06,
         "sd": 4.49,
-        "norm": null
+        "norm": 1417
       }
     },
     "frc9582": {
       "2026gacol": {
         "total": 12.38,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.87,
+        "teleop": 4.32,
+        "endgame": 4.19,
         "sd": 19.02,
-        "norm": null
+        "norm": 1407
       },
       "2026gagai": {
         "total": 12.38,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 3.87,
+        "teleop": 4.32,
+        "endgame": 4.19,
         "sd": 19.02,
-        "norm": null
+        "norm": 1407
       }
     },
     "frc8080": {
       "2026gaalb": {
         "total": 28.5,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.6,
+        "teleop": 10.24,
+        "endgame": 10.65,
         "sd": 18.42,
-        "norm": null
+        "norm": 1473
       },
       "2026gagai": {
         "total": 28.5,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 7.6,
+        "teleop": 10.24,
+        "endgame": 10.65,
         "sd": 18.42,
-        "norm": null
+        "norm": 1473
       }
     },
     "frc8872": {
       "2026gagai": {
         "total": 18.39,
-        "auto": null,
-        "teleop": null,
-        "endgame": null,
+        "auto": 4.01,
+        "teleop": 9.82,
+        "endgame": 4.56,
         "sd": 5.59,
-        "norm": null
+        "norm": 1435
       }
     }
   }
