@@ -265,7 +265,6 @@ async function init(){
       DB.matches[ev.key]=matches;
       DB.rankings[ev.key]=evData.rankings||{};
       DB.alliances[ev.key]=evData.alliances||[];
-      DB.oprs[ev.key]=evData.oprs||{};
       matches.forEach(m=>{
         m._ev=ev.key;m._esh=ev.short;m._en=ev.name;m._ec=ev.cls;m._wk=ev.week;
       });
