@@ -373,6 +373,14 @@ function teamStatsF(tk,fM,matchType='qm'){
     if(au!==null)s.aT+=au;if(tl!==null)s.tlT+=tl;if(eg!==null)s.egT+=eg;
     s.matches.push({m,al,res,my,op,au,tl,eg});
   });
+  // Sort: event week → quals before playoffs → set number → match number
+  const poOrder={qm:0,qf:1,sf:2,f:3};
+  s.matches.sort((a,b)=>{
+    const wk=(a.m._wk||0)-(b.m._wk||0); if(wk!==0)return wk;
+    const cl=(poOrder[a.m.comp_level]||0)-(poOrder[b.m.comp_level]||0); if(cl!==0)return cl;
+    const sn=(a.m.set_number||0)-(b.m.set_number||0); if(sn!==0)return sn;
+    return a.m.match_number-b.m.match_number;
+  });
   const n=s.wins+s.losses+s.ties||1;s.avgS=s.tot/n;s.avgA=s.aT/n;s.avgTl=s.tlT/n;s.avgEg=s.egT/n;s.n=n;return s;
 }
 function filterLabel(){if(ACTIVE_FILTER.size===0)return'';const names=EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)).map(ev=>ev.name);return` · Filtered: ${names.join(', ')}`;}
