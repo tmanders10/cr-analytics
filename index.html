@@ -208,7 +208,7 @@ const EVENTS=[
 
 let TRACKED=new Set();
 let ACTIVE_FILTER=new Set();
-let DB={matches:{},rankings:{},alliances:{},teams:{}};
+let DB={matches:{},rankings:{},alliances:{},teams:{},epa:{}};
 let allM=[],distRank=[];
 const loadedEvents=new Set();
 
@@ -265,6 +265,7 @@ async function init(){
       DB.matches[ev.key]=matches;
       DB.rankings[ev.key]=evData.rankings||{};
       DB.alliances[ev.key]=evData.alliances||[];
+      DB.oprs[ev.key]=evData.oprs||{};
       matches.forEach(m=>{
         m._ev=ev.key;m._esh=ev.short;m._en=ev.name;m._ec=ev.cls;m._wk=ev.week;
       });
@@ -280,6 +281,7 @@ async function init(){
 
     distRank=data.districtRankings||[];
     DB.teams=data.teams||{};
+    DB.epa=data.epa||{};
 
     // Try to load 1002 avatar if stored in data
     const avatar1002=data.teams?.frc1002;
@@ -385,6 +387,26 @@ function teamStatsF(tk,fM,matchType='qm'){
 }
 function filterLabel(){if(ACTIVE_FILTER.size===0)return'';const names=EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)).map(ev=>ev.name);return` · Filtered: ${names.join(', ')}`;}
 
+// ── EPA HELPERS ──
+function getTeamEPAs(tk){
+  return EVENTS.filter(ev=>loadedEvents.has(ev.key))
+    .map(ev=>{const e=DB.epa[tk]?.[ev.key];return e?{ev,...e}:null;}).filter(Boolean);
+}
+function getLatestEPA(tk){const all=getTeamEPAs(tk);return all.length?all[all.length-1]:null;}
+function getEventEPA(tk,evKey){return DB.epa[tk]?.[evKey]||null;}
+const fmtEPA=v=>(v==null)?'–':v.toFixed(1);
+function epaColor(v,allVals){
+  if(v==null||!allVals.length)return'var(--text2)';
+  const sorted=[...allVals].filter(x=>x!=null).sort((a,b)=>a-b);
+  const pct=sorted.filter(x=>x<=v).length/sorted.length;
+  if(pct>=0.75)return'var(--green)';
+  if(pct>=0.40)return'#f0c040';
+  return'var(--text3)';
+}
+// All latest EPA total values across all tracked teams (for percentile coloring)
+function allLatestEPAs(){
+  return Object.keys(DB.epa).map(tk=>{const e=getLatestEPA(tk);return e?.total??null;}).filter(v=>v!=null);
+}
 // ════════ OVERVIEW ════════
 function renderOv(){
   const fM=filteredMatches();
@@ -560,7 +582,6 @@ function renderTPCard(t){
   const hasData=(s.wins+s.losses+s.ties)>0;
   const wpt=s.n?Math.round(s.wins/s.n*100):0;
 
-  // Compute stats for current avg mode
   const cs = mode === 'all'
     ? { avgS:s.avgS, avgA:s.avgA, avgTl:s.avgTl, avgEg:s.avgEg, n:s.n }
     : calcPhaseStats(s.matches, mode);
@@ -584,9 +605,43 @@ function renderTPCard(t){
     ? `background:var(--green);color:#030803;border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;letter-spacing:.08em;padding:4px 9px;border-radius:4px;cursor:pointer;text-transform:uppercase`
     : `background:transparent;color:var(--text3);border:1px solid var(--border2);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 9px;border-radius:4px;cursor:pointer;text-transform:uppercase`;
 
-  // dot background by result AND match type
   const dotClass = mx => mx.res==='win'?'mw':mx.res==='loss'?'ml':'mt';
   const dotBorder = mx => mx.m.comp_level!=='qm' ? 'outline:1px solid rgba(255,140,66,.6);outline-offset:-1px;' : '';
+
+  // EPA section
+  const allEPAs = getTeamEPAs(t.k);
+  const latestEPA = allEPAs.length ? allEPAs[allEPAs.length-1] : null;
+  const allTotals = allLatestEPAs();
+  const epaSection = latestEPA ? `
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3)">
+          EPA — Expected Points Added
+        </div>
+        <div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">
+          via <a href="https://www.statbotics.io/team/${t.n}/2026" target="_blank" style="color:var(--green);text-decoration:none">Statbotics</a>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">
+        ${[
+          {l:'Total',   v:latestEPA.total,   col:epaColor(latestEPA.total, allTotals)},
+          {l:'Auto',    v:latestEPA.auto,     col:'var(--blue)'},
+          {l:'Teleop',  v:latestEPA.teleop,   col:'#00c8aa'},
+          {l:'Endgame', v:latestEPA.endgame,  col:'var(--orange)'},
+        ].map(p=>`<div style="background:var(--bg3);border-radius:5px;padding:7px 8px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:3px">${p.l}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:16px;color:${p.col}">${fmtEPA(p.v)}</div>
+        </div>`).join('')}
+      </div>
+      ${latestEPA.sd!=null?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:6px">Consistency (SD): ${latestEPA.sd.toFixed(1)} pts — ${latestEPA.sd<8?'consistent':'variable'}</div>`:''}
+      ${allEPAs.length>1?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:4px">EPA progression:</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${allEPAs.map(e=>`
+        <div style="background:var(--bg3);border-radius:4px;padding:3px 7px;text-align:center">
+          <div style="font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em">${e.ev.short}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:${epaColor(e.total,allTotals)}">${fmtEPA(e.total)}</div>
+        </div>`).join('')}
+      </div>`:''} 
+    </div>` : `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">EPA not yet available — run data refresh after event completes.</div>`;
 
   return`<div class="tpc featured">
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
@@ -612,21 +667,41 @@ function renderTPCard(t){
     <div class="mhl">Match History — ${mtypeLabel}${ACTIVE_FILTER.size?' (filtered)':''}</div>
     <div class="mhd">${s.matches.map(mx=>`<div class="mhdot ${dotClass(mx)}" style="${dotBorder(mx)}" title="${mx.m._esh} ${mx.m.comp_level==='qm'?'QM':'PO'}${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
     :`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No ${mtypeLabel.toLowerCase()} data in current filter.</div>`}
+    ${epaSection}
     <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
       <button class="add-btn" style="background:transparent;border:1px solid var(--loss);color:var(--loss);font-size:11px;padding:4px 10px" onclick="removeTrackedTeam(${t.n})">Remove</button>
       ${mtype==='all'?`<span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,230,100,.15);outline:1px solid rgba(255,140,66,.6);vertical-align:middle;margin-right:3px"></span>playoff match</span>`:''}
     </div>
   </div>`;}
-function renderTmTable(teams){return`<table><thead><tr><th>Rank</th><th>Team</th><th class="r">W</th><th class="r">L</th><th class="r">T</th><th class="r">Avg Score</th><th class="r" style="color:var(--blue)">Avg Auto</th><th class="r">Avg Teleop</th><th class="r" style="color:var(--orange)">Avg Endgame</th><th></th></tr></thead>
-  <tbody>${teams.map(t=>`<tr class="${isTr(t.key)?'hl':''}">
+
+function renderTmTable(teams){
+  const allTotals=allLatestEPAs();
+  return`<table><thead><tr>
+    <th>Rank</th><th>Team</th><th class="r">W</th><th class="r">L</th><th class="r">T</th>
+    <th class="r">Avg Score</th><th class="r" style="color:var(--blue)">Avg Auto</th>
+    <th class="r">Avg Teleop</th><th class="r" style="color:var(--orange)">Avg Endgame</th>
+    <th class="r" style="color:var(--green)">EPA</th>
+    <th class="r" style="color:var(--blue)">EPA Auto</th>
+    <th class="r" style="color:var(--orange)">EPA EG</th>
+    <th></th>
+  </tr></thead>
+  <tbody>${teams.map(t=>{
+    const epa=getLatestEPA(t.key);
+    return`<tr class="${isTr(t.key)?'hl':''}">
     <td><span class="rk ${t.rank<=3?'top':''}">${t.rank===999?'–':t.rank}</span></td>
     <td><a class="tlink" href="https://www.thebluealliance.com/team/${t.num}" target="_blank">${t.name}</a><span class="tnsm">${t.num}</span>${isTr(t.key)?'<span style="margin-left:5px;font-size:11px;color:var(--green)">★</span>':''}</td>
-    <td class="r" style="color:var(--win)">${t.stats.wins}</td><td class="r" style="color:var(--loss)">${t.stats.losses}</td><td class="r dim">${t.stats.ties}</td>
+    <td class="r" style="color:var(--win)">${t.stats.wins}</td>
+    <td class="r" style="color:var(--loss)">${t.stats.losses}</td>
+    <td class="r dim">${t.stats.ties}</td>
     <td class="r" style="color:var(--green);font-weight:600">${t.stats.avgS.toFixed(1)}</td>
-    <td class="r" style="color:var(--blue)">${t.stats.avgA.toFixed(1)}</td><td class="r">${t.stats.avgTl.toFixed(1)}</td>
+    <td class="r" style="color:var(--blue)">${t.stats.avgA.toFixed(1)}</td>
+    <td class="r">${t.stats.avgTl.toFixed(1)}</td>
     <td class="r" style="color:var(--orange)">${t.stats.avgEg.toFixed(1)}</td>
+    <td class="r" style="color:${epaColor(epa?.total??null,allTotals)};font-weight:600">${fmtEPA(epa?.total??null)}</td>
+    <td class="r" style="color:var(--blue)">${fmtEPA(epa?.auto??null)}</td>
+    <td class="r" style="color:var(--orange)">${fmtEPA(epa?.endgame??null)}</td>
     <td><button onclick="TRACKED.add(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${isTr(t.key)?'disabled':''}>+ Track</button></td>
-  </tr>`).join('')}</tbody></table>`;}
+  </tr>`;}).join('')}</tbody></table>`;}
 function renderTm(){
   const fM=filteredMatches();
   const allTkeys=new Set();
@@ -647,7 +722,11 @@ ${renderTrackerSetup()}
     <input type="text" class="si" id="tmSearch" placeholder="Search team…" oninput="filterTm()"/>
     <select class="ss" id="tmSort" onchange="filterTm()">
       <option value="rank">Sort: District Rank</option><option value="avg">Sort: Avg Score</option>
-      <option value="wins">Sort: Wins</option><option value="auto">Sort: Avg Auto</option><option value="endgame">Sort: Avg Endgame</option>
+      <option value="wins">Sort: Wins</option><option value="auto">Sort: Avg Auto</option>
+      <option value="endgame">Sort: Avg Endgame</option>
+      <option value="epa">Sort: EPA (Total)</option>
+      <option value="epaauto">Sort: EPA Auto</option>
+      <option value="epaeg">Sort: EPA Endgame</option>
     </select>
   </div>
   <div class="tw" id="tmTbl">${renderTmTable(allTm)}</div>
@@ -661,6 +740,9 @@ function filterTm(){
   else if(srt==='wins')t.sort((a,b)=>b.stats.wins-a.stats.wins);
   else if(srt==='auto')t.sort((a,b)=>b.stats.avgA-a.stats.avgA);
   else if(srt==='endgame')t.sort((a,b)=>b.stats.avgEg-a.stats.avgEg);
+  else if(srt==='epa')t.sort((a,b)=>(getLatestEPA(a.key)?.total??-999)-(getLatestEPA(b.key)?.total??-999)).reverse();
+  else if(srt==='epaauto')t.sort((a,b)=>(getLatestEPA(a.key)?.auto??-999)-(getLatestEPA(b.key)?.auto??-999)).reverse();
+  else if(srt==='epaeg')t.sort((a,b)=>(getLatestEPA(a.key)?.endgame??-999)-(getLatestEPA(b.key)?.endgame??-999)).reverse();
   else t.sort((a,b)=>a.rank-b.rank);
   document.getElementById('tmTbl').innerHTML=renderTmTable(t);}
 
