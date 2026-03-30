@@ -756,10 +756,47 @@ function renderAl(){
     const alliances=DB.alliances[ev.key]||[],pm=po(ev.key);
     html+=`<div style="margin-bottom:28px"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);margin-bottom:14px;display:flex;align-items:center;gap:8px"><span class="badge ${ev.cls}">${ev.short}</span> PCH District ${ev.name}</div>`;
     if(alliances.length){html+=`<div class="agrid" style="margin-bottom:14px">`;alliances.slice(0,8).forEach((al,i)=>{const picks=al.picks||[];html+=`<div class="acard"><div class="anum">Alliance ${i+1}</div>${picks.map((pk,pi)=>{const hl=isTr(pk);return`<div class="ateam ${hl?'hl':''}">${pi===0?'<span class="acap">CAP</span>':'<span style="width:28px;display:inline-block"></span>'}${tn(pk)} <span style="font-size:11px;color:${hl?'var(--green)':'var(--text3)'}">${tnum(pk)}${hl?'★':''}</span></div>`;}).join('')}</div>`;});html+=`</div>`;}
-    if(pm.length){const lo={qf:1,sf:2,f:3};const sorted=[...pm].sort((a,b)=>(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||(a.set_number-b.set_number)||(a.match_number-b.match_number));
-      html+=`<div class="card" style="padding:0 18px 0"><div class="tw"><table><thead><tr><th>Round</th><th>Match</th><th>Red Alliance</th><th class="r">Red</th><th class="r">Blue</th><th>Blue Alliance</th><th>Winner</th></tr></thead>
-      <tbody>${sorted.map(m=>{const rt=(m.alliances?.red?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' ');const bt=(m.alliances?.blue?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' ');const rs=m.alliances?.red?.score??'–',bs=m.alliances?.blue?.score??'–',w=m.winning_alliance||'';const lv={qf:'QF',sf:'SF',f:'Final'}[m.comp_level]||m.comp_level.toUpperCase();
-        return`<tr><td style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text2)">${lv}</td><td class="dim">${m.set_number?`${m.set_number}-${m.match_number}`:m.match_number}</td><td>${rt}</td><td class="r" style="color:${w==='red'?'var(--win)':'var(--text)'};font-weight:${w==='red'?700:400}">${rs}</td><td class="r" style="color:${w==='blue'?'var(--win)':'var(--text)'};font-weight:${w==='blue'?700:400}">${bs}</td><td>${bt}</td><td><span class="badge" style="background:${w==='red'?'rgba(255,61,90,.15)':'rgba(56,168,255,.15)'};color:${w==='red'?'var(--loss)':'var(--blue)'}">${w?w.toUpperCase():'–'}</span></td></tr>`;}).join('')}</tbody></table></div></div>`;}
+    if(pm.length){
+      const lo={qf:1,sf:2,f:3};
+      const sorted=[...pm].sort((a,b)=>(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||(a.set_number-b.set_number)||(a.match_number-b.match_number));
+      html+=`<div class="card" style="padding:0 18px 0"><div class="tw"><table style="table-layout:fixed;width:100%">
+        <colgroup>
+          <col style="width:60px"/>
+          <col style="width:48px"/>
+          <col style="width:calc(50% - 120px)"/>
+          <col style="width:54px"/>
+          <col style="width:12px"/>
+          <col style="width:54px"/>
+          <col style="width:calc(50% - 120px)"/>
+          <col style="width:64px"/>
+        </colgroup>
+        <thead><tr>
+          <th>Round</th>
+          <th>Match</th>
+          <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
+          <th class="r" style="color:var(--loss)">Red</th>
+          <th></th>
+          <th style="color:var(--blue)">Blue</th>
+          <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
+          <th class="r">Winner</th>
+        </tr></thead>
+        <tbody>${sorted.map(m=>{
+          const rt=(m.alliances?.red?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' ');
+          const bt=(m.alliances?.blue?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' ');
+          const rs=m.alliances?.red?.score??'–',bs=m.alliances?.blue?.score??'–',w=m.winning_alliance||'';
+          const lv={qf:'QF',sf:'SF',f:'Final'}[m.comp_level]||m.comp_level.toUpperCase();
+          const rWin=w==='red', bWin=w==='blue';
+          return`<tr>
+            <td style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text2)">${lv}</td>
+            <td class="dim">${m.set_number?`${m.set_number}-${m.match_number}`:m.match_number}</td>
+            <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${rWin?'background:rgba(255,61,90,.05)':''}">${rt}</td>
+            <td class="r" style="font-family:'JetBrains Mono',monospace;font-weight:${rWin?700:400};font-size:14px;color:${rWin?'var(--loss)':'var(--text3)'};${rWin?'background:rgba(255,61,90,.05)':''}">${rs}</td>
+            <td style="text-align:center;color:var(--text3);font-size:10px;padding:0 2px">–</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:${bWin?700:400};font-size:14px;color:${bWin?'var(--blue)':'var(--text3)'};${bWin?'background:rgba(56,168,255,.05)':''}">${bs}</td>
+            <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${bWin?'background:rgba(56,168,255,.05)':''}">${bt}</td>
+            <td class="r"><span class="badge" style="background:${rWin?'rgba(255,61,90,.15)':bWin?'rgba(56,168,255,.15)':'var(--bg3)'};color:${rWin?'var(--loss)':bWin?'var(--blue)':'var(--text3)'}">${w?w.toUpperCase():'–'}</span></td>
+          </tr>`;}).join('')}
+        </tbody></table></div></div>`;}
     html+=`</div>`;
   });
   document.getElementById('pg-alliances').innerHTML=html;}
@@ -789,19 +826,44 @@ function filterMx(){
 function renderMxTable(matches){
   const sorted=[...matches].sort((a,b)=>{if(a._wk!==b._wk)return(a._wk||0)-(b._wk||0);const lo={qm:0,qf:1,sf:2,f:3};return(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||a.match_number-b.match_number;});
   if(!sorted.length)return`<div class="empty"><div class="empty-s">No matches match your filters.</div></div>`;
-  return`<table><thead><tr><th>Event</th><th>Type</th><th>Match</th><th>Red Alliance</th><th class="r">Red</th><th class="r">Blue</th><th>Blue Alliance</th><th>Winner</th></tr></thead>
+  return`<table style="table-layout:fixed;width:100%"><colgroup>
+    <col style="width:58px"/>
+    <col style="width:52px"/>
+    <col style="width:52px"/>
+    <col style="width:calc(50% - 120px)"/>
+    <col style="width:54px"/>
+    <col style="width:12px"/>
+    <col style="width:54px"/>
+    <col style="width:calc(50% - 120px)"/>
+    <col style="width:60px"/>
+  </colgroup>
+  <thead><tr>
+    <th>Event</th>
+    <th>Type</th>
+    <th class="r">Match</th>
+    <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
+    <th class="r" style="color:var(--loss)">Red</th>
+    <th></th>
+    <th style="color:var(--blue)">Blue</th>
+    <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
+    <th class="r">Winner</th>
+  </tr></thead>
   <tbody>${sorted.map(m=>{
     const rt=(m.alliances?.red?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' · ');
     const bt=(m.alliances?.blue?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' · ');
     const rs=m.alliances?.red?.score??'–',bs=m.alliances?.blue?.score??'–',w=m.winning_alliance;
     const hasT=[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])].some(isTr);
-    return`<tr class="${hasT?'hl':''}"><td><span class="badge ${m._ec}">${m._esh}</span></td>
+    const rWin=w==='red', bWin=w==='blue';
+    return`<tr class="${hasT?'hl':''}">
+      <td><span class="badge ${m._ec}">${m._esh}</span></td>
       <td><span style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;color:var(--text3)">${m.comp_level==='qm'?'QUAL':'PO'}</span></td>
-      <td class="r dim">${m.match_number}</td><td>${rt}</td>
-      <td class="r" style="color:${w==='red'?'var(--win)':'var(--text)'};font-weight:${w==='red'?700:400}">${rs}</td>
-      <td class="r" style="color:${w==='blue'?'var(--win)':'var(--text)'};font-weight:${w==='blue'?700:400}">${bs}</td>
-      <td>${bt}</td>
-      <td>${w==='red'?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:w==='blue'?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`}</td>
+      <td class="r dim">${m.match_number}</td>
+      <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${rWin?'background:rgba(255,61,90,.04)':''}">${rt}</td>
+      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${rWin?700:400};color:${rWin?'var(--loss)':'var(--text3)'};${rWin?'background:rgba(255,61,90,.04)':''}">${rs}</td>
+      <td style="text-align:center;color:var(--text3);font-size:10px;padding:0 2px">–</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${bWin?700:400};color:${bWin?'var(--blue)':'var(--text3)'};${bWin?'background:rgba(56,168,255,.04)':''}">${bs}</td>
+      <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${bWin?'background:rgba(56,168,255,.04)':''}">${bt}</td>
+      <td class="r">${rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`}</td>
     </tr>`;}).join('')}</tbody></table>`;}
 
 // Start
