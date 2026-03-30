@@ -523,13 +523,13 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
   <div class="card"><div class="ctitle">Phase Breakdown by Event — ${scLabel}</div>
     <table><thead><tr><th>Event</th><th class="r" style="color:var(--blue)">Auto</th><th class="r">Teleop</th><th class="r" style="color:var(--orange)">Endgame</th><th class="r">Total Avg</th><th class="r">Peak</th></tr></thead>
     <tbody>${EVENTS.map(ev=>{
-      if(!loadedEvents.has(ev.key))return\`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">Pending</td></tr>\`;
+      if(!loadedEvents.has(ev.key))return`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">Pending</td></tr>`;
       const inF=ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key);
-      if(!inF)return\`<tr style="opacity:.25"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">Filtered out</td></tr>\`;
+      if(!inF)return`<tr style="opacity:.25"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">Filtered out</td></tr>`;
       const cnt=evMs(ev.key).length;
-      if(cnt===0)return\`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">No ${scLabel.toLowerCase()} data</td></tr>\`;
+      if(cnt===0)return`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">No ${scLabel.toLowerCase()} data</td></tr>`;
       const au=evAvgPhSc(ev.key,'auto'),tl=evAvgPhSc(ev.key,'teleop'),eg=evAvgPhSc(ev.key,'endgame');
-      return\`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r" style="color:var(--green);font-weight:600">${evAvgSc(ev.key).toFixed(1)}</td><td class="r">${evMxSc(ev.key)}</td></tr>\`;
+      return`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r" style="color:var(--green);font-weight:600">${evAvgSc(ev.key).toFixed(1)}</td><td class="r">${evMxSc(ev.key)}</td></tr>`;
     }).join('')}</tbody></table>
   </div>
   <div class="card"><div class="ctitle">Score Distribution — ${scLabel} (${bsz}pt buckets)</div>
