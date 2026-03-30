@@ -483,20 +483,36 @@ function renderRk(){
 }
 
 // ════════ SCORING ════════
+let SC_TYPE = 'qm';
 function renderSc(){
   const fM=filteredMatches();
-  const qms=fM.filter(m=>m.comp_level==='qm');
-  const margins=qms.filter(m=>m.winning_alliance).map(m=>Math.abs((m.alliances?.red?.score||0)-(m.alliances?.blue?.score||0)));
+  const ms = SC_TYPE==='qm' ? fM.filter(m=>m.comp_level==='qm')
+           : SC_TYPE==='po' ? fM.filter(m=>m.comp_level!=='qm')
+           : fM;
+  const scLabel = SC_TYPE==='qm'?'Qualification':SC_TYPE==='po'?'Playoff':'All';
+  const margins=ms.filter(m=>m.winning_alliance).map(m=>Math.abs((m.alliances?.red?.score||0)-(m.alliances?.blue?.score||0)));
   const avgMar=margins.length?margins.reduce((a,b)=>a+b,0)/margins.length:0;
   const close=margins.filter(m=>m<=10).length,blow=margins.filter(m=>m>40).length;
   const bsz=20,bkts=Array(12).fill(0);
-  qms.forEach(m=>['red','blue'].forEach(a=>{const s=m.alliances?.[a]?.score??0;bkts[Math.min(Math.floor(s/bsz),11)]++;}));
+  ms.forEach(m=>['red','blue'].forEach(a=>{const s=m.alliances?.[a]?.score??0;bkts[Math.min(Math.floor(s/bsz),11)]++;}));
   const mx=Math.max(...bkts,1);
   const topRows=[];
-  qms.forEach(m=>['red','blue'].forEach(a=>{const sc=m.alliances?.[a]?.score??0;topRows.push({sc,teams:(m.alliances?.[a]?.team_keys||[]).map(tnum),a,mn:m.match_number,esh:m._esh,ec:m._ec,au:phS(m,a,'auto'),tl:phS(m,a,'teleop'),eg:phS(m,a,'endgame'),won:m.winning_alliance===a});}));
+  ms.forEach(m=>['red','blue'].forEach(a=>{const sc=m.alliances?.[a]?.score??0;topRows.push({sc,teams:(m.alliances?.[a]?.team_keys||[]).map(tnum),a,mn:m.match_number,esh:m._esh,ec:m._ec,au:phS(m,a,'auto'),tl:phS(m,a,'teleop'),eg:phS(m,a,'endgame'),won:m.winning_alliance===a,isQm:m.comp_level==='qm'});}));
   topRows.sort((a,b)=>b.sc-a.sc);
+  const btnStyle=(active)=>active?`background:var(--green);color:#030803;border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;letter-spacing:.08em;padding:5px 14px;border-radius:4px;cursor:pointer;text-transform:uppercase`:`background:transparent;color:var(--text3);border:1px solid var(--border2);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 14px;border-radius:4px;cursor:pointer;text-transform:uppercase`;
+  const evMs=ek=>ms.filter(m=>m._ev===ek);
+  const evAvgSc=ek=>{const v=evMs(ek);let s=0,c=0;v.forEach(m=>{if((m.alliances?.red?.score??-1)>=0){s+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){s+=m.alliances.blue.score;c++;}});return c?s/c:0;};
+  const evMxSc=ek=>{let mx=0;evMs(ek).forEach(m=>{if((m.alliances?.red?.score||0)>mx)mx=m.alliances.red.score;if((m.alliances?.blue?.score||0)>mx)mx=m.alliances.blue.score;});return mx;};
+  const evAvgPhSc=(ek,ph)=>{const v=[];evMs(ek).forEach(m=>['red','blue'].forEach(a=>{const x=phS(m,a,ph);if(x!==null)v.push(x);}));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;};
   document.getElementById('pg-scoring').innerHTML=`
-<div class="sh"><h2>Scoring <span>Analysis</span></h2><span class="sub">Qualification matches${filterLabel()}</span></div>
+<div class="sh"><h2>Scoring <span>Analysis</span></h2><span class="sub">${scLabel} matches${filterLabel()}</span></div>
+<div style="display:flex;gap:6px;align-items:center;margin-bottom:16px">
+  <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Match Type:</span>
+  <button style="${btnStyle(SC_TYPE==='qm')}"  onclick="SC_TYPE='qm';renderSc()">Qualifiers</button>
+  <button style="${btnStyle(SC_TYPE==='po')}"  onclick="SC_TYPE='po';renderSc()">Playoffs</button>
+  <button style="${btnStyle(SC_TYPE==='all')}" onclick="SC_TYPE='all';renderSc()">All</button>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-left:4px">${ms.length} matches</span>
+</div>
 ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3);margin-bottom:16px">🔍 Filtered to: ${EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)).map(e=>`<span class="badge ${e.cls}">${e.short}</span>`).join(' ')}</div>`:''}
 <div class="g3" style="margin-bottom:16px">
   <div class="metric"><div class="mlabel">Avg Margin of Victory</div><div class="mval" style="color:var(--loss)">${avgMar.toFixed(1)}</div><div class="msub">points</div></div>
@@ -504,27 +520,29 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
   <div class="metric"><div class="mlabel">Blowouts (>40 pts)</div><div class="mval" style="color:var(--orange)">${blow}</div><div class="msub">of ${margins.length} decided</div></div>
 </div>
 <div class="g2" style="margin-bottom:16px">
-  <div class="card"><div class="ctitle">Phase Breakdown by Event</div>
-    <table><thead><tr><th>Event</th><th class="r" style="color:var(--blue)">Auto</th><th class="r">Teleop</th><th class="r" style="color:var(--orange)">Endgame</th><th class="r">Total Avg</th></tr></thead>
+  <div class="card"><div class="ctitle">Phase Breakdown by Event — ${scLabel}</div>
+    <table><thead><tr><th>Event</th><th class="r" style="color:var(--blue)">Auto</th><th class="r">Teleop</th><th class="r" style="color:var(--orange)">Endgame</th><th class="r">Total Avg</th><th class="r">Peak</th></tr></thead>
     <tbody>${EVENTS.map(ev=>{
-      if(!loadedEvents.has(ev.key))return`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="4">Pending</td></tr>`;
+      if(!loadedEvents.has(ev.key))return\`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">Pending</td></tr>\`;
       const inF=ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key);
-      if(!inF)return`<tr style="opacity:.25"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="4">Filtered out</td></tr>`;
-      const au=evAvgPhF(ev.key,'auto',fM),tl=evAvgPhF(ev.key,'teleop',fM),eg=evAvgPhF(ev.key,'endgame',fM);
-      return`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r" style="color:var(--green);font-weight:600">${evAvgScoreF(ev.key,fM).toFixed(1)}</td></tr>`;
+      if(!inF)return\`<tr style="opacity:.25"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">Filtered out</td></tr>\`;
+      const cnt=evMs(ev.key).length;
+      if(cnt===0)return\`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">No ${scLabel.toLowerCase()} data</td></tr>\`;
+      const au=evAvgPhSc(ev.key,'auto'),tl=evAvgPhSc(ev.key,'teleop'),eg=evAvgPhSc(ev.key,'endgame');
+      return\`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r" style="color:var(--green);font-weight:600">${evAvgSc(ev.key).toFixed(1)}</td><td class="r">${evMxSc(ev.key)}</td></tr>\`;
     }).join('')}</tbody></table>
   </div>
-  <div class="card"><div class="ctitle">Score Distribution (${bsz}pt buckets)</div>
+  <div class="card"><div class="ctitle">Score Distribution — ${scLabel} (${bsz}pt buckets)</div>
     <div class="hbars">${bkts.map((c,i)=>`<div class="hbc"><div class="hb" style="height:${c/mx*100}%;min-height:${c>0?2:0}px"></div><div class="hbl">${i*bsz}</div></div>`).join('')}</div>
     <div style="font-size:10px;color:var(--text3);text-align:center;font-family:'JetBrains Mono',monospace">Alliance score</div>
   </div>
 </div>
-<div class="card"><div class="ctitle">Top 20 Single-Alliance Qualification Scores</div>
+<div class="card"><div class="ctitle">Top 20 Single-Alliance Scores — ${scLabel}</div>
   <div class="tw"><table>
     <thead><tr><th>#</th><th>Event</th><th class="r">Match</th><th>Alliance</th><th>Teams</th><th class="r">Score</th><th class="r" style="color:var(--blue)">Auto</th><th class="r">Teleop</th><th class="r" style="color:var(--orange)">Endgame</th><th>Result</th></tr></thead>
     <tbody>${topRows.slice(0,20).map((row,i)=>`<tr class="${row.teams.some(t=>TRACKED.has(parseInt(t)))?'hl':''}">
       <td class="dim">${i+1}</td><td><span class="badge ${row.ec}">${row.esh}</span></td>
-      <td class="r dim">QM${row.mn}</td>
+      <td class="r dim">${row.isQm?'QM':'PO'}${row.mn}</td>
       <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
       <td>${row.teams.map(t=>`<span style="${TRACKED.has(parseInt(t))?'color:var(--green);font-weight:600':''}">${t}</span>`).join(' · ')}</td>
       <td class="r" style="color:var(--green);font-weight:600">${row.sc}</td>
