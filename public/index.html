@@ -340,10 +340,15 @@ async function manualRefresh(){
     const res=await fetch('/api/refresh');
     const data=await res.json();
     if(!res.ok||!data.success) throw new Error(data.error||'Refresh failed');
-    setS('loading','Data saved — reloading in 5 seconds…');
+    setS('loading','Data saved — reloading in 30 seconds…');
     document.getElementById('dataInfo').innerHTML=`Refreshed just now<br><span style="opacity:.6">${data.matches} matches · ${data.epaTeams} EPA teams</span>`;
-    // Wait for Vercel to redeploy the new data.json then reload
-    setTimeout(()=>{ window.location.reload(); }, 5000);
+    // Count down visibly then reload
+    let secs=30;
+    const cd=setInterval(()=>{
+      secs--;
+      setS('loading',`Data saved — reloading in ${secs} second${secs!==1?'s':''}…`);
+      if(secs<=0){ clearInterval(cd); window.location.reload(); }
+    },1000);
   }catch(err){
     setS('error','Refresh failed — '+err.message);
     btn.disabled=false;
