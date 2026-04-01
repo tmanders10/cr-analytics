@@ -50,7 +50,7 @@ function extractEPA(record) {
   };
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Only allow GET
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -130,17 +130,17 @@ export default async function handler(req, res) {
     // ── Write to GitHub via API ──
     const content = Buffer.from(JSON.stringify(output, null, 2)).toString('base64');
 
-    // Get current SHA of data.json (needed for update)
+    // Get current SHA of public/data.json (needed for update)
     const shaRes = await fetch(
-      `https://api.github.com/repos/${GITHUB_REPO}/contents/data.json`,
+      `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
       { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' } }
     );
     const shaData = await shaRes.json();
     const sha = shaData.sha;
 
-    // Commit updated data.json
+    // Commit updated public/data.json
     const commitRes = await fetch(
-      `https://api.github.com/repos/${GITHUB_REPO}/contents/data.json`,
+      `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
       {
         method: 'PUT',
         headers: {
