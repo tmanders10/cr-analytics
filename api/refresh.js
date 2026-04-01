@@ -1,30 +1,36 @@
 /**
  * CR Analytics — /api/refresh
  * ----------------------------
- * Vercel serverless function. Fetches fresh data from TBA + Statbotics
- * and writes it to public/data.json, then commits via the GitHub API.
- *
- * Called by the "Refresh Now" button in the app header.
- * Requires environment variables set in Vercel dashboard:
- *   TBA_KEY        — your TBA read API key
- *   GITHUB_TOKEN   — a GitHub personal access token (repo scope)
- *   GITHUB_REPO    — e.g. "tmanders10/cr-analytics"
+ * Smart serverless refresh: only fetches TBA data for active/upcoming events.
+ * Completed events reuse existing data. EPA always refreshes.
  */
 
 const EVENTS = [
-  { key: '2026gadal', short: 'DAL', name: 'Dalton',          week: 1 },
-  { key: '2026gagwi', short: 'GWI', name: 'Gwinnett',        week: 2 },
-  { key: '2026gacol', short: 'COL', name: 'Columbus',        week: 3 },
-  { key: '2026gaalb', short: 'ALB', name: 'Albany',          week: 4 },
-  { key: '2026gagai', short: 'GAI', name: 'Gainesville',     week: 5 },
-  { key: '2026gacmp', short: 'CMP', name: 'District Champs', week: 6 },
+  { key: '2026gadal', short: 'DAL', name: 'Dalton',          week: 1, start: '2026-02-27', end: '2026-03-01' },
+  { key: '2026gagwi', short: 'GWI', name: 'Gwinnett',        week: 2, start: '2026-03-06', end: '2026-03-08' },
+  { key: '2026gacol', short: 'COL', name: 'Columbus',        week: 3, start: '2026-03-13', end: '2026-03-15' },
+  { key: '2026gaalb', short: 'ALB', name: 'Albany',          week: 4, start: '2026-03-20', end: '2026-03-22' },
+  { key: '2026gagai', short: 'GAI', name: 'Gainesville',     week: 5, start: '2026-04-02', end: '2026-04-04' },
+  { key: '2026gacmp', short: 'CMP', name: 'District Champs', week: 6, start: '2026-04-08', end: '2026-04-11' },
 ];
+
+function eventStatus(ev) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const start = new Date(ev.start);
+  const end   = new Date(ev.end);
+  const grace = new Date(end);
+  grace.setDate(grace.getDate() + 2);
+  if (today > grace)  return 'complete';
+  if (today >= start) return 'active';
+  return 'upcoming';
+}
 
 async function tbaFetch(path, tbaKey) {
   const res = await fetch(`https://www.thebluealliance.com/api/v3${path}`, {
     headers: { 'X-TBA-Auth-Key': tbaKey }
   });
-  if (!res.ok) throw new Error(`TBA HTTP ${res.status} for ${path}`);
+  if (!res.ok) throw new Error(`TBA HTTP ${res.status}`);
   return res.json();
 }
 
@@ -50,31 +56,75 @@ function extractEPA(record) {
   };
 }
 
-module.exports = async function handler(req, res) {
-  // Only allow GET
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+async function getFileSHA(url, token) {
+  const res = await fetch(url, {
+    headers: { Authorization: `token ${token}`, 'User-Agent': 'cr-analytics' }
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.sha || null;
+}
+
+async function commitFile(url, content, sha, token, message) {
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      Authorization: `token ${token}`,
+      'Content-Type': 'application/json',
+      'User-Agent': 'cr-analytics',
+    },
+    body: JSON.stringify({ message, content, sha }),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(`GitHub commit failed: ${err.message}`);
   }
+}
+
+module.exports = async function handler(req, res) {
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   const TBA_KEY      = process.env.TBA_KEY;
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-  const GITHUB_REPO  = process.env.GITHUB_REPO; // e.g. "tmanders10/cr-analytics"
+  const GITHUB_REPO  = process.env.GITHUB_REPO;
 
   if (!TBA_KEY)      return res.status(500).json({ error: 'TBA_KEY not configured' });
   if (!GITHUB_TOKEN) return res.status(500).json({ error: 'GITHUB_TOKEN not configured' });
   if (!GITHUB_REPO)  return res.status(500).json({ error: 'GITHUB_REPO not configured' });
 
   try {
+    // Load existing data.json from GitHub to preserve completed event data
+    let existing = { events: {}, districtRankings: [], teams: {}, epa: {} };
+    try {
+      const existingRes = await fetch(
+        `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
+        { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' } }
+      );
+      if (existingRes.ok) {
+        const existingData = await existingRes.json();
+        const decoded = Buffer.from(existingData.content, 'base64').toString('utf8');
+        existing = JSON.parse(decoded);
+      }
+    } catch (e) {}
+
     const output = {
       fetchedAt: new Date().toISOString(),
       events: {},
-      districtRankings: [],
-      teams: {},
-      epa: {},
+      districtRankings: existing.districtRankings || [],
+      teams: existing.teams || {},
+      epa: existing.epa || {},
     };
 
-    // ── TBA: matches, rankings, alliances ──
+    // ── TBA: smart event fetching ──
     for (const ev of EVENTS) {
+      const status = eventStatus(ev);
+
+      if (status === 'complete' && existing.events?.[ev.key]?.matches?.length > 0) {
+        // Reuse cached data for completed events
+        output.events[ev.key] = existing.events[ev.key];
+        continue;
+      }
+
       try {
         const [matches, rankings, alliances] = await Promise.all([
           tbaFetch(`/event/${ev.key}/matches`, TBA_KEY),
@@ -88,16 +138,17 @@ module.exports = async function handler(req, res) {
           alliances: alliances || [],
         };
       } catch (e) {
-        output.events[ev.key] = { meta: ev, matches: [], rankings: {}, alliances: [] };
+        output.events[ev.key] = existing.events?.[ev.key] ||
+          { meta: ev, matches: [], rankings: {}, alliances: [] };
       }
     }
 
-    // ── TBA: district rankings ──
+    // ── TBA: district rankings (always refresh) ──
     try {
       output.districtRankings = await tbaFetch('/district/2026pch/rankings', TBA_KEY) || [];
     } catch (e) {}
 
-    // ── TBA: team info ──
+    // ── TBA: team info (only new teams) ──
     const teamKeys = new Set();
     Object.values(output.events).forEach(ev => {
       (ev.matches || []).forEach(m => {
@@ -105,15 +156,17 @@ module.exports = async function handler(req, res) {
         (m.alliances?.blue?.team_keys || []).forEach(k => teamKeys.add(k));
       });
     });
-    const teamArr = [...teamKeys];
-    for (let i = 0; i < teamArr.length; i += 10) {
-      await Promise.all(teamArr.slice(i, i + 10).map(async k => {
+    const newTeams = [...teamKeys].filter(k => !output.teams[k]);
+    for (let i = 0; i < newTeams.length; i += 10) {
+      await Promise.all(newTeams.slice(i, i + 10).map(async k => {
         try { output.teams[k] = await tbaFetch(`/team/${k}/simple`, TBA_KEY); } catch (e) {}
       }));
     }
 
-    // ── Statbotics: EPA ──
+    // ── Statbotics: EPA (always refresh active/complete events) ──
     for (const ev of EVENTS) {
+      const status = eventStatus(ev);
+      if (status === 'upcoming' && !existing.events?.[ev.key]?.matches?.length) continue;
       try {
         const records = await statboticsFetch(`/team_events?event=${ev.key}&limit=100`);
         if (Array.isArray(records)) {
@@ -127,60 +180,32 @@ module.exports = async function handler(req, res) {
       } catch (e) {}
     }
 
-    // ── Write to GitHub via API ──
+    // ── Write to GitHub (both public/data.json and root data.json) ──
     const content = Buffer.from(JSON.stringify(output, null, 2)).toString('base64');
-
-    // Get current SHA of public/data.json in GitHub
-    const shaRes = await fetch(
-      `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
-      { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' } }
-    );
-    const shaData = await shaRes.json();
-    const sha = shaData.sha;
-
-    // Commit to both public/data.json AND root data.json so whichever Vercel serves is fresh
-    const filesToUpdate = [
+    const commitMsg = `chore: refresh data ${new Date().toISOString()}`;
+    const files = [
       `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
       `https://api.github.com/repos/${GITHUB_REPO}/contents/data.json`,
     ];
-
-    for (const fileUrl of filesToUpdate) {
-      // Get SHA for this specific file
-      const fShaRes = await fetch(fileUrl, {
-        headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' }
-      });
-      const fShaData = await fShaRes.json();
-      const fSha = fShaData.sha;
-      if (!fSha) continue; // file doesn't exist, skip
-
-      await fetch(fileUrl, {
-        method: 'PUT',
-        headers: {
-          Authorization: `token ${GITHUB_TOKEN}`,
-          'Content-Type': 'application/json',
-          'User-Agent': 'cr-analytics',
-        },
-        body: JSON.stringify({
-          message: `chore: refresh data ${new Date().toISOString()}`,
-          content,
-          sha: fSha,
-        }),
-      });
+    for (const fileUrl of files) {
+      const sha = await getFileSHA(fileUrl, GITHUB_TOKEN);
+      if (!sha) continue;
+      await commitFile(fileUrl, content, sha, GITHUB_TOKEN, commitMsg);
     }
 
-    const matchCount = Object.values(output.events).reduce((s, ev) => s + (ev.matches?.length || 0), 0);
-    const epaCount = Object.keys(output.epa).length;
+    const matchCount = Object.values(output.events)
+      .reduce((s, ev) => s + (ev.matches?.length || 0), 0);
 
     return res.status(200).json({
       success: true,
       fetchedAt: output.fetchedAt,
       matches: matchCount,
       teams: Object.keys(output.teams).length,
-      epaTeams: epaCount,
+      epaTeams: Object.keys(output.epa).length,
     });
 
   } catch (err) {
     console.error('Refresh error:', err);
     return res.status(500).json({ error: err.message });
   }
-}
+};
