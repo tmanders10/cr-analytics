@@ -340,10 +340,9 @@ async function manualRefresh(){
     const res=await fetch('/api/refresh');
     const data=await res.json();
     if(!res.ok||!data.success) throw new Error(data.error||'Refresh failed');
-    setS('loading','Data saved — reloading in 30 seconds…');
+    setS('loading','Data saved — reloading in 10 seconds…');
     document.getElementById('dataInfo').innerHTML=`Refreshed just now<br><span style="opacity:.6">${data.matches} matches · ${data.epaTeams} EPA teams</span>`;
-    // Count down visibly then reload
-    let secs=30;
+    let secs=10;
     const cd=setInterval(()=>{
       secs--;
       setS('loading',`Data saved — reloading in ${secs} second${secs!==1?'s':''}…`);
