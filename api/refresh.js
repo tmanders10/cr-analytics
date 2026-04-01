@@ -130,7 +130,7 @@ module.exports = async function handler(req, res) {
     // ── Write to GitHub via API ──
     const content = Buffer.from(JSON.stringify(output, null, 2)).toString('base64');
 
-    // Get current SHA of public/data.json (needed for update)
+    // Get current SHA of public/data.json in GitHub
     const shaRes = await fetch(
       `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
       { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' } }
@@ -138,10 +138,22 @@ module.exports = async function handler(req, res) {
     const shaData = await shaRes.json();
     const sha = shaData.sha;
 
-    // Commit updated public/data.json
-    const commitRes = await fetch(
+    // Commit to both public/data.json AND root data.json so whichever Vercel serves is fresh
+    const filesToUpdate = [
       `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
-      {
+      `https://api.github.com/repos/${GITHUB_REPO}/contents/data.json`,
+    ];
+
+    for (const fileUrl of filesToUpdate) {
+      // Get SHA for this specific file
+      const fShaRes = await fetch(fileUrl, {
+        headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' }
+      });
+      const fShaData = await fShaRes.json();
+      const fSha = fShaData.sha;
+      if (!fSha) continue; // file doesn't exist, skip
+
+      await fetch(fileUrl, {
         method: 'PUT',
         headers: {
           Authorization: `token ${GITHUB_TOKEN}`,
@@ -151,14 +163,9 @@ module.exports = async function handler(req, res) {
         body: JSON.stringify({
           message: `chore: refresh data ${new Date().toISOString()}`,
           content,
-          sha,
+          sha: fSha,
         }),
-      }
-    );
-
-    if (!commitRes.ok) {
-      const err = await commitRes.json();
-      throw new Error(`GitHub commit failed: ${err.message}`);
+      });
     }
 
     const matchCount = Object.values(output.events).reduce((s, ev) => s + (ev.matches?.length || 0), 0);
