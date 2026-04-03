@@ -327,6 +327,7 @@ function saveState(){
   sessionStorage.setItem('cr_ovType',  OV_TYPE);
   sessionStorage.setItem('cr_cardType', JSON.stringify(CARD_TYPE));
   sessionStorage.setItem('cr_cardMode', JSON.stringify(CARD_MODE));
+  // Stream overrides persist automatically (already in sessionStorage by key)
 }
 
 function restoreState(){
@@ -573,6 +574,41 @@ function dragEnd(e){
   _dragTeam=null;
 }
 
+function editStream(evKey, slot){
+  const editDiv=document.getElementById(`stream-edit-${slot}`);
+  const input=document.getElementById(`stream-input-${slot}`);
+  if(!editDiv||!input) return;
+  // Pre-fill with current frame src
+  const frame=document.getElementById(`stream-frame-${slot}`);
+  if(frame) input.value=frame.src.replace('?autoplay=0','').replace('https://www.youtube.com/embed/','https://www.youtube.com/watch?v=');
+  editDiv.style.display='block';
+  input.focus();
+  input.select();
+}
+function saveStream(evKey, slot){
+  const input=document.getElementById(`stream-input-${slot}`);
+  if(!input) return;
+  const raw=input.value.trim();
+  if(!raw) return;
+  // Extract video ID from various YouTube URL formats
+  let embedUrl;
+  const m=raw.match(/(?:v=|youtu\.be\/|embed\/)([^&?/\s]+)/);
+  if(m) embedUrl=`https://www.youtube.com/embed/${m[1]}?autoplay=0`;
+  else if(raw.startsWith('UC')) embedUrl=`https://www.youtube.com/embed/live_stream?channel=${raw}&autoplay=0`;
+  else if(/^[a-zA-Z0-9_-]{11}$/.test(raw)) embedUrl=`https://www.youtube.com/embed/${raw}?autoplay=0`;
+  else embedUrl=raw; // use as-is
+  // Save to sessionStorage
+  const ovKey=`cr_stream_${evKey}`;
+  let overrides={};
+  try{ overrides=JSON.parse(sessionStorage.getItem(ovKey)||'{}'); }catch(e){}
+  overrides[slot]=embedUrl;
+  sessionStorage.setItem(ovKey, JSON.stringify(overrides));
+  // Update iframe immediately
+  const frame=document.getElementById(`stream-frame-${slot}`);
+  if(frame) frame.src=embedUrl;
+  // Hide edit panel
+  document.getElementById(`stream-edit-${slot}`).style.display='none';
+}
 function toggleStream(url1, url2){
   const frame=document.getElementById('streamFrame');
   const btn=document.getElementById('streamToggleBtn');
@@ -683,14 +719,36 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
 ${(()=>{
   const activeEv=EVENTS.find(ev=>evStatus(ev)==='active');
   if(!activeEv) return '';
-  const cast=getYouTubeWebcast(activeEv.key);
-  const embedUrl=getYouTubeEmbedUrl(cast);
   const allCasts=(DB.webcasts[activeEv.key]||[]).filter(c=>c.type==='youtube');
-  if(!embedUrl) return `<div class="pending-banner" style="background:rgba(255,140,66,.06);border-color:rgba(255,140,66,.3);margin-bottom:16px">📡 <strong>${activeEv.name}</strong> is live — no webcast listed on TBA yet. <a href="https://www.thebluealliance.com/event/${activeEv.key}" target="_blank" style="color:var(--green)">Check TBA</a> or refresh data.</div>`;
-  const otherCast=allCasts.length>1?allCasts[1]:null;
-  const otherEmbedUrl=otherCast?getYouTubeEmbedUrl(otherCast):null;
-  const streamLabel1 = otherEmbedUrl ? 'Overhead View' : 'Live Stream';
-  const streamLabel2 = 'Field View';
+  // TBA order for PCH: first=field, second=overhead — swap so overhead is left, field is right
+  const castOverhead = allCasts.length>1 ? allCasts[1] : allCasts[0] || null;
+  const castField    = allCasts.length>1 ? allCasts[0] : null;
+  // Check sessionStorage for user overrides
+  const ovKey=`cr_stream_${activeEv.key}`;
+  let overrides={};
+  try{ overrides=JSON.parse(sessionStorage.getItem(ovKey)||'{}'); }catch(e){}
+  const urlFromYT=u=>{ if(!u)return null; const m=u.match(/(?:v=|youtu\.be\/|embed\/)([^&?/]+)/); return m?`https://www.youtube.com/embed/${m[1]}?autoplay=0`:u; };
+  const embedOverhead = overrides.overhead || getYouTubeEmbedUrl(castOverhead);
+  const embedField    = overrides.field    || getYouTubeEmbedUrl(castField);
+  if(!embedOverhead && !embedField) return `<div class="pending-banner" style="background:rgba(255,140,66,.06);border-color:rgba(255,140,66,.3);margin-bottom:16px">📡 <strong>${activeEv.name}</strong> is live — no webcast listed on TBA yet. <a href="https://www.thebluealliance.com/event/${activeEv.key}" target="_blank" style="color:var(--green)">Check TBA</a> or use the edit button after refresh.</div>`;
+  const streamCard=(label,embedUrl,slotKey)=>`<div class="card" style="padding:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)">${label}</span>
+      <button onclick="editStream('${activeEv.key}','${slotKey}')" title="Edit stream URL" style="background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:12px;padding:0 2px;line-height:1" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text3)'">✎</button>
+    </div>
+    <div id="stream-edit-${slotKey}" style="display:none;margin-bottom:6px">
+      <div style="display:flex;gap:5px">
+        <input id="stream-input-${slotKey}" type="text" placeholder="Paste YouTube URL or video ID…" style="flex:1;font-size:11px;font-family:'JetBrains Mono',monospace;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:4px 8px;color:var(--text2)"/>
+        <button onclick="saveStream('${activeEv.key}','${slotKey}')" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--green);color:#030803;border:none">Save</button>
+        <button onclick="document.getElementById('stream-edit-${slotKey}').style.display='none'" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text3)">✕</button>
+      </div>
+    </div>
+    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:5px;background:#000">
+      ${embedUrl
+        ? `<iframe id="stream-frame-${slotKey}" src="${embedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>`
+        : `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px">No stream listed<br><button onclick="editStream('${activeEv.key}','${slotKey}')" style="margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text3)">+ Add URL</button></div>`}
+    </div>
+  </div>`;
   return `<div style="margin-bottom:16px">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
       <span style="width:8px;height:8px;border-radius:50%;background:#ff4444;animation:pulse 1.5s infinite;flex-shrink:0"></span>
@@ -699,20 +757,8 @@ ${(()=>{
       <a href="https://www.thebluealliance.com/event/${activeEv.key}" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;color:var(--text3);text-decoration:none;border:1px solid var(--border2);margin-left:auto">TBA ↗</a>
     </div>
     <div class="g2">
-      <div class="card" style="padding:10px">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">${streamLabel1}</div>
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:5px;background:#000">
-          <iframe src="${embedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-        </div>
-      </div>
-      <div class="card" style="padding:10px">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">${otherEmbedUrl?streamLabel2:'Second Stream'}</div>
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:5px;background:#111;display:flex;align-items:center;justify-content:center">
-          ${otherEmbedUrl
-            ? `<iframe src="${otherEmbedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>`
-            : `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px">No second stream<br>listed on TBA</div>`}
-        </div>
-      </div>
+      ${streamCard('Overhead View', embedOverhead, 'overhead')}
+      ${streamCard('Field View',    embedField,    'field')}
     </div>
   </div>`;
 })()}
