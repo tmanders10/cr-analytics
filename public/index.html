@@ -485,7 +485,7 @@ function renderOv(){
     </div>`).join('');
   }
   document.getElementById('pg-overview').innerHTML=`
-<div class="sh"><h2>2026 <span>District</span> Season</h2><span class="sub">${loadedEvents.size} of ${EVENTS.length} events complete${filterLabel()}</span></div>
+<div class="sh"><h2>2026 <span>District</span> Season</h2><span class="sub">${(()=>{const comp=EVENTS.filter(ev=>evStatus(ev)==='complete').length;const active=EVENTS.filter(ev=>evStatus(ev)==='active').length;let s=`${comp} of ${EVENTS.length} complete`;if(active>0)s+=` · ${active} in progress`;return s+filterLabel();})()}</span></div>
 ${pendingEvs.length?`<div class="pending-banner">⏳ <strong>${pendingEvs.map(e=>e.name+' (Wk '+e.week+')').join(' · ')}</strong> — upcoming. Refresh data after events complete.</div>`:''}
 ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3)">🔍 Showing: <strong>${EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)).map(e=>`<span class="badge ${e.cls}">${e.short}</span>`).join(' ')}</strong> — click pills to change filter.</div>`:''}
 <div class="g4" style="margin-bottom:16px">
