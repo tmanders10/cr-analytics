@@ -81,21 +81,22 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // Load existing data.json from GitHub
-    let existing = { events: {}, districtRankings: [], teams: {}, epa: {} };
-    let existingEncoded = null;
+    // Load existing data.json from GitHub — abort if we can't get it
+    // (proceeding without it would wipe all other events' data)
+    let existing;
     try {
       const existingRes = await fetch(
         `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
         { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' } }
       );
-      if (existingRes.ok) {
-        const existingData = await existingRes.json();
-        existingEncoded = existingData.content; // keep for decode
-        const decoded = Buffer.from(existingData.content, 'base64').toString('utf8');
-        existing = JSON.parse(decoded);
-      }
-    } catch (e) {}
+      if (!existingRes.ok) throw new Error(`HTTP ${existingRes.status}`);
+      const existingData = await existingRes.json();
+      const decoded = Buffer.from(existingData.content, 'base64').toString('utf8');
+      existing = JSON.parse(decoded);
+    } catch (e) {
+      // Safety abort — never proceed without existing data or we'll wipe all other events
+      return res.status(500).json({ error: `Aborted: could not load existing data — ${e.message}. Use Full Refresh instead.` });
+    }
 
     // Fetch only matches for the active event
     const matches = await tbaFetch(`/event/${activeEvent.key}/matches`, TBA_KEY);
