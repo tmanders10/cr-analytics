@@ -267,6 +267,33 @@ function showPage(name,el){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('pg-'+name).classList.add('active');
   el.classList.add('active');
+  sessionStorage.setItem('cr_activePage', name);
+}
+
+function saveState(){
+  sessionStorage.setItem('cr_tracked', JSON.stringify([...TRACKED]));
+  sessionStorage.setItem('cr_filter',  JSON.stringify([...ACTIVE_FILTER]));
+  sessionStorage.setItem('cr_scType',  SC_TYPE);
+  sessionStorage.setItem('cr_ovType',  OV_TYPE);
+  sessionStorage.setItem('cr_cardType', JSON.stringify(CARD_TYPE));
+  sessionStorage.setItem('cr_cardMode', JSON.stringify(CARD_MODE));
+}
+
+function restoreState(){
+  try{
+    const tracked=sessionStorage.getItem('cr_tracked');
+    if(tracked) TRACKED=new Set(JSON.parse(tracked));
+    const filter=sessionStorage.getItem('cr_filter');
+    if(filter) ACTIVE_FILTER=new Set(JSON.parse(filter));
+    const scType=sessionStorage.getItem('cr_scType');
+    if(scType) SC_TYPE=scType;
+    const ovType=sessionStorage.getItem('cr_ovType');
+    if(ovType) OV_TYPE=ovType;
+    const cardType=sessionStorage.getItem('cr_cardType');
+    if(cardType) Object.assign(CARD_TYPE, JSON.parse(cardType));
+    const cardMode=sessionStorage.getItem('cr_cardMode');
+    if(cardMode) Object.assign(CARD_MODE, JSON.parse(cardMode));
+  }catch(e){}
 }
 
 // ── LOAD FROM data.json ──
@@ -319,7 +346,25 @@ async function init(){
     const loadedCount=loadedEvents.size;
     const pending=EVENTS.length-loadedCount;
     setS('ok',`${allM.length} matches · ${loadedCount} events loaded · ${pending>0?pending+' pending':'all complete'}`);
+
+    // Restore state from before refresh if available
+    restoreState();
+
+    // Restore active filter pill UI
+    ACTIVE_FILTER.forEach(evKey=>{
+      const pill=document.getElementById('pill-'+evKey);
+      if(pill){ pill.classList.add('on'); makePillClickable(evKey); }
+    });
+    if(ACTIVE_FILTER.size) document.getElementById('filterHint').style.display='inline';
+
     renderAll();
+
+    // Restore active tab
+    const savedPage=sessionStorage.getItem('cr_activePage');
+    if(savedPage){
+      const tabs=document.querySelectorAll('.nav-tab');
+      tabs.forEach(tab=>{ if(tab.getAttribute('onclick')&&tab.getAttribute('onclick').includes("'"+savedPage+"'")) showPage(savedPage,tab); });
+    }
   }catch(err){
     setS('error','Failed to load data.json — '+err.message);
     document.getElementById('dataInfo').textContent='No data loaded';
@@ -352,7 +397,7 @@ async function manualRefresh(){
     const cd=setInterval(()=>{
       secs--;
       setS('loading',`Data saved — reloading in ${secs} second${secs!==1?'s':''}…`);
-      if(secs<=0){ clearInterval(cd); window.location.href=window.location.pathname+'?r='+Date.now(); }
+      if(secs<=0){ clearInterval(cd); saveState(); window.location.href=window.location.pathname+'?r='+Date.now(); }
     },1000);
   }catch(err){
     setS('error','Refresh failed — '+err.message);
@@ -386,7 +431,7 @@ async function quickRefresh(){
     const cd=setInterval(()=>{
       secs--;
       setS('loading',`${data.event} matches saved — reloading in ${secs} second${secs!==1?'s':''}…`);
-      if(secs<=0){ clearInterval(cd); window.location.href=window.location.pathname+'?r='+Date.now(); }
+      if(secs<=0){ clearInterval(cd); saveState(); window.location.href=window.location.pathname+'?r='+Date.now(); }
     },1000);
   }catch(err){
     setS('error','Match update failed — '+err.message);
