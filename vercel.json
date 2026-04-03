@@ -5,6 +5,7 @@
     { "src": "/api/refresh", "dest": "/api/refresh.js" },
     { "src": "/data.json", "dest": "/public/data.json" },
     { "src": "/logo.png", "dest": "/public/logo.png" },
-    { "src": "/(.*)", "dest": "/public/index.html" }
+    { "src": "/index.html", "dest": "/public/index.html" },
+    { "src": "/", "dest": "/public/index.html" }
   ]
 }
