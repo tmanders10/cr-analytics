@@ -237,25 +237,20 @@ let allM=[],distRank=[];
 const loadedEvents=new Set();
 
 // ── WEBCAST HELPERS ──
-// Build YouTube embed URL from a webcast object
-// TBA webcast types: 'youtube' (channel=videoId or liveId), 'twitch' (channel=username)
 function getYouTubeWebcast(evKey){
   const casts=DB.webcasts[evKey]||[];
-  // Prefer YouTube, look for 'overhead' hint in channel name or just take last YouTube entry
-  // (PCH typically has field view first, overhead second)
   const ytCasts=casts.filter(c=>c.type==='youtube');
   if(!ytCasts.length) return null;
-  // Return last YouTube cast (overhead tends to be added second for PCH)
-  return ytCasts[ytCasts.length-1];
+  // First YouTube entry = overhead for PCH
+  return ytCasts[0];
 }
 function getYouTubeEmbedUrl(cast){
   if(!cast) return null;
-  // For live streams the channel field is either a video ID or a channel ID
-  // YouTube live embed: https://www.youtube.com/embed/live_stream?channel=CHANNEL_ID
-  // YouTube video embed: https://www.youtube.com/embed/VIDEO_ID
-  const ch=cast.channel||'';
-  // Channel IDs start with UC, video IDs are 11 chars
+  const ch=(cast.channel||'').trim();
+  if(!ch) return null;
+  // Channel IDs start with UC → live stream embed
   if(ch.startsWith('UC')) return `https://www.youtube.com/embed/live_stream?channel=${ch}&autoplay=0`;
+  // Otherwise it's a video ID → standard embed
   return `https://www.youtube.com/embed/${ch}?autoplay=0`;
 }
 // Build a YouTube watch URL for a match video
@@ -692,7 +687,7 @@ ${(()=>{
   const embedUrl=getYouTubeEmbedUrl(cast);
   const allCasts=(DB.webcasts[activeEv.key]||[]).filter(c=>c.type==='youtube');
   if(!embedUrl) return `<div class="pending-banner" style="background:rgba(255,140,66,.06);border-color:rgba(255,140,66,.3);margin-bottom:16px">📡 <strong>${activeEv.name}</strong> is live — no webcast listed on TBA yet. <a href="https://www.thebluealliance.com/event/${activeEv.key}" target="_blank" style="color:var(--green)">Check TBA</a> or refresh data.</div>`;
-  const otherCast=allCasts.length>1?allCasts[0]:null;
+  const otherCast=allCasts.length>1?allCasts[1]:null;
   const otherEmbedUrl=otherCast?getYouTubeEmbedUrl(otherCast):null;
   const streamLabel1 = otherEmbedUrl ? 'Overhead View' : 'Live Stream';
   const streamLabel2 = 'Field View';
