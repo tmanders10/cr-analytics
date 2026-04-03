@@ -114,23 +114,25 @@ async function main() {
 
     // Fetch fresh data for active/upcoming events (or completed events with no cached data)
     try {
-      const [matches, rankings, alliances] = await Promise.all([
+      const [matches, rankings, alliances, eventDetail] = await Promise.all([
         tbaFetch(`/event/${ev.key}/matches`),
         tbaFetch(`/event/${ev.key}/rankings`),
         tbaFetch(`/event/${ev.key}/alliances`),
+        tbaFetch(`/event/${ev.key}`).catch(() => null),
       ]);
       output.events[ev.key] = {
         meta: ev,
         matches: matches || [],
         rankings: rankings || {},
         alliances: alliances || [],
+        webcasts: eventDetail?.webcasts || [],
       };
-      console.log(` -> ${(matches || []).length} matches`);
+      console.log(` -> ${(matches || []).length} matches · ${(eventDetail?.webcasts||[]).length} webcasts`);
       fetchedCount++;
     } catch (e) {
       console.log(` -> No data yet (${e.message})`);
       output.events[ev.key] = existing.events?.[ev.key] ||
-        { meta: ev, matches: [], rankings: {}, alliances: [] };
+        { meta: ev, matches: [], rankings: {}, alliances: [], webcasts: [] };
     }
   }
 
