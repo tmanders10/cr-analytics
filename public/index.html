@@ -178,22 +178,23 @@
   <div class="hdiv"></div>
   <div class="header-sub">2026 District Season Analytics</div>
   <div class="hspacer"></div>
-  <button class="refresh-btn" id="quickRefreshBtn" onclick="quickRefresh()" title="Fetch latest match scores for the current event only (~5 seconds)">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Match Update
-  </button>
-  <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Full refresh — TBA + Statbotics EPA for all active events (~20 seconds)" style="margin-left:6px">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" id="refreshIcon">
-      <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Full Refresh
-  </button>
+  <div id="adminBtns" style="display:none;gap:6px;align-items:center">
+    <button class="refresh-btn" id="quickRefreshBtn" onclick="quickRefresh()" title="Fetch latest match scores for the current event only (~5 seconds)">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Match Update
+    </button>
+    <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Full refresh — TBA + Statbotics EPA for all active events (~20 seconds)">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" id="refreshIcon">
+        <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Full Refresh
+    </button>
+  </div>
   <div class="data-info" id="dataInfo">Loading…</div>
-</div>
 
 <div class="status-bar">
   <div class="sdot" id="sdot"></div>
@@ -344,6 +345,8 @@ function restoreState(){
     if(cardType) Object.assign(CARD_TYPE, JSON.parse(cardType));
     const cardMode=sessionStorage.getItem('cr_cardMode');
     if(cardMode) Object.assign(CARD_MODE, JSON.parse(cardMode));
+    // Restore admin mode
+    if(sessionStorage.getItem('cr_admin')==='1') setAdminMode(true);
   }catch(e){}
 }
 
@@ -541,7 +544,26 @@ function teamStats(tk){
   s.avgS=s.tot/n;s.avgA=s.aT/n;s.avgTl=s.tlT/n;s.avgEg=s.egT/n;s.n=n;return s;
 }
 function pendingBanner(ev){return`<div class="pending-banner"><strong>${ev.name}</strong> (Week ${ev.week}) — event not yet completed.</div>`;}
-// ── DRAG AND DROP ──
+// ── ADMIN MODE (Ctrl+Shift+D) ──
+function setAdminMode(on){
+  const el=document.getElementById('adminBtns');
+  if(!el) return;
+  el.style.display=on?'flex':'none';
+  if(on) sessionStorage.setItem('cr_admin','1');
+  else sessionStorage.removeItem('cr_admin');
+}
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey&&e.shiftKey&&e.key==='D'){
+    e.preventDefault();
+    const el=document.getElementById('adminBtns');
+    const isVisible=el&&el.style.display==='flex';
+    setAdminMode(!isVisible);
+  }
+});
+// Restore admin mode after a refresh-button reload
+if(sessionStorage.getItem('cr_admin')==='1') {
+  document.addEventListener('DOMContentLoaded',()=>setAdminMode(true));
+}
 let _dragTeam=null;
 function dragStart(e,n){
   _dragTeam=n;
