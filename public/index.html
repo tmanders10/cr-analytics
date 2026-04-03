@@ -694,20 +694,30 @@ ${(()=>{
   if(!embedUrl) return `<div class="pending-banner" style="background:rgba(255,140,66,.06);border-color:rgba(255,140,66,.3);margin-bottom:16px">📡 <strong>${activeEv.name}</strong> is live — no webcast listed on TBA yet. <a href="https://www.thebluealliance.com/event/${activeEv.key}" target="_blank" style="color:var(--green)">Check TBA</a> or refresh data.</div>`;
   const otherCast=allCasts.length>1?allCasts[0]:null;
   const otherEmbedUrl=otherCast?getYouTubeEmbedUrl(otherCast):null;
-  return `<div class="card" style="margin-bottom:16px;padding:14px 16px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="width:8px;height:8px;border-radius:50%;background:#ff4444;animation:pulse 1.5s infinite;flex-shrink:0"></span>
-        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)">${activeEv.name} — Live</span>
-        <span class="badge ${activeEv.cls}">${activeEv.short}</span>
-      </div>
-      <div style="display:flex;gap:6px;align-items:center">
-        ${otherEmbedUrl?`<button id="streamToggleBtn" onclick="toggleStream('${embedUrl}','${otherEmbedUrl}')" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text3)">Switch Stream</button>`:''}
-        <a href="https://www.thebluealliance.com/event/${activeEv.key}" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;color:var(--text3);text-decoration:none;border:1px solid var(--border2)">TBA ↗</a>
-      </div>
+  const streamLabel1 = otherEmbedUrl ? 'Overhead View' : 'Live Stream';
+  const streamLabel2 = 'Field View';
+  return `<div style="margin-bottom:16px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="width:8px;height:8px;border-radius:50%;background:#ff4444;animation:pulse 1.5s infinite;flex-shrink:0"></span>
+      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)">${activeEv.name} — Live</span>
+      <span class="badge ${activeEv.cls}">${activeEv.short}</span>
+      <a href="https://www.thebluealliance.com/event/${activeEv.key}" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;color:var(--text3);text-decoration:none;border:1px solid var(--border2);margin-left:auto">TBA ↗</a>
     </div>
-    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:6px;background:#000">
-      <iframe id="streamFrame" src="${embedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    <div class="g2">
+      <div class="card" style="padding:10px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">${streamLabel1}</div>
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:5px;background:#000">
+          <iframe src="${embedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+        </div>
+      </div>
+      <div class="card" style="padding:10px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">${otherEmbedUrl?streamLabel2:'Second Stream'}</div>
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:5px;background:#111;display:flex;align-items:center;justify-content:center">
+          ${otherEmbedUrl
+            ? `<iframe src="${otherEmbedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>`
+            : `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px">No second stream<br>listed on TBA</div>`}
+        </div>
+      </div>
     </div>
   </div>`;
 })()}
@@ -786,7 +796,7 @@ function renderSc(){
   ms.forEach(m=>['red','blue'].forEach(a=>{const s=m.alliances?.[a]?.score??0;bkts[Math.min(Math.floor(s/bsz),11)]++;}));
   const mx=Math.max(...bkts,1);
   const topRows=[];
-  ms.forEach(m=>['red','blue'].forEach(a=>{const sc=m.alliances?.[a]?.score??0;topRows.push({sc,teams:(m.alliances?.[a]?.team_keys||[]).map(tnum),a,mn:m.match_number,esh:m._esh,ec:m._ec,au:phS(m,a,'auto'),tl:phS(m,a,'teleop'),eg:phS(m,a,'endgame'),won:m.winning_alliance===a,isQm:m.comp_level==='qm'});}));
+  ms.forEach(m=>['red','blue'].forEach(a=>{const sc=m.alliances?.[a]?.score??0;topRows.push({sc,teams:(m.alliances?.[a]?.team_keys||[]).map(tnum),a,mn:m.match_number,esh:m._esh,ec:m._ec,au:phS(m,a,'auto'),tl:phS(m,a,'teleop'),eg:phS(m,a,'endgame'),won:m.winning_alliance===a,isQm:m.comp_level==='qm',m});}));
   topRows.sort((a,b)=>b.sc-a.sc);
   const btnStyle=(active)=>active?`background:var(--green);color:#030803;border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;letter-spacing:.08em;padding:5px 14px;border-radius:4px;cursor:pointer;text-transform:uppercase`:`background:transparent;color:var(--text3);border:1px solid var(--border2);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 14px;border-radius:4px;cursor:pointer;text-transform:uppercase`;
   const evMs=ek=>ms.filter(m=>m._ev===ek);
@@ -828,10 +838,11 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
 </div>
 <div class="card"><div class="ctitle">Top 20 Single-Alliance Scores — ${scLabel}</div>
   <div class="tw"><table>
-    <thead><tr><th>#</th><th>Event</th><th class="r">Match</th><th>Alliance</th><th>Teams</th><th class="r">Score</th><th class="r" style="color:var(--blue)">Auto</th><th class="r">Teleop</th><th class="r" style="color:var(--orange)">Endgame</th><th>Result</th></tr></thead>
+    <thead><tr><th>#</th><th>Event</th><th class="r">Match</th><th class="r"></th><th>Alliance</th><th>Teams</th><th class="r">Score</th><th class="r" style="color:var(--blue)">Auto</th><th class="r">Teleop</th><th class="r" style="color:var(--orange)">Endgame</th><th>Result</th></tr></thead>
     <tbody>${topRows.slice(0,20).map((row,i)=>`<tr class="${row.teams.some(t=>TRACKED.includes(parseInt(t)))?'hl':''}">
       <td class="dim">${i+1}</td><td><span class="badge ${row.ec}">${row.esh}</span></td>
       <td class="r dim">${row.isQm?'QM':'PO'}${row.mn}</td>
+      <td class="r" style="padding:0 2px">${videoLink(matchVideoUrl(row.m))}</td>
       <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
       <td>${row.teams.map(t=>{const tc=teamColor(parseInt(t));return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${t}</span>`;}).join(' · ')}</td>
       <td class="r" style="color:var(--green);font-weight:600">${row.sc}</td>
@@ -1162,18 +1173,20 @@ function renderMxTable(matches){
   return`<table style="table-layout:fixed;width:100%"><colgroup>
     <col style="width:58px"/>
     <col style="width:52px"/>
-    <col style="width:52px"/>
-    <col style="width:calc(50% - 120px)"/>
+    <col style="width:48px"/>
+    <col style="width:24px"/>
+    <col style="width:calc(50% - 116px)"/>
     <col style="width:54px"/>
     <col style="width:12px"/>
     <col style="width:54px"/>
-    <col style="width:calc(50% - 120px)"/>
-    <col style="width:60px"/>
+    <col style="width:calc(50% - 116px)"/>
+    <col style="width:56px"/>
   </colgroup>
   <thead><tr>
     <th>Event</th>
     <th>Type</th>
     <th class="r">Match</th>
+    <th></th>
     <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
     <th class="r" style="color:var(--loss)">Red</th>
     <th></th>
@@ -1191,12 +1204,13 @@ function renderMxTable(matches){
       <td><span class="badge ${m._ec}">${m._esh}</span></td>
       <td><span style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;color:var(--text3)">${m.comp_level==='qm'?'QUAL':'PO'}</span></td>
       <td class="r dim">${m.match_number}</td>
+      <td style="padding:0 2px">${videoLink(matchVideoUrl(m))}</td>
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${rWin?'background:rgba(255,61,90,.04)':''}">${rt}</td>
       <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${rWin?700:400};color:${rWin?'var(--loss)':'var(--text3)'};${rWin?'background:rgba(255,61,90,.04)':''}">${rs}</td>
       <td style="text-align:center;color:var(--text3);font-size:10px;padding:0 2px">–</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${bWin?700:400};color:${bWin?'var(--blue)':'var(--text3)'};${bWin?'background:rgba(56,168,255,.04)':''}">${bs}</td>
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${bWin?'background:rgba(56,168,255,.04)':''}">${bt}</td>
-      <td class="r" style="display:flex;align-items:center;justify-content:flex-end;gap:2px">${rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`}${videoLink(matchVideoUrl(m))}</td>
+      <td class="r">${rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`}</td>
     </tr>`;}).join('')}</tbody></table>`;}
 
 // Start
