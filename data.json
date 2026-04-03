@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-03T13:50:11.522Z",
+  "fetchedAt": "2026-04-03T15:06:22.681Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -44046,11 +44046,11 @@
       },
       "matches": [
         {
-          "actual_time": null,
+          "actual_time": 1775228477,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 125,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc6705",
@@ -44060,7 +44060,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 93,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc8761",
@@ -44073,13 +44073,104 @@
           "event_key": "2026gagai",
           "key": "2026gagai_qm1",
           "match_number": 1,
-          "post_result_time": null,
+          "post_result_time": 1775228664,
           "predicted_time": 1775228400,
-          "score_breakdown": null,
+          "score_breakdown": {
+            "blue": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": true,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 24,
+                "autoPoints": 24,
+                "endgameCount": 12,
+                "endgamePoints": 12,
+                "shift1Count": 0,
+                "shift1Points": 0,
+                "shift2Count": 45,
+                "shift2Points": 45,
+                "shift3Count": 0,
+                "shift3Points": 0,
+                "shift4Count": 32,
+                "shift4Points": 32,
+                "teleopCount": 101,
+                "teleopPoints": 101,
+                "totalCount": 125,
+                "totalPoints": 125,
+                "transitionCount": 12,
+                "transitionPoints": 12,
+                "uncounted": 0
+              },
+              "majorFoulCount": 1,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 4,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 24,
+              "totalPoints": 125,
+              "totalTeleopPoints": 101,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            },
+            "red": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 15,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 15,
+                "autoPoints": 15,
+                "endgameCount": 22,
+                "endgamePoints": 22,
+                "shift1Count": 12,
+                "shift1Points": 12,
+                "shift2Count": 0,
+                "shift2Points": 0,
+                "shift3Count": 29,
+                "shift3Points": 29,
+                "shift4Count": 0,
+                "shift4Points": 0,
+                "teleopCount": 63,
+                "teleopPoints": 63,
+                "totalCount": 78,
+                "totalPoints": 78,
+                "transitionCount": 0,
+                "transitionPoints": 0,
+                "uncounted": 0
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 15,
+              "totalPoints": 93,
+              "totalTeleopPoints": 63,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            }
+          },
           "set_number": 1,
           "time": 1775228400,
           "videos": [],
-          "winning_alliance": ""
+          "winning_alliance": "blue"
         },
         {
           "actual_time": null,
@@ -46207,8 +46298,152 @@
         }
       ],
       "rankings": {
-        "extra_stats_info": [],
-        "rankings": [],
+        "extra_stats_info": [
+          {
+            "name": "Total Ranking Points",
+            "precision": 0
+          }
+        ],
+        "rankings": [
+          {
+            "dq": 0,
+            "extra_stats": [
+              4
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 1,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              4,
+              125,
+              24,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc3815"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              4
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 2,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              4,
+              125,
+              24,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc6705"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              4
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 3,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              4,
+              125,
+              24,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc5651"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              0
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 4,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 0
+            },
+            "sort_orders": [
+              0,
+              78,
+              15,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc5293"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              0
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 5,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 0
+            },
+            "sort_orders": [
+              0,
+              78,
+              15,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc8761"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              0
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 6,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 0
+            },
+            "sort_orders": [
+              0,
+              78,
+              15,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc6340"
+          }
+        ],
         "sort_order_info": [
           {
             "name": "Ranking Score",
@@ -47896,15 +48131,6 @@
     }
   ],
   "teams": {
-    "frc6905": {
-      "city": "Alpharetta",
-      "country": "USA",
-      "key": "frc6905",
-      "name": "ToDo Robotics/Wendy's at Macfarland Road/Chick-fil-a at Macfarland Road&Alpharetta High School",
-      "nickname": "Raiders of the ARC- TEAR-A-BYTE",
-      "state_prov": "Georgia",
-      "team_number": 6905
-    },
     "frc6829": {
       "city": "Suwanee",
       "country": "USA",
@@ -47913,6 +48139,15 @@
       "nickname": "Ignite Robotics",
       "state_prov": "Georgia",
       "team_number": 6829
+    },
+    "frc1002": {
+      "city": "Marietta",
+      "country": "USA",
+      "key": "frc1002",
+      "name": "NCR/RW Smith Company/Lockheed Martin/StartProto/Parker's 3D Prints/Chick-fil-A/Sevaa Group/Wheeler Magnet Foundation Center For Advanced Studies/NASA/Farm Burger&Joseph Wheeler High School",
+      "nickname": "CircuitRunners Robotics",
+      "state_prov": "Georgia",
+      "team_number": 1002
     },
     "frc8761": {
       "city": "Adairsville",
@@ -47923,23 +48158,14 @@
       "state_prov": "Georgia",
       "team_number": 8761
     },
-    "frc2974": {
-      "city": "Marietta",
+    "frc6905": {
+      "city": "Alpharetta",
       "country": "USA",
-      "key": "frc2974",
-      "name": "Novelis/Carrier/Durable Industrial Finishishing/Gene Haas Foundation&Walton High School",
-      "nickname": "Walton Robotics",
+      "key": "frc6905",
+      "name": "ToDo Robotics/Wendy's at Macfarland Road/Chick-fil-a at Macfarland Road&Alpharetta High School",
+      "nickname": "Raiders of the ARC- TEAR-A-BYTE",
       "state_prov": "Georgia",
-      "team_number": 2974
-    },
-    "frc5900": {
-      "city": "Dalton",
-      "country": "USA",
-      "key": "frc5900",
-      "name": "Shaw Industries/Haas Foundation/Argosy Foundation/Dalton-Whitfield Joint Development Authority/Novelis/Dalton Utilities/State Farm/Hi-Tech Controls/Technicraft Services/Kendall Electric/Floor Productions/Fantasy Factor&Northwest Georgia College & Career Academy",
-      "nickname": "The Fighting Mongooses",
-      "state_prov": "Georgia",
-      "team_number": 5900
+      "team_number": 6905
     },
     "frc1746": {
       "city": "Cumming",
@@ -47968,15 +48194,6 @@
       "state_prov": "Georgia",
       "team_number": 8866
     },
-    "frc1002": {
-      "city": "Marietta",
-      "country": "USA",
-      "key": "frc1002",
-      "name": "NCR/RW Smith Company/Lockheed Martin/StartProto/Parker's 3D Prints/Chick-fil-A/Sevaa Group/Wheeler Magnet Foundation Center For Advanced Studies/NASA/Farm Burger&Joseph Wheeler High School",
-      "nickname": "CircuitRunners Robotics",
-      "state_prov": "Georgia",
-      "team_number": 1002
-    },
     "frc7676": {
       "city": "Thomson",
       "country": "USA",
@@ -47986,77 +48203,23 @@
       "state_prov": "Georgia",
       "team_number": 7676
     },
-    "frc4026": {
-      "city": "Decatur",
-      "country": "USA",
-      "key": "frc4026",
-      "name": "Johnson Controls/Bosch/3M/City of Decatur Police Department&Decatur High School",
-      "nickname": "Decatur Robotics",
-      "state_prov": "Georgia",
-      "team_number": 4026
-    },
-    "frc6887": {
-      "city": "Dalton",
-      "country": "USA",
-      "key": "frc6887",
-      "name": "Dalton Utilities/SHAW/Dalton-Whitfield Joint Development Authority/Argosy Foundation&Dalton High School",
-      "nickname": "Dalton Catabots",
-      "state_prov": "Georgia",
-      "team_number": 6887
-    },
-    "frc5219": {
-      "city": "Douglasville",
-      "country": "USA",
-      "key": "frc5219",
-      "name": "Comcast/Johnson Research & Development/Allison-Smith Company/System Technology Works, LLC/D & A Transportation/GAFIRST/Future Seekers, Inc.&Future Seekers, Inc.",
-      "nickname": "TeknoSquad 5219",
-      "state_prov": "Georgia",
-      "team_number": 5219
-    },
-    "frc10376": {
-      "city": "Augusta",
-      "country": "USA",
-      "key": "frc10376",
-      "name": "John Deere/Department of Defense&Johnson Magnet",
-      "nickname": "Plutonium Panthers",
-      "state_prov": "Georgia",
-      "team_number": 10376
-    },
-    "frc5608": {
+    "frc2974": {
       "city": "Marietta",
       "country": "USA",
-      "key": "frc5608",
-      "name": "Intercontinental Exchange/Cotton States Properties/AIG/Dickerson Agency/Lockheed Martin/KARS/Team Rehabilitaiton&Lassiter High School",
-      "nickname": "Lassiter Robotics",
+      "key": "frc2974",
+      "name": "Novelis/Carrier/Durable Industrial Finishishing/Gene Haas Foundation&Walton High School",
+      "nickname": "Walton Robotics",
       "state_prov": "Georgia",
-      "team_number": 5608
+      "team_number": 2974
     },
-    "frc11214": {
-      "city": "Bainbridge ",
+    "frc5900": {
+      "city": "Dalton",
       "country": "USA",
-      "key": "frc11214",
-      "name": "NASA/Southwest Georgia Regional Commission and GaTECH/Southern Regional Technical College (SRTC)/Argosy Foundation/SHAW Industries/Howard Technologies, EDU/Kiwanis International, Bainbridge-Decatur County/Worthington Alignment and Auto Service/Chick-Fil-A, BAINBRIDGE GA/Hill's Stump Removal/Franklin's Spring Creek Ford, Colquitt Georgia&Bainbridge High School",
-      "nickname": "[CY]BEARCATS robotics",
+      "key": "frc5900",
+      "name": "Shaw Industries/Haas Foundation/Argosy Foundation/Dalton-Whitfield Joint Development Authority/Novelis/Dalton Utilities/State Farm/Hi-Tech Controls/Technicraft Services/Kendall Electric/Floor Productions/Fantasy Factor&Northwest Georgia College & Career Academy",
+      "nickname": "The Fighting Mongooses",
       "state_prov": "Georgia",
-      "team_number": 11214
-    },
-    "frc6772": {
-      "city": "Atlanta",
-      "country": "USA",
-      "key": "frc6772",
-      "name": "Marist School",
-      "nickname": "The Marist Manta Rays",
-      "state_prov": "Georgia",
-      "team_number": 6772
-    },
-    "frc3329": {
-      "city": "Kingsland",
-      "country": "USA",
-      "key": "frc3329",
-      "name": "Lockheed Martin/DoD STEM - SWFLANT/Camden County Rotary International&Camden Co High School",
-      "nickname": "Wildbots",
-      "state_prov": "Georgia",
-      "team_number": 3329
+      "team_number": 5900
     },
     "frc8736": {
       "city": "Marietta",
@@ -48067,6 +48230,69 @@
       "state_prov": "Georgia",
       "team_number": 8736
     },
+    "frc10376": {
+      "city": "Augusta",
+      "country": "USA",
+      "key": "frc10376",
+      "name": "John Deere/Department of Defense&Johnson Magnet",
+      "nickname": "Plutonium Panthers",
+      "state_prov": "Georgia",
+      "team_number": 10376
+    },
+    "frc11214": {
+      "city": "Bainbridge ",
+      "country": "USA",
+      "key": "frc11214",
+      "name": "NASA/Southwest Georgia Regional Commission and GaTECH/Southern Regional Technical College (SRTC)/Argosy Foundation/SHAW Industries/Howard Technologies, EDU/Kiwanis International, Bainbridge-Decatur County/Worthington Alignment and Auto Service/Chick-Fil-A, BAINBRIDGE GA/Hill's Stump Removal/Franklin's Spring Creek Ford, Colquitt Georgia&Bainbridge High School",
+      "nickname": "[CY]BEARCATS robotics",
+      "state_prov": "Georgia",
+      "team_number": 11214
+    },
+    "frc5219": {
+      "city": "Douglasville",
+      "country": "USA",
+      "key": "frc5219",
+      "name": "Comcast/Johnson Research & Development/Allison-Smith Company/System Technology Works, LLC/D & A Transportation/GAFIRST/Future Seekers, Inc.&Future Seekers, Inc.",
+      "nickname": "TeknoSquad 5219",
+      "state_prov": "Georgia",
+      "team_number": 5219
+    },
+    "frc6772": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc6772",
+      "name": "Marist School",
+      "nickname": "The Marist Manta Rays",
+      "state_prov": "Georgia",
+      "team_number": 6772
+    },
+    "frc5608": {
+      "city": "Marietta",
+      "country": "USA",
+      "key": "frc5608",
+      "name": "Intercontinental Exchange/Cotton States Properties/AIG/Dickerson Agency/Lockheed Martin/KARS/Team Rehabilitaiton&Lassiter High School",
+      "nickname": "Lassiter Robotics",
+      "state_prov": "Georgia",
+      "team_number": 5608
+    },
+    "frc6887": {
+      "city": "Dalton",
+      "country": "USA",
+      "key": "frc6887",
+      "name": "Dalton Utilities/SHAW/Dalton-Whitfield Joint Development Authority/Argosy Foundation&Dalton High School",
+      "nickname": "Dalton Catabots",
+      "state_prov": "Georgia",
+      "team_number": 6887
+    },
+    "frc4026": {
+      "city": "Decatur",
+      "country": "USA",
+      "key": "frc4026",
+      "name": "Johnson Controls/Bosch/3M/City of Decatur Police Department&Decatur High School",
+      "nickname": "Decatur Robotics",
+      "state_prov": "Georgia",
+      "team_number": 4026
+    },
     "frc10338": {
       "city": "Cairo",
       "country": "USA",
@@ -48075,6 +48301,60 @@
       "nickname": "10338 - CircuitMakers",
       "state_prov": "Georgia",
       "team_number": 10338
+    },
+    "frc3329": {
+      "city": "Kingsland",
+      "country": "USA",
+      "key": "frc3329",
+      "name": "Lockheed Martin/DoD STEM - SWFLANT/Camden County Rotary International&Camden Co High School",
+      "nickname": "Wildbots",
+      "state_prov": "Georgia",
+      "team_number": 3329
+    },
+    "frc9770": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc9770",
+      "name": "Family/Community",
+      "nickname": "Victory Church of Christ Robo Knights",
+      "state_prov": "Georgia",
+      "team_number": 9770
+    },
+    "frc4112": {
+      "city": "Cumming ",
+      "country": "USA",
+      "key": "frc4112",
+      "name": "AutomationDirect/Schneider Electric/NASA/Gene Haas Foundation/PTC/Fabricators Inc./Bhatia Family/Hershey Foundation&South Forsyth High School",
+      "nickname": "EagleBots",
+      "state_prov": "Georgia",
+      "team_number": 4112
+    },
+    "frc7451": {
+      "city": "Cumming",
+      "country": "USA",
+      "key": "frc7451",
+      "name": "AutomationDirect.com/Forsyth County Schools/Rosati's/DoDSTEM/Gene Haas Foundation/Novelis/T&D Machine Handling Inc./HC Robotics&Alliance Academy for Innovation",
+      "nickname": "AvengerRobotics",
+      "state_prov": "Georgia",
+      "team_number": 7451
+    },
+    "frc9477": {
+      "city": "Suwanee",
+      "country": "USA",
+      "key": "frc9477",
+      "name": "Forsyth County Schools/Automation Direct/NASA/Argosy Foundation/Gene Haas Foundation/The Goli Family/Lambert Robotics Booster Association&Lambert High School",
+      "nickname": "Lambda (λ)",
+      "state_prov": "Georgia",
+      "team_number": 9477
+    },
+    "frc8849": {
+      "city": "Alpharetta",
+      "country": "USA",
+      "key": "frc8849",
+      "name": "NCS Partners/Gene Haas Foundation/Carrier/Rolex Industries/LexisNexis&Family/Community",
+      "nickname": "Storm Robotics",
+      "state_prov": "Georgia",
+      "team_number": 8849
     },
     "frc7514": {
       "city": "Atlanta",
@@ -48094,33 +48374,6 @@
       "state_prov": "Georgia",
       "team_number": 6712
     },
-    "frc4730": {
-      "city": "Albany",
-      "country": "USA",
-      "key": "frc4730",
-      "name": "SWE/Department of Education/Dougherty County Schools System/Women in Technology/Albany Technical College&Monroe Comprehensive HS",
-      "nickname": "Terminators",
-      "state_prov": "Georgia",
-      "team_number": 4730
-    },
-    "frc4112": {
-      "city": "Cumming ",
-      "country": "USA",
-      "key": "frc4112",
-      "name": "AutomationDirect/Schneider Electric/NASA/Gene Haas Foundation/PTC/Fabricators Inc./Bhatia Family/Hershey Foundation&South Forsyth High School",
-      "nickname": "EagleBots",
-      "state_prov": "Georgia",
-      "team_number": 4112
-    },
-    "frc8849": {
-      "city": "Alpharetta",
-      "country": "USA",
-      "key": "frc8849",
-      "name": "NCS Partners/Gene Haas Foundation/Carrier/Rolex Industries/LexisNexis&Family/Community",
-      "nickname": "Storm Robotics",
-      "state_prov": "Georgia",
-      "team_number": 8849
-    },
     "frc6023": {
       "city": "Atlanta",
       "country": "USA",
@@ -48130,23 +48383,14 @@
       "state_prov": "Georgia",
       "team_number": 6023
     },
-    "frc9770": {
-      "city": "Atlanta",
+    "frc4730": {
+      "city": "Albany",
       "country": "USA",
-      "key": "frc9770",
-      "name": "Family/Community",
-      "nickname": "Victory Church of Christ Robo Knights",
+      "key": "frc4730",
+      "name": "SWE/Department of Education/Dougherty County Schools System/Women in Technology/Albany Technical College&Monroe Comprehensive HS",
+      "nickname": "Terminators",
       "state_prov": "Georgia",
-      "team_number": 9770
-    },
-    "frc7451": {
-      "city": "Cumming",
-      "country": "USA",
-      "key": "frc7451",
-      "name": "AutomationDirect.com/Forsyth County Schools/Rosati's/DoDSTEM/Gene Haas Foundation/Novelis/T&D Machine Handling Inc./HC Robotics&Alliance Academy for Innovation",
-      "nickname": "AvengerRobotics",
-      "state_prov": "Georgia",
-      "team_number": 7451
+      "team_number": 4730
     },
     "frc832": {
       "city": "Roswell",
@@ -48157,14 +48401,14 @@
       "state_prov": "Georgia",
       "team_number": 832
     },
-    "frc9477": {
-      "city": "Suwanee",
+    "frc9561": {
+      "city": "Dawsonville",
       "country": "USA",
-      "key": "frc9477",
-      "name": "Forsyth County Schools/Automation Direct/NASA/Argosy Foundation/Gene Haas Foundation/The Goli Family/Lambert Robotics Booster Association&Lambert High School",
-      "nickname": "Lambda (λ)",
+      "key": "frc9561",
+      "name": "CBG Consulting/Haas Foundation/Spicer Group/Universal Servo/Atlanta Gear Works/Huey Family/MESH Automation/BTD Manufacturing&Dawson Co High School",
+      "nickname": "Dawson Dinos",
       "state_prov": "Georgia",
-      "team_number": 9477
+      "team_number": 9561
     },
     "frc9480": {
       "city": "Flowery Branch",
@@ -48184,14 +48428,14 @@
       "state_prov": "Georgia",
       "team_number": 8100
     },
-    "frc1648": {
-      "city": "Atlanta",
+    "frc1833": {
+      "city": "Cumming",
       "country": "USA",
-      "key": "frc1648",
-      "name": "Novelis/T.R. & N. Reddy Foundation/Factory Automation Systems/In Memory of Shanna Jackson/ClearPoint Strategy/Northside Hospital/Professor Bug/Gene Haas Foundation/Kinematek/Midtown High School PTSO/State Representative Stacey Evans/Dematic/REV Robotics/Equipment Controls/Earthly Dynamics/Liz Dawg/IEEE/Pelle Development Group/King of Pops&Midtown High School",
-      "nickname": "G3 Robotics",
+      "key": "frc1833",
+      "name": "Advanced Instrument Technologies/Microsoft/Automation Direct/Jones Utilities Construction, Inc./NASA/Ignite Wireless/Banks Bookkeeping/Lead Coverage/Price Industries/BoldVu by MRI/Intuitive Foundation Grant/ADP/Cobb Community Foundation/Allstate/Conway & Owen/Gene Haas Foundation Grant/Agilox/PTC Grant/Thrifty Bot/Atlanta Creative Graphics Inc/Hopewell Designs, Inc/TAG Inc/Intuitive Foundation Grant/Trent Callan/Formlabs/David and Mary Kelton/Avery Banks/Kelton Holdings/Empower Sports Chiropractic&Family/Community",
+      "nickname": "Team BEAN",
       "state_prov": "Georgia",
-      "team_number": 1648
+      "team_number": 1833
     },
     "frc4189": {
       "city": "Jefferson",
@@ -48202,15 +48446,6 @@
       "state_prov": "Georgia",
       "team_number": 4189
     },
-    "frc11174": {
-      "city": "Alpharetta",
-      "country": "USA",
-      "key": "frc11174",
-      "name": "Automation Direct/Novelis/Haas Foundation/Argosy Foundation/Oximont&Denmark High School",
-      "nickname": "Danes Robotics",
-      "state_prov": "Georgia",
-      "team_number": 11174
-    },
     "frc8815": {
       "city": "Statesboro",
       "country": "USA",
@@ -48219,33 +48454,6 @@
       "nickname": "Barnstormers",
       "state_prov": "Georgia",
       "team_number": 8815
-    },
-    "frc1833": {
-      "city": "Cumming",
-      "country": "USA",
-      "key": "frc1833",
-      "name": "Advanced Instrument Technologies/Microsoft/Automation Direct/Jones Utilities Construction, Inc./NASA/Ignite Wireless/Banks Bookkeeping/Lead Coverage/Price Industries/BoldVu by MRI/Intuitive Foundation Grant/ADP/Cobb Community Foundation/Allstate/Conway & Owen/Gene Haas Foundation Grant/Agilox/PTC Grant/Thrifty Bot/Atlanta Creative Graphics Inc/Hopewell Designs, Inc/TAG Inc/Intuitive Foundation Grant/Trent Callan/Formlabs/David and Mary Kelton/Avery Banks/Kelton Holdings/Empower Sports Chiropractic&Family/Community",
-      "nickname": "Team BEAN",
-      "state_prov": "Georgia",
-      "team_number": 1833
-    },
-    "frc9561": {
-      "city": "Dawsonville",
-      "country": "USA",
-      "key": "frc9561",
-      "name": "CBG Consulting/Haas Foundation/Spicer Group/Universal Servo/Atlanta Gear Works/Huey Family/MESH Automation/BTD Manufacturing&Dawson Co High School",
-      "nickname": "Dawson Dinos",
-      "state_prov": "Georgia",
-      "team_number": 9561
-    },
-    "frc1771": {
-      "city": "Suwanee",
-      "country": "USA",
-      "key": "frc1771",
-      "name": "Family/Community & North Gwinnett High School",
-      "nickname": "North Gwinnett Robotics",
-      "state_prov": "Georgia",
-      "team_number": 1771
     },
     "frc5651": {
       "city": "Atlanta",
@@ -48256,23 +48464,32 @@
       "state_prov": "Georgia",
       "team_number": 5651
     },
-    "frc9522": {
-      "city": "Flowery Branch",
+    "frc1771": {
+      "city": "Suwanee",
       "country": "USA",
-      "key": "frc9522",
-      "name": "The Gene Haas Foundation/Argosy Foundation/State Farm/Lanier Periodontics&Flowery Branch High School",
-      "nickname": "Archimedes",
+      "key": "frc1771",
+      "name": "Family/Community & North Gwinnett High School",
+      "nickname": "North Gwinnett Robotics",
       "state_prov": "Georgia",
-      "team_number": 9522
+      "team_number": 1771
     },
-    "frc2415": {
+    "frc1648": {
       "city": "Atlanta",
       "country": "USA",
-      "key": "frc2415",
-      "name": "Novelis/Jim and Marilyn Black Family/UL-Greenguard & Westminster School",
-      "nickname": "WiredCats",
+      "key": "frc1648",
+      "name": "Novelis/T.R. & N. Reddy Foundation/Factory Automation Systems/In Memory of Shanna Jackson/ClearPoint Strategy/Northside Hospital/Professor Bug/Gene Haas Foundation/Kinematek/Midtown High School PTSO/State Representative Stacey Evans/Dematic/REV Robotics/Equipment Controls/Earthly Dynamics/Liz Dawg/IEEE/Pelle Development Group/King of Pops&Midtown High School",
+      "nickname": "G3 Robotics",
       "state_prov": "Georgia",
-      "team_number": 2415
+      "team_number": 1648
+    },
+    "frc11174": {
+      "city": "Alpharetta",
+      "country": "USA",
+      "key": "frc11174",
+      "name": "Automation Direct/Novelis/Haas Foundation/Argosy Foundation/Oximont&Denmark High School",
+      "nickname": "Danes Robotics",
+      "state_prov": "Georgia",
+      "team_number": 11174
     },
     "frc3091": {
       "city": "Atlanta",
@@ -48283,32 +48500,14 @@
       "state_prov": "Georgia",
       "team_number": 3091
     },
-    "frc4468": {
-      "city": "Atlanta",
+    "frc9522": {
+      "city": "Flowery Branch",
       "country": "USA",
-      "key": "frc4468",
-      "name": "GE Volunteers/H.B. Fuller/Johnson Research & Development/Gate 6 Solutions/SOLIDWORKS/Novelis/Invention Studio at Georgia Tech/Automation Direct/Fastenal&Fernbank Science Center",
-      "nickname": "Fernbank LINKS",
+      "key": "frc9522",
+      "name": "The Gene Haas Foundation/Argosy Foundation/State Farm/Lanier Periodontics&Flowery Branch High School",
+      "nickname": "Archimedes",
       "state_prov": "Georgia",
-      "team_number": 4468
-    },
-    "frc4509": {
-      "city": "Sugar Hill",
-      "country": "USA",
-      "key": "frc4509",
-      "name": "State Farm IT/Haas Foundation/Gwinnett County Public Schools&Lanier High School",
-      "nickname": "Mechanical Bulls",
-      "state_prov": "Georgia",
-      "team_number": 4509
-    },
-    "frc9057": {
-      "city": "Atlanta",
-      "country": "USA",
-      "key": "frc9057",
-      "name": "Novelis/NASA Robotics Alliance Project/Women In Technology&Coretta Scott King Young women's Leadership Academy",
-      "nickname": "G.I.R.L.",
-      "state_prov": "Georgia",
-      "team_number": 9057
+      "team_number": 9522
     },
     "frc1795": {
       "city": "Atlanta",
@@ -48319,6 +48518,15 @@
       "state_prov": "Georgia",
       "team_number": 1795
     },
+    "frc2415": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc2415",
+      "name": "Novelis/Jim and Marilyn Black Family/UL-Greenguard & Westminster School",
+      "nickname": "WiredCats",
+      "state_prov": "Georgia",
+      "team_number": 2415
+    },
     "frc6340": {
       "city": "Atlanta",
       "country": "USA",
@@ -48327,6 +48535,15 @@
       "nickname": "The Marist Manatees",
       "state_prov": "Georgia",
       "team_number": 6340
+    },
+    "frc4468": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc4468",
+      "name": "GE Volunteers/H.B. Fuller/Johnson Research & Development/Gate 6 Solutions/SOLIDWORKS/Novelis/Invention Studio at Georgia Tech/Automation Direct/Fastenal&Fernbank Science Center",
+      "nickname": "Fernbank LINKS",
+      "state_prov": "Georgia",
+      "team_number": 4468
     },
     "frc1261": {
       "city": "Suwanee",
@@ -48337,6 +48554,15 @@
       "state_prov": "Georgia",
       "team_number": 1261
     },
+    "frc4509": {
+      "city": "Sugar Hill",
+      "country": "USA",
+      "key": "frc4509",
+      "name": "State Farm IT/Haas Foundation/Gwinnett County Public Schools&Lanier High School",
+      "nickname": "Mechanical Bulls",
+      "state_prov": "Georgia",
+      "team_number": 4509
+    },
     "frc5074": {
       "city": "Norcross",
       "country": "USA",
@@ -48346,32 +48572,14 @@
       "state_prov": "Georgia",
       "team_number": 5074
     },
-    "frc5293": {
-      "city": "Duluth",
+    "frc9057": {
+      "city": "Atlanta",
       "country": "USA",
-      "key": "frc5293",
-      "name": "Gwinnett County Public Schools/Price Industries/Gene Haas Foundation/Kimberly-Clark/Novelis/Automation Direct&Duluth High School",
-      "nickname": "Metal Crusaders",
+      "key": "frc9057",
+      "name": "Novelis/NASA Robotics Alliance Project/Women In Technology&Coretta Scott King Young women's Leadership Academy",
+      "nickname": "G.I.R.L.",
       "state_prov": "Georgia",
-      "team_number": 5293
-    },
-    "frc1683": {
-      "city": "Johns Creek",
-      "country": "USA",
-      "key": "frc1683",
-      "name": "Nordson Corporation/PMMI/General Motors/Rockwell Automation/Gene Haas Foundation/Slack&Northview High School",
-      "nickname": "Techno Titans",
-      "state_prov": "Georgia",
-      "team_number": 1683
-    },
-    "frc8865": {
-      "city": "Dacula",
-      "country": "USA",
-      "key": "frc8865",
-      "name": "Gwinnett County Public Schools/Gene Haas Foundation/Arconic Foundation/Publix Supermarkets&Dacula High School",
-      "nickname": "Dacula Droids",
-      "state_prov": "Georgia",
-      "team_number": 8865
+      "team_number": 9057
     },
     "frc10482": {
       "city": "Athens",
@@ -48382,14 +48590,14 @@
       "state_prov": "Georgia",
       "team_number": 10482
     },
-    "frc8577": {
-      "city": "Atlanta",
+    "frc8865": {
+      "city": "Dacula",
       "country": "USA",
-      "key": "frc8577",
-      "name": "Comcast/Johnson STEM Activity Center/Brewer Industries&Georgia Cyber Academy",
-      "nickname": "Georgia Cyber Academy Champions",
+      "key": "frc8865",
+      "name": "Gwinnett County Public Schools/Gene Haas Foundation/Arconic Foundation/Publix Supermarkets&Dacula High School",
+      "nickname": "Dacula Droids",
       "state_prov": "Georgia",
-      "team_number": 8577
+      "team_number": 8865
     },
     "frc4701": {
       "city": "Savannah",
@@ -48418,15 +48626,6 @@
       "state_prov": "Georgia",
       "team_number": 3318
     },
-    "frc6910": {
-      "city": "Hoschton",
-      "country": "USA",
-      "key": "frc6910",
-      "name": "Gwinnett County Public Schools/Gene Haas Foundation/ABEV/Chick-fil-A Hamilton Mill&Mill Creek High School",
-      "nickname": "Mill Creek Steel Talons",
-      "state_prov": "Georgia",
-      "team_number": 6910
-    },
     "frc6705": {
       "city": "Dunwoody",
       "country": "USA",
@@ -48436,23 +48635,41 @@
       "state_prov": "Georgia",
       "team_number": 6705
     },
-    "frc7104": {
-      "city": "Savannah",
+    "frc6910": {
+      "city": "Hoschton",
       "country": "USA",
-      "key": "frc7104",
-      "name": "DoD STEM/International Paper/Chatles.Anderson Jr and family/The Ganem Family/The McKinney Family/Keith Parker&Benedictine Military School",
-      "nickname": "The Bot Brothers",
+      "key": "frc6910",
+      "name": "Gwinnett County Public Schools/Gene Haas Foundation/ABEV/Chick-fil-A Hamilton Mill&Mill Creek High School",
+      "nickname": "Mill Creek Steel Talons",
       "state_prov": "Georgia",
-      "team_number": 7104
+      "team_number": 6910
     },
-    "frc4188": {
-      "city": "Columbus",
+    "frc1683": {
+      "city": "Johns Creek",
       "country": "USA",
-      "key": "frc4188",
-      "name": "Bradley-Turner Foundation/CHS Alumni Association/Aflac/Ebco Battery/WestCoast Products/Mathnasium/Muscogee County School District/DoD STEM/Flint Energies/JROTC/Pantone 294/Harris County Sheriff's Office&Family/Community",
-      "nickname": "Columbus Space Program",
+      "key": "frc1683",
+      "name": "Nordson Corporation/PMMI/General Motors/Rockwell Automation/Gene Haas Foundation/Slack&Northview High School",
+      "nickname": "Techno Titans",
       "state_prov": "Georgia",
-      "team_number": 4188
+      "team_number": 1683
+    },
+    "frc8577": {
+      "city": "Atlanta",
+      "country": "USA",
+      "key": "frc8577",
+      "name": "Comcast/Johnson STEM Activity Center/Brewer Industries&Georgia Cyber Academy",
+      "nickname": "Georgia Cyber Academy Champions",
+      "state_prov": "Georgia",
+      "team_number": 8577
+    },
+    "frc5293": {
+      "city": "Duluth",
+      "country": "USA",
+      "key": "frc5293",
+      "name": "Gwinnett County Public Schools/Price Industries/Gene Haas Foundation/Kimberly-Clark/Novelis/Automation Direct&Duluth High School",
+      "nickname": "Metal Crusaders",
+      "state_prov": "Georgia",
+      "team_number": 5293
     },
     "frc1414": {
       "city": "Atlanta",
@@ -48463,24 +48680,6 @@
       "state_prov": "Georgia",
       "team_number": 1414
     },
-    "frc5828": {
-      "city": "Albany",
-      "country": "USA",
-      "key": "frc5828",
-      "name": "Gear Up Dougherty County/Argosy / Hack Club/Dougherty County School System/The 4C Academy&Westover Comprehensive HS",
-      "nickname": "Flying Riots",
-      "state_prov": "Georgia",
-      "team_number": 5828
-    },
-    "frc3344": {
-      "city": "Fayetteville",
-      "country": "USA",
-      "key": "frc3344",
-      "name": "Caterpillar Inc/QTS/Aberdeen Advisors/Fayette County Schools&Whitewater High School",
-      "nickname": "Space Dragons",
-      "state_prov": "Georgia",
-      "team_number": 3344
-    },
     "frc9582": {
       "city": "Conyers",
       "country": "USA",
@@ -48490,14 +48689,32 @@
       "state_prov": "Georgia",
       "team_number": 9582
     },
-    "frc3635": {
-      "city": "Perry",
+    "frc5109": {
+      "city": "Johns Creek",
       "country": "USA",
-      "key": "frc3635",
-      "name": "DoD STEM/Booz Allen Hamilton/BAE/GA Power&Perry High School&Northside High School&Warner Robins High School&Houston Co High School&Veterans High School&Houston Co Career Academy",
-      "nickname": "Flying Legion",
+      "key": "frc5109",
+      "name": "Nordson Corporation Foundation/Johns Creek High School PTSA/Johns Creek High School School Governance Council/Holloway Consulting/PCEMT/Berry Bar Acai Bowl/The Home Depot&Johns Creek High School",
+      "nickname": "Gladiator Robotics",
       "state_prov": "Georgia",
-      "team_number": 3635
+      "team_number": 5109
+    },
+    "frc7104": {
+      "city": "Savannah",
+      "country": "USA",
+      "key": "frc7104",
+      "name": "DoD STEM/International Paper/Chatles.Anderson Jr and family/The Ganem Family/The McKinney Family/Keith Parker&Benedictine Military School",
+      "nickname": "The Bot Brothers",
+      "state_prov": "Georgia",
+      "team_number": 7104
+    },
+    "frc5828": {
+      "city": "Albany",
+      "country": "USA",
+      "key": "frc5828",
+      "name": "Gear Up Dougherty County/Argosy / Hack Club/Dougherty County School System/The 4C Academy&Westover Comprehensive HS",
+      "nickname": "Flying Riots",
+      "state_prov": "Georgia",
+      "team_number": 5828
     },
     "frc3815": {
       "city": "Cumming",
@@ -48517,23 +48734,32 @@
       "state_prov": "Georgia",
       "team_number": 4240
     },
-    "frc5109": {
-      "city": "Johns Creek",
+    "frc3635": {
+      "city": "Perry",
       "country": "USA",
-      "key": "frc5109",
-      "name": "Nordson Corporation Foundation/Johns Creek High School PTSA/Johns Creek High School School Governance Council/Holloway Consulting/PCEMT/Berry Bar Acai Bowl/The Home Depot&Johns Creek High School",
-      "nickname": "Gladiator Robotics",
+      "key": "frc3635",
+      "name": "DoD STEM/Booz Allen Hamilton/BAE/GA Power&Perry High School&Northside High School&Warner Robins High School&Houston Co High School&Veterans High School&Houston Co Career Academy",
+      "nickname": "Flying Legion",
       "state_prov": "Georgia",
-      "team_number": 5109
+      "team_number": 3635
     },
-    "frc8080": {
-      "city": "Canton",
+    "frc4188": {
+      "city": "Columbus",
       "country": "USA",
-      "key": "frc8080",
-      "name": "Cherokee County School District/Lockheed Martin/Online Metals/Vanderlande /Win-Tech/Sycamore Learning Company&Sequoyah High School",
-      "nickname": "Sequoyah High School Robotics",
+      "key": "frc4188",
+      "name": "Bradley-Turner Foundation/CHS Alumni Association/Aflac/Ebco Battery/WestCoast Products/Mathnasium/Muscogee County School District/DoD STEM/Flint Energies/JROTC/Pantone 294/Harris County Sheriff's Office&Family/Community",
+      "nickname": "Columbus Space Program",
       "state_prov": "Georgia",
-      "team_number": 8080
+      "team_number": 4188
+    },
+    "frc3344": {
+      "city": "Fayetteville",
+      "country": "USA",
+      "key": "frc3344",
+      "name": "Caterpillar Inc/QTS/Aberdeen Advisors/Fayette County Schools&Whitewater High School",
+      "nickname": "Space Dragons",
+      "state_prov": "Georgia",
+      "team_number": 3344
     },
     "frc4459": {
       "city": "Lithia Springs",
@@ -48544,6 +48770,15 @@
       "state_prov": "Georgia",
       "team_number": 4459
     },
+    "frc9086": {
+      "city": "Richmond Hill",
+      "country": "USA",
+      "key": "frc9086",
+      "name": "Publix/Coastal Electric Cooperative&Richmond Hill High School",
+      "nickname": "Wildcat Robotics",
+      "state_prov": "Georgia",
+      "team_number": 9086
+    },
     "frc6925": {
       "city": "College Park",
       "country": "USA",
@@ -48553,14 +48788,14 @@
       "state_prov": "Georgia",
       "team_number": 6925
     },
-    "frc9086": {
-      "city": "Richmond Hill",
+    "frc8080": {
+      "city": "Canton",
       "country": "USA",
-      "key": "frc9086",
-      "name": "Publix/Coastal Electric Cooperative&Richmond Hill High School",
-      "nickname": "Wildcat Robotics",
+      "key": "frc8080",
+      "name": "Cherokee County School District/Lockheed Martin/Online Metals/Vanderlande /Win-Tech/Sycamore Learning Company&Sequoyah High School",
+      "nickname": "Sequoyah High School Robotics",
       "state_prov": "Georgia",
-      "team_number": 9086
+      "team_number": 8080
     }
   },
   "epa": {
