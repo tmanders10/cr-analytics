@@ -81,17 +81,33 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // Load existing data.json from GitHub — abort if we can't get it
-    // (proceeding without it would wipe all other events' data)
+    // Load existing data.json from GitHub using blob API (handles files > 1MB)
+    // The contents API silently truncates large files, so we use the blob SHA instead
     let existing;
     try {
-      const existingRes = await fetch(
+      // Step 1: Get the blob SHA for public/data.json via contents API
+      const metaRes = await fetch(
         `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
         { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' } }
       );
-      if (!existingRes.ok) throw new Error(`HTTP ${existingRes.status}`);
-      const existingData = await existingRes.json();
-      const decoded = Buffer.from(existingData.content, 'base64').toString('utf8');
+      if (!metaRes.ok) throw new Error(`Metadata fetch failed: HTTP ${metaRes.status}`);
+      const meta = await metaRes.json();
+
+      // Step 2: If file is small enough, use content directly; otherwise fetch via blob API
+      let decoded;
+      if (meta.content && meta.encoding === 'base64' && meta.size < 900000) {
+        // Small enough — use inline content
+        decoded = Buffer.from(meta.content.replace(/\n/g, ''), 'base64').toString('utf8');
+      } else {
+        // Large file — fetch via blob API using the sha
+        const blobRes = await fetch(
+          `https://api.github.com/repos/${GITHUB_REPO}/git/blobs/${meta.sha}`,
+          { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics', Accept: 'application/vnd.github.v3.raw' } }
+        );
+        if (!blobRes.ok) throw new Error(`Blob fetch failed: HTTP ${blobRes.status}`);
+        decoded = await blobRes.text();
+      }
+
       existing = JSON.parse(decoded);
     } catch (e) {
       // Safety abort — never proceed without existing data or we'll wipe all other events
