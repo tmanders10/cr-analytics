@@ -282,9 +282,9 @@ function saveState(){
 function restoreState(){
   try{
     const tracked=sessionStorage.getItem('cr_tracked');
-    if(tracked) TRACKED=new Set(JSON.parse(tracked));
+    if(tracked){ TRACKED.clear(); JSON.parse(tracked).forEach(v=>TRACKED.add(v)); }
     const filter=sessionStorage.getItem('cr_filter');
-    if(filter) ACTIVE_FILTER=new Set(JSON.parse(filter));
+    if(filter){ ACTIVE_FILTER.clear(); JSON.parse(filter).forEach(v=>ACTIVE_FILTER.add(v)); }
     const scType=sessionStorage.getItem('cr_scType');
     if(scType) SC_TYPE=scType;
     const ovType=sessionStorage.getItem('cr_ovType');
