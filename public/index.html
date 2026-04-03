@@ -347,23 +347,36 @@ async function init(){
     const pending=EVENTS.length-loadedCount;
     setS('ok',`${allM.length} matches · ${loadedCount} events loaded · ${pending>0?pending+' pending':'all complete'}`);
 
-    // Restore state from before refresh if available
-    restoreState();
-
-    // Restore active filter pill UI (pills already clickable from hydration above)
-    ACTIVE_FILTER.forEach(evKey=>{
-      const pill=document.getElementById('pill-'+evKey);
-      if(pill) pill.classList.add('on');
-    });
-    if(ACTIVE_FILTER.size) document.getElementById('filterHint').style.display='inline';
+    // Only restore state if this load was triggered by a refresh button (has ?r= param)
+    const wasRefresh = new URLSearchParams(window.location.search).has('r');
+    if(wasRefresh){
+      restoreState();
+      // Restore active filter pill UI
+      ACTIVE_FILTER.forEach(evKey=>{
+        const pill=document.getElementById('pill-'+evKey);
+        if(pill) pill.classList.add('on');
+      });
+      if(ACTIVE_FILTER.size) document.getElementById('filterHint').style.display='inline';
+    } else {
+      // Clean slate — clear any saved state from previous sessions
+      sessionStorage.removeItem('cr_tracked');
+      sessionStorage.removeItem('cr_filter');
+      sessionStorage.removeItem('cr_scType');
+      sessionStorage.removeItem('cr_ovType');
+      sessionStorage.removeItem('cr_cardType');
+      sessionStorage.removeItem('cr_cardMode');
+      sessionStorage.removeItem('cr_activePage');
+    }
 
     renderAll();
 
-    // Restore active tab
-    const savedPage=sessionStorage.getItem('cr_activePage');
-    if(savedPage){
-      const tabs=document.querySelectorAll('.nav-tab');
-      tabs.forEach(tab=>{ if(tab.getAttribute('onclick')&&tab.getAttribute('onclick').includes("'"+savedPage+"'")) showPage(savedPage,tab); });
+    // Restore active tab (only if refresh)
+    if(wasRefresh){
+      const savedPage=sessionStorage.getItem('cr_activePage');
+      if(savedPage){
+        const tabs=document.querySelectorAll('.nav-tab');
+        tabs.forEach(tab=>{ if(tab.getAttribute('onclick')&&tab.getAttribute('onclick').includes("'"+savedPage+"'")) showPage(savedPage,tab); });
+      }
     }
   }catch(err){
     setS('error','Failed to load data.json — '+err.message);
