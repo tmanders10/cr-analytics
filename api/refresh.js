@@ -94,16 +94,26 @@ module.exports = async function handler(req, res) {
 
   try {
     // Load existing data.json from GitHub to preserve completed event data
+    // Uses blob API to handle files > 1MB (contents API silently truncates)
     let existing = { events: {}, districtRankings: [], teams: {}, epa: {} };
     try {
-      const existingRes = await fetch(
+      const metaRes = await fetch(
         `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
         { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' } }
       );
-      if (existingRes.ok) {
-        const existingData = await existingRes.json();
-        const decoded = Buffer.from(existingData.content, 'base64').toString('utf8');
-        existing = JSON.parse(decoded);
+      if (metaRes.ok) {
+        const meta = await metaRes.json();
+        let decoded;
+        if (meta.content && meta.encoding === 'base64' && meta.size < 900000) {
+          decoded = Buffer.from(meta.content.replace(/\n/g, ''), 'base64').toString('utf8');
+        } else {
+          const blobRes = await fetch(
+            `https://api.github.com/repos/${GITHUB_REPO}/git/blobs/${meta.sha}`,
+            { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics', Accept: 'application/vnd.github.v3.raw' } }
+          );
+          if (blobRes.ok) decoded = await blobRes.text();
+        }
+        if (decoded) existing = JSON.parse(decoded);
       }
     } catch (e) {}
 
