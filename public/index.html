@@ -350,10 +350,10 @@ async function init(){
     // Restore state from before refresh if available
     restoreState();
 
-    // Restore active filter pill UI
+    // Restore active filter pill UI (pills already clickable from hydration above)
     ACTIVE_FILTER.forEach(evKey=>{
       const pill=document.getElementById('pill-'+evKey);
-      if(pill){ pill.classList.add('on'); makePillClickable(evKey); }
+      if(pill) pill.classList.add('on');
     });
     if(ACTIVE_FILTER.size) document.getElementById('filterHint').style.display='inline';
 
