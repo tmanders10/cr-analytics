@@ -236,6 +236,24 @@ let DB={matches:{},rankings:{},alliances:{},teams:{},epa:{}};
 let allM=[],distRank=[];
 const loadedEvents=new Set();
 
+// ── TEAM COLORS ──
+const TEAM_COLORS=[
+  {name:'Green',  border:'#1D9E75',text:'#1D9E75',badge:'#E1F5EE',badgeText:'#0F6E56',dot:'#1D9E75'},
+  {name:'Blue',   border:'#378ADD',text:'#378ADD',badge:'#E6F1FB',badgeText:'#185FA5',dot:'#378ADD'},
+  {name:'Amber',  border:'#BA7517',text:'#BA7517',badge:'#FAEEDA',badgeText:'#854F0B',dot:'#BA7517'},
+  {name:'Purple', border:'#7F77DD',text:'#7F77DD',badge:'#EEEDFE',badgeText:'#3C3489',dot:'#7F77DD'},
+  {name:'Coral',  border:'#D85A30',text:'#D85A30',badge:'#FAECE7',badgeText:'#712B13',dot:'#D85A30'},
+  {name:'Pink',   border:'#D4537E',text:'#D4537E',badge:'#FBEAF0',badgeText:'#72243E',dot:'#D4537E'},
+];
+const MAX_TRACKED=6;
+// Get color for a team number (by position in TRACKED array)
+function teamColor(n){const i=TRACKED.indexOf(parseInt(n));return i>=0?TEAM_COLORS[i]:null;}
+// Get color for a team key e.g. 'frc1002'
+function teamColorByKey(k){return teamColor(parseInt(k.replace('frc','')));}
+// Styled team number span with their assigned color
+function coloredTeamNum(n,extra=''){const c=teamColor(n);return c?`<span style="color:${c.text};font-weight:600${extra}">${n}</span>`:`<span>${n}</span>`;}
+function coloredTeamNumByKey(k,extra=''){return coloredTeamNum(parseInt(k.replace('frc','')),extra);}
+
 // ── INIT PILLS ──
 (function(){
   const wrap=document.getElementById('pillWrap');
@@ -759,7 +777,18 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
 }
 
 // ════════ TEAM TRACKER ════════
-function addTrackedTeam(){const inp=document.getElementById('trackAdd');const n=parseInt(inp.value.trim());if(!n||isNaN(n)){inp.value='';return;}if(!TRACKED.includes(n))TRACKED.push(n);inp.value='';renderAll();}
+function addTrackedTeam(){
+  const inp=document.getElementById('trackAdd');
+  const n=parseInt(inp.value.trim());
+  if(!n||isNaN(n)){inp.value='';return;}
+  if(TRACKED.length>=MAX_TRACKED){
+    setS('error',`Maximum ${MAX_TRACKED} teams can be tracked at once.`);
+    setTimeout(()=>setS('ok',''),3000);
+    inp.value='';return;
+  }
+  if(!TRACKED.includes(n))TRACKED.push(n);
+  inp.value='';renderAll();
+}
 function removeTrackedTeam(n){const i=TRACKED.indexOf(n);if(i>-1)TRACKED.splice(i,1);renderAll();}
 function renderTrackerSetup(){return`<div class="tracker-setup">
   <div class="tracker-setup-title">★ Tracked Teams — highlights across all tabs</div>
@@ -866,17 +895,23 @@ function renderTPCard(t){
       </div>`:''} 
     </div>` : `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">EPA not yet available — run data refresh after event completes.</div>`;
 
-  return`<div class="tpc featured" draggable="true" data-team="${t.n}"
+  const tc=teamColor(t.n)||TEAM_COLORS[0];
+
+  return`<div class="tpc" draggable="true" data-team="${t.n}"
+    style="border-color:${tc.border}"
     ondragstart="dragStart(event,${t.n})"
     ondragover="dragOver(event)"
     ondragleave="dragLeave(event)"
     ondrop="dragDrop(event,${t.n})"
     ondragend="dragEnd(event)">
+    <div style="display:inline-flex;align-items:center;gap:5px;background:${tc.badge};color:${tc.badgeText};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:10px">
+      <span style="width:7px;height:7px;border-radius:50%;background:${tc.dot};flex-shrink:0"></span>${tc.name}
+    </div>
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
       <div class="drag-handle" title="Drag to reorder">⠿</div>
-      <div class="tpn">${t.n}</div>
+      <div class="tpn" style="color:${tc.text}">${t.n}</div>
       <div><div class="tpname">${t.name}</div><div class="tpmeta">District Rank #${t.rank}${ACTIVE_FILTER.size?' · filtered view':''}</div>
-      <div class="tprec">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
+      <div class="tprec" style="color:${tc.text}">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
     </div>
     ${hasData?`
     <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
@@ -916,9 +951,10 @@ function renderTmTable(teams){
   </tr></thead>
   <tbody>${teams.map(t=>{
     const epa=getLatestEPA(t.key);
-    return`<tr class="${isTr(t.key)?'hl':''}">
+    const tc=teamColorByKey(t.key);
+    return`<tr style="${tc?'border-left:3px solid '+tc.border+';':''}" class="${isTr(t.key)?'hl':''}">
     <td><span class="rk ${t.rank<=3?'top':''}">${t.rank===999?'–':t.rank}</span></td>
-    <td><a class="tlink" href="https://www.thebluealliance.com/team/${t.num}" target="_blank">${t.name}</a><span class="tnsm">${t.num}</span>${isTr(t.key)?'<span style="margin-left:5px;font-size:11px;color:var(--green)">★</span>':''}</td>
+    <td><a class="tlink" href="https://www.thebluealliance.com/team/${t.num}" target="_blank" style="${tc?'color:'+tc.text:''}">${t.name}</a><span class="tnsm">${t.num}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
     <td class="r" style="color:var(--win)">${t.stats.wins}</td>
     <td class="r" style="color:var(--loss)">${t.stats.losses}</td>
     <td class="r dim">${t.stats.ties}</td>
@@ -929,7 +965,7 @@ function renderTmTable(teams){
     <td class="r" style="color:${epaColor(epa?.total??null,allTotals)};font-weight:600">${fmtEPA(epa?.total??null)}</td>
     <td class="r" style="color:var(--blue)">${fmtEPA(epa?.auto??null)}</td>
     <td class="r" style="color:var(--orange)">${fmtEPA(epa?.endgame??null)}</td>
-    <td><button onclick="if(!TRACKED.includes(${t.num}))TRACKED.push(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${isTr(t.key)?'disabled':''}>+ Track</button></td>
+    <td><button onclick="if(!TRACKED.includes(${t.num}))TRACKED.push(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${isTr(t.key)||TRACKED.length>=MAX_TRACKED?'disabled':''}>+ Track</button></td>
   </tr>`;}).join('')}</tbody></table>`;}
 function renderTm(){
   const fM=filteredMatches();
@@ -985,7 +1021,7 @@ function renderAl(){
     if(!loadedEvents.has(ev.key)){html+=`<div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:8px"><span class="badge ${ev.cls}">${ev.short}</span> PCH District ${ev.name}</div>${pendingBanner(ev)}</div>`;return;}
     const alliances=DB.alliances[ev.key]||[],pm=po(ev.key);
     html+=`<div style="margin-bottom:28px"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);margin-bottom:14px;display:flex;align-items:center;gap:8px"><span class="badge ${ev.cls}">${ev.short}</span> PCH District ${ev.name}</div>`;
-    if(alliances.length){html+=`<div class="agrid" style="margin-bottom:14px">`;alliances.slice(0,8).forEach((al,i)=>{const picks=al.picks||[];html+=`<div class="acard"><div class="anum">Alliance ${i+1}</div>${picks.map((pk,pi)=>{const hl=isTr(pk);return`<div class="ateam ${hl?'hl':''}">${pi===0?'<span class="acap">CAP</span>':'<span style="width:28px;display:inline-block"></span>'}${tn(pk)} <span style="font-size:11px;color:${hl?'var(--green)':'var(--text3)'}">${tnum(pk)}${hl?'★':''}</span></div>`;}).join('')}</div>`;});html+=`</div>`;}
+    if(alliances.length){html+=`<div class="agrid" style="margin-bottom:14px">`;alliances.slice(0,8).forEach((al,i)=>{const picks=al.picks||[];html+=`<div class="acard"><div class="anum">Alliance ${i+1}</div>${picks.map((pk,pi)=>{const hl=isTr(pk);const tc=teamColorByKey(pk);return`<div class="ateam ${hl?'hl':''}">${pi===0?'<span class="acap">CAP</span>':'<span style="width:28px;display:inline-block"></span>'}${tn(pk)} <span style="font-size:11px;color:${tc?tc.text:'var(--text3)'}">${tnum(pk)}${hl?'★':''}</span></div>`;}).join('')}</div>`;});html+=`</div>`;}
     if(pm.length){
       const lo={qf:1,sf:2,f:3};
       const sorted=[...pm].sort((a,b)=>(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||(a.set_number-b.set_number)||(a.match_number-b.match_number));
@@ -1011,8 +1047,8 @@ function renderAl(){
           <th class="r">Winner</th>
         </tr></thead>
         <tbody>${sorted.map(m=>{
-          const rt=(m.alliances?.red?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' ');
-          const bt=(m.alliances?.blue?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' ');
+          const rt=(m.alliances?.red?.team_keys||[]).map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${tnum(k)}</span>`;}).join(' ');
+          const bt=(m.alliances?.blue?.team_keys||[]).map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${tnum(k)}</span>`;}).join(' ');
           const rs=m.alliances?.red?.score??'–',bs=m.alliances?.blue?.score??'–',w=m.winning_alliance||'';
           const lv={qf:'QF',sf:'SF',f:'Final'}[m.comp_level]||m.comp_level.toUpperCase();
           const rWin=w==='red', bWin=w==='blue';
@@ -1079,8 +1115,8 @@ function renderMxTable(matches){
     <th class="r">Winner</th>
   </tr></thead>
   <tbody>${sorted.map(m=>{
-    const rt=(m.alliances?.red?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' · ');
-    const bt=(m.alliances?.blue?.team_keys||[]).map(k=>`<span style="${isTr(k)?'color:var(--green);font-weight:600':''}">${tnum(k)}</span>`).join(' · ');
+    const rt=(m.alliances?.red?.team_keys||[]).map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${tnum(k)}</span>`;}).join(' · ');
+    const bt=(m.alliances?.blue?.team_keys||[]).map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${tnum(k)}</span>`;}).join(' · ');
     const rs=m.alliances?.red?.score??'–',bs=m.alliances?.blue?.score??'–',w=m.winning_alliance;
     const hasT=[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])].some(isTr);
     const rWin=w==='red', bWin=w==='blue';
