@@ -173,12 +173,19 @@
   <div class="hdiv"></div>
   <div class="header-sub">2026 District Season Analytics</div>
   <div class="hspacer"></div>
-  <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Fetch latest data from TBA + Statbotics">
+  <button class="refresh-btn" id="quickRefreshBtn" onclick="quickRefresh()" title="Fetch latest match scores for the current event only (~5 seconds)">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Match Update
+  </button>
+  <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Full refresh — TBA + Statbotics EPA for all active events (~20 seconds)" style="margin-left:6px">
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" id="refreshIcon">
       <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
       <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    Refresh Now
+    Full Refresh
   </button>
   <div class="data-info" id="dataInfo">Loading…</div>
 </div>
@@ -331,7 +338,6 @@ function timeSince(date){
 
 async function manualRefresh(){
   const btn=document.getElementById('refreshBtn');
-  const icon=document.getElementById('refreshIcon');
   btn.disabled=true;
   btn.classList.add('loading');
   btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 1s linear infinite"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Refreshing…`;
@@ -340,9 +346,9 @@ async function manualRefresh(){
     const res=await fetch('/api/refresh');
     const data=await res.json();
     if(!res.ok||!data.success) throw new Error(data.error||'Refresh failed');
-    setS('loading','Data saved — reloading in 10 seconds…');
     document.getElementById('dataInfo').innerHTML=`Refreshed just now<br><span style="opacity:.6">${data.matches} matches · ${data.epaTeams} EPA teams</span>`;
-    let secs=10;
+    let secs=3;
+    setS('loading',`Data saved — reloading in ${secs}…`);
     const cd=setInterval(()=>{
       secs--;
       setS('loading',`Data saved — reloading in ${secs} second${secs!==1?'s':''}…`);
@@ -352,7 +358,41 @@ async function manualRefresh(){
     setS('error','Refresh failed — '+err.message);
     btn.disabled=false;
     btn.classList.remove('loading');
-    btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Refresh Now`;
+    btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Full Refresh`;
+  }
+}
+
+async function quickRefresh(){
+  const btn=document.getElementById('quickRefreshBtn');
+  btn.disabled=true;
+  btn.classList.add('loading');
+  btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 1s linear infinite"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Updating…`;
+  setS('loading','Fetching latest match scores…');
+  try{
+    const res=await fetch('/api/refresh-matches');
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||'Update failed');
+    if(!data.success){
+      // No active event
+      setS('ok',data.message||'No active event today.');
+      btn.disabled=false;
+      btn.classList.remove('loading');
+      btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Match Update`;
+      return;
+    }
+    document.getElementById('dataInfo').innerHTML=`Refreshed just now<br><span style="opacity:.6">${data.eventName} · ${data.matches} matches</span>`;
+    let secs=3;
+    setS('loading',`${data.event} matches saved — reloading in ${secs}…`);
+    const cd=setInterval(()=>{
+      secs--;
+      setS('loading',`${data.event} matches saved — reloading in ${secs} second${secs!==1?'s':''}…`);
+      if(secs<=0){ clearInterval(cd); window.location.href=window.location.pathname+'?r='+Date.now(); }
+    },1000);
+  }catch(err){
+    setS('error','Match update failed — '+err.message);
+    btn.disabled=false;
+    btn.classList.remove('loading');
+    btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Match Update`;
   }
 }
 
