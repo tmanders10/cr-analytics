@@ -238,7 +238,7 @@ const loadedEvents=new Set();
 
 // ── TEAM COLORS ──
 const TEAM_COLORS=[
-  {name:'Green',  border:'#1D9E75',text:'#1D9E75',badge:'#E1F5EE',badgeText:'#0F6E56',dot:'#1D9E75'},
+  {name:'Green',  border:'#00e664',text:'#00e664',badge:'rgba(0,230,100,.12)',badgeText:'#00b84e',dot:'#00e664'},
   {name:'Blue',   border:'#378ADD',text:'#378ADD',badge:'#E6F1FB',badgeText:'#185FA5',dot:'#378ADD'},
   {name:'Amber',  border:'#BA7517',text:'#BA7517',badge:'#FAEEDA',badgeText:'#854F0B',dot:'#BA7517'},
   {name:'Purple', border:'#7F77DD',text:'#7F77DD',badge:'#EEEDFE',badgeText:'#3C3489',dot:'#7F77DD'},
@@ -630,13 +630,13 @@ function renderOv(){
     trackedHtml=`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:12px 0">No teams tracked yet — add teams on the <strong style="color:var(--text2)">Team Tracker</strong> tab.</div>`;
   }else{
     const trk=TRACKED.map(n=>{const k=`frc${n}`;const s=teamStatsF(k,fM);const dr=distRank.find(r=>r.team_key===k);return{n,k,name:tn(k),s,rank:dr?.rank??'–'};});
-    trackedHtml=trk.map(t=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:30px;color:var(--green);width:50px;flex-shrink:0;line-height:1">${t.n}</div>
+    trackedHtml=trk.map(t=>{const tc=teamColor(t.n)||TEAM_COLORS[0];return`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);border-left:3px solid ${tc.border};padding-left:10px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:30px;color:${tc.text};width:50px;flex-shrink:0;line-height:1">${t.n}</div>
       <div style="flex:1"><div style="font-weight:500">${t.name}</div><div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:2px">Rank #${t.rank} · ${t.s.wins}W-${t.s.losses}L-${t.s.ties}T</div></div>
-      <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:15px;color:var(--green)">${t.s.avgS.toFixed(1)}</div><div style="font-size:10px;color:var(--text3)">avg</div></div>
+      <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:15px;color:${tc.text}">${t.s.avgS.toFixed(1)}</div><div style="font-size:10px;color:var(--text3)">avg</div></div>
       <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--blue)">${t.s.avgA.toFixed(1)}</div><div style="font-size:10px;color:var(--text3)">auto</div></div>
       <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange)">${t.s.avgEg.toFixed(1)}</div><div style="font-size:10px;color:var(--text3)">endgame</div></div>
-    </div>`).join('');
+    </div>`;}).join('');
   }
   document.getElementById('pg-overview').innerHTML=`
 <div class="sh"><h2>2026 <span>District</span> Season</h2><span class="sub">${(()=>{const comp=EVENTS.filter(ev=>evStatus(ev)==='complete').length;const active=EVENTS.filter(ev=>evStatus(ev)==='active').length;let s=`${comp} of ${EVENTS.length} complete`;if(active>0)s+=` · ${active} in progress`;return s+filterLabel();})()}</span></div>
@@ -693,9 +693,7 @@ function renderRk(){
 <div class="sh"><h2>District <span>Rankings</span></h2><span class="sub">${rows.length} teams · 2026pch</span></div>
 <div class="card" style="padding:0 18px 0"><div class="tw"><table>
   <thead><tr><th>Rank</th><th>Team</th><th class="r">District Pts</th><th class="r">Event 1</th><th class="r">Event 2</th><th class="r">Rookie Bonus</th></tr></thead>
-  <tbody>${rows.map(r=>{const tr=isTr(r.team_key);return`<tr class="${tr?'hl':''}">
-    <td><span class="rk ${r.rank<=3?'top':''}">${r.rank}</span></td>
-    <td><a class="tlink" href="https://www.thebluealliance.com/team/${tnum(r.team_key)}" target="_blank">${tn(r.team_key)}</a><span class="tnsm">${tnum(r.team_key)}</span>${tr?'<span style="margin-left:5px;font-size:11px;color:var(--green)">★</span>':''}</td>
+  <tbody>${rows.map(r=>{const tr=isTr(r.team_key);const tc=teamColorByKey(r.team_key);return`<tr class="${tr?'hl':''}" style="${tc?'border-left:3px solid '+tc.border+';':''}">\n    <td><span class="rk ${r.rank<=3?'top':''}">${r.rank}</span></td>\n    <td><a class="tlink" href="https://www.thebluealliance.com/team/${tnum(r.team_key)}" target="_blank" style="${tc?'color:'+tc.text:''}">${tn(r.team_key)}</a><span class="tnsm">${tnum(r.team_key)}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
     <td class="r" style="color:var(--green);font-weight:600">${r.point_total??r.total_points??'–'}</td>
     <td class="r">${r.event_points?.[0]?.total??'–'}</td>
     <td class="r">${r.event_points?.[1]?.total??'–'}</td>
@@ -766,7 +764,7 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
       <td class="dim">${i+1}</td><td><span class="badge ${row.ec}">${row.esh}</span></td>
       <td class="r dim">${row.isQm?'QM':'PO'}${row.mn}</td>
       <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
-      <td>${row.teams.map(t=>`<span style="${TRACKED.includes(parseInt(t))?'color:var(--green);font-weight:600':''}">${t}</span>`).join(' · ')}</td>
+      <td>${row.teams.map(t=>{const tc=teamColor(parseInt(t));return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${t}</span>`;}).join(' · ')}</td>
       <td class="r" style="color:var(--green);font-weight:600">${row.sc}</td>
       <td class="r" style="color:var(--blue)">${row.au??'–'}</td><td class="r">${row.tl??'–'}</td>
       <td class="r" style="color:var(--orange)">${row.eg??'–'}</td>
