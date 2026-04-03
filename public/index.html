@@ -195,6 +195,7 @@
     </button>
   </div>
   <div class="data-info" id="dataInfo">Loading…</div>
+</div>
 
 <div class="status-bar">
   <div class="sdot" id="sdot"></div>
@@ -738,48 +739,6 @@ function renderOv(){
 <div class="sh"><h2>2026 <span>District</span> Season</h2><span class="sub">${(()=>{const comp=EVENTS.filter(ev=>evStatus(ev)==='complete').length;const active=EVENTS.filter(ev=>evStatus(ev)==='active').length;let s=`${comp} of ${EVENTS.length} complete`;if(active>0)s+=` · ${active} in progress`;return s+filterLabel();})()}</span></div>
 ${pendingEvs.length?`<div class="pending-banner">⏳ <strong>${pendingEvs.map(e=>e.name+' (Wk '+e.week+')').join(' · ')}</strong> — upcoming. Refresh data after events complete.</div>`:''}
 ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3)">🔍 Showing: <strong>${EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)).map(e=>`<span class="badge ${e.cls}">${e.short}</span>`).join(' ')}</strong> — click pills to change filter.</div>`:''}
-<div class="g4" style="margin-bottom:16px">
-  <div class="metric"><div class="mlabel">Qual Matches</div><div class="mval">${totQ}</div><div class="msub">${loadedEvs.length} event(s) shown</div></div>
-  <div class="metric"><div class="mlabel">Playoff Matches</div><div class="mval">${totP}</div><div class="msub">QF through finals</div></div>
-  <div class="metric"><div class="mlabel">Avg Alliance Score</div><div class="mval">${avgAll.toFixed(1)}</div><div class="msub">qual rounds</div></div>
-  <div class="metric"><div class="mlabel">Top Match Score</div><div class="mval">${hiS||'–'}</div><div class="msub">${hiT||'–'} · ${hiE||'–'}</div></div>
-</div>
-<div class="g2" style="margin-bottom:16px">
-  <div class="card"><div class="ctitle">Avg Alliance Score by Event</div>
-    ${evRows.length?evRows.map(ev=>`<div style="margin-bottom:13px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span><span class="badge ${ev.cls}">${ev.short}</span><span style="margin-left:7px">${ev.name}</span></span><span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--green)">${ev.avg.toFixed(1)}</span></div>
-      <div style="display:flex;align-items:center;gap:8px"><div class="bt"><div class="bf bg" style="width:${ev.avg/maxAvg*100}%"></div></div></div>
-      <div style="font-size:10px;color:var(--text3);margin-top:3px;font-family:'JetBrains Mono',monospace">${ev.cnt} matches · peak ${ev.max}</div>
-    </div>`).join(''):'<div style="color:var(--text3);font-size:12px">No completed events in current filter.</div>'}
-  </div>
-  <div class="card"><div class="ctitle">★ Tracked Teams</div>${trackedHtml}</div>
-</div>
-<div class="card" id="ovPhaseCard">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-    <div class="ctitle" style="margin-bottom:0">Per-Event Phase Averages</div>
-    <div style="display:flex;gap:5px;align-items:center">
-      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Type:</span>
-      <button style="${OV_TYPE==='qm'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='qm';renderOv()">Quals</button>
-      <button style="${OV_TYPE==='po'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='po';renderOv()">Playoffs</button>
-      <button style="${OV_TYPE==='all'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='all';renderOv()">All</button>
-    </div>
-  </div>
-  <div class="tw"><table><thead><tr><th>Event</th><th>Status</th><th class="r">Matches</th><th class="r">Avg Total</th><th class="r" style="color:var(--blue)">Avg Auto</th><th class="r">Avg Teleop</th><th class="r" style="color:var(--orange)">Avg Endgame</th><th class="r">Peak</th></tr></thead>
-  <tbody>${EVENTS.map(ev=>{
-    const inFilter=ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key);
-    const status=evStatus(ev);
-    if(status==='pending')return`<tr style="opacity:.45"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--text3)">Pending</span></td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td></tr>`;
-    if(!inFilter)return`<tr style="opacity:.3"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--text3)">Filtered out</span></td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td></tr>`;
-    const ovMs=OV_TYPE==='qm'?fM.filter(m=>m._ev===ev.key&&m.comp_level==='qm'):OV_TYPE==='po'?fM.filter(m=>m._ev===ev.key&&m.comp_level!=='qm'):fM.filter(m=>m._ev===ev.key);
-    const cnt=ovMs.length;
-    const avgTot=cnt?ovMs.reduce((s,m)=>{let c=0,sc=0;if((m.alliances?.red?.score??-1)>=0){sc+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){sc+=m.alliances.blue.score;c++;}return s+(c?sc/c:0);},0)/cnt:0;
-    const phAvg=ph=>{const v=[];ovMs.forEach(m=>['red','blue'].forEach(a=>{const x=phS(m,a,ph);if(x!==null)v.push(x);}));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;};
-    const au=phAvg('auto'),tl=phAvg('teleop'),eg=phAvg('endgame');
-    let pk=0;ovMs.forEach(m=>{if((m.alliances?.red?.score||0)>pk)pk=m.alliances.red.score;if((m.alliances?.blue?.score||0)>pk)pk=m.alliances.blue.score;});
-    const statusEl=status==='active'?`<span style="font-size:11px;color:var(--orange);font-weight:600">● In Progress</span>`:`<span style="font-size:11px;color:var(--green)">Complete</span>`;
-    return`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td>${statusEl}</td><td class="r">${cnt}</td><td class="r" style="color:var(--green);font-weight:600">${avgTot.toFixed(1)}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r">${pk||'–'}</td></tr>`;
-  }).join('')}</tbody></table></div>
-
 ${(()=>{
   const activeEv=EVENTS.find(ev=>evStatus(ev)==='active');
   if(!activeEv) return '';
@@ -826,6 +785,48 @@ ${(()=>{
     </div>
   </div>`;
 })()}
+<div class="g4" style="margin-bottom:16px">
+  <div class="metric"><div class="mlabel">Qual Matches</div><div class="mval">${totQ}</div><div class="msub">${loadedEvs.length} event(s) shown</div></div>
+  <div class="metric"><div class="mlabel">Playoff Matches</div><div class="mval">${totP}</div><div class="msub">QF through finals</div></div>
+  <div class="metric"><div class="mlabel">Avg Alliance Score</div><div class="mval">${avgAll.toFixed(1)}</div><div class="msub">qual rounds</div></div>
+  <div class="metric"><div class="mlabel">Top Match Score</div><div class="mval">${hiS||'–'}</div><div class="msub">${hiT||'–'} · ${hiE||'–'}</div></div>
+</div>
+<div class="g2" style="margin-bottom:16px">
+  <div class="card"><div class="ctitle">Avg Alliance Score by Event</div>
+    ${evRows.length?evRows.map(ev=>`<div style="margin-bottom:13px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span><span class="badge ${ev.cls}">${ev.short}</span><span style="margin-left:7px">${ev.name}</span></span><span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--green)">${ev.avg.toFixed(1)}</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="bt"><div class="bf bg" style="width:${ev.avg/maxAvg*100}%"></div></div></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:3px;font-family:'JetBrains Mono',monospace">${ev.cnt} matches · peak ${ev.max}</div>
+    </div>`).join(''):'<div style="color:var(--text3);font-size:12px">No completed events in current filter.</div>'}
+  </div>
+  <div class="card"><div class="ctitle">★ Tracked Teams</div>${trackedHtml}</div>
+</div>
+<div class="card" id="ovPhaseCard">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+    <div class="ctitle" style="margin-bottom:0">Per-Event Phase Averages</div>
+    <div style="display:flex;gap:5px;align-items:center">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Type:</span>
+      <button style="${OV_TYPE==='qm'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='qm';renderOv()">Quals</button>
+      <button style="${OV_TYPE==='po'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='po';renderOv()">Playoffs</button>
+      <button style="${OV_TYPE==='all'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='all';renderOv()">All</button>
+    </div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Event</th><th>Status</th><th class="r">Matches</th><th class="r">Avg Total</th><th class="r" style="color:var(--blue)">Avg Auto</th><th class="r">Avg Teleop</th><th class="r" style="color:var(--orange)">Avg Endgame</th><th class="r">Peak</th></tr></thead>
+  <tbody>${EVENTS.map(ev=>{
+    const inFilter=ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key);
+    const status=evStatus(ev);
+    if(status==='pending')return`<tr style="opacity:.45"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--text3)">Pending</span></td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td></tr>`;
+    if(!inFilter)return`<tr style="opacity:.3"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--text3)">Filtered out</span></td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td></tr>`;
+    const ovMs=OV_TYPE==='qm'?fM.filter(m=>m._ev===ev.key&&m.comp_level==='qm'):OV_TYPE==='po'?fM.filter(m=>m._ev===ev.key&&m.comp_level!=='qm'):fM.filter(m=>m._ev===ev.key);
+    const cnt=ovMs.length;
+    const avgTot=cnt?ovMs.reduce((s,m)=>{let c=0,sc=0;if((m.alliances?.red?.score??-1)>=0){sc+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){sc+=m.alliances.blue.score;c++;}return s+(c?sc/c:0);},0)/cnt:0;
+    const phAvg=ph=>{const v=[];ovMs.forEach(m=>['red','blue'].forEach(a=>{const x=phS(m,a,ph);if(x!==null)v.push(x);}));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;};
+    const au=phAvg('auto'),tl=phAvg('teleop'),eg=phAvg('endgame');
+    let pk=0;ovMs.forEach(m=>{if((m.alliances?.red?.score||0)>pk)pk=m.alliances.red.score;if((m.alliances?.blue?.score||0)>pk)pk=m.alliances.blue.score;});
+    const statusEl=status==='active'?`<span style="font-size:11px;color:var(--orange);font-weight:600">● In Progress</span>`:`<span style="font-size:11px;color:var(--green)">Complete</span>`;
+    return`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td>${statusEl}</td><td class="r">${cnt}</td><td class="r" style="color:var(--green);font-weight:600">${avgTot.toFixed(1)}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r">${pk||'–'}</td></tr>`;
+  }).join('')}</tbody></table></div>
+
 
 </div>`;
 }
