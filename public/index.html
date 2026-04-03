@@ -112,6 +112,11 @@
   .add-btn:hover{background:var(--green2)}
   .tpc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px}
   .tpc.featured{border-color:var(--green);box-shadow:0 0 20px rgba(0,230,100,.08)}
+  .tpc.dragging{opacity:.35;transform:scale(.97);transition:transform .15s}
+  .tpc.drag-over{outline:2px dashed var(--green);outline-offset:3px}
+  .drag-handle{cursor:grab;color:var(--text3);font-size:16px;line-height:1;user-select:none;flex-shrink:0;padding-right:4px;opacity:.5}
+  .drag-handle:hover{opacity:1;color:var(--green)}
+  .drag-handle:active{cursor:grabbing}
   .tpn{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:44px;color:var(--green);line-height:1}
   .tpname{font-size:15px;font-weight:500;margin-top:4px}
   .tpmeta{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:2px}
@@ -225,7 +230,7 @@ const EVENTS=[
   {key:'2026gacmp',short:'CMP',name:'District Champs',cls:'ev-cmp',week:6,start:'2026-04-08',end:'2026-04-11'},
 ];
 
-let TRACKED=new Set();
+let TRACKED=[];  // ordered array instead of Set for drag-and-drop support
 let ACTIVE_FILTER=new Set();
 let DB={matches:{},rankings:{},alliances:{},teams:{},epa:{}};
 let allM=[],distRank=[];
@@ -271,7 +276,7 @@ function showPage(name,el){
 }
 
 function saveState(){
-  sessionStorage.setItem('cr_tracked', JSON.stringify([...TRACKED]));
+  sessionStorage.setItem('cr_tracked', JSON.stringify(TRACKED));
   sessionStorage.setItem('cr_filter',  JSON.stringify([...ACTIVE_FILTER]));
   sessionStorage.setItem('cr_scType',  SC_TYPE);
   sessionStorage.setItem('cr_ovType',  OV_TYPE);
@@ -282,7 +287,7 @@ function saveState(){
 function restoreState(){
   try{
     const tracked=sessionStorage.getItem('cr_tracked');
-    if(tracked){ TRACKED.clear(); JSON.parse(tracked).forEach(v=>TRACKED.add(v)); }
+    if(tracked){ TRACKED.length=0; JSON.parse(tracked).forEach(v=>{ if(!TRACKED.includes(v)) TRACKED.push(v); }); }
     const filter=sessionStorage.getItem('cr_filter');
     if(filter){ ACTIVE_FILTER.clear(); JSON.parse(filter).forEach(v=>ACTIVE_FILTER.add(v)); }
     const scType=sessionStorage.getItem('cr_scType');
@@ -457,7 +462,7 @@ async function quickRefresh(){
 // ── HELPERS ──
 const tn=k=>DB.teams[k]?.nickname||k.replace('frc','');
 const tnum=k=>k.replace('frc','');
-const isTr=k=>TRACKED.has(parseInt(k.replace('frc','')));
+const isTr=k=>TRACKED.includes(parseInt(k.replace('frc','')));
 const qm=ek=>(DB.matches[ek]||[]).filter(m=>m.comp_level==='qm').sort((a,b)=>a.match_number-b.match_number);
 const po=ek=>(DB.matches[ek]||[]).filter(m=>m.comp_level!=='qm');
 const evLoaded=ek=>loadedEvents.has(ek);
@@ -489,6 +494,39 @@ function teamStats(tk){
   s.avgS=s.tot/n;s.avgA=s.aT/n;s.avgTl=s.tlT/n;s.avgEg=s.egT/n;s.n=n;return s;
 }
 function pendingBanner(ev){return`<div class="pending-banner"><strong>${ev.name}</strong> (Week ${ev.week}) — event not yet completed.</div>`;}
+// ── DRAG AND DROP ──
+let _dragTeam=null;
+function dragStart(e,n){
+  _dragTeam=n;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed='move';
+  e.dataTransfer.setData('text/plain',n);
+}
+function dragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect='move';
+  e.currentTarget.classList.add('drag-over');
+}
+function dragLeave(e){
+  e.currentTarget.classList.remove('drag-over');
+}
+function dragDrop(e,targetN){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if(_dragTeam===null||_dragTeam===targetN)return;
+  const fromIdx=TRACKED.indexOf(_dragTeam);
+  const toIdx=TRACKED.indexOf(targetN);
+  if(fromIdx<0||toIdx<0)return;
+  TRACKED.splice(fromIdx,1);
+  TRACKED.splice(toIdx,0,_dragTeam);
+  _dragTeam=null;
+  renderTm();
+}
+function dragEnd(e){
+  e.currentTarget.classList.remove('dragging');
+  _dragTeam=null;
+}
+
 function renderAll(){renderOv();renderRk();renderSc();renderTm();renderAl();renderMx();}
 function evQmF(ek,fM){return fM.filter(m=>m._ev===ek&&m.comp_level==='qm');}
 function evAvgScoreF(ek,fM){let s=0,c=0;evQmF(ek,fM).forEach(m=>{if((m.alliances?.red?.score??-1)>=0){s+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){s+=m.alliances.blue.score;c++;}});return c?s/c:0;}
@@ -570,10 +608,10 @@ function renderOv(){
   const evRows=loadedEvs.map(ev=>({...ev,avg:evAvgScoreF(ev.key,fM),max:evMaxF(ev.key,fM),cnt:evQmF(ev.key,fM).length}));
   const maxAvg=Math.max(...evRows.map(e=>e.avg),1);
   let trackedHtml='';
-  if(TRACKED.size===0){
+  if(TRACKED.length===0){
     trackedHtml=`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:12px 0">No teams tracked yet — add teams on the <strong style="color:var(--text2)">Team Tracker</strong> tab.</div>`;
   }else{
-    const trk=[...TRACKED].map(n=>{const k=`frc${n}`;const s=teamStatsF(k,fM);const dr=distRank.find(r=>r.team_key===k);return{n,k,name:tn(k),s,rank:dr?.rank??'–'};});
+    const trk=TRACKED.map(n=>{const k=`frc${n}`;const s=teamStatsF(k,fM);const dr=distRank.find(r=>r.team_key===k);return{n,k,name:tn(k),s,rank:dr?.rank??'–'};});
     trackedHtml=trk.map(t=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
       <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:30px;color:var(--green);width:50px;flex-shrink:0;line-height:1">${t.n}</div>
       <div style="flex:1"><div style="font-weight:500">${t.name}</div><div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:2px">Rank #${t.rank} · ${t.s.wins}W-${t.s.losses}L-${t.s.ties}T</div></div>
@@ -706,11 +744,11 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
 <div class="card"><div class="ctitle">Top 20 Single-Alliance Scores — ${scLabel}</div>
   <div class="tw"><table>
     <thead><tr><th>#</th><th>Event</th><th class="r">Match</th><th>Alliance</th><th>Teams</th><th class="r">Score</th><th class="r" style="color:var(--blue)">Auto</th><th class="r">Teleop</th><th class="r" style="color:var(--orange)">Endgame</th><th>Result</th></tr></thead>
-    <tbody>${topRows.slice(0,20).map((row,i)=>`<tr class="${row.teams.some(t=>TRACKED.has(parseInt(t)))?'hl':''}">
+    <tbody>${topRows.slice(0,20).map((row,i)=>`<tr class="${row.teams.some(t=>TRACKED.includes(parseInt(t)))?'hl':''}">
       <td class="dim">${i+1}</td><td><span class="badge ${row.ec}">${row.esh}</span></td>
       <td class="r dim">${row.isQm?'QM':'PO'}${row.mn}</td>
       <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
-      <td>${row.teams.map(t=>`<span style="${TRACKED.has(parseInt(t))?'color:var(--green);font-weight:600':''}">${t}</span>`).join(' · ')}</td>
+      <td>${row.teams.map(t=>`<span style="${TRACKED.includes(parseInt(t))?'color:var(--green);font-weight:600':''}">${t}</span>`).join(' · ')}</td>
       <td class="r" style="color:var(--green);font-weight:600">${row.sc}</td>
       <td class="r" style="color:var(--blue)">${row.au??'–'}</td><td class="r">${row.tl??'–'}</td>
       <td class="r" style="color:var(--orange)">${row.eg??'–'}</td>
@@ -721,12 +759,12 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
 }
 
 // ════════ TEAM TRACKER ════════
-function addTrackedTeam(){const inp=document.getElementById('trackAdd');const n=parseInt(inp.value.trim());if(!n||isNaN(n)){inp.value='';return;}TRACKED.add(n);inp.value='';renderAll();}
-function removeTrackedTeam(n){TRACKED.delete(n);renderAll();}
+function addTrackedTeam(){const inp=document.getElementById('trackAdd');const n=parseInt(inp.value.trim());if(!n||isNaN(n)){inp.value='';return;}if(!TRACKED.includes(n))TRACKED.push(n);inp.value='';renderAll();}
+function removeTrackedTeam(n){const i=TRACKED.indexOf(n);if(i>-1)TRACKED.splice(i,1);renderAll();}
 function renderTrackerSetup(){return`<div class="tracker-setup">
   <div class="tracker-setup-title">★ Tracked Teams — highlights across all tabs</div>
   <div class="team-selector-wrap">
-    <div class="team-chips">${TRACKED.size===0?`<span style="font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;padding:5px 0">No teams tracked yet.</span>`:[...TRACKED].map(n=>`<div class="team-chip active"><span style="font-family:'JetBrains Mono',monospace;font-weight:600">${n}</span><span style="font-size:12px;color:var(--text2)">${tn('frc'+n)}</span><span class="chip-remove" onclick="removeTrackedTeam(${n})">✕</span></div>`).join('')}</div>
+    <div class="team-chips">${TRACKED.length===0?`<span style="font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;padding:5px 0">No teams tracked yet.</span>`:[...TRACKED].map(n=>`<div class="team-chip active"><span style="font-family:'JetBrains Mono',monospace;font-weight:600">${n}</span><span style="font-size:12px;color:var(--text2)">${tn('frc'+n)}</span><span class="chip-remove" onclick="removeTrackedTeam(${n})">✕</span></div>`).join('')}</div>
     <div class="team-add-wrap"><input type="number" class="team-add-in" id="trackAdd" placeholder="Team #" onkeydown="if(event.key==='Enter')addTrackedTeam()"/><button class="add-btn" onclick="addTrackedTeam()">+ Add</button></div>
   </div>
 </div>`;}
@@ -828,8 +866,14 @@ function renderTPCard(t){
       </div>`:''} 
     </div>` : `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">EPA not yet available — run data refresh after event completes.</div>`;
 
-  return`<div class="tpc featured">
+  return`<div class="tpc featured" draggable="true" data-team="${t.n}"
+    ondragstart="dragStart(event,${t.n})"
+    ondragover="dragOver(event)"
+    ondragleave="dragLeave(event)"
+    ondrop="dragDrop(event,${t.n})"
+    ondragend="dragEnd(event)">
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+      <div class="drag-handle" title="Drag to reorder">⠿</div>
       <div class="tpn">${t.n}</div>
       <div><div class="tpname">${t.name}</div><div class="tpmeta">District Rank #${t.rank}${ACTIVE_FILTER.size?' · filtered view':''}</div>
       <div class="tprec">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
@@ -885,7 +929,7 @@ function renderTmTable(teams){
     <td class="r" style="color:${epaColor(epa?.total??null,allTotals)};font-weight:600">${fmtEPA(epa?.total??null)}</td>
     <td class="r" style="color:var(--blue)">${fmtEPA(epa?.auto??null)}</td>
     <td class="r" style="color:var(--orange)">${fmtEPA(epa?.endgame??null)}</td>
-    <td><button onclick="TRACKED.add(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${isTr(t.key)?'disabled':''}>+ Track</button></td>
+    <td><button onclick="if(!TRACKED.includes(${t.num}))TRACKED.push(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${isTr(t.key)?'disabled':''}>+ Track</button></td>
   </tr>`;}).join('')}</tbody></table>`;}
 function renderTm(){
   const fM=filteredMatches();
@@ -893,9 +937,9 @@ function renderTm(){
   allM.filter(m=>m.comp_level==='qm').forEach(m=>{(m.alliances?.red?.team_keys||[]).forEach(k=>allTkeys.add(k));(m.alliances?.blue?.team_keys||[]).forEach(k=>allTkeys.add(k));});
   const allTm=[...allTkeys].map(k=>{const stats=teamStatsF(k,fM);const dr=distRank.find(r=>r.team_key===k);return{key:k,num:parseInt(tnum(k)),name:tn(k),stats,rank:dr?.rank??999};}).sort((a,b)=>a.rank-b.rank);
   window._allTm=allTm;
-  const trkCards=TRACKED.size===0?`<div class="no-data-card">No teams tracked yet — add team numbers below or click + Track in the table.</div>`
-    :[...TRACKED].map(n=>{const k=`frc${n}`;const dr=distRank.find(r=>r.team_key===k);return renderTPCard({n,k,name:tn(k),rank:dr?.rank??'–'});}).join('');
-  const gridCols=Math.min(TRACKED.size,3)||1;
+  const trkCards=TRACKED.length===0?`<div class="no-data-card">No teams tracked yet — add team numbers below or click + Track in the table.</div>`
+    :TRACKED.map(n=>{const k=`frc${n}`;const dr=distRank.find(r=>r.team_key===k);return renderTPCard({n,k,name:tn(k),rank:dr?.rank??'–'});}).join('');
+  const gridCols=Math.min(TRACKED.length,3)||1;
   document.getElementById('pg-teams').innerHTML=`
 <div class="sh"><h2>Team <span>Tracker</span></h2><span class="sub">${allTkeys.size} teams in match data${filterLabel()}</span></div>
 ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3);margin-bottom:16px">🔍 Stats reflect filtered events: ${EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)).map(e=>`<span class="badge ${e.cls}">${e.short}</span>`).join(' ')}</div>`:''}
