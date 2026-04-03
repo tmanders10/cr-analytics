@@ -7,8 +7,8 @@
     { "src": "public/**/*", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/api/refresh-matches", "dest": "/api/refresh-matches.js" },
-    { "src": "/api/refresh", "dest": "/api/refresh.js" },
+    { "src": "/api/refresh-matches", "dest": "/api/refresh-matches" },
+    { "src": "/api/refresh", "dest": "/api/refresh" },
     { "src": "/data.json", "dest": "/public/data.json" },
     { "src": "/logo.png", "dest": "/public/logo.png" },
     { "src": "/(.*)", "dest": "/public/index.html" }
