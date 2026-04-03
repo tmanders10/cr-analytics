@@ -210,12 +210,12 @@
 
 <script>
 const EVENTS=[
-  {key:'2026gadal',short:'DAL',name:'Dalton',        cls:'ev-dal',week:1},
-  {key:'2026gagwi',short:'GWI',name:'Gwinnett',      cls:'ev-gwi',week:2},
-  {key:'2026gacol',short:'COL',name:'Columbus',      cls:'ev-col',week:3},
-  {key:'2026gaalb',short:'ALB',name:'Albany',        cls:'ev-alb',week:4},
-  {key:'2026gagai',short:'GAI',name:'Gainesville',   cls:'ev-gai',week:5},
-  {key:'2026gacmp',short:'CMP',name:'District Champs',cls:'ev-cmp',week:6},
+  {key:'2026gadal',short:'DAL',name:'Dalton',        cls:'ev-dal',week:1,start:'2026-02-27',end:'2026-03-01'},
+  {key:'2026gagwi',short:'GWI',name:'Gwinnett',      cls:'ev-gwi',week:2,start:'2026-03-06',end:'2026-03-08'},
+  {key:'2026gacol',short:'COL',name:'Columbus',      cls:'ev-col',week:3,start:'2026-03-13',end:'2026-03-15'},
+  {key:'2026gaalb',short:'ALB',name:'Albany',        cls:'ev-alb',week:4,start:'2026-03-20',end:'2026-03-22'},
+  {key:'2026gagai',short:'GAI',name:'Gainesville',   cls:'ev-gai',week:5,start:'2026-04-02',end:'2026-04-04'},
+  {key:'2026gacmp',short:'CMP',name:'District Champs',cls:'ev-cmp',week:6,start:'2026-04-08',end:'2026-04-11'},
 ];
 
 let TRACKED=new Set();
@@ -425,6 +425,19 @@ function teamStatsF(tk,fM,matchType='qm'){
 }
 function filterLabel(){if(ACTIVE_FILTER.size===0)return'';const names=EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)).map(ev=>ev.name);return` · Filtered: ${names.join(', ')}`;}
 
+// Event status based on date + match data
+function evStatus(ev){
+  const today=new Date();today.setHours(0,0,0,0);
+  const start=new Date(ev.start),end=new Date(ev.end);
+  const grace=new Date(end);grace.setDate(grace.getDate()+2);
+  if(!loadedEvents.has(ev.key)) return 'pending';
+  // Has data — check if quals are done (alliances exist = playoffs happened)
+  const alliances=DB.alliances[ev.key]||[];
+  const hasPlayoffs=(DB.matches[ev.key]||[]).some(m=>m.comp_level!=='qm');
+  if(today>grace||hasPlayoffs) return 'complete';
+  if(today>=start) return 'active';
+  return 'complete'; // has data but outside window = complete
+}
 // ── EPA HELPERS ──
 function getTeamEPAs(tk){
   return EVENTS.filter(ev=>loadedEvents.has(ev.key))
@@ -491,14 +504,30 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
   </div>
   <div class="card"><div class="ctitle">★ Tracked Teams</div>${trackedHtml}</div>
 </div>
-<div class="card"><div class="ctitle">Per-Event Phase Averages (Qualification)</div>
+<div class="card" id="ovPhaseCard">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+    <div class="ctitle" style="margin-bottom:0">Per-Event Phase Averages</div>
+    <div style="display:flex;gap:5px;align-items:center">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Type:</span>
+      <button style="${OV_TYPE==='qm'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='qm';renderOv()">Quals</button>
+      <button style="${OV_TYPE==='po'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='po';renderOv()">Playoffs</button>
+      <button style="${OV_TYPE==='all'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='all';renderOv()">All</button>
+    </div>
+  </div>
   <div class="tw"><table><thead><tr><th>Event</th><th>Status</th><th class="r">Matches</th><th class="r">Avg Total</th><th class="r" style="color:var(--blue)">Avg Auto</th><th class="r">Avg Teleop</th><th class="r" style="color:var(--orange)">Avg Endgame</th><th class="r">Peak</th></tr></thead>
   <tbody>${EVENTS.map(ev=>{
     const inFilter=ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key);
-    if(!loadedEvents.has(ev.key))return`<tr style="opacity:.45"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--text3)">Pending</span></td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td></tr>`;
+    const status=evStatus(ev);
+    if(status==='pending')return`<tr style="opacity:.45"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--text3)">Pending</span></td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td></tr>`;
     if(!inFilter)return`<tr style="opacity:.3"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--text3)">Filtered out</span></td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td></tr>`;
-    const au=evAvgPhF(ev.key,'auto',fM),tl=evAvgPhF(ev.key,'teleop',fM),eg=evAvgPhF(ev.key,'endgame',fM);
-    return`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--green)">Complete</span></td><td class="r">${evQmF(ev.key,fM).length}</td><td class="r" style="color:var(--green);font-weight:600">${evAvgScoreF(ev.key,fM).toFixed(1)}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r">${evMaxF(ev.key,fM)}</td></tr>`;
+    const ovMs=OV_TYPE==='qm'?fM.filter(m=>m._ev===ev.key&&m.comp_level==='qm'):OV_TYPE==='po'?fM.filter(m=>m._ev===ev.key&&m.comp_level!=='qm'):fM.filter(m=>m._ev===ev.key);
+    const cnt=ovMs.length;
+    const avgTot=cnt?ovMs.reduce((s,m)=>{let c=0,sc=0;if((m.alliances?.red?.score??-1)>=0){sc+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){sc+=m.alliances.blue.score;c++;}return s+(c?sc/c:0);},0)/cnt:0;
+    const phAvg=ph=>{const v=[];ovMs.forEach(m=>['red','blue'].forEach(a=>{const x=phS(m,a,ph);if(x!==null)v.push(x);}));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;};
+    const au=phAvg('auto'),tl=phAvg('teleop'),eg=phAvg('endgame');
+    let pk=0;ovMs.forEach(m=>{if((m.alliances?.red?.score||0)>pk)pk=m.alliances.red.score;if((m.alliances?.blue?.score||0)>pk)pk=m.alliances.blue.score;});
+    const statusEl=status==='active'?`<span style="font-size:11px;color:var(--orange);font-weight:600">● In Progress</span>`:`<span style="font-size:11px;color:var(--green)">Complete</span>`;
+    return`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td>${statusEl}</td><td class="r">${cnt}</td><td class="r" style="color:var(--green);font-weight:600">${avgTot.toFixed(1)}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r">${pk||'–'}</td></tr>`;
   }).join('')}</tbody></table></div>
 </div>`;
 }
@@ -607,6 +636,8 @@ function renderTrackerSetup(){return`<div class="tracker-setup">
 const CARD_MODE = {};
 // Per-team card match type: 'qm' | 'po' | 'all'
 const CARD_TYPE = {};
+// Overview phase table match type
+let OV_TYPE = 'qm';
 
 function calcPhaseStats(matches, mode) {
   let ms = [...matches];
