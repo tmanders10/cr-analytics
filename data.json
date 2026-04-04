@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-04T02:59:08.777Z",
+  "fetchedAt": "2026-04-04T03:31:33.666Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -55110,6 +55110,938 @@
         "sd": 5.59,
         "norm": 1434
       }
+    }
+  },
+  "ace": {
+    "832": {
+      "ace": 60.64,
+      "raw": 68.3,
+      "confidence": 0.89,
+      "auto_raw": 13.68,
+      "teleop_raw": 54.62,
+      "endgame_raw": 0,
+      "wins": 21,
+      "losses": 12,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 38.98,
+          "raw": 47.86,
+          "auto_raw": 9.86,
+          "event_key": "2026gadal",
+          "confidence": 0.81,
+          "teleop_raw": 38,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 71.08,
+          "raw": 77.2,
+          "auto_raw": 15.34,
+          "event_key": "2026gacol",
+          "confidence": 0.92,
+          "teleop_raw": 61.86,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "1002": {
+      "ace": 139.79,
+      "raw": 148.16,
+      "confidence": 0.94,
+      "auto_raw": 26.08,
+      "teleop_raw": 121.82,
+      "endgame_raw": 0.26,
+      "wins": 32,
+      "losses": 5,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 102.19,
+          "raw": 109.72,
+          "auto_raw": 16.09,
+          "event_key": "2026gadal",
+          "confidence": 0.93,
+          "teleop_raw": 92.82,
+          "endgame_raw": 0.81
+        },
+        {
+          "ace": 157.51,
+          "raw": 165.94,
+          "auto_raw": 30.7,
+          "event_key": "2026gaalb",
+          "confidence": 0.95,
+          "teleop_raw": 135.24,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "1261": {
+      "ace": 77.15,
+      "raw": 88.01,
+      "confidence": 0.88,
+      "auto_raw": 18.83,
+      "teleop_raw": 69.18,
+      "endgame_raw": 0,
+      "wins": 17,
+      "losses": 14,
+      "ties": 1,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 95.57,
+          "raw": 105.11,
+          "auto_raw": 18.89,
+          "event_key": "2026gaalb",
+          "confidence": 0.91,
+          "teleop_raw": 86.22,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 52.75,
+          "raw": 63.53,
+          "auto_raw": 18.75,
+          "event_key": "2026gagwi",
+          "confidence": 0.83,
+          "teleop_raw": 44.78,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "1648": {
+      "ace": 72.22,
+      "raw": 82.15,
+      "confidence": 0.88,
+      "auto_raw": 17.41,
+      "teleop_raw": 64.74,
+      "endgame_raw": 0,
+      "wins": 36,
+      "losses": 14,
+      "ties": 2,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 75.73,
+          "raw": 83.17,
+          "auto_raw": 17.26,
+          "event_key": "2026gaalb",
+          "confidence": 0.91,
+          "teleop_raw": 65.91,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 55.79,
+          "raw": 67.54,
+          "auto_raw": 15.03,
+          "event_key": "2026gagwi",
+          "confidence": 0.83,
+          "teleop_raw": 52.51,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 95.33,
+          "raw": 104.79,
+          "auto_raw": 21.71,
+          "event_key": "2026sccha",
+          "confidence": 0.91,
+          "teleop_raw": 83.08,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "1683": {
+      "ace": 71.23,
+      "raw": 78.91,
+      "confidence": 0.9,
+      "auto_raw": 14.2,
+      "teleop_raw": 64.71,
+      "endgame_raw": 0,
+      "wins": 16,
+      "losses": 8,
+      "ties": 4,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 63.21,
+          "raw": 70.59,
+          "auto_raw": 17.29,
+          "event_key": "2026gagwi",
+          "confidence": 0.9,
+          "teleop_raw": 53.3,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 77.76,
+          "raw": 85.57,
+          "auto_raw": 11.73,
+          "event_key": "2026gagai",
+          "confidence": 0.91,
+          "teleop_raw": 73.85,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "1771": {
+      "ace": 132.74,
+      "raw": 143.16,
+      "confidence": 0.93,
+      "auto_raw": 29.19,
+      "teleop_raw": 113.96,
+      "endgame_raw": 0,
+      "wins": 28,
+      "losses": 6,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 125.17,
+          "raw": 133.68,
+          "auto_raw": 25.35,
+          "event_key": "2026gaalb",
+          "confidence": 0.94,
+          "teleop_raw": 108.33,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 143.3,
+          "raw": 156.73,
+          "auto_raw": 34.7,
+          "event_key": "2026gagwi",
+          "confidence": 0.91,
+          "teleop_raw": 122.03,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "1833": {
+      "ace": 145.84,
+      "raw": 165.45,
+      "confidence": 0.88,
+      "auto_raw": 27.56,
+      "teleop_raw": 137.89,
+      "endgame_raw": 0,
+      "wins": 25,
+      "losses": 0,
+      "ties": 4,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 157.34,
+          "raw": 177.56,
+          "auto_raw": 31.91,
+          "event_key": "2026gagwi",
+          "confidence": 0.89,
+          "teleop_raw": 145.66,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 136.13,
+          "raw": 155.13,
+          "auto_raw": 23.86,
+          "event_key": "2026gagai",
+          "confidence": 0.88,
+          "teleop_raw": 131.27,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "2974": {
+      "ace": 120.46,
+      "raw": 127.57,
+      "confidence": 0.94,
+      "auto_raw": 19.2,
+      "teleop_raw": 108.36,
+      "endgame_raw": 0,
+      "wins": 26,
+      "losses": 8,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 90.8,
+          "raw": 97.76,
+          "auto_raw": 14.02,
+          "event_key": "2026gadal",
+          "confidence": 0.93,
+          "teleop_raw": 83.74,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 136.34,
+          "raw": 143.15,
+          "auto_raw": 21.91,
+          "event_key": "2026gacol",
+          "confidence": 0.95,
+          "teleop_raw": 121.24,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "3329": {
+      "ace": 55.82,
+      "raw": 63.96,
+      "confidence": 0.87,
+      "auto_raw": 10.7,
+      "teleop_raw": 53.26,
+      "endgame_raw": 0,
+      "wins": 16,
+      "losses": 14,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 50.38,
+          "raw": 59.48,
+          "auto_raw": 7.85,
+          "event_key": "2026gadal",
+          "confidence": 0.85,
+          "teleop_raw": 51.63,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 59.18,
+          "raw": 66.64,
+          "auto_raw": 12.4,
+          "event_key": "2026gacol",
+          "confidence": 0.89,
+          "teleop_raw": 54.24,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "4026": {
+      "ace": 77.75,
+      "raw": 84.88,
+      "confidence": 0.92,
+      "auto_raw": 17.2,
+      "teleop_raw": 67.68,
+      "endgame_raw": 0,
+      "wins": 20,
+      "losses": 12,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 53.56,
+          "raw": 59.09,
+          "auto_raw": 10.6,
+          "event_key": "2026gadal",
+          "confidence": 0.91,
+          "teleop_raw": 48.49,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 87.72,
+          "raw": 95.37,
+          "auto_raw": 19.89,
+          "event_key": "2026gacol",
+          "confidence": 0.92,
+          "teleop_raw": 75.48,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "4188": {
+      "ace": 114.57,
+      "raw": 121.61,
+      "confidence": 0.94,
+      "auto_raw": 22.15,
+      "teleop_raw": 99.45,
+      "endgame_raw": 0,
+      "wins": 30,
+      "losses": 4,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 99.99,
+          "raw": 106.62,
+          "auto_raw": 19.52,
+          "event_key": "2026gacol",
+          "confidence": 0.94,
+          "teleop_raw": 87.09,
+          "endgame_raw": 0.01
+        },
+        {
+          "ace": 126.9,
+          "raw": 134.18,
+          "auto_raw": 24.35,
+          "event_key": "2026gaalb",
+          "confidence": 0.95,
+          "teleop_raw": 109.82,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "4189": {
+      "ace": 76.95,
+      "raw": 85.54,
+      "confidence": 0.9,
+      "auto_raw": 15.22,
+      "teleop_raw": 69.48,
+      "endgame_raw": 0.85,
+      "wins": 17,
+      "losses": 8,
+      "ties": 5,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 58.8,
+          "raw": 68.16,
+          "auto_raw": 15.31,
+          "event_key": "2026gagwi",
+          "confidence": 0.86,
+          "teleop_raw": 52.85,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 94.59,
+          "raw": 101.22,
+          "auto_raw": 15.14,
+          "event_key": "2026gagai",
+          "confidence": 0.93,
+          "teleop_raw": 84.47,
+          "endgame_raw": 1.61
+        }
+      ]
+    },
+    "5109": {
+      "ace": 60.4,
+      "raw": 71.96,
+      "confidence": 0.84,
+      "auto_raw": 14.03,
+      "teleop_raw": 57.93,
+      "endgame_raw": 0,
+      "wins": 20,
+      "losses": 12,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 73.95,
+          "raw": 86.17,
+          "auto_raw": 16.92,
+          "event_key": "2026gaalb",
+          "confidence": 0.86,
+          "teleop_raw": 69.25,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 39.55,
+          "raw": 48.9,
+          "auto_raw": 9.34,
+          "event_key": "2026gagwi",
+          "confidence": 0.81,
+          "teleop_raw": 39.56,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "5608": {
+      "ace": 41.23,
+      "raw": 46.88,
+      "confidence": 0.88,
+      "auto_raw": 10.6,
+      "teleop_raw": 34.68,
+      "endgame_raw": 1.6,
+      "wins": 13,
+      "losses": 19,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 35.59,
+          "raw": 41.42,
+          "auto_raw": 8.67,
+          "event_key": "2026gadal",
+          "confidence": 0.86,
+          "teleop_raw": 32.75,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 44.27,
+          "raw": 49.74,
+          "auto_raw": 11.61,
+          "event_key": "2026gacol",
+          "confidence": 0.89,
+          "teleop_raw": 35.69,
+          "endgame_raw": 2.44
+        }
+      ]
+    },
+    "5900": {
+      "ace": 58.09,
+      "raw": 64.79,
+      "confidence": 0.9,
+      "auto_raw": 11.26,
+      "teleop_raw": 50.4,
+      "endgame_raw": 3.13,
+      "wins": 21,
+      "losses": 14,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 60.75,
+          "raw": 69.52,
+          "auto_raw": 11.98,
+          "event_key": "2026gadal",
+          "confidence": 0.87,
+          "teleop_raw": 55.72,
+          "endgame_raw": 1.82
+        },
+        {
+          "ace": 56.37,
+          "raw": 61.86,
+          "auto_raw": 10.82,
+          "event_key": "2026gacol",
+          "confidence": 0.91,
+          "teleop_raw": 47.09,
+          "endgame_raw": 3.95
+        }
+      ]
+    },
+    "6829": {
+      "ace": 85.23,
+      "raw": 96.87,
+      "confidence": 0.88,
+      "auto_raw": 11.93,
+      "teleop_raw": 84.93,
+      "endgame_raw": 0,
+      "wins": 24,
+      "losses": 10,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 87.45,
+          "raw": 98.85,
+          "auto_raw": 9.89,
+          "event_key": "2026gadal",
+          "confidence": 0.88,
+          "teleop_raw": 88.96,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 84.07,
+          "raw": 95.83,
+          "auto_raw": 13,
+          "event_key": "2026gacol",
+          "confidence": 0.88,
+          "teleop_raw": 82.83,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "6887": {
+      "ace": 39.92,
+      "raw": 49.46,
+      "confidence": 0.81,
+      "auto_raw": 10.55,
+      "teleop_raw": 38.7,
+      "endgame_raw": 0.21,
+      "wins": 13,
+      "losses": 17,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 35.05,
+          "raw": 41.09,
+          "auto_raw": 9.59,
+          "event_key": "2026gadal",
+          "confidence": 0.85,
+          "teleop_raw": 31.44,
+          "endgame_raw": 0.06
+        },
+        {
+          "ace": 42.45,
+          "raw": 54.46,
+          "auto_raw": 11.12,
+          "event_key": "2026gacol",
+          "confidence": 0.78,
+          "teleop_raw": 43.04,
+          "endgame_raw": 0.3
+        }
+      ]
+    },
+    "6905": {
+      "ace": 76.4,
+      "raw": 87.55,
+      "confidence": 0.87,
+      "auto_raw": 16.53,
+      "teleop_raw": 71.02,
+      "endgame_raw": 0,
+      "wins": 15,
+      "losses": 19,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 49.85,
+          "raw": 59.12,
+          "auto_raw": 10.26,
+          "event_key": "2026gadal",
+          "confidence": 0.84,
+          "teleop_raw": 48.86,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 88.56,
+          "raw": 100.01,
+          "auto_raw": 19.28,
+          "event_key": "2026gaalb",
+          "confidence": 0.89,
+          "teleop_raw": 80.73,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "7451": {
+      "ace": 49.81,
+      "raw": 60.07,
+      "confidence": 0.83,
+      "auto_raw": 10.67,
+      "teleop_raw": 49.4,
+      "endgame_raw": 0,
+      "wins": 17,
+      "losses": 12,
+      "ties": 1,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 53.69,
+          "raw": 64.04,
+          "auto_raw": 9.55,
+          "event_key": "2026gadal",
+          "confidence": 0.84,
+          "teleop_raw": 54.48,
+          "endgame_raw": 0.01
+        },
+        {
+          "ace": 47.81,
+          "raw": 58,
+          "auto_raw": 11.26,
+          "event_key": "2026gacol",
+          "confidence": 0.82,
+          "teleop_raw": 46.74,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "8736": {
+      "ace": 54.61,
+      "raw": 63.03,
+      "confidence": 0.87,
+      "auto_raw": 13.79,
+      "teleop_raw": 49.24,
+      "endgame_raw": 0,
+      "wins": 15,
+      "losses": 15,
+      "ties": 1,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 45.29,
+          "raw": 52.02,
+          "auto_raw": 9.21,
+          "event_key": "2026gadal",
+          "confidence": 0.87,
+          "teleop_raw": 42.81,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 58.93,
+          "raw": 68.18,
+          "auto_raw": 15.93,
+          "event_key": "2026gaalb",
+          "confidence": 0.86,
+          "teleop_raw": 52.25,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "8866": {
+      "ace": 69.06,
+      "raw": 80.31,
+      "confidence": 0.86,
+      "auto_raw": 16.04,
+      "teleop_raw": 64.27,
+      "endgame_raw": 0,
+      "wins": 12,
+      "losses": 19,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 34.98,
+          "raw": 42.64,
+          "auto_raw": 9.13,
+          "event_key": "2026gadal",
+          "confidence": 0.82,
+          "teleop_raw": 33.51,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 82.1,
+          "raw": 93.91,
+          "auto_raw": 18.53,
+          "event_key": "2026gaalb",
+          "confidence": 0.87,
+          "teleop_raw": 75.38,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "9477": {
+      "ace": 50.96,
+      "raw": 60.54,
+      "confidence": 0.84,
+      "auto_raw": 11.44,
+      "teleop_raw": 49.1,
+      "endgame_raw": 0,
+      "wins": 25,
+      "losses": 18,
+      "ties": 2,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 54.72,
+          "raw": 63.39,
+          "auto_raw": 8.52,
+          "event_key": "2026gadal",
+          "confidence": 0.86,
+          "teleop_raw": 54.87,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 71.15,
+          "raw": 80.56,
+          "auto_raw": 15.28,
+          "event_key": "2026gaalb",
+          "confidence": 0.88,
+          "teleop_raw": 65.28,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 22.31,
+          "raw": 29.12,
+          "auto_raw": 7.65,
+          "event_key": "2026schop",
+          "confidence": 0.77,
+          "teleop_raw": 21.46,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "11174": {
+      "ace": 45.86,
+      "raw": 58.75,
+      "confidence": 0.78,
+      "auto_raw": 11.9,
+      "teleop_raw": 46.8,
+      "endgame_raw": 0.04,
+      "wins": 15,
+      "losses": 10,
+      "ties": 4,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 52.95,
+          "raw": 69.78,
+          "auto_raw": 13.73,
+          "event_key": "2026gagwi",
+          "confidence": 0.76,
+          "teleop_raw": 56.04,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 39.44,
+          "raw": 49.35,
+          "auto_raw": 10.34,
+          "event_key": "2026gagai",
+          "confidence": 0.8,
+          "teleop_raw": 38.94,
+          "endgame_raw": 0.07
+        }
+      ]
+    },
+    "11214": {
+      "ace": 44.56,
+      "raw": 62.66,
+      "confidence": 0.71,
+      "auto_raw": 12.72,
+      "teleop_raw": 49.93,
+      "endgame_raw": 0,
+      "wins": 14,
+      "losses": 19,
+      "ties": 0,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 28.69,
+          "raw": 38.99,
+          "auto_raw": 10.38,
+          "event_key": "2026gadal",
+          "confidence": 0.74,
+          "teleop_raw": 28.61,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 50.77,
+          "raw": 72.42,
+          "auto_raw": 13.69,
+          "event_key": "2026gaalb",
+          "confidence": 0.7,
+          "teleop_raw": 58.73,
+          "endgame_raw": 0
+        }
+      ]
     }
   }
 }
