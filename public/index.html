@@ -848,9 +848,12 @@ ${(()=>{
   const activeEv=EVENTS.find(ev=>evStatus(ev)==='active');
   if(!activeEv) return '';
   const allCasts=(DB.webcasts[activeEv.key]||[]).filter(c=>c.type==='youtube');
-  // TBA order for PCH: first=field, second=overhead — swap so overhead is left, field is right
-  const castOverhead = allCasts.length>1 ? allCasts[1] : allCasts[0] || null;
-  const castField    = allCasts.length>1 ? allCasts[0] : null;
+  // Prefer the most recent day's streams — group by date and take the latest
+  const latestDate=allCasts.reduce((max,c)=>c.date>max?c.date:max,'');
+  const todayCasts=allCasts.filter(c=>c.date===latestDate);
+  const useCasts=todayCasts.length>=2?todayCasts:allCasts;
+  const castOverhead = useCasts.length>1 ? useCasts[1] : useCasts[0] || null;
+  const castField    = useCasts.length>1 ? useCasts[0] : null;
   // Check sessionStorage for user overrides
   const ovKey=`cr_stream_${activeEv.key}`;
   let overrides={};
