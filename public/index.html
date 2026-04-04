@@ -764,16 +764,15 @@ function filterLabel(){if(ACTIVE_FILTER.size===0)return'';const names=EVENTS.fil
 
 // Event status based on date + match data
 function evStatus(ev){
-  const today=new Date();today.setHours(0,0,0,0);
-  const start=new Date(ev.start),end=new Date(ev.end);
-  const grace=new Date(end);grace.setDate(grace.getDate()+2);
+  const now=new Date();
+  const start=new Date(ev.start);
+  // Event is considered active until 8pm local time on the end date
+  const end=new Date(ev.end);
+  end.setHours(20,0,0,0); // 8pm on last day
   if(!loadedEvents.has(ev.key)) return 'pending';
-  // Has data — check if quals are done (alliances exist = playoffs happened)
-  const alliances=DB.alliances[ev.key]||[];
-  const hasPlayoffs=(DB.matches[ev.key]||[]).some(m=>m.comp_level!=='qm');
-  if(today>grace||hasPlayoffs) return 'complete';
-  if(today>=start) return 'active';
-  return 'complete'; // has data but outside window = complete
+  if(now>end) return 'complete';
+  if(now>=start) return 'active';
+  return 'complete'; // has data but before start window = complete
 }
 // ── EPA HELPERS ──
 function getTeamEPAs(tk){
