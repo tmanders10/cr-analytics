@@ -123,6 +123,7 @@ module.exports = async function handler(req, res) {
       districtRankings: existing.districtRankings || [],
       teams: existing.teams || {},
       epa: existing.epa || {},
+      ace: existing.ace || {},
     };
 
     // ── TBA: smart event fetching ──
@@ -173,6 +174,65 @@ module.exports = async function handler(req, res) {
       await Promise.all(newTeams.slice(i, i + 10).map(async k => {
         try { output.teams[k] = await tbaFetch(`/team/${k}/simple`, TBA_KEY); } catch (e) {}
       }));
+    }
+
+    // ── Peekorobo: ACE data for all district teams ──
+    try {
+      const PEEKOROBO_KEY = process.env.PEEKOROBO_API_KEY;
+      if (PEEKOROBO_KEY) {
+        const distTeamNums = (output.districtRankings || [])
+          .map(r => parseInt(r.team_key.replace('frc', '')))
+          .filter(Boolean);
+
+        const BATCH = 20;
+        const aceData = existing.ace || {};
+
+        for (let i = 0; i < distTeamNums.length; i += BATCH) {
+          const batch = distTeamNums.slice(i, i + BATCH);
+          try {
+            const r = await fetch(
+              `https://www.peekorobo.com/api/team_perfs/${batch[0]}`,
+              { headers: { 'X-Api-Key': PEEKOROBO_KEY } }
+            );
+            // Fetch each team individually — Peekorobo has no bulk endpoint
+            await Promise.all(batch.map(async num => {
+              try {
+                const res = await fetch(
+                  `https://www.peekorobo.com/api/team_perfs/${num}`,
+                  { headers: { 'X-Api-Key': PEEKOROBO_KEY } }
+                );
+                if (!res.ok) return;
+                const data = await res.json();
+                const perfs = (data.team_perfs || []).find(p => p.year === 2026) || null;
+                if (perfs) {
+                  aceData[num] = {
+                    ace:            perfs.ace           ?? null,
+                    raw:            perfs.raw           ?? null,
+                    confidence:     perfs.confidence    ?? null,
+                    auto_raw:       perfs.auto_raw      ?? null,
+                    teleop_raw:     perfs.teleop_raw    ?? null,
+                    endgame_raw:    perfs.endgame_raw   ?? null,
+                    wins:           perfs.wins          ?? null,
+                    losses:         perfs.losses        ?? null,
+                    ties:           perfs.ties          ?? null,
+                    rank_global:    data.rank_global    ?? null,
+                    rank_country:   data.rank_country   ?? null,
+                    rank_state:     data.rank_state     ?? null,
+                    rank_district:  data.rank_district  ?? null,
+                    count_global:   data.count_global   ?? null,
+                    count_state:    data.count_state    ?? null,
+                    count_district: data.count_district ?? null,
+                    event_perfs:    perfs.event_perf    ?? [],
+                  };
+                }
+              } catch (e) {}
+            }));
+          } catch (e) {}
+        }
+        output.ace = aceData;
+      }
+    } catch (e) {
+      output.ace = existing.ace || {};
     }
 
     // ── Statbotics: EPA (always refresh active/complete events) ──
