@@ -239,9 +239,9 @@ let allM=[],distRank=[];
 const loadedEvents=new Set();
 
 // ── PEEKOROBO ACE DATA ──
-let ACE_DATA={};  // keyed by team number (int), populated on-demand
+let ACE_DATA={};       // keyed by team number (int)
 let ACE_LOADING=false;
-let ACE_LAST_TEAMS='';  // track which teams we last fetched for
+let ACE_LAST_TEAMS=''; // track which teams we last fetched for
 
 async function fetchACEData(force=false){
   if(TRACKED.length===0) return;
@@ -250,7 +250,10 @@ async function fetchACEData(force=false){
   if(ACE_LOADING) return;
   ACE_LOADING=true;
   const btn=document.getElementById('aceRefreshBtn');
-  if(btn){btn.disabled=true;btn.innerHTML=`<svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="animation:spin 1s linear infinite"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Fetching…`;}
+  if(btn){
+    btn.disabled=true;
+    btn.innerHTML=`<svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="animation:spin 1s linear infinite"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Fetching…`;
+  }
   try{
     const r=await fetch(`/api/peekorobo?teams=${teamStr}`);
     const data=await r.json();
@@ -263,8 +266,13 @@ async function fetchACEData(force=false){
     console.warn('Peekorobo fetch failed:',e.message);
   }finally{
     ACE_LOADING=false;
-    if(btn){btn.disabled=false;btn.innerHTML=`<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Refresh ACE`;}
+    if(btn){
+      btn.disabled=false;
+      btn.innerHTML=`<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Refresh ACE`;
+    }
     renderTm();
+    renderRk();
+    renderMx();
   }
 }
 
@@ -350,6 +358,7 @@ function showPage(name,el){
   document.getElementById('pg-'+name).classList.add('active');
   el.classList.add('active');
   sessionStorage.setItem('cr_activePage', name);
+  if(name==='teams' && TRACKED.length>0) fetchACEData();
 }
 
 function saveState(){
@@ -464,6 +473,9 @@ async function init(){
         tabs.forEach(tab=>{ if(tab.getAttribute('onclick')&&tab.getAttribute('onclick').includes("'"+savedPage+"'")) showPage(savedPage,tab); });
       }
     }
+
+    // Auto-fetch ACE if teams are already tracked (e.g. restored from session)
+    if(TRACKED.length>0) fetchACEData();
   }catch(err){
     setS('error','Failed to load data.json — '+err.message);
     document.getElementById('dataInfo').textContent='No data loaded';
@@ -864,17 +876,43 @@ ${(()=>{
 // ════════ RANKINGS ════════
 function renderRk(){
   const rows=(distRank||[]).slice(0,80);
+  const aceLoaded=Object.keys(ACE_DATA).length>0;
   document.getElementById('pg-rankings').innerHTML=`
 <div class="sh"><h2>District <span>Rankings</span></h2><span class="sub">${rows.length} teams · 2026pch</span></div>
 <div class="card" style="padding:0 18px 0"><div class="tw"><table>
-  <thead><tr><th>Rank</th><th>Team</th><th class="r">District Pts</th><th class="r">Event 1</th><th class="r">Event 2</th><th class="r">Rookie Bonus</th></tr></thead>
-  <tbody>${rows.map(r=>{const tr=isTr(r.team_key);const tc=teamColorByKey(r.team_key);return`<tr class="${tr?'hl':''}" style="${tc?'border-left:3px solid '+tc.border+';':''}">\n    <td><span class="rk ${r.rank<=3?'top':''}">${r.rank}</span></td>\n    <td><a class="tlink" href="https://www.thebluealliance.com/team/${tnum(r.team_key)}" target="_blank" style="${tc?'color:'+tc.text:''}">${tn(r.team_key)}</a><span class="tnsm">${tnum(r.team_key)}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
+  <thead><tr>
+    <th>Rank</th><th>Team</th><th class="r">District Pts</th><th class="r">Event 1</th><th class="r">Event 2</th><th class="r">Rookie Bonus</th>
+    <th class="r" style="color:var(--green)" title="ACE — Adjusted Contribution Estimate (Peekorobo)">ACE</th>
+    <th class="r" style="color:#b464ff" title="ACE Confidence score (Peekorobo)">Conf</th>
+    <th class="r" style="color:#b464ff" title="Georgia state rank (Peekorobo)">GA Rank</th>
+  </tr></thead>
+  <tbody>${rows.map(r=>{
+    const tr=isTr(r.team_key);const tc=teamColorByKey(r.team_key);
+    const teamNum=parseInt(tnum(r.team_key));
+    const ace=ACE_DATA[teamNum];
+    const aceVal=ace?.ace!=null?ace.ace.toFixed(1):'–';
+    const confVal=ace?.confidence!=null?Math.round(ace.confidence*100)+'%':'–';
+    const confCol=ace?.confidence!=null?(ace.confidence>=0.9?'var(--green)':ace.confidence>=0.75?'#f0c040':'var(--loss)'):'var(--text3)';
+    const stRank=ace?.rank_state!=null?`#${ace.rank_state}`:'–';
+    const distRankDelta=ace?.rank_district!=null&&r.rank?(()=>{
+      const diff=r.rank-ace.rank_district;
+      if(diff===0) return `<span style="color:var(--text3)">#${ace.rank_district}</span>`;
+      if(diff>0)   return `<span style="color:var(--green)" title="ACE rank ${ace.rank_district} vs district rank ${r.rank}">#${ace.rank_district} ▲${diff}</span>`;
+      return `<span style="color:var(--loss)" title="ACE rank ${ace.rank_district} vs district rank ${r.rank}">#${ace.rank_district} ▼${Math.abs(diff)}</span>`;
+    })():'–';
+    return`<tr class="${tr?'hl':''}" style="${tc?'border-left:3px solid '+tc.border+';':''}">
+    <td><span class="rk ${r.rank<=3?'top':''}">${r.rank}</span></td>
+    <td><a class="tlink" href="https://www.thebluealliance.com/team/${tnum(r.team_key)}" target="_blank" style="${tc?'color:'+tc.text:''}">${tn(r.team_key)}</a><span class="tnsm">${tnum(r.team_key)}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
     <td class="r" style="color:var(--green);font-weight:600">${r.point_total??r.total_points??'–'}</td>
     <td class="r">${r.event_points?.[0]?.total??'–'}</td>
     <td class="r">${r.event_points?.[1]?.total??'–'}</td>
     <td class="r dim">${r.rookie_bonus??0}</td>
+    <td class="r" style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:12px">${aceVal}</td>
+    <td class="r" style="color:${confCol};font-family:'JetBrains Mono',monospace;font-size:12px">${confVal}</td>
+    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#b464ff">${stRank}</td>
   </tr>`;}).join('')}</tbody>
-</table></div></div>`;
+</table></div></div>
+${!aceLoaded?`<div style="margin-top:10px;font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;padding:0 4px">ACE · Conf · GA Rank columns populate after loading ACE data on the Team Tracker tab.</div>`:''}`;
 }
 
 // ════════ SCORING ════════
@@ -962,6 +1000,7 @@ function addTrackedTeam(){
   }
   if(!TRACKED.includes(n))TRACKED.push(n);
   inp.value='';renderAll();
+  fetchACEData();
 }
 function removeTrackedTeam(n){const i=TRACKED.indexOf(n);if(i>-1)TRACKED.splice(i,1);renderAll();}
 function renderTrackerSetup(){return`<div class="tracker-setup">
@@ -1108,10 +1147,7 @@ function renderTPCard(t){
     ${epaSection}
     ${(()=>{
       const ace=ACE_DATA[t.n];
-      if(!ace) return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px">
-        <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">ACE not loaded —</span>
-        <button onclick="fetchACEData(true)" style="font-size:10px;padding:2px 8px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em">Load ACE Data</button>
-      </div>`;
+      if(!ace) return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px"><span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">ACE not loaded —</span><button onclick="fetchACEData(true)" style="font-size:10px;padding:2px 8px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em">Load ACE Data</button></div>`;
       const confPct=Math.round((ace.confidence||0)*100);
       const confCol=confPct>=90?'var(--green)':confPct>=75?'#f0c040':'var(--loss)';
       const stateRank=ace.rank_state!=null?`<span style="color:var(--green);font-weight:700">#${ace.rank_state}</span><span style="color:var(--text3)"> / ${ace.count_state} GA</span>`:'–';
@@ -1124,35 +1160,15 @@ function renderTPCard(t){
           <div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">via <a href="https://www.peekorobo.com/team/${t.n}/2026" target="_blank" style="color:var(--green);text-decoration:none">Peekorobo</a></div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">
-          ${[
-            {l:'ACE',     v:ace.ace,         col:'var(--green)',  fmt:v=>v!=null?v.toFixed(1):'–'},
-            {l:'Auto',    v:ace.auto_raw,     col:'var(--blue)',   fmt:v=>v!=null?v.toFixed(1):'–'},
-            {l:'Teleop',  v:ace.teleop_raw,   col:'#00c8aa',       fmt:v=>v!=null?v.toFixed(1):'–'},
-            {l:'Endgame', v:ace.endgame_raw,  col:'var(--orange)', fmt:v=>v!=null?v.toFixed(1):'–'},
-          ].map(p=>`<div style="background:var(--bg3);border-radius:5px;padding:7px 8px;text-align:center">
-            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:3px">${p.l}</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:16px;color:${p.col}">${p.fmt(p.v)}</div>
-          </div>`).join('')}
+          ${[{l:'ACE',v:ace.ace,col:'var(--green)'},{l:'Auto',v:ace.auto_raw,col:'var(--blue)'},{l:'Teleop',v:ace.teleop_raw,col:'#00c8aa'},{l:'Endgame',v:ace.endgame_raw,col:'var(--orange)'}].map(p=>`<div style="background:var(--bg3);border-radius:5px;padding:7px 8px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:3px">${p.l}</div><div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:16px;color:${p.col}">${p.v!=null?p.v.toFixed(1):'–'}</div></div>`).join('')}
         </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace">${stateRank} &nbsp;${distRankAce} &nbsp;${globalRank}</div>
-        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap"><div style="font-size:11px;font-family:'JetBrains Mono',monospace">${stateRank} &nbsp;${distRankAce} &nbsp;${globalRank}</div></div>
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:${evPerfs.length?'8':'0'}px">
           <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">Confidence:</span>
-          <div style="flex:1;background:var(--bg3);border-radius:3px;height:6px;max-width:120px">
-            <div style="width:${confPct}%;height:100%;background:${confCol};border-radius:3px;transition:width .3s"></div>
-          </div>
+          <div style="flex:1;background:var(--bg3);border-radius:3px;height:6px;max-width:120px"><div style="width:${confPct}%;height:100%;background:${confCol};border-radius:3px"></div></div>
           <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:${confCol}">${confPct}%</span>
         </div>
-        ${evPerfs.length?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:4px">ACE by event:</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">${evPerfs.map(ep=>{
-          const evShort=EVENTS.find(e=>e.key===ep.event_key)?.short||ep.event_key.replace('2026','').toUpperCase();
-          const evCls=EVENTS.find(e=>e.key===ep.event_key)?.cls||'';
-          return`<div style="background:var(--bg3);border-radius:4px;padding:3px 7px;text-align:center">
-            <div style="font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em">${evShort}</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)">${ep.ace!=null?ep.ace.toFixed(1):'–'}</div>
-          </div>`;}).join('')}</div>` : ''}
-      </div>`;
+        ${evPerfs.length?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:4px">ACE by event:</div><div style="display:flex;gap:6px;flex-wrap:wrap">${evPerfs.map(ep=>{const evShort=EVENTS.find(e=>e.key===ep.event_key)?.short||ep.event_key.replace('2026','').toUpperCase();return`<div style="background:var(--bg3);border-radius:4px;padding:3px 7px;text-align:center"><div style="font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em">${evShort}</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)">${ep.ace!=null?ep.ace.toFixed(1):'–'}</div></div>`;}).join('')}</div>`:''}</div>`;
     })()}
     <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
       <button class="add-btn" style="background:transparent;border:1px solid var(--loss);color:var(--loss);font-size:11px;padding:4px 10px" onclick="removeTrackedTeam(${t.n})">Remove</button>
@@ -1169,11 +1185,17 @@ function renderTmTable(teams){
     <th class="r" style="color:var(--green)">EPA</th>
     <th class="r" style="color:var(--blue)">EPA Auto</th>
     <th class="r" style="color:var(--orange)">EPA EG</th>
+    <th class="r" style="color:var(--green)" title="ACE — Adjusted Contribution Estimate (Peekorobo)">ACE</th>
+    <th class="r" style="color:#b464ff" title="Georgia state rank (Peekorobo)">GA</th>
     <th></th>
   </tr></thead>
   <tbody>${teams.map(t=>{
     const epa=getLatestEPA(t.key);
     const tc=teamColorByKey(t.key);
+    const ace=ACE_DATA[t.num];
+    const aceVal=ace?.ace!=null?ace.ace.toFixed(1):'–';
+    const stRank=ace?.rank_state!=null?`#${ace.rank_state}`:'–';
+    const stCol=ace?.rank_state!=null?(ace.rank_state<=5?'var(--green)':ace.rank_state<=15?'#f0c040':'var(--text3)'):'var(--text3)';
     return`<tr style="${tc?'border-left:3px solid '+tc.border+';':''}" class="${isTr(t.key)?'hl':''}">
     <td><span class="rk ${t.rank<=3?'top':''}">${t.rank===999?'–':t.rank}</span></td>
     <td><a class="tlink" href="https://www.thebluealliance.com/team/${t.num}" target="_blank" style="${tc?'color:'+tc.text:''}">${t.name}</a><span class="tnsm">${t.num}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
@@ -1187,7 +1209,9 @@ function renderTmTable(teams){
     <td class="r" style="color:${epaColor(epa?.total??null,allTotals)};font-weight:600">${fmtEPA(epa?.total??null)}</td>
     <td class="r" style="color:var(--blue)">${fmtEPA(epa?.auto??null)}</td>
     <td class="r" style="color:var(--orange)">${fmtEPA(epa?.endgame??null)}</td>
-    <td><button onclick="if(!TRACKED.includes(${t.num}))TRACKED.push(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${isTr(t.key)||TRACKED.length>=MAX_TRACKED?'disabled':''}>+ Track</button></td>
+    <td class="r" style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:12px">${aceVal}</td>
+    <td class="r" style="color:${stCol};font-family:'JetBrains Mono',monospace;font-size:12px">${stRank}</td>
+    <td><button onclick="if(!TRACKED.includes(${t.num}))TRACKED.push(${t.num});renderAll();fetchACEData()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${isTr(t.key)||TRACKED.length>=MAX_TRACKED?'disabled':''}>+ Track</button></td>
   </tr>`;}).join('')}</tbody></table>`;}
 function renderTm(){
   const fM=filteredMatches();
@@ -1198,17 +1222,15 @@ function renderTm(){
   const trkCards=TRACKED.length===0?`<div class="no-data-card">No teams tracked yet — add team numbers below or click + Track in the table.</div>`
     :TRACKED.map(n=>{const k=`frc${n}`;const dr=distRank.find(r=>r.team_key===k);return renderTPCard({n,k,name:tn(k),rank:dr?.rank??'–'});}).join('');
   const gridCols=Math.min(TRACKED.length,3)||1;
-  const aceLoaded=Object.keys(ACE_DATA).length>0;
-  const aceLastFetch=aceLoaded?`<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-left:6px">loaded</span>`:'';
   document.getElementById('pg-teams').innerHTML=`
 <div class="sh"><h2>Team <span>Tracker</span></h2><span class="sub">${allTkeys.size} teams in match data${filterLabel()}</span></div>
 ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3);margin-bottom:16px">🔍 Stats reflect filtered events: ${EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)).map(e=>`<span class="badge ${e.cls}">${e.short}</span>`).join(' ')}</div>`:''}
 ${TRACKED.length>0?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
   <button id="aceRefreshBtn" class="refresh-btn" onclick="fetchACEData(true)" style="font-size:10px;padding:5px 12px" title="Fetch ACE ratings from Peekorobo for tracked teams">
     <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    ${aceLoaded?'Refresh ACE':'Load ACE Data'}
+    ${Object.keys(ACE_DATA).length>0?'Refresh ACE':'Load ACE Data'}
   </button>
-  <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">via <a href="https://www.peekorobo.com" target="_blank" style="color:var(--green);text-decoration:none">Peekorobo</a>${aceLastFetch}</span>
+  <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">via <a href="https://www.peekorobo.com" target="_blank" style="color:var(--green);text-decoration:none">Peekorobo</a>${Object.keys(ACE_DATA).length>0?'<span style="margin-left:6px">loaded</span>':''}</span>
 </div>`:''}
 ${renderTrackerSetup()}
 <div style="display:grid;grid-template-columns:repeat(${gridCols},1fr);gap:16px;margin-bottom:22px">${trkCards}</div>
@@ -1223,6 +1245,8 @@ ${renderTrackerSetup()}
       <option value="epa">Sort: EPA (Total)</option>
       <option value="epaauto">Sort: EPA Auto</option>
       <option value="epaeg">Sort: EPA Endgame</option>
+      <option value="ace">Sort: ACE</option>
+      <option value="acestate">Sort: GA State Rank</option>
     </select>
   </div>
   <div class="tw" id="tmTbl">${renderTmTable(allTm)}</div>
@@ -1239,6 +1263,8 @@ function filterTm(){
   else if(srt==='epa')t.sort((a,b)=>(getLatestEPA(a.key)?.total??-999)-(getLatestEPA(b.key)?.total??-999)).reverse();
   else if(srt==='epaauto')t.sort((a,b)=>(getLatestEPA(a.key)?.auto??-999)-(getLatestEPA(b.key)?.auto??-999)).reverse();
   else if(srt==='epaeg')t.sort((a,b)=>(getLatestEPA(a.key)?.endgame??-999)-(getLatestEPA(b.key)?.endgame??-999)).reverse();
+  else if(srt==='ace')t.sort((a,b)=>(ACE_DATA[b.num]?.ace??-999)-(ACE_DATA[a.num]?.ace??-999));
+  else if(srt==='acestate')t.sort((a,b)=>(ACE_DATA[a.num]?.rank_state??9999)-(ACE_DATA[b.num]?.rank_state??9999));
   else t.sort((a,b)=>a.rank-b.rank);
   document.getElementById('tmTbl').innerHTML=renderTmTable(t);}
 
@@ -1326,17 +1352,27 @@ function filterMx(){
 function renderMxTable(matches){
   const sorted=[...matches].sort((a,b)=>{if(a._wk!==b._wk)return(a._wk||0)-(b._wk||0);const lo={qm:0,qf:1,sf:2,f:3};return(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||a.match_number-b.match_number;});
   if(!sorted.length)return`<div class="empty"><div class="empty-s">No matches match your filters.</div></div>`;
+  const aceLoaded=Object.keys(ACE_DATA).length>0;
+  // Win probability from ACE: logistic function of ACE sum difference
+  function aceWinProb(redKeys, blueKeys){
+    const redAce=redKeys.reduce((s,k)=>{const a=ACE_DATA[parseInt(tnum(k))];return s+(a?.ace??0);},0);
+    const blueAce=blueKeys.reduce((s,k)=>{const a=ACE_DATA[parseInt(tnum(k))];return s+(a?.ace??0);},0);
+    if(redAce===0&&blueAce===0) return null;
+    const diff=redAce-blueAce;
+    const redProb=1/(1+Math.exp(-diff/30));
+    return {red:redProb, blue:1-redProb, redAce, blueAce};
+  }
   return`<table style="table-layout:fixed;width:100%"><colgroup>
-    <col style="width:58px"/>
     <col style="width:52px"/>
+    <col style="width:46px"/>
+    <col style="width:42px"/>
+    <col style="width:20px"/>
+    <col style="width:calc(50% - 145px)"/>
     <col style="width:48px"/>
-    <col style="width:24px"/>
-    <col style="width:calc(50% - 116px)"/>
-    <col style="width:54px"/>
-    <col style="width:12px"/>
-    <col style="width:54px"/>
-    <col style="width:calc(50% - 116px)"/>
-    <col style="width:56px"/>
+    <col style="width:10px"/>
+    <col style="width:48px"/>
+    <col style="width:calc(50% - 145px)"/>
+    <col style="width:${aceLoaded?'90px':'56px'}"/>
   </colgroup>
   <thead><tr>
     <th>Event</th>
@@ -1348,14 +1384,37 @@ function renderMxTable(matches){
     <th></th>
     <th style="color:var(--blue)">Blue</th>
     <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
-    <th class="r">Winner</th>
+    <th class="r">${aceLoaded?'Pred / Result':'Winner'}</th>
   </tr></thead>
   <tbody>${sorted.map(m=>{
-    const rt=(m.alliances?.red?.team_keys||[]).map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${tnum(k)}</span>`;}).join(' · ');
-    const bt=(m.alliances?.blue?.team_keys||[]).map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${tnum(k)}</span>`;}).join(' · ');
+    const redKeys=m.alliances?.red?.team_keys||[];
+    const blueKeys=m.alliances?.blue?.team_keys||[];
+    const rt=redKeys.map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${tnum(k)}</span>`;}).join(' · ');
+    const bt=blueKeys.map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${tnum(k)}</span>`;}).join(' · ');
     const rs=m.alliances?.red?.score??'–',bs=m.alliances?.blue?.score??'–',w=m.winning_alliance;
-    const hasT=[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])].some(isTr);
+    const hasT=[...redKeys,...blueKeys].some(isTr);
     const rWin=w==='red', bWin=w==='blue';
+    const prob=aceLoaded?aceWinProb(redKeys,blueKeys):null;
+    let predCell='';
+    if(aceLoaded){
+      if(!prob){
+        predCell=rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`;
+      } else {
+        const predRed=prob.red>=0.5;
+        const correct=(predRed&&rWin)||(!predRed&&bWin);
+        const upset=w&&((predRed&&bWin)||(!predRed&&rWin));
+        const pct=Math.round((predRed?prob.red:prob.blue)*100);
+        const predLabel=predRed?`<span style="color:var(--loss)">RED</span>`:`<span style="color:var(--blue)">BLUE</span>`;
+        const resultBadge=rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss);font-size:9px">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue);font-size:9px">BLUE</span>`:`<span class="rp rt" style="font-size:9px">TIE</span>`;
+        const upsetBadge=upset?`<span style="font-size:9px;color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.04em" title="Upset — predicted ${predRed?'RED':'BLUE'} but ${w.toUpperCase()} won">⚡</span>`:'';
+        predCell=`<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+          <div style="font-size:10px;font-family:'JetBrains Mono',monospace">${predLabel} <span style="color:var(--text3)">${pct}%</span>${upsetBadge}</div>
+          <div>${resultBadge}</div>
+        </div>`;
+      }
+    } else {
+      predCell=rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`;
+    }
     return`<tr class="${hasT?'hl':''}">
       <td><span class="badge ${m._ec}">${m._esh}</span></td>
       <td><span style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;color:var(--text3)">${m.comp_level==='qm'?'QUAL':'PO'}</span></td>
@@ -1366,7 +1425,7 @@ function renderMxTable(matches){
       <td style="text-align:center;color:var(--text3);font-size:10px;padding:0 2px">–</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${bWin?700:400};color:${bWin?'var(--blue)':'var(--text3)'};${bWin?'background:rgba(56,168,255,.04)':''}">${bs}</td>
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${bWin?'background:rgba(56,168,255,.04)':''}">${bt}</td>
-      <td class="r">${rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`}</td>
+      <td class="r">${predCell}</td>
     </tr>`;}).join('')}</tbody></table>`;}
 
 // Start
