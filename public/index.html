@@ -765,14 +765,13 @@ function filterLabel(){if(ACTIVE_FILTER.size===0)return'';const names=EVENTS.fil
 // Event status based on date + match data
 function evStatus(ev){
   const now=new Date();
-  const start=new Date(ev.start);
-  // Event is considered active until 8pm local time on the end date
-  const end=new Date(ev.end);
-  end.setHours(20,0,0,0); // 8pm on last day
+  // Parse dates as local time (append T12:00 to avoid UTC midnight shifting the date)
+  const start=new Date(ev.start+'T00:00:00');
+  const end=new Date(ev.end+'T20:00:00'); // treat event as active until 8pm local on last day
   if(!loadedEvents.has(ev.key)) return 'pending';
   if(now>end) return 'complete';
   if(now>=start) return 'active';
-  return 'complete'; // has data but before start window = complete
+  return 'complete';
 }
 // ── EPA HELPERS ──
 function getTeamEPAs(tk){
