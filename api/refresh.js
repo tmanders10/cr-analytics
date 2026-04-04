@@ -95,7 +95,7 @@ module.exports = async function handler(req, res) {
   try {
     // Load existing data.json from GitHub to preserve completed event data
     // Uses blob API to handle files > 1MB (contents API silently truncates)
-    let existing = { events: {}, districtRankings: [], teams: {}, epa: {} };
+    let existing = { events: {}, districtRankings: [], teams: {}, epa: {}, ace: {} };
     try {
       const metaRes = await fetch(
         `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
@@ -189,7 +189,6 @@ module.exports = async function handler(req, res) {
 
         for (let i = 0; i < distTeamNums.length; i += BATCH) {
           const batch = distTeamNums.slice(i, i + BATCH);
-          // Fetch each team individually — Peekorobo has no bulk endpoint
           await Promise.all(batch.map(async num => {
             try {
               const res = await fetch(
@@ -198,26 +197,27 @@ module.exports = async function handler(req, res) {
               );
               if (!res.ok) return;
               const data = await res.json();
+              // rank fields live inside the team_perfs entry, not at root level
               const perfs = (data.team_perfs || []).find(p => p.year === 2026) || null;
               if (perfs) {
                 aceData[num] = {
-                  ace:            perfs.ace           ?? null,
-                  raw:            perfs.raw           ?? null,
-                  confidence:     perfs.confidence    ?? null,
-                  auto_raw:       perfs.auto_raw      ?? null,
-                  teleop_raw:     perfs.teleop_raw    ?? null,
-                  endgame_raw:    perfs.endgame_raw   ?? null,
-                  wins:           perfs.wins          ?? null,
-                  losses:         perfs.losses        ?? null,
-                  ties:           perfs.ties          ?? null,
-                  rank_global:    data.rank_global    ?? null,
-                  rank_country:   data.rank_country   ?? null,
-                  rank_state:     data.rank_state     ?? null,
-                  rank_district:  data.rank_district  ?? null,
-                  count_global:   data.count_global   ?? null,
-                  count_state:    data.count_state    ?? null,
-                  count_district: data.count_district ?? null,
-                  event_perfs:    perfs.event_perf    ?? [],
+                  ace:            perfs.ace            ?? null,
+                  raw:            perfs.raw            ?? null,
+                  confidence:     perfs.confidence     ?? null,
+                  auto_raw:       perfs.auto_raw       ?? null,
+                  teleop_raw:     perfs.teleop_raw     ?? null,
+                  endgame_raw:    perfs.endgame_raw    ?? null,
+                  wins:           perfs.wins           ?? null,
+                  losses:         perfs.losses         ?? null,
+                  ties:           perfs.ties           ?? null,
+                  rank_global:    perfs.rank_global    ?? null,
+                  rank_country:   perfs.rank_country   ?? null,
+                  rank_state:     perfs.rank_state     ?? null,
+                  rank_district:  perfs.rank_district  ?? null,
+                  count_global:   perfs.count_global   ?? null,
+                  count_state:    perfs.count_state    ?? null,
+                  count_district: perfs.count_district ?? null,
+                  event_perfs:    perfs.event_perf     ?? [],
                 };
               }
             } catch (e) {}
