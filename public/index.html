@@ -27,7 +27,7 @@
   .refresh-btn:hover{border-color:var(--green);color:var(--green)}
   .refresh-btn.loading{border-color:var(--green);color:var(--green);animation:pulse 1s infinite}
   .refresh-btn:disabled{opacity:.5;cursor:not-allowed}
-  .status-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:7px 24px;display:flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);min-height:34px;flex-wrap:wrap}
+  .status-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:7px 24px;display:flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);min-height:34px;flex-wrap:wrap;position:sticky;top:60px;z-index:99;box-shadow:0 1px 8px rgba(0,0,0,.3)}
   .sdot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0}
   .sdot.loading{background:var(--green);animation:pulse 1s infinite}
   .sdot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
@@ -41,7 +41,7 @@
   .ev-pill.loaded.on{border-color:var(--green);color:#030803;background:var(--green);box-shadow:0 0 8px rgba(0,230,100,.35)}
   .ev-pill.pending{border-color:var(--text3);color:var(--text3);opacity:.4}
   .filter-hint{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-right:4px;white-space:nowrap}
-  .nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:2px;overflow-x:auto}
+  .nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:2px;overflow-x:auto;position:sticky;top:94px;z-index:98;box-shadow:0 2px 8px rgba(0,0,0,.3)}
   .nav-tab{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:13px 14px 11px;color:#8aa090;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;background:none;border-left:none;border-right:none;border-top:none}
   .nav-tab:hover{color:#c8d8ce}
   .nav-tab.active{color:var(--green);border-bottom-color:var(--green)}
