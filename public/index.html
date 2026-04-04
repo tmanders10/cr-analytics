@@ -1316,9 +1316,16 @@ function filterTm(){
 // ════════ ALLIANCES ════════
 function renderAl(){
   const showEvs=ACTIVE_FILTER.size>0?EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)):EVENTS;
+  // Sort active event to top, then by week
+  const orderedEvs=[...showEvs].sort((a,b)=>{
+    const aA=evStatus(a)==='active'?0:1;
+    const bA=evStatus(b)==='active'?0:1;
+    if(aA!==bA) return aA-bA;
+    return a.week-b.week;
+  });
   let html=`<div class="sh"><h2>Alliances <span>&</span> Playoffs</h2><span class="sub">All 6 PCH events${filterLabel()}</span></div>`;
   if(ACTIVE_FILTER.size)html+=`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3);margin-bottom:16px">🔍 Showing: ${showEvs.map(e=>`<span class="badge ${e.cls}">${e.short}</span>`).join(' ')}</div>`;
-  EVENTS.forEach(ev=>{
+  orderedEvs.forEach(ev=>{
     const inFilter=ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key);if(!inFilter)return;
     if(!loadedEvents.has(ev.key)){html+=`<div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:8px"><span class="badge ${ev.cls}">${ev.short}</span> PCH District ${ev.name}</div>${pendingBanner(ev)}</div>`;return;}
     const alliances=DB.alliances[ev.key]||[],pm=po(ev.key);
@@ -1495,9 +1502,9 @@ ${rkList.length===0
 
 // ════════ MATCH LOG ════════
 function renderMx(){
-  const fM=filteredMatches();const initMs=fM.filter(m=>m.comp_level==='qm');
+  const fM=filteredMatches();const initMs=fM;
   document.getElementById('pg-matches').innerHTML=`
-<div class="sh"><h2>Match <span>Log</span></h2><span class="sub">${initMs.length} qual matches${filterLabel()}</span></div>
+<div class="sh"><h2>Match <span>Log</span></h2><span class="sub">${fM.filter(m=>m.comp_level==='qm').length} qual · ${fM.filter(m=>m.comp_level!=='qm').length} playoff matches${filterLabel()}</span></div>
 ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3);margin-bottom:12px">🔍 Pill filter active.</div>`:''}
 <div class="sr">
   <select class="ss" id="mxEv" onchange="filterMx()">
@@ -1516,10 +1523,10 @@ function filterMx(){
   if(team)ms=ms.filter(m=>[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])].some(k=>k.includes(team)));
   document.getElementById('mxTbl').innerHTML=renderMxTable(ms);}
 function renderMxTable(matches){
-  // Determine which event week has unplayed matches — sort that to top
+  // Determine priority week: unplayed matches first, then active event, then chronological
   const unplayedWks=new Set(matches.filter(m=>(m.alliances?.red?.score??-1)<0).map(m=>m._wk));
-  // Pick the lowest week number that has unplayed matches (most imminent)
-  const priorityWk=unplayedWks.size>0?Math.min(...unplayedWks):null;
+  const activeWk=EVENTS.find(ev=>evStatus(ev)==='active')?._wk??null;
+  const priorityWk=unplayedWks.size>0?Math.min(...unplayedWks):activeWk;
   const sorted=[...matches].sort((a,b)=>{
     const aP=a._wk===priorityWk?0:1;
     const bP=b._wk===priorityWk?0:1;
