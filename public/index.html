@@ -186,7 +186,7 @@
       </svg>
       Match Update
     </button>
-    <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Full refresh — TBA + Statbotics EPA for all active events (~20 seconds)">
+    <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Full refresh — TBA + Statbotics EPA + Peekorobo ACE for all active events (~30 seconds)">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" id="refreshIcon">
         <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -471,7 +471,7 @@ async function manualRefresh(){
   btn.disabled=true;
   btn.classList.add('loading');
   btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 1s linear infinite"><path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Refreshing…`;
-  setS('loading','Fetching latest data from TBA + Statbotics…');
+  setS('loading','Fetching latest data from TBA + Statbotics + Peekorobo…');
   try{
     const res=await fetch('/api/refresh');
     const data=await res.json();
@@ -1184,7 +1184,10 @@ function renderTmTable(teams){
     <td class="r" style="color:var(--orange)">${fmtEPA(epa?.endgame??null)}</td>
     <td class="r" style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:12px">${aceVal}</td>
     <td class="r" style="color:${stCol};font-family:'JetBrains Mono',monospace;font-size:12px">${stRank}</td>
-    <td><button onclick="if(!TRACKED.includes(${t.num}))TRACKED.push(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${isTr(t.key)||TRACKED.length>=MAX_TRACKED?'disabled':''}>+ Track</button></td>
+    <td>${isTr(t.key)
+      ? `<button onclick="removeTrackedTeam(${t.num})" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--loss);color:var(--loss);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em">− Remove</button>`
+      : `<button onclick="if(!TRACKED.includes(${t.num}))TRACKED.push(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${TRACKED.length>=MAX_TRACKED?'disabled':''}>+ Track</button>`
+    }</td>
   </tr>`;}).join('')}</tbody></table>`;}
 function renderTm(){
   const fM=filteredMatches();
@@ -1333,12 +1336,13 @@ function renderMxTable(matches){
     <col style="width:46px"/>
     <col style="width:42px"/>
     <col style="width:20px"/>
-    <col style="width:calc(50% - 145px)"/>
+    <col style="width:calc(50% - 150px)"/>
     <col style="width:48px"/>
     <col style="width:10px"/>
     <col style="width:48px"/>
-    <col style="width:calc(50% - 145px)"/>
-    <col style="width:${aceLoaded?'90px':'56px'}"/>
+    <col style="width:calc(50% - 150px)"/>
+    <col style="width:${aceLoaded?'60px':'56px'}"/>
+    <col style="width:${aceLoaded?'52px':'0px'}"/>
   </colgroup>
   <thead><tr>
     <th>Event</th>
@@ -1350,7 +1354,8 @@ function renderMxTable(matches){
     <th></th>
     <th style="color:var(--blue)">Blue</th>
     <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
-    <th class="r">${aceLoaded?'Pred / Result':'Winner'}</th>
+    <th class="r">${aceLoaded?'Pred':'Winner'}</th>
+    ${aceLoaded?'<th class="r">Result</th>':''}
   </tr></thead>
   <tbody>${sorted.map(m=>{
     const redKeys=m.alliances?.red?.team_keys||[];
@@ -1361,25 +1366,26 @@ function renderMxTable(matches){
     const hasT=[...redKeys,...blueKeys].some(isTr);
     const rWin=w==='red', bWin=w==='blue';
     const prob=aceLoaded?aceWinProb(redKeys,blueKeys):null;
-    let predCell='';
+    const resultBadge=rWin
+      ?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`
+      :bWin
+        ?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`
+        :`<span class="rp rt">TIE</span>`;
+    let predCell='', resultCell='';
     if(aceLoaded){
       if(!prob){
-        predCell=rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`;
+        predCell=`<span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">–</span>`;
       } else {
         const predRed=prob.red>=0.5;
-        const correct=(predRed&&rWin)||(!predRed&&bWin);
         const upset=w&&((predRed&&bWin)||(!predRed&&rWin));
         const pct=Math.round((predRed?prob.red:prob.blue)*100);
-        const predLabel=predRed?`<span style="color:var(--loss)">RED</span>`:`<span style="color:var(--blue)">BLUE</span>`;
-        const resultBadge=rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss);font-size:9px">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue);font-size:9px">BLUE</span>`:`<span class="rp rt" style="font-size:9px">TIE</span>`;
-        const upsetBadge=upset?`<span style="font-size:9px;color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.04em" title="Upset — predicted ${predRed?'RED':'BLUE'} but ${w.toUpperCase()} won">⚡</span>`:'';
-        predCell=`<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
-          <div style="font-size:10px;font-family:'JetBrains Mono',monospace">${predLabel} <span style="color:var(--text3)">${pct}%</span>${upsetBadge}</div>
-          <div>${resultBadge}</div>
-        </div>`;
+        const predLabel=predRed
+          ?`<span style="color:var(--loss);font-family:'JetBrains Mono',monospace;font-size:11px">RED</span>`
+          :`<span style="color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:11px">BLUE</span>`;
+        const upsetBadge=upset?`<span style="color:var(--orange)" title="Upset — predicted ${predRed?'RED':'BLUE'} but ${w.toUpperCase()} won"> ⚡</span>`:'';
+        predCell=`${predLabel}<span style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px"> ${pct}%</span>${upsetBadge}`;
       }
-    } else {
-      predCell=rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`;
+      resultCell=resultBadge;
     }
     return`<tr class="${hasT?'hl':''}">
       <td><span class="badge ${m._ec}">${m._esh}</span></td>
@@ -1391,7 +1397,8 @@ function renderMxTable(matches){
       <td style="text-align:center;color:var(--text3);font-size:10px;padding:0 2px">–</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${bWin?700:400};color:${bWin?'var(--blue)':'var(--text3)'};${bWin?'background:rgba(56,168,255,.04)':''}">${bs}</td>
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${bWin?'background:rgba(56,168,255,.04)':''}">${bt}</td>
-      <td class="r">${predCell}</td>
+      <td class="r">${aceLoaded?predCell:resultBadge}</td>
+      ${aceLoaded?`<td class="r">${resultCell}</td>`:''}
     </tr>`;}).join('')}</tbody></table>`;}
 
 // Start
