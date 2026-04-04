@@ -1327,9 +1327,25 @@ function filterMx(){
   if(team)ms=ms.filter(m=>[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])].some(k=>k.includes(team)));
   document.getElementById('mxTbl').innerHTML=renderMxTable(ms);}
 function renderMxTable(matches){
-  const sorted=[...matches].sort((a,b)=>{if(a._wk!==b._wk)return(a._wk||0)-(b._wk||0);const lo={qm:0,qf:1,sf:2,f:3};return(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||a.match_number-b.match_number;});
+  // Sort: active event week first, then completed events by week, then within event by match order
+  const activeWk=EVENTS.find(ev=>evStatus(ev)==='active')?._wk??null;
+  const sorted=[...matches].sort((a,b)=>{
+    const aActive=a._wk===activeWk?0:1;
+    const bActive=b._wk===activeWk?0:1;
+    if(aActive!==bActive) return aActive-bActive;
+    if(a._wk!==b._wk) return (a._wk||0)-(b._wk||0);
+    const lo={qm:0,qf:1,sf:2,f:3};
+    return(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||a.match_number-b.match_number;
+  });
   if(!sorted.length)return`<div class="empty"><div class="empty-s">No matches match your filters.</div></div>`;
   const aceLoaded=Object.keys(ACE_DATA).length>0;
+  // Format a TBA Unix timestamp as local time string
+  function fmtMatchTime(m){
+    const t=m.predicted_time||m.scheduled_time||null;
+    if(!t) return '';
+    const d=new Date(t*1000);
+    return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+  }
   // Win probability from ACE: logistic function of ACE sum difference
   function aceWinProb(redKeys, blueKeys){
     const redAce=redKeys.reduce((s,k)=>{const a=ACE_DATA[parseInt(tnum(k))];return s+(a?.ace??0);},0);
@@ -1395,11 +1411,16 @@ function renderMxTable(matches){
       }
       resultCell=resultBadge;
     }
+    const isUnplayed=(rs==='–'||rs==null||rs==='')&&(bs==='–'||bs==null||bs==='');
+    const matchTime=fmtMatchTime(m);
+    const timOrVid=isUnplayed&&matchTime
+      ?`<span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3);white-space:nowrap">${matchTime}</span>`
+      :videoLink(matchVideoUrl(m));
     return`<tr class="${hasT?'hl':''}">
       <td><span class="badge ${m._ec}">${m._esh}</span></td>
       <td><span style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;color:var(--text3)">${m.comp_level==='qm'?'QUAL':'PO'}</span></td>
       <td class="r dim">${m.match_number}</td>
-      <td style="padding:0 2px">${videoLink(matchVideoUrl(m))}</td>
+      <td style="padding:0 2px">${timOrVid}</td>
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${rWin?'background:rgba(255,61,90,.04)':''}">${rt}</td>
       <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${rWin?700:400};color:${rWin?'var(--loss)':'var(--text3)'};${rWin?'background:rgba(255,61,90,.04)':''}">${rs}</td>
       <td style="text-align:center;color:var(--text3);font-size:10px;padding:0 2px">–</td>
