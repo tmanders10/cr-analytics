@@ -1327,12 +1327,14 @@ function filterMx(){
   if(team)ms=ms.filter(m=>[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])].some(k=>k.includes(team)));
   document.getElementById('mxTbl').innerHTML=renderMxTable(ms);}
 function renderMxTable(matches){
-  // Sort: active event week first, then completed events by week, then within event by match order
-  const activeWk=EVENTS.find(ev=>evStatus(ev)==='active')?._wk??null;
+  // Determine which event week has unplayed matches — sort that to top
+  const unplayedWks=new Set(matches.filter(m=>(m.alliances?.red?.score??-1)<0).map(m=>m._wk));
+  // Pick the lowest week number that has unplayed matches (most imminent)
+  const priorityWk=unplayedWks.size>0?Math.min(...unplayedWks):null;
   const sorted=[...matches].sort((a,b)=>{
-    const aActive=a._wk===activeWk?0:1;
-    const bActive=b._wk===activeWk?0:1;
-    if(aActive!==bActive) return aActive-bActive;
+    const aP=a._wk===priorityWk?0:1;
+    const bP=b._wk===priorityWk?0:1;
+    if(aP!==bP) return aP-bP;
     if(a._wk!==b._wk) return (a._wk||0)-(b._wk||0);
     const lo={qm:0,qf:1,sf:2,f:3};
     return(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||a.match_number-b.match_number;
@@ -1411,7 +1413,7 @@ function renderMxTable(matches){
       }
       resultCell=resultBadge;
     }
-    const isUnplayed=(rs==='–'||rs==null||rs==='')&&(bs==='–'||bs==null||bs==='');
+    const isUnplayed=(m.alliances?.red?.score??-1)<0;
     const matchTime=fmtMatchTime(m);
     const timOrVid=isUnplayed&&matchTime
       ?`<span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3);white-space:nowrap">${matchTime}</span>`
