@@ -1336,12 +1336,12 @@ function renderMxTable(matches){
     <col style="width:46px"/>
     <col style="width:42px"/>
     <col style="width:20px"/>
-    <col style="width:calc(50% - 150px)"/>
+    <col style="width:calc(50% - 165px)"/>
     <col style="width:48px"/>
     <col style="width:10px"/>
     <col style="width:48px"/>
-    <col style="width:calc(50% - 150px)"/>
-    <col style="width:${aceLoaded?'60px':'56px'}"/>
+    <col style="width:calc(50% - 165px)"/>
+    <col style="width:${aceLoaded?'80px':'56px'}"/>
     <col style="width:${aceLoaded?'52px':'0px'}"/>
   </colgroup>
   <thead><tr>
@@ -1397,7 +1397,7 @@ function renderMxTable(matches){
       <td style="text-align:center;color:var(--text3);font-size:10px;padding:0 2px">–</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${bWin?700:400};color:${bWin?'var(--blue)':'var(--text3)'};${bWin?'background:rgba(56,168,255,.04)':''}">${bs}</td>
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${bWin?'background:rgba(56,168,255,.04)':''}">${bt}</td>
-      <td class="r">${aceLoaded?predCell:resultBadge}</td>
+      <td class="r" style="white-space:nowrap">${aceLoaded?predCell:resultBadge}</td>
       ${aceLoaded?`<td class="r">${resultCell}</td>`:''}
     </tr>`;}).join('')}</tbody></table>`;}
 
