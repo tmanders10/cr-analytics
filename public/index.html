@@ -1394,23 +1394,19 @@ ${rkList.length===0
     <div class="card" style="padding:0 18px 0"><div class="tw"><table>
   <thead>
     <tr>
-      <th rowspan="2">Rank</th>
-      <th rowspan="2">Team</th>
-      <th rowspan="2" class="r" style="color:var(--text3)">W-L-T</th>
-      <th rowspan="2" class="r" style="color:var(--text3)">DQ</th>
-      <th rowspan="2" class="r" style="color:var(--text3)">Pld</th>
-      <th colspan="${1+metricCols.length+extraCols.length+2}" class="r" style="color:var(--blue);border-bottom:1px solid rgba(56,168,255,.2);padding-bottom:2px">— Event —</th>
-      <th colspan="3" class="r" style="color:var(--green);border-bottom:1px solid rgba(0,230,100,.2);padding-bottom:2px">— Season —</th>
-    </tr>
-    <tr>
-      <th ${thEv} class="r" title="Ranking Score">RS</th>
-      ${metricCols.map(c=>`<th ${thEv} class="r" title="${c}">${c.replace('Avg ','').replace('Average ','').substring(0,8)}</th>`).join('')}
-      ${extraCols.map(c=>`<th ${thEv} class="r" title="${c}">${c.replace('Total ','').substring(0,6)}</th>`).join('')}
-      <th ${thEv} class="r" title="Avg Alliance Score (this event)">Avg</th>
-      <th ${thEv} class="r" title="Avg Auto Points (this event)" style="color:var(--blue)">Auto</th>
-      <th ${thSz} class="r" title="EPA Total - season (Statbotics)">EPA</th>
-      <th ${thSz} class="r" title="ACE - season (Peekorobo)">ACE</th>
-      <th ${thSz} class="r" title="ACE Confidence (Peekorobo)" style="color:#b464ff">Conf</th>
+      <th>Rank</th>
+      <th>Team</th>
+      <th class="r" style="color:var(--text3)">W-L-T</th>
+      <th class="r" style="color:var(--text3)">DQ</th>
+      <th class="r" style="color:var(--text3)">Pld</th>
+      <th class="r" style="color:var(--blue)" title="Ranking Score">RS</th>
+      ${metricCols.map(c=>`<th class="r" style="color:var(--blue)" title="${c}">${c.replace('Avg ','').replace('Average ','').substring(0,8)}</th>`).join('')}
+      ${extraCols.map(c=>`<th class="r" style="color:var(--blue)" title="${c}">${c.replace('Total ','').substring(0,7)}</th>`).join('')}
+      <th class="r" style="color:var(--blue)" title="Avg Alliance Score (this event)">Avg</th>
+      <th class="r" style="color:var(--blue)" title="Avg Auto Points (this event)">Auto</th>
+      <th class="r" style="color:var(--green);border-left:2px solid rgba(0,230,100,.2)" title="EPA Total - season (Statbotics)">EPA</th>
+      <th class="r" style="color:var(--green)" title="ACE - season (Peekorobo)">ACE</th>
+      <th class="r" style="color:#b464ff" title="ACE Confidence (Peekorobo)">Conf</th>
     </tr>
   </thead>
   <tbody>${rows.map(r=>`<tr class="${r.isTrk?'hl':''}" style="${r.tc?'border-left:3px solid '+r.tc.border+';':''}">
@@ -1424,7 +1420,7 @@ ${rkList.length===0
     ${r.extras.map(v=>`<td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue)">${v}</td>`).join('')}
     <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue);font-weight:600">${r.avgScore}</td>
     <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue)">${r.avgAuto}</td>
-    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${r.epaVal!=='–'?'var(--green)':'var(--text3)'}">${r.epaVal}</td>
+    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${r.epaVal!=='–'?'var(--green)':'var(--text3)'};border-left:2px solid rgba(0,230,100,.2)">${r.epaVal}</td>
     <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${r.aceVal!=='–'?'var(--green)':'var(--text3)'}">${r.aceVal}</td>
     <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${r.confCol}">${r.confVal}</td>
   </tr>`).join('')}</tbody>
