@@ -1360,8 +1360,9 @@ ${selector}
     const dq=r.dq??0;
     const played=r.matches_played??'–';
     const rs=r.sort_orders?.[0]!=null?r.sort_orders[0].toFixed(2):'–';
-    const metrics=(r.sort_orders||[]).slice(1).map(v=>v!=null?v.toFixed(2):'–');
-    const extras=(r.extra_stats||[]).map(v=>v!=null?Number.isInteger(v)?v:v.toFixed(1):'–');
+    // Only render as many metric cols as TBA has info entries for — sort_orders is padded with zeros
+    const metrics=(r.sort_orders||[]).slice(1,metricCols.length+1).map(v=>v!=null?v.toFixed(2):'–');
+    const extras=(r.extra_stats||[]).slice(0,extraCols.length).map(v=>v!=null?Number.isInteger(v)?v:v.toFixed(1):'–');
     // Event-specific avg score from match data
     const s=teamStatsF(tk,fM,'qm');
     const avgScore=s.n>0?s.avgS.toFixed(1):'–';
