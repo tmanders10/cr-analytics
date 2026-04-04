@@ -483,6 +483,20 @@ async function init(){
     document.getElementById('dataInfo').innerHTML=
       `Data refreshed ${ago}<br><span style="opacity:.6">Use Refresh Now button to update</span>`;
 
+    // Clear any stream URL overrides that predate the current data.json —
+    // ensures all users see fresh TBA webcasts after a full refresh, not stale saved URLs
+    if(fetchedAt){
+      EVENTS.forEach(ev=>{
+        const ovKey=`cr_stream_${ev.key}`;
+        try{
+          const stored=JSON.parse(sessionStorage.getItem(ovKey)||'{}');
+          if(stored._savedAt && stored._savedAt < fetchedAt.getTime()){
+            sessionStorage.removeItem(ovKey);
+          }
+        }catch(e){}
+      });
+    }
+
     const loadedCount=loadedEvents.size;
     const pending=EVENTS.length-loadedCount;
     setS('ok',`${allM.length} matches · ${loadedCount} events loaded · ${pending>0?pending+' pending':'all complete'}`);
@@ -552,7 +566,13 @@ async function manualRefresh(){
     const cd=setInterval(()=>{
       secs--;
       setS('loading',`Data saved — reloading in ${secs} second${secs!==1?'s':''}…`);
-      if(secs<=0){ clearInterval(cd); saveState(); window.location.href=window.location.pathname+'?r='+Date.now(); }
+      if(secs<=0){
+        clearInterval(cd);
+        saveState();
+        // Clear stream URL overrides so TBA's latest webcasts load fresh
+        EVENTS.forEach(ev=>sessionStorage.removeItem(`cr_stream_${ev.key}`));
+        window.location.href=window.location.pathname+'?r='+Date.now();
+      }
     },1000);
   }catch(err){
     setS('error','Refresh failed — '+err.message);
@@ -711,6 +731,7 @@ function saveStream(evKey, slot){
   let overrides={};
   try{ overrides=JSON.parse(sessionStorage.getItem(ovKey)||'{}'); }catch(e){}
   overrides[slot]=embedUrl;
+  overrides._savedAt=Date.now();
   sessionStorage.setItem(ovKey, JSON.stringify(overrides));
   // Update iframe immediately
   const frame=document.getElementById(`stream-frame-${slot}`);
