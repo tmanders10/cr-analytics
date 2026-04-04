@@ -1308,10 +1308,9 @@ function renderAl(){
   document.getElementById('pg-alliances').innerHTML=html;}
 
 // ════════ EVENT STANDINGS ════════
-let EV_SELECTED=null; // currently selected event key in standings tab
+let EV_SELECTED=null;
 
 function renderEv(evKey){
-  // Default: active event, then most recently completed
   if(!evKey){
     const active=EVENTS.find(ev=>evStatus(ev)==='active');
     const complete=[...EVENTS].reverse().find(ev=>loadedEvents.has(ev.key));
@@ -1321,11 +1320,10 @@ function renderEv(evKey){
   const ev=EVENTS.find(e=>e.key===evKey);
   const loaded=loadedEvents.has(evKey);
 
-  // Build event selector
   const selector=`<select class="ss" id="evStandSel" onchange="renderEv(this.value)" style="margin-bottom:16px">
     ${EVENTS.map(e=>{
       const st=evStatus(e);
-      const label=st==='active'?` ● LIVE`:st==='complete'?' ✓':'';
+      const label=st==='active'?' ● LIVE':st==='complete'?' ✓':'';
       return`<option value="${e.key}" ${e.key===evKey?'selected':''}${!loadedEvents.has(e.key)?' disabled':''}>${e.name}${label}</option>`;
     }).join('')}
   </select>`;
@@ -1338,67 +1336,97 @@ ${selector}
     return;
   }
 
-  // Get rankings from TBA
   const rkData=DB.rankings[evKey]||{};
   const rkList=rkData.rankings||[];
+  const soInfo=rkData.sort_order_info||[];   // e.g. [{name:'Ranking Score'},{name:'Avg Match Points'},...]
+  const exInfo=rkData.extra_stats_info||[];  // e.g. [{name:'Total Ranking Points'}]
   const fM=allM.filter(m=>m._ev===evKey&&m.comp_level==='qm');
-  const allTotals=allLatestEPAs();
   const isActive=evStatus(ev)==='active';
 
-  // Build rows — merge TBA rankings with match stats + EPA + ACE
+  // Build column headers from TBA metadata — skip index 0 (Ranking Score, shown separately)
+  // soInfo[0] = Ranking Score, soInfo[1+] = per-match metrics (Avg Match, Avg Auto, etc.)
+  const metricCols=soInfo.slice(1).map(s=>s.name||s.verbose_name||'');
+  const extraCols=exInfo.map(s=>s.name||s.verbose_name||'');  // e.g. Total Ranking Points
+
   const rows=rkList.map(r=>{
-    const tk=`frc${r.team_key?.replace?.('frc','')||r.team_key}`;
+    const tk=`frc${(r.team_key||'').replace('frc','')}`;
     const teamNum=parseInt(tk.replace('frc',''));
     const tc=teamColorByKey(tk);
-    const tr=isTr(tk);
-    const epa=getEventEPA(tk,evKey);
-    const ace=ACE_DATA[teamNum];
-    // TBA ranking fields vary by year — handle gracefully
-    const rs=r.rank??'–';
-    const wlt=r.record?`${r.record.wins}-${r.record.losses}-${r.record.ties}`:
-               r.wins!=null?`${r.wins}-${r.losses}-${r.ties??0}`:'–';
+    const isTrk=isTr(tk);
+    // TBA fields
+    const rank=r.rank??'–';
+    const rec=r.record?`${r.record.wins}-${r.record.losses}-${r.record.ties}`:
+              r.wins!=null?`${r.wins}-${r.losses}-${r.ties??0}`:'–';
     const dq=r.dq??0;
-    const played=r.matches_played??r.played??'–';
-    const rankScore=r.ranking_score!=null?r.ranking_score.toFixed(2):
-                    r.sort_orders?.[0]!=null?r.sort_orders[0].toFixed(2):'–';
-    // Avg alliance score from match data
+    const played=r.matches_played??'–';
+    const rs=r.sort_orders?.[0]!=null?r.sort_orders[0].toFixed(2):'–';
+    const metrics=(r.sort_orders||[]).slice(1).map(v=>v!=null?v.toFixed(2):'–');
+    const extras=(r.extra_stats||[]).map(v=>v!=null?Number.isInteger(v)?v:v.toFixed(1):'–');
+    // Event-specific avg score from match data
     const s=teamStatsF(tk,fM,'qm');
     const avgScore=s.n>0?s.avgS.toFixed(1):'–';
-    const aceVal=ace?.ace!=null?ace.ace.toFixed(1):'–';
+    const avgAuto=s.n>0?s.avgA.toFixed(1):'–';
+    // EPA — event-specific from Statbotics
+    const epa=getEventEPA(tk,evKey);
     const epaVal=epa?.total!=null?epa.total.toFixed(1):'–';
+    const epaAutoVal=epa?.auto!=null?epa.auto.toFixed(1):'–';
+    // ACE — season-level (event-specific ACE would need event_perfs lookup)
+    const ace=ACE_DATA[teamNum];
+    const aceVal=ace?.ace!=null?ace.ace.toFixed(1):'–';
     const confVal=ace?.confidence!=null?Math.round(ace.confidence*100)+'%':'–';
     const confCol=ace?.confidence!=null?(ace.confidence>=0.9?'var(--green)':ace.confidence>=0.75?'#f0c040':'var(--loss)'):'var(--text3)';
-    return{rs,tk,teamNum,tc,tr,wlt,dq,played,rankScore,avgScore,aceVal,epaVal,confVal,confCol};
+    return{rank,tk,teamNum,tc,isTrk,rec,dq,played,rs,metrics,extras,avgScore,avgAuto,epaVal,epaAutoVal,aceVal,confVal,confCol};
   });
+
+  const thStyle=`class="r" style="font-size:11px"`;
+  const thEv=`style="color:var(--blue);font-size:11px"`;   // event-specific = blue
+  const thSz=`style="color:var(--green);font-size:11px"`; // season = green
 
   document.getElementById('pg-standings').innerHTML=`
 <div class="sh"><h2>Event <span>Standings</span></h2><span class="sub">${ev.name} · ${rkList.length} teams${isActive?` <span style="color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;margin-left:6px">● LIVE</span>`:''}</span></div>
 ${selector}
-${rkList.length===0?`<div class="pending-banner">Rankings not yet available for this event.</div>`:`
-<div class="card" style="padding:0 18px 0"><div class="tw"><table>
-  <thead><tr>
-    <th>Rank</th>
-    <th>Team</th>
-    <th class="r">W-L-T</th>
-    <th class="r">DQ</th>
-    <th class="r">Played</th>
-    <th class="r" title="Ranking Score (TBA)">RS</th>
-    <th class="r">Avg Score</th>
-    <th class="r" style="color:var(--green)" title="EPA Total (Statbotics)">EPA</th>
-    <th class="r" style="color:var(--green)" title="ACE (Peekorobo)">ACE</th>
-    <th class="r" style="color:#b464ff" title="ACE Confidence">Conf</th>
-  </tr></thead>
-  <tbody>${rows.map(r=>`<tr class="${r.tr?'hl':''}" style="${r.tc?'border-left:3px solid '+r.tc.border+';':''}">
-    <td><span class="rk ${r.rs<=3?'top':''}">${r.rs}</span></td>
-    <td><a class="tlink" href="https://www.thebluealliance.com/team/${r.teamNum}" target="_blank" style="${r.tc?'color:'+r.tc.text:''}">${tn(r.tk)}</a><span class="tnsm">${r.teamNum}</span>${r.tc?`<span style="margin-left:5px;font-size:11px;color:${r.tc.text}">★</span>`:''}</td>
-    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px">${r.wlt}</td>
-    <td class="r dim">${r.dq||0}</td>
-    <td class="r dim">${r.played}</td>
-    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2)">${r.rankScore}</td>
-    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green);font-weight:600">${r.avgScore}</td>
-    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:${r.epaVal!=='–'?'var(--green)':'var(--text3)'}">${r.epaVal}</td>
-    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:${r.aceVal!=='–'?'var(--green)':'var(--text3)'}">${r.aceVal}</td>
-    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:${r.confCol}">${r.confVal}</td>
+${rkList.length===0
+  ? `<div class="pending-banner">Rankings not yet available for this event.</div>`
+  : `<div style="display:flex;gap:16px;margin-bottom:8px;font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase">
+      <span style="color:var(--blue)">■ Event data (TBA / Statbotics)</span>
+      <span style="color:var(--green)">■ Season data (Statbotics / Peekorobo)</span>
+    </div>
+    <div class="card" style="padding:0 18px 0"><div class="tw"><table>
+  <thead>
+    <tr>
+      <th rowspan="2">Rank</th>
+      <th rowspan="2">Team</th>
+      <th rowspan="2" class="r" style="color:var(--text3)">W-L-T</th>
+      <th rowspan="2" class="r" style="color:var(--text3)">DQ</th>
+      <th rowspan="2" class="r" style="color:var(--text3)">Pld</th>
+      <th colspan="${1+metricCols.length+extraCols.length+2}" class="r" style="color:var(--blue);border-bottom:1px solid rgba(56,168,255,.2);padding-bottom:2px">— Event —</th>
+      <th colspan="3" class="r" style="color:var(--green);border-bottom:1px solid rgba(0,230,100,.2);padding-bottom:2px">— Season —</th>
+    </tr>
+    <tr>
+      <th ${thEv} class="r" title="Ranking Score">RS</th>
+      ${metricCols.map(c=>`<th ${thEv} class="r" title="${c}">${c.replace('Avg ','').replace('Average ','').substring(0,8)}</th>`).join('')}
+      ${extraCols.map(c=>`<th ${thEv} class="r" title="${c}">${c.replace('Total ','').substring(0,6)}</th>`).join('')}
+      <th ${thEv} class="r" title="Avg Alliance Score (this event)">Avg</th>
+      <th ${thEv} class="r" title="Avg Auto Points (this event)" style="color:var(--blue)">Auto</th>
+      <th ${thSz} class="r" title="EPA Total - season (Statbotics)">EPA</th>
+      <th ${thSz} class="r" title="ACE - season (Peekorobo)">ACE</th>
+      <th ${thSz} class="r" title="ACE Confidence (Peekorobo)" style="color:#b464ff">Conf</th>
+    </tr>
+  </thead>
+  <tbody>${rows.map(r=>`<tr class="${r.isTrk?'hl':''}" style="${r.tc?'border-left:3px solid '+r.tc.border+';':''}">
+    <td><span class="rk ${r.rank<=3?'top':''}">${r.rank}</span></td>
+    <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px"><a class="tlink" href="https://www.thebluealliance.com/team/${r.teamNum}" target="_blank" style="${r.tc?'color:'+r.tc.text:''}">${tn(r.tk)}</a><span class="tnsm">${r.teamNum}</span>${r.tc?`<span style="margin-left:5px;font-size:11px;color:${r.tc.text}">★</span>`:''}</td>
+    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px">${r.rec}</td>
+    <td class="r dim" style="font-family:'JetBrains Mono',monospace;font-size:11px">${r.dq}</td>
+    <td class="r dim" style="font-family:'JetBrains Mono',monospace;font-size:11px">${r.played}</td>
+    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2)">${r.rs}</td>
+    ${r.metrics.map(v=>`<td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue)">${v}</td>`).join('')}
+    ${r.extras.map(v=>`<td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue)">${v}</td>`).join('')}
+    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue);font-weight:600">${r.avgScore}</td>
+    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue)">${r.avgAuto}</td>
+    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${r.epaVal!=='–'?'var(--green)':'var(--text3)'}">${r.epaVal}</td>
+    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${r.aceVal!=='–'?'var(--green)':'var(--text3)'}">${r.aceVal}</td>
+    <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${r.confCol}">${r.confVal}</td>
   </tr>`).join('')}</tbody>
 </table></div></div>`}`;
 }
