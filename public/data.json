@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-04T03:31:33.666Z",
+  "fetchedAt": "2026-04-04T03:44:13.027Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -55840,6 +55840,44 @@
           "event_key": "2026gacol",
           "confidence": 0.82,
           "teleop_raw": 46.74,
+          "endgame_raw": 0
+        }
+      ]
+    },
+    "8080": {
+      "ace": 49.46,
+      "raw": 56.3,
+      "confidence": 0.88,
+      "auto_raw": 9.6,
+      "teleop_raw": 46.71,
+      "endgame_raw": 0,
+      "wins": 14,
+      "losses": 9,
+      "ties": 4,
+      "rank_global": null,
+      "rank_country": null,
+      "rank_state": null,
+      "rank_district": null,
+      "count_global": null,
+      "count_state": null,
+      "count_district": null,
+      "event_perfs": [
+        {
+          "ace": 59.95,
+          "raw": 67.29,
+          "auto_raw": 13.31,
+          "event_key": "2026gaalb",
+          "confidence": 0.89,
+          "teleop_raw": 53.98,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 38.48,
+          "raw": 44.48,
+          "auto_raw": 5.6,
+          "event_key": "2026gagai",
+          "confidence": 0.86,
+          "teleop_raw": 38.88,
           "endgame_raw": 0
         }
       ]
