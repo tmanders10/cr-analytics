@@ -1400,8 +1400,8 @@ ${rkList.length===0
       <th class="r" style="color:var(--text3)">DQ</th>
       <th class="r" style="color:var(--text3)">Pld</th>
       <th class="r" style="color:var(--blue)" title="Ranking Score">RS</th>
-      ${metricCols.map(c=>`<th class="r" style="color:var(--blue)" title="${c}">${c.replace('Avg ','').replace('Average ','').substring(0,8)}</th>`).join('')}
-      ${extraCols.map(c=>`<th class="r" style="color:var(--blue)" title="${c}">${c.replace('Total ','').substring(0,7)}</th>`).join('')}
+      ${metricCols.map(c=>`<th class="r" style="color:var(--blue)" title="${c}">${c.replace('Avg ','').replace('Average ','')}</th>`).join('')}
+      ${extraCols.map(c=>`<th class="r" style="color:var(--blue)" title="${c}">${c.replace('Total ','')}</th>`).join('')}
       <th class="r" style="color:var(--blue)" title="Avg Alliance Score (this event)">Avg</th>
       <th class="r" style="color:var(--blue)" title="Avg Auto Points (this event)">Auto</th>
       <th class="r" style="color:var(--green);border-left:2px solid rgba(0,230,100,.2)" title="EPA Total - season (Statbotics)">EPA</th>
