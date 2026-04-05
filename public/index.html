@@ -1727,42 +1727,55 @@ function renderMxTable(matches){
       if(isUnplayed) return '';
       const rhs=hubS(m,'red'), bhs=hubS(m,'blue');
       if(!rhs&&!bhs) return '';
-      const phases=[
-        {label:'Auto',       k:'auto',       col:'var(--blue)'},
-        {label:'Shift 1',    k:'s1',         col:'#a78bfa'},
-        {label:'Shift 2',    k:'s2',         col:'#a78bfa'},
-        {label:'Shift 3',    k:'s3',         col:'#a78bfa'},
-        {label:'Shift 4',    k:'s4',         col:'#a78bfa'},
-        {label:'Teleop',     k:'teleop',     col:'#00c8aa'},
-        {label:'Endgame',    k:'endgame',    col:'var(--orange)'},
-        {label:'Transition', k:'transition', col:'var(--text2)'},
-        {label:'Total',      k:'total',      col:'var(--green)'},
-      ].filter(p=>((rhs?rhs[p.k]:0)||0)+((bhs?bhs[p.k]:0)||0)>0);
-      const maxV=Math.max(...phases.map(p=>Math.max((rhs?rhs[p.k]:0)||0,(bhs?bhs[p.k]:0)||0)),1);
-      const bar=(val,col,dir)=>{
-        const pct=Math.round((val/maxV)*100);
-        const inner=`width:${pct}%;height:100%;background:${col};border-radius:3px`;
-        return`<div style="flex:1;background:var(--bg3);border-radius:3px;height:5px;overflow:hidden">
-          <div style="${inner};${dir==='right'?'margin-left:auto':''}"></div>
-        </div>`;
-      };
-      const rows=phases.map(p=>{
-        const rv=(rhs?rhs[p.k]:0)||0, bv=(bhs?bhs[p.k]:0)||0;
-        const isTotal=p.k==='total';
+      // Phase rows — always show all, pair Sh1/Sh2 and Sh3/Sh4 on same row
+      // Each "row" is either a single phase or a paired phase (either/or per alliance)
+      const singlePhases=[
+        {label:'Auto',       k:'auto',    col:'var(--blue)'},
+        {label:'Transition', k:'transition',col:'var(--text2)'},
+      ];
+      const pairedPhases=[
+        {label:'Shift 1 / 2', k1:'s1', k2:'s2', col:'#a78bfa'},
+        {label:'Shift 3 / 4', k1:'s3', k2:'s4', col:'#a78bfa'},
+      ];
+      const latePhases=[
+        {label:'Teleop',  k:'teleop',  col:'#00c8aa'},
+        {label:'Endgame', k:'endgame', col:'var(--orange)'},
+        {label:'Total',   k:'total',   col:'var(--green)'},
+      ];
+
+      const f=(hs,k)=>(hs?hs[k]:0)||0;
+      const maxV=Math.max(
+        ...[rhs,bhs].filter(Boolean).flatMap(h=>['auto','transition','s1','s2','s3','s4','teleop','endgame'].map(k=>h[k]||0)),1);
+
+      const makeRow=(rv,bv,label,col,isTotal)=>{
+        const pctR=Math.round((rv/maxV)*100), pctB=Math.round((bv/maxV)*100);
         const rCol=rWin&&isTotal?'var(--loss)':rv>bv?'rgba(255,100,100,.9)':'var(--text3)';
         const bCol=bWin&&isTotal?'var(--blue)':bv>rv?'rgba(80,180,255,.9)':'var(--text3)';
-        return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':'margin-bottom:5px'}">
-          <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal?700:400};color:${rCol};min-width:24px;text-align:right">${rv}</span>
-            ${bar(rv,'var(--loss)','right')}
-          </div>
-          <div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':p.col}">${p.label}</div>
-          <div style="display:flex;align-items:center;gap:5px">
-            ${bar(bv,'var(--blue)','left')}
-            <span style="font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal?700:400};color:${bCol};min-width:24px">${bv}</span>
-          </div>
+        const barR=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative">
+          <div style="width:${pctR}%;height:100%;background:var(--loss);opacity:${rWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;right:0;top:0"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal?700:400};color:${rCol}">${rv}</div>
         </div>`;
-      }).join('');
+        const barB=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative">
+          <div style="width:${pctB}%;height:100%;background:var(--blue);opacity:${bWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;left:0;top:0"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal?700:400};color:${bCol}">${bv}</div>
+        </div>`;
+        return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':'margin-bottom:4px'}">
+          ${barR}
+          <div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':col}">${label}</div>
+          ${barB}
+        </div>`;
+      };
+
+      const rows=[
+        ...singlePhases.map(p=>makeRow(f(rhs,p.k),f(bhs,p.k),p.label,p.col,false)),
+        // Paired shifts: red uses whichever has points (k1 or k2), blue uses the other
+        ...pairedPhases.map(p=>{
+          const rv=f(rhs,p.k1)+f(rhs,p.k2);
+          const bv=f(bhs,p.k1)+f(bhs,p.k2);
+          return makeRow(rv,bv,p.label,p.col,false);
+        }),
+        ...latePhases.map(p=>makeRow(f(rhs,p.k),f(bhs,p.k),p.label,p.col,p.k==='total')),
+      ].join('');
       return`<tr id="${bdId}" class="mx-bd">
         <td colspan="${colSpan}" style="padding:0">
           <div style="padding:14px 24px 16px">
