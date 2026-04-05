@@ -1662,23 +1662,24 @@ document.getElementById('guideModal').addEventListener('click',function(e){
   if(e.target===this) this.style.display='none';
 });
 
-// Long-press logo to toggle admin mode on mobile
+// Triple-tap logo to toggle admin mode on mobile
 (function(){
   const logo=document.getElementById('logoImg');
   if(!logo) return;
-  let pressTimer=null;
-  logo.addEventListener('touchstart',function(e){
-    pressTimer=setTimeout(()=>{
+  let tapCount=0, tapTimer=null;
+  logo.addEventListener('click',function(){
+    tapCount++;
+    if(tapCount===1) tapTimer=setTimeout(()=>{ tapCount=0; },600);
+    if(tapCount>=3){
+      clearTimeout(tapTimer);
+      tapCount=0;
       const el=document.getElementById('adminBtns');
       const isVisible=el&&el.style.display==='flex';
       setAdminMode(!isVisible);
-      // Brief visual feedback
       logo.style.opacity='0.5';
-      setTimeout(()=>logo.style.opacity='1', 300);
-    },1000);
-  },{passive:true});
-  logo.addEventListener('touchend',()=>clearTimeout(pressTimer));
-  logo.addEventListener('touchmove',()=>clearTimeout(pressTimer));
+      setTimeout(()=>logo.style.opacity='1',300);
+    }
+  });
 })();
 
 // Start
