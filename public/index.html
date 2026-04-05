@@ -1730,7 +1730,7 @@ function renderMxTable(matches){
       // Phase rows — always show all, pair Sh1/Sh2 and Sh3/Sh4 on same row
       // Each "row" is either a single phase or a paired phase (either/or per alliance)
       const singlePhases=[
-        {label:'Auto',       k:'auto',    col:'var(--blue)'},
+        {label:'Auto',       k:'auto',      col:'var(--blue)'},
         {label:'Transition', k:'transition',col:'var(--text2)'},
       ];
       const pairedPhases=[
@@ -1738,8 +1738,8 @@ function renderMxTable(matches){
         {label:'Shift 3 / 4', k1:'s3', k2:'s4', col:'#a78bfa'},
       ];
       const latePhases=[
-        {label:'Teleop',  k:'teleop',  col:'#00c8aa'},
         {label:'Endgame', k:'endgame', col:'var(--orange)'},
+        {label:'Teleop',  k:'teleop',  col:'#00c8aa', sub:true},
         {label:'Total',   k:'total',   col:'var(--green)'},
       ];
 
@@ -1747,21 +1747,22 @@ function renderMxTable(matches){
       const maxV=Math.max(
         ...[rhs,bhs].filter(Boolean).flatMap(h=>['auto','transition','s1','s2','s3','s4','teleop','endgame'].map(k=>h[k]||0)),1);
 
-      const makeRow=(rv,bv,label,col,isTotal)=>{
+      const makeRow=(rv,bv,label,col,isTotal,isSub)=>{
         const pctR=Math.round((rv/maxV)*100), pctB=Math.round((bv/maxV)*100);
         const rCol=rWin&&isTotal?'var(--loss)':rv>bv?'rgba(255,100,100,.9)':'var(--text3)';
         const bCol=bWin&&isTotal?'var(--blue)':bv>rv?'rgba(80,180,255,.9)':'var(--text3)';
         const barR=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative">
           <div style="width:${pctR}%;height:100%;background:var(--loss);opacity:${rWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;right:0;top:0"></div>
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal?700:400};color:${rCol}">${rv}</div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${rCol}">${rv}</div>
         </div>`;
         const barB=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative">
           <div style="width:${pctB}%;height:100%;background:var(--blue);opacity:${bWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;left:0;top:0"></div>
-          <div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal?700:400};color:${bCol}">${bv}</div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${bCol}">${bv}</div>
         </div>`;
-        return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':'margin-bottom:4px'}">
+        const topStyle=isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':isSub?'padding-top:5px;border-top:1px dashed rgba(255,255,255,.1);margin-top:2px;margin-bottom:4px':'margin-bottom:4px';
+        return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${topStyle}">
           ${barR}
-          <div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':col}">${label}</div>
+          <div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal||isSub?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':col}">${label}${isSub?'<div style="font-size:8px;font-weight:400;color:var(--text3);letter-spacing:.04em;margin-top:1px">subtotal</div>':''}</div>
           ${barB}
         </div>`;
       };
@@ -1774,7 +1775,7 @@ function renderMxTable(matches){
           const bv=f(bhs,p.k1)+f(bhs,p.k2);
           return makeRow(rv,bv,p.label,p.col,false);
         }),
-        ...latePhases.map(p=>makeRow(f(rhs,p.k),f(bhs,p.k),p.label,p.col,p.k==='total')),
+        ...latePhases.map(p=>makeRow(f(rhs,p.k),f(bhs,p.k),p.label,p.col,p.k==='total',!!p.sub)),
       ].join('');
       return`<tr id="${bdId}" class="mx-bd">
         <td colspan="${colSpan}" style="padding:0">
