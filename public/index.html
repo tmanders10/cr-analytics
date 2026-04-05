@@ -1121,6 +1121,18 @@ const CARD_MODE = {};
 const CARD_TYPE = {};
 // Per-team analytics section expanded state
 const CARD_EXPAND = {};
+let ANALYTICS_EXPANDED = false; // global state for all cards
+
+function toggleAnalytics(){
+  ANALYTICS_EXPANDED = !ANALYTICS_EXPANDED;
+  TRACKED.forEach(n=>{
+    CARD_EXPAND[n] = ANALYTICS_EXPANDED;
+    const el=document.getElementById(`analytics-${n}`);
+    const btn=el?.previousElementSibling;
+    if(el) el.style.display=ANALYTICS_EXPANDED?'block':'none';
+    if(btn){ const ch=btn.querySelector('.chevron'); if(ch) ch.style.transform=ANALYTICS_EXPANDED?'rotate(180deg)':'rotate(0deg)'; }
+  });
+}
 // Overview phase table match type
 let OV_TYPE = 'qm';
 
@@ -1255,7 +1267,7 @@ function renderTPCard(t){
     <div class="mhd">${s.matches.map(mx=>`<div class="mhdot ${dotClass(mx)}" style="${dotBorder(mx)}" title="${mx.m._esh} ${mx.m.comp_level==='qm'?'QM':'PO'}${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
     :`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No ${mtypeLabel.toLowerCase()} data in current filter.</div>`}
     <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
-      <button onclick="CARD_EXPAND[${t.n}]=!CARD_EXPAND[${t.n}];document.getElementById('analytics-${t.n}').style.display=CARD_EXPAND[${t.n}]?'block':'none';this.querySelector('.chevron').style.transform=CARD_EXPAND[${t.n}]?'rotate(180deg)':'rotate(0deg)'" style="width:100%;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:0;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase">
+      <button onclick="toggleAnalytics()" style="width:100%;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:0;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase">
         <span>EPA · ACE · Breakdown</span>
         <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;transition:transform .2s"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
@@ -1391,11 +1403,12 @@ ${renderTrackerSetup()}
 </div>`;
   // Restore expand state for each tracked card after DOM re-render
   TRACKED.forEach(n=>{
-    if(CARD_EXPAND[n]){
+    if(ANALYTICS_EXPANDED){
+      CARD_EXPAND[n]=true;
       const el=document.getElementById(`analytics-${n}`);
       const btn=el?.previousElementSibling;
       if(el) el.style.display='block';
-      if(btn) { const ch=btn.querySelector('.chevron'); if(ch) ch.style.transform='rotate(180deg)'; }
+      if(btn){ const ch=btn.querySelector('.chevron'); if(ch) ch.style.transform='rotate(180deg)'; }
     }
   });
 }function filterTm(){
