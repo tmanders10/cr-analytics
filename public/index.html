@@ -159,7 +159,62 @@
   ::-webkit-scrollbar{width:5px;height:5px}
   ::-webkit-scrollbar-track{background:var(--bg2)}
   ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-  @media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr}.agrid{grid-template-columns:1fr 1fr}.ev-pills,.header-sub{display:none}}
+  @media(max-width:900px){
+    .g2,.g3,.g4{grid-template-columns:1fr}
+    .agrid{grid-template-columns:1fr 1fr}
+    .ev-pills,.header-sub,.hdiv{display:none}
+  }
+  @media(max-width:600px){
+    /* Use short nav labels */
+    .nav-tab{font-size:0}
+    .nav-tab::after{content:attr(data-short);font-size:10px;letter-spacing:.06em}
+    /* Header compression */
+    .header{height:52px;padding:0 12px;gap:10px}
+    .logo-img{width:32px;height:32px}
+    .header-logo{font-size:16px}
+    .header-logo small{display:none}
+    .data-info{display:none}
+    /* Status bar */
+    .status-bar{padding:5px 12px;min-height:28px;font-size:10px}
+    /* Nav */
+    .nav{padding:0 8px}
+    .nav-tab{padding:11px 9px 9px}
+    /* Main content */
+    .main{padding:14px 12px}
+    /* Cards */
+    .card{padding:14px}
+    .tpc{padding:14px}
+    /* Team number */
+    .tpn{font-size:36px}
+    .tpname{font-size:13px}
+    /* Metric cards */
+    .mval{font-size:28px}
+    /* Search inputs */
+    .si{width:100%;min-width:0}
+    .sr{gap:6px}
+    /* Table padding */
+    tbody td{padding:6px 8px}
+    thead th{padding:6px 8px}
+    /* Tracker setup */
+    .tracker-setup{padding:14px}
+    .pending-banner{padding:12px 14px}
+    /* Bigger touch targets for match row expand */
+    tbody tr{min-height:44px}
+    /* Guide button - show ? only */
+    .guide-btn-text{display:none}
+    /* Admin refresh buttons - smaller */
+    .refresh-btn{font-size:10px;padding:5px 9px}
+  }
+  @media(max-width:400px){
+    .nav-tab{padding:11px 7px 9px}
+    .header-logo{font-size:14px}
+    .tpn{font-size:30px}
+  }
+  @media(max-width:600px){
+    /* Adjust sticky offsets for compressed header (52px vs 60px) */
+    .status-bar{top:52px}
+    .nav{top:80px} /* 52 + 28 */
+  }
 </style>
 </head>
 <body>
@@ -196,7 +251,7 @@
     </button>
   </div>
   <div class="data-info" id="dataInfo">Loading…</div>
-  <button onclick="document.getElementById('guideModal').style.display='flex'" style="margin-left:10px;background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:5px;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">User Guide</button>
+  <button onclick="document.getElementById('guideModal').style.display='flex'" style="margin-left:10px;background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:5px;cursor:pointer;flex-shrink:0;transition:all .2s;white-space:nowrap" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">?<span class="guide-btn-text"> Guide</span></button>
 </div>
 
 <div class="status-bar">
@@ -206,13 +261,13 @@
 </div>
 
 <div class="nav">
-  <button class="nav-tab active" onclick="showPage('overview',this)">Overview</button>
-  <button class="nav-tab" onclick="showPage('rankings',this)">District Rankings</button>
-  <button class="nav-tab" onclick="showPage('scoring',this)">Scoring Analysis</button>
-  <button class="nav-tab" onclick="showPage('teams',this)">Team Tracker</button>
-  <button class="nav-tab" onclick="showPage('alliances',this)">Alliances & Playoffs</button>
-  <button class="nav-tab" onclick="showPage('matches',this)">Match Log</button>
-  <button class="nav-tab" onclick="showPage('standings',this)">Event Standings</button>
+  <button class="nav-tab active" onclick="showPage('overview',this)" data-short="Home">Overview</button>
+  <button class="nav-tab" onclick="showPage('rankings',this)" data-short="Ranks">District Rankings</button>
+  <button class="nav-tab" onclick="showPage('scoring',this)" data-short="Scoring">Scoring Analysis</button>
+  <button class="nav-tab" onclick="showPage('teams',this)" data-short="Teams">Team Tracker</button>
+  <button class="nav-tab" onclick="showPage('alliances',this)" data-short="Alliances">Alliances & Playoffs</button>
+  <button class="nav-tab" onclick="showPage('matches',this)" data-short="Matches">Match Log</button>
+  <button class="nav-tab" onclick="showPage('standings',this)" data-short="Standings">Event Standings</button>
 </div>
 
 <div class="main">
