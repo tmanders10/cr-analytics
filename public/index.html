@@ -196,7 +196,7 @@
     </button>
   </div>
   <div class="data-info" id="dataInfo">Loading…</div>
-  <button onclick="document.getElementById('guideModal').style.display='flex'" style="margin-left:10px;background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:5px;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">? Guide</button>
+  <button onclick="document.getElementById('guideModal').style.display='flex'" style="margin-left:10px;background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:5px;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">User Guide</button>
 </div>
 
 <div class="status-bar">
@@ -1305,7 +1305,7 @@ function renderTPCard(t){
       </div>`;
       const shiftRows=[avg.s1,avg.s2,avg.s3,avg.s4].map((v,i)=>v>0?row(`Shift ${i+1}`,v,'#a78bfa'):'').join('');
       return`<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Alliance Avg Breakdown <span style="font-weight:400;color:var(--text3);font-size:9px">(${avg.n} match${avg.n!==1?'es':''})</span></div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Avg Point Breakdown by Shift <span style="font-weight:400;color:var(--text3);font-size:9px">(${avg.n} match${avg.n!==1?'es':''})</span></div>
         ${row('Auto',avg.auto,'var(--blue)')}
         ${shiftRows}
         ${row('Teleop',avg.teleop,'#00c8aa')}
