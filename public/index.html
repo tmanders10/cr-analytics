@@ -1119,6 +1119,8 @@ function renderTrackerSetup(){return`<div class="tracker-setup">
 const CARD_MODE = {};
 // Per-team card match type: 'qm' | 'po' | 'all'
 const CARD_TYPE = {};
+// Per-team analytics section expanded state
+const CARD_EXPAND = {};
 // Overview phase table match type
 let OV_TYPE = 'qm';
 
@@ -1249,10 +1251,16 @@ function renderTPCard(t){
     <div class="mhl">Match History — ${mtypeLabel}${ACTIVE_FILTER.size?' (filtered)':''}</div>
     <div class="mhd">${s.matches.map(mx=>`<div class="mhdot ${dotClass(mx)}" style="${dotBorder(mx)}" title="${mx.m._esh} ${mx.m.comp_level==='qm'?'QM':'PO'}${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
     :`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No ${mtypeLabel.toLowerCase()} data in current filter.</div>`}
-    ${epaSection}
-    ${(()=>{
-      const ace=ACE_DATA[t.n];
-      if(!ace) return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">ACE not available — run a Full Refresh to load Peekorobo data.</div>`;
+    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
+      <button onclick="CARD_EXPAND[${t.n}]=!CARD_EXPAND[${t.n}];document.getElementById('analytics-${t.n}').style.display=CARD_EXPAND[${t.n}]?'block':'none';this.querySelector('.chevron').style.transform=CARD_EXPAND[${t.n}]?'rotate(180deg)':'rotate(0deg)'" style="width:100%;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:0;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase">
+        <span>EPA · ACE · Breakdown</span>
+        <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;transition:transform .2s"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div id="analytics-${t.n}" style="display:none">
+        ${epaSection}
+        ${(()=>{
+          const ace=ACE_DATA[t.n];
+          if(!ace) return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">ACE not available — run a Full Refresh to load Peekorobo data.</div>`;
       const confPct=Math.round((ace.confidence||0)*100);
       const confCol=confPct>=90?'var(--green)':confPct>=75?'#f0c040':'var(--loss)';
       const stateRank=ace.rank_state!=null?`<span style="color:var(--green);font-weight:700">#${ace.rank_state}</span><span style="color:var(--text3)"> / ${ace.count_state} GA</span>`:'–';
@@ -1302,6 +1310,8 @@ function renderTPCard(t){
         ${avg.transition>0?row('Transit',avg.transition,'var(--text2)'):''}
       </div>`;
     })()}
+      </div><!-- end analytics collapse -->
+    </div><!-- end analytics wrapper -->
     <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
       <button class="add-btn" style="background:transparent;border:1px solid var(--loss);color:var(--loss);font-size:11px;padding:4px 10px" onclick="removeTrackedTeam(${t.n})">Remove</button>
       ${mtype==='all'?`<span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,230,100,.15);outline:1px solid rgba(255,140,66,.6);vertical-align:middle;margin-right:3px"></span>playoff match</span>`:''}
