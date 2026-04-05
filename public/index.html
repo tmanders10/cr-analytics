@@ -45,7 +45,8 @@
   .nav-tab{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:13px 14px 11px;color:#8aa090;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;background:none;border-left:none;border-right:none;border-top:none}
   .nav-tab:hover{color:#c8d8ce}
   .nav-tab.active{color:var(--green);border-bottom-color:var(--green)}
-  .main{padding:22px 24px;max-width:1600px;margin:0 auto}
+  .mx-bd{display:none;background:var(--bg2);border-top:1px solid var(--border)}
+  .mx-bd.open{display:table-row}
   .page{display:none}.page.active{display:block}
   .sh{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
   .sh h2{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;letter-spacing:.03em;text-transform:uppercase}
@@ -195,7 +196,7 @@
     </button>
   </div>
   <div class="data-info" id="dataInfo">Loading…</div>
-  <button onclick="document.getElementById('guideModal').style.display='flex'" style="margin-left:10px;background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:5px;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">User Guide</button>
+  <button onclick="document.getElementById('guideModal').style.display='flex'" style="margin-left:10px;background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:5px;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">? Guide</button>
 </div>
 
 <div class="status-bar">
@@ -630,6 +631,43 @@ function phS(m,a,ph){
   if(ph==='teleop')  return bd.totalTeleopPoints  ??bd.teleopPoints  ??bd.teleop_points  ??null;
   if(ph==='endgame') return bd.endGameTowerPoints ??bd.endgamePoints ??bd.endgame_points ??bd.endGamePoints??null;
   return null;
+}
+// Extract hubScore fields from a breakdown alliance
+function hubS(m,a){
+  const bd=m.score_breakdown?.[a];
+  const hs=bd?.hubScore;
+  if(!hs) return null;
+  return {
+    auto:       hs.autoPoints      ??0,
+    teleop:     hs.teleopPoints    ??0,
+    endgame:    hs.endgamePoints   ??0,
+    transition: hs.transitionPoints??0,
+    s1:         hs.shift1Points    ??0,
+    s2:         hs.shift2Points    ??0,
+    s3:         hs.shift3Points    ??0,
+    s4:         hs.shift4Points    ??0,
+    total:      hs.totalPoints     ??0,
+  };
+}
+// Average hubScore breakdown for a team across their matches
+function teamHubAvg(tk, matches){
+  const acc={auto:0,teleop:0,endgame:0,transition:0,s1:0,s2:0,s3:0,s4:0,total:0};
+  let n=0;
+  matches.forEach(m=>{
+    const red=m.alliances?.red?.team_keys||[];
+    const blue=m.alliances?.blue?.team_keys||[];
+    const side=red.includes(tk)?'red':blue.includes(tk)?'blue':null;
+    if(!side) return;
+    const hs=hubS(m,side);
+    if(!hs||hs.total===0) return;
+    Object.keys(acc).forEach(k=>acc[k]+=hs[k]);
+    n++;
+  });
+  if(!n) return null;
+  const avg={};
+  Object.keys(acc).forEach(k=>avg[k]=acc[k]/n);
+  avg.n=n;
+  return avg;
 }
 function evAvgPh(ek,ph){const v=[];qm(ek).forEach(m=>['red','blue'].forEach(a=>{const x=phS(m,a,ph);if(x!==null)v.push(x);}));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;}
 function evAvgScore(ek){let s=0,c=0;qm(ek).forEach(m=>{if((m.alliances?.red?.score??-1)>=0){s+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){s+=m.alliances.blue.score;c++;}});return c?s/c:0;}
@@ -1243,6 +1281,27 @@ function renderTPCard(t){
         </div>
         ${evPerfs.length?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:4px">ACE by event:</div><div style="display:flex;gap:6px;flex-wrap:wrap">${evPerfs.map(ep=>{const evShort=EVENTS.find(e=>e.key===ep.event_key)?.short||ep.event_key.replace('2026','').toUpperCase();return`<div style="background:var(--bg3);border-radius:4px;padding:3px 7px;text-align:center"><div style="font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em">${evShort}</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)">${ep.ace!=null?ep.ace.toFixed(1):'–'}</div></div>`;}).join('')}</div>`:''}</div>`;
     })()}
+    ${(()=>{
+      const tMatches=fMatches.filter(m=>{const r=m.alliances?.red?.team_keys||[],b=m.alliances?.blue?.team_keys||[];return r.includes(t.key)||b.includes(t.key);}).filter(m=>(m.alliances?.red?.score??-1)>=0);
+      const avg=teamHubAvg(t.key,tMatches);
+      if(!avg||avg.n<1) return '';
+      const maxVal=Math.max(avg.auto,avg.teleop,avg.endgame,avg.s1,avg.s2,avg.s3,avg.s4,1);
+      const bar=(val,col)=>`<div style="flex:1;background:var(--bg3);border-radius:3px;height:6px;overflow:hidden"><div style="width:${Math.round((val/maxVal)*100)}%;height:100%;background:${col};border-radius:3px"></div></div>`;
+      const row=(label,val,col)=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+        <span style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);width:52px;flex-shrink:0">${label}</span>
+        ${bar(val,col)}
+        <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:${col};width:32px;text-align:right;flex-shrink:0">${val.toFixed(1)}</span>
+      </div>`;
+      const shiftRows=[avg.s1,avg.s2,avg.s3,avg.s4].map((v,i)=>v>0?row(`Shift ${i+1}`,v,'#a78bfa'):'').join('');
+      return`<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Alliance Avg Breakdown <span style="font-weight:400;color:var(--text3);font-size:9px">(${avg.n} match${avg.n!==1?'es':''})</span></div>
+        ${row('Auto',avg.auto,'var(--blue)')}
+        ${shiftRows}
+        ${row('Teleop',avg.teleop,'#00c8aa')}
+        ${row('Endgame',avg.endgame,'var(--orange)')}
+        ${avg.transition>0?row('Transit',avg.transition,'var(--text2)'):''}
+      </div>`;
+    })()}
     <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
       <button class="add-btn" style="background:transparent;border:1px solid var(--loss);color:var(--loss);font-size:11px;padding:4px 10px" onclick="removeTrackedTeam(${t.n})">Remove</button>
       ${mtype==='all'?`<span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,230,100,.15);outline:1px solid rgba(255,140,66,.6);vertical-align:middle;margin-right:3px"></span>playoff match</span>`:''}
@@ -1643,7 +1702,47 @@ function renderMxTable(matches){
       ?`<tr><td colspan="${colSpan}" style="padding:0;border-top:2px solid var(--border2);background:transparent"></td></tr>`
       :'';
     lastEv=m._ev;
-    return`${evBoundary}<tr class="${hasT?'hl':''}">
+    const bdId=`bd-${m.key}`;
+    // Build breakdown panel for played matches
+    const bdPanel=(()=>{
+      if(isUnplayed) return '';
+      const rhs=hubS(m,'red'), bhs=hubS(m,'blue');
+      if(!rhs&&!bhs) return '';
+      const maxV=Math.max(...[rhs,bhs].filter(Boolean).flatMap(h=>Object.values(h)),1);
+      const miniBar=(v,col)=>`<div style="height:4px;border-radius:2px;background:var(--bg3);overflow:hidden;margin-top:2px"><div style="width:${Math.round((v/maxV)*100)}%;height:100%;background:${col};border-radius:2px"></div></div>`;
+      const cell=(label,rv,bv,col)=>`<td style="padding:4px 6px;text-align:center;min-width:52px">
+        <div style="font-size:8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:2px">${label}</div>
+        <div style="display:flex;gap:4px;align-items:flex-end;justify-content:center">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${rWin?'var(--loss)':'var(--text3)'}">${rv!=null?rv:0}</span>
+          <span style="font-size:9px;color:var(--text3)">|</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${bWin?'var(--blue)':'var(--text3)'}">${bv!=null?bv:0}</span>
+        </div>
+        ${miniBar(rv||0,'var(--loss)')}
+        ${miniBar(bv||0,'var(--blue)')}
+      </td>`;
+      const f=(hs,k)=>hs?hs[k]??0:0;
+      const cols=[
+        cell('Auto',    f(rhs,'auto'),    f(bhs,'auto'),    'var(--blue)'),
+        ...[1,2,3,4].map(i=>cell(`Sh${i}`, f(rhs,`s${i}`), f(bhs,`s${i}`), '#a78bfa')),
+        cell('Teleop',  f(rhs,'teleop'),  f(bhs,'teleop'),  '#00c8aa'),
+        cell('Endgame', f(rhs,'endgame'), f(bhs,'endgame'), 'var(--orange)'),
+        cell('Transit', f(rhs,'transition'),f(bhs,'transition'),'var(--text2)'),
+        cell('Total',   f(rhs,'total'),   f(bhs,'total'),   'var(--green)'),
+      ].join('');
+      return`<tr id="${bdId}" class="mx-bd">
+        <td colspan="${colSpan}" style="padding:0">
+          <div style="padding:6px 8px 8px;overflow-x:auto">
+            <div style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;display:flex;gap:16px">
+              <span style="color:var(--loss)">■ Red</span><span style="color:var(--blue)">■ Blue</span>
+              <span style="margin-left:auto;font-weight:400">Alliance totals · click row to close</span>
+            </div>
+            <table style="border-collapse:collapse;font-size:11px"><tr>${cols}</tr></table>
+          </div>
+        </td>
+      </tr>`;
+    })();
+    const clickable=!isUnplayed&&bdPanel?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
+    return`${evBoundary}<tr class="${hasT?'hl':''}" ${clickable}>
       <td><span class="badge ${m._ec}">${m._esh}</span></td>
       <td><span style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;color:var(--text3)">${m.comp_level==='qm'?'QUAL':'PO'}</span></td>
       <td class="r dim">${m.match_number}</td>
@@ -1655,7 +1754,7 @@ function renderMxTable(matches){
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${bWin?'background:rgba(56,168,255,.04)':''}">${bt}</td>
       <td class="r" style="white-space:nowrap">${aceLoaded?predCell:resultBadge}</td>
       ${aceLoaded?`<td class="r">${resultCell}</td>`:''}
-    </tr>`;}).join('')})()}</tbody></table>`;}
+    </tr>${bdPanel}`;}).join('')})()}</tbody></table>`;}
 
 // Guide modal — close on backdrop click
 document.getElementById('guideModal').addEventListener('click',function(e){
