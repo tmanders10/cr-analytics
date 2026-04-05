@@ -1224,8 +1224,11 @@ function renderTPCard(t){
     ondragleave="dragLeave(event)"
     ondrop="dragDrop(event,${t.n})"
     ondragend="dragEnd(event)">
-    <div style="display:inline-flex;align-items:center;gap:5px;background:${tc.badge};color:${tc.badgeText};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:10px">
-      <span style="width:7px;height:7px;border-radius:50%;background:${tc.dot};flex-shrink:0"></span>${tc.name}
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="display:inline-flex;align-items:center;gap:5px;background:${tc.badge};color:${tc.badgeText};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px">
+        <span style="width:7px;height:7px;border-radius:50%;background:${tc.dot};flex-shrink:0"></span>${tc.name}
+      </div>
+      <button onclick="removeTrackedTeam(${t.n})" style="background:transparent;border:1px solid rgba(255,61,90,.4);color:rgba(255,61,90,.6);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--loss)';this.style.color='var(--loss)'" onmouseout="this.style.borderColor='rgba(255,61,90,.4)';this.style.color='rgba(255,61,90,.6)'">✕ Remove</button>
     </div>
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
       <div class="drag-handle" title="Drag to reorder">⠿</div>
@@ -1312,10 +1315,7 @@ function renderTPCard(t){
     })()}
       </div><!-- end analytics collapse -->
     </div><!-- end analytics wrapper -->
-    <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
-      <button class="add-btn" style="background:transparent;border:1px solid var(--loss);color:var(--loss);font-size:11px;padding:4px 10px" onclick="removeTrackedTeam(${t.n})">Remove</button>
-      ${mtype==='all'?`<span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,230,100,.15);outline:1px solid rgba(255,140,66,.6);vertical-align:middle;margin-right:3px"></span>playoff match</span>`:''}
-    </div>
+    ${mtype==='all'?`<div style="margin-top:8px;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,230,100,.15);outline:1px solid rgba(255,140,66,.6);vertical-align:middle;margin-right:3px"></span>playoff match</div>`:''}
   </div>`;}
 
 function renderTmTable(teams){
@@ -1388,8 +1388,17 @@ ${renderTrackerSetup()}
     </select>
   </div>
   <div class="tw" id="tmTbl">${renderTmTable(allTm)}</div>
-</div>`;}
-function filterTm(){
+</div>`;
+  // Restore expand state for each tracked card after DOM re-render
+  TRACKED.forEach(n=>{
+    if(CARD_EXPAND[n]){
+      const el=document.getElementById(`analytics-${n}`);
+      const btn=el?.previousElementSibling;
+      if(el) el.style.display='block';
+      if(btn) { const ch=btn.querySelector('.chevron'); if(ch) ch.style.transform='rotate(180deg)'; }
+    }
+  });
+}function filterTm(){
   if(!window._allTm)return;
   const q=document.getElementById('tmSearch').value.toLowerCase();
   const srt=document.getElementById('tmSort').value;
