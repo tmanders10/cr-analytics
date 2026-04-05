@@ -1282,8 +1282,8 @@ function renderTPCard(t){
         ${evPerfs.length?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:4px">ACE by event:</div><div style="display:flex;gap:6px;flex-wrap:wrap">${evPerfs.map(ep=>{const evShort=EVENTS.find(e=>e.key===ep.event_key)?.short||ep.event_key.replace('2026','').toUpperCase();return`<div style="background:var(--bg3);border-radius:4px;padding:3px 7px;text-align:center"><div style="font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em">${evShort}</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)">${ep.ace!=null?ep.ace.toFixed(1):'–'}</div></div>`;}).join('')}</div>`:''}</div>`;
     })()}
     ${(()=>{
-      const tMatches=fMatches.filter(m=>{const r=m.alliances?.red?.team_keys||[],b=m.alliances?.blue?.team_keys||[];return r.includes(t.key)||b.includes(t.key);}).filter(m=>(m.alliances?.red?.score??-1)>=0);
-      const avg=teamHubAvg(t.key,tMatches);
+      const tMatches=fM.filter(m=>{const r=m.alliances?.red?.team_keys||[],b=m.alliances?.blue?.team_keys||[];return r.includes(t.k)||b.includes(t.k);}).filter(m=>(m.alliances?.red?.score??-1)>=0);
+      const avg=teamHubAvg(t.k,tMatches);
       if(!avg||avg.n<1) return '';
       const maxVal=Math.max(avg.auto,avg.teleop,avg.endgame,avg.s1,avg.s2,avg.s3,avg.s4,1);
       const bar=(val,col)=>`<div style="flex:1;background:var(--bg3);border-radius:3px;height:6px;overflow:hidden"><div style="width:${Math.round((val/maxVal)*100)}%;height:100%;background:${col};border-radius:3px"></div></div>`;
