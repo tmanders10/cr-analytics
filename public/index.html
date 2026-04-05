@@ -1662,20 +1662,40 @@ document.getElementById('guideModal').addEventListener('click',function(e){
   if(e.target===this) this.style.display='none';
 });
 
-// Triple-tap logo to toggle admin mode on mobile
+// Double-tap logo on mobile / triple-click on desktop to toggle admin mode
 (function(){
   const logo=document.getElementById('logoImg');
   if(!logo) return;
-  let tapCount=0, tapTimer=null;
-  logo.addEventListener('click',function(){
+  let tapCount=0, tapTimer=null, lastTouch=0;
+  // Mobile: double-tap via touchend (prevents iOS zoom interference)
+  logo.addEventListener('touchend',function(e){
+    const now=Date.now();
+    if(now-lastTouch<400){
+      e.preventDefault(); // block iOS double-tap zoom
+      tapCount++;
+      if(tapCount>=2){
+        tapCount=0;
+        const el=document.getElementById('adminBtns');
+        setAdminMode(!(el&&el.style.display==='flex'));
+        logo.style.opacity='0.5';
+        setTimeout(()=>logo.style.opacity='1',300);
+      }
+    } else {
+      tapCount=1;
+    }
+    lastTouch=now;
+  },{passive:false});
+  // Desktop: triple-click
+  logo.addEventListener('click',function(e){
+    if(e.pointerType==='touch') return; // handled by touchend above
     tapCount++;
-    if(tapCount===1) tapTimer=setTimeout(()=>{ tapCount=0; },600);
+    clearTimeout(tapTimer);
+    tapTimer=setTimeout(()=>{ tapCount=0; },600);
     if(tapCount>=3){
       clearTimeout(tapTimer);
       tapCount=0;
       const el=document.getElementById('adminBtns');
-      const isVisible=el&&el.style.display==='flex';
-      setAdminMode(!isVisible);
+      setAdminMode(!(el&&el.style.display==='flex'));
       logo.style.opacity='0.5';
       setTimeout(()=>logo.style.opacity='1',300);
     }
