@@ -1727,35 +1727,52 @@ function renderMxTable(matches){
       if(isUnplayed) return '';
       const rhs=hubS(m,'red'), bhs=hubS(m,'blue');
       if(!rhs&&!bhs) return '';
-      const maxV=Math.max(...[rhs,bhs].filter(Boolean).flatMap(h=>Object.values(h)),1);
-      const miniBar=(v,col)=>`<div style="height:4px;border-radius:2px;background:var(--bg3);overflow:hidden;margin-top:2px"><div style="width:${Math.round((v/maxV)*100)}%;height:100%;background:${col};border-radius:2px"></div></div>`;
-      const cell=(label,rv,bv,col)=>`<td style="padding:4px 6px;text-align:center;min-width:52px">
-        <div style="font-size:8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:2px">${label}</div>
-        <div style="display:flex;gap:4px;align-items:flex-end;justify-content:center">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${rWin?'var(--loss)':'var(--text3)'}">${rv!=null?rv:0}</span>
-          <span style="font-size:9px;color:var(--text3)">|</span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${bWin?'var(--blue)':'var(--text3)'}">${bv!=null?bv:0}</span>
-        </div>
-        ${miniBar(rv||0,'var(--loss)')}
-        ${miniBar(bv||0,'var(--blue)')}
-      </td>`;
-      const f=(hs,k)=>hs?hs[k]??0:0;
-      const cols=[
-        cell('Auto',    f(rhs,'auto'),    f(bhs,'auto'),    'var(--blue)'),
-        ...[1,2,3,4].map(i=>cell(`Sh${i}`, f(rhs,`s${i}`), f(bhs,`s${i}`), '#a78bfa')),
-        cell('Teleop',  f(rhs,'teleop'),  f(bhs,'teleop'),  '#00c8aa'),
-        cell('Endgame', f(rhs,'endgame'), f(bhs,'endgame'), 'var(--orange)'),
-        cell('Transit', f(rhs,'transition'),f(bhs,'transition'),'var(--text2)'),
-        cell('Total',   f(rhs,'total'),   f(bhs,'total'),   'var(--green)'),
-      ].join('');
+      const phases=[
+        {label:'Auto',       k:'auto',       col:'var(--blue)'},
+        {label:'Shift 1',    k:'s1',         col:'#a78bfa'},
+        {label:'Shift 2',    k:'s2',         col:'#a78bfa'},
+        {label:'Shift 3',    k:'s3',         col:'#a78bfa'},
+        {label:'Shift 4',    k:'s4',         col:'#a78bfa'},
+        {label:'Teleop',     k:'teleop',     col:'#00c8aa'},
+        {label:'Endgame',    k:'endgame',    col:'var(--orange)'},
+        {label:'Transition', k:'transition', col:'var(--text2)'},
+        {label:'Total',      k:'total',      col:'var(--green)'},
+      ].filter(p=>((rhs?rhs[p.k]:0)||0)+((bhs?bhs[p.k]:0)||0)>0);
+      const maxV=Math.max(...phases.map(p=>Math.max((rhs?rhs[p.k]:0)||0,(bhs?bhs[p.k]:0)||0)),1);
+      const bar=(val,col,dir)=>{
+        const pct=Math.round((val/maxV)*100);
+        const inner=`width:${pct}%;height:100%;background:${col};border-radius:3px`;
+        return`<div style="flex:1;background:var(--bg3);border-radius:3px;height:5px;overflow:hidden">
+          <div style="${inner};${dir==='right'?'margin-left:auto':''}"></div>
+        </div>`;
+      };
+      const rows=phases.map(p=>{
+        const rv=(rhs?rhs[p.k]:0)||0, bv=(bhs?bhs[p.k]:0)||0;
+        const isTotal=p.k==='total';
+        const rCol=rWin&&isTotal?'var(--loss)':rv>bv?'rgba(255,100,100,.9)':'var(--text3)';
+        const bCol=bWin&&isTotal?'var(--blue)':bv>rv?'rgba(80,180,255,.9)':'var(--text3)';
+        return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':'margin-bottom:5px'}">
+          <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal?700:400};color:${rCol};min-width:24px;text-align:right">${rv}</span>
+            ${bar(rv,'var(--loss)','right')}
+          </div>
+          <div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':p.col}">${p.label}</div>
+          <div style="display:flex;align-items:center;gap:5px">
+            ${bar(bv,'var(--blue)','left')}
+            <span style="font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal?700:400};color:${bCol};min-width:24px">${bv}</span>
+          </div>
+        </div>`;
+      }).join('');
       return`<tr id="${bdId}" class="mx-bd">
         <td colspan="${colSpan}" style="padding:0">
-          <div style="padding:6px 8px 8px;overflow-x:auto">
-            <div style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;display:flex;gap:16px">
-              <span style="color:var(--loss)">■ Red</span><span style="color:var(--blue)">■ Blue</span>
-              <span style="margin-left:auto;font-weight:400">Alliance totals · click row to close</span>
+          <div style="padding:14px 24px 16px">
+            <div style="display:grid;grid-template-columns:1fr 90px 1fr;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+              <div style="text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${rWin?'var(--loss)':'var(--text3)'}">RED ALLIANCE</div>
+              <div></div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${bWin?'var(--blue)':'var(--text3)'}">BLUE ALLIANCE</div>
             </div>
-            <table style="border-collapse:collapse;font-size:11px"><tr>${cols}</tr></table>
+            ${rows}
+            <div style="margin-top:10px;text-align:right;font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase">Alliance totals · click row to close</div>
           </div>
         </td>
       </tr>`;
