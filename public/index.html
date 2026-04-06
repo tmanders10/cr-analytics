@@ -1297,21 +1297,23 @@ function renderTPCard(t){
       const tMatches=fM.filter(m=>{const r=m.alliances?.red?.team_keys||[],b=m.alliances?.blue?.team_keys||[];return r.includes(t.k)||b.includes(t.k);}).filter(m=>(m.alliances?.red?.score??-1)>=0);
       const avg=teamHubAvg(t.k,tMatches);
       if(!avg||avg.n<1) return '';
-      const maxVal=Math.max(avg.auto,avg.teleop,avg.endgame,avg.s1,avg.s2,avg.s3,avg.s4,1);
+      // Use same phase order as match log: Auto, Transition, Sh1/2, Sh3/4, Endgame, Teleop (sub), Total
+      const maxVal=Math.max(avg.auto,avg.transition,avg.s1+avg.s2,avg.s3+avg.s4,avg.endgame,avg.teleop,1);
       const bar=(val,col)=>`<div style="flex:1;background:var(--bg3);border-radius:3px;height:6px;overflow:hidden"><div style="width:${Math.round((val/maxVal)*100)}%;height:100%;background:${col};border-radius:3px"></div></div>`;
-      const row=(label,val,col)=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
-        <span style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);width:52px;flex-shrink:0">${label}</span>
+      const row=(label,val,col,isSub,isTotal)=>`<div style="display:flex;align-items:center;gap:6px;${isTotal?'padding-top:6px;border-top:1px solid var(--border);margin-top:4px':'margin-bottom:3px'}">
+        <span style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:${isSub||isTotal?800:700};letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':isSub?'#00c8aa':'var(--text3)'};width:56px;flex-shrink:0">${label}${isSub?'<span style="font-weight:400;font-size:8px;display:block;letter-spacing:.04em;margin-top:-1px">subtotal</span>':''}</span>
         ${bar(val,col)}
-        <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:${col};width:32px;text-align:right;flex-shrink:0">${val.toFixed(1)}</span>
+        <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:${col};width:36px;text-align:right;flex-shrink:0;font-weight:${isTotal?700:400}">${val.toFixed(1)}</span>
       </div>`;
-      const shiftRows=[avg.s1,avg.s2,avg.s3,avg.s4].map((v,i)=>v>0?row(`Shift ${i+1}`,v,'#a78bfa'):'').join('');
       return`<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Avg Point Breakdown by Shift <span style="font-weight:400;color:var(--text3);font-size:9px">(${avg.n} match${avg.n!==1?'es':''})</span></div>
-        ${row('Auto',avg.auto,'var(--blue)')}
-        ${shiftRows}
-        ${row('Teleop',avg.teleop,'#00c8aa')}
-        ${row('Endgame',avg.endgame,'var(--orange)')}
-        ${avg.transition>0?row('Transit',avg.transition,'var(--text2)'):''}
+        ${row('Auto',avg.auto,'var(--blue)',false,false)}
+        ${row('Transit',avg.transition,'var(--text2)',false,false)}
+        ${row('Sh 1 / 2',avg.s1+avg.s2,'#a78bfa',false,false)}
+        ${row('Sh 3 / 4',avg.s3+avg.s4,'#a78bfa',false,false)}
+        ${row('Endgame',avg.endgame,'var(--orange)',false,false)}
+        ${row('Teleop',avg.teleop,'#00c8aa',true,false)}
+        ${row('Total',avg.total,'var(--green)',false,true)}
       </div>`;
     })()}
       </div><!-- end analytics collapse -->
