@@ -131,8 +131,19 @@ module.exports = async function handler(req, res) {
       const status = eventStatus(ev);
 
       if (status === 'complete' && existing.events?.[ev.key]?.matches?.length > 0) {
-        // Reuse cached data for completed events
-        output.events[ev.key] = existing.events[ev.key];
+        // Reuse cached data for completed events — but backfill OPR if missing
+        const cached = existing.events[ev.key];
+        if (cached.oprs && Object.keys(cached.oprs).length > 0) {
+          output.events[ev.key] = cached;
+          continue;
+        }
+        // OPR missing from cache — fetch it now and merge in
+        try {
+          const oprs = await tbaFetch(`/event/${ev.key}/oprs`, TBA_KEY).catch(() => null);
+          output.events[ev.key] = { ...cached, oprs: oprs || {} };
+        } catch(e) {
+          output.events[ev.key] = { ...cached, oprs: {} };
+        }
         continue;
       }
 
