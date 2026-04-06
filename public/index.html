@@ -1110,16 +1110,25 @@ const CARD_MODE = {};
 const CARD_TYPE = {};
 // Per-team analytics section expanded state
 const CARD_EXPAND = {};
-let ANALYTICS_EXPANDED = false; // global state for all cards
+let EPA_EXPANDED = false;
+let ACE_EXPANDED = false;
+let BREAKDOWN_EXPANDED = false;
 
-function toggleAnalytics(){
-  ANALYTICS_EXPANDED = !ANALYTICS_EXPANDED;
+function sectionBtnStyle(active){
+  return `background:${active?'rgba(0,230,100,.15)':'transparent'};border:1px solid ${active?'var(--green)':'var(--border2)'};color:${active?'var(--green)':'var(--text3)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;cursor:pointer;transition:all .2s`;
+}
+
+function toggleSection(which){
+  if(which==='epa')       EPA_EXPANDED=!EPA_EXPANDED;
+  if(which==='ace')       ACE_EXPANDED=!ACE_EXPANDED;
+  if(which==='breakdown') BREAKDOWN_EXPANDED=!BREAKDOWN_EXPANDED;
+  // Apply to all tracked cards without full re-render
   TRACKED.forEach(n=>{
-    CARD_EXPAND[n] = ANALYTICS_EXPANDED;
-    const el=document.getElementById(`analytics-${n}`);
-    const btn=el?.previousElementSibling;
-    if(el) el.style.display=ANALYTICS_EXPANDED?'block':'none';
-    if(btn){ const ch=btn.querySelector('.chevron'); if(ch) ch.style.transform=ANALYTICS_EXPANDED?'rotate(180deg)':'rotate(0deg)'; }
+    const sec=document.getElementById(`sec-${which}-${n}`);
+    const btn=document.getElementById(`btn-${which}-${n}`);
+    const expanded=which==='epa'?EPA_EXPANDED:which==='ace'?ACE_EXPANDED:BREAKDOWN_EXPANDED;
+    if(sec) sec.style.display=expanded?'block':'none';
+    if(btn) btn.style.cssText=sectionBtnStyle(expanded);
   });
 }
 // Overview phase table match type
@@ -1229,7 +1238,12 @@ function renderTPCard(t){
       <div style="display:inline-flex;align-items:center;gap:5px;background:${tc.badge};color:${tc.badgeText};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px">
         <span style="width:7px;height:7px;border-radius:50%;background:${tc.dot};flex-shrink:0"></span>${tc.name}
       </div>
-      <button onclick="removeTrackedTeam(${t.n})" style="background:transparent;border:1px solid rgba(255,61,90,.4);color:rgba(255,61,90,.6);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--loss)';this.style.color='var(--loss)'" onmouseout="this.style.borderColor='rgba(255,61,90,.4)';this.style.color='rgba(255,61,90,.6)'">✕ Remove</button>
+      <div style="display:flex;align-items:center;gap:5px">
+        <button onclick="toggleSection('epa')" id="btn-epa-${t.n}" style="${sectionBtnStyle(EPA_EXPANDED)}">EPA</button>
+        <button onclick="toggleSection('ace')" id="btn-ace-${t.n}" style="${sectionBtnStyle(ACE_EXPANDED)}">ACE</button>
+        <button onclick="toggleSection('breakdown')" id="btn-breakdown-${t.n}" style="${sectionBtnStyle(BREAKDOWN_EXPANDED)}">Shifts</button>
+        <button onclick="removeTrackedTeam(${t.n})" style="background:transparent;border:1px solid rgba(255,61,90,.4);color:rgba(255,61,90,.6);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;cursor:pointer;transition:all .2s;margin-left:2px" onmouseover="this.style.borderColor='var(--loss)';this.style.color='var(--loss)'" onmouseout="this.style.borderColor='rgba(255,61,90,.4)';this.style.color='rgba(255,61,90,.6)'">✕</button>
+      </div>
     </div>
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
       <div class="drag-handle" title="Drag to reorder">⠿</div>
@@ -1255,13 +1269,11 @@ function renderTPCard(t){
     <div class="mhl">Match History — ${mtypeLabel}${ACTIVE_FILTER.size?' (filtered)':''}</div>
     <div class="mhd">${s.matches.map(mx=>`<div class="mhdot ${dotClass(mx)}" style="${dotBorder(mx)}" title="${mx.m._esh} ${mx.m.comp_level==='qm'?'QM':'PO'}${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
     :`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No ${mtypeLabel.toLowerCase()} data in current filter.</div>`}
-    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
-      <button onclick="toggleAnalytics()" style="width:100%;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:0;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase">
-        <span>EPA · ACE · Breakdown</span>
-        <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;transition:transform .2s"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <div id="analytics-${t.n}" style="display:none">
+    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:2px">
+      <div id="sec-epa-${t.n}" style="display:${EPA_EXPANDED?'block':'none'}">
         ${epaSection}
+      </div>
+      <div id="sec-ace-${t.n}" style="display:${ACE_EXPANDED?'block':'none'}">
         ${(()=>{
           const ace=ACE_DATA[t.n];
           if(!ace) return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">ACE not available — run a Full Refresh to load Peekorobo data.</div>`;
@@ -1293,6 +1305,8 @@ function renderTPCard(t){
         </div>
         ${evPerfs.length?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:4px">ACE by event:</div><div style="display:flex;gap:6px;flex-wrap:wrap">${evPerfs.map(ep=>{const evShort=EVENTS.find(e=>e.key===ep.event_key)?.short||ep.event_key.replace('2026','').toUpperCase();return`<div style="background:var(--bg3);border-radius:4px;padding:3px 7px;text-align:center"><div style="font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em">${evShort}</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)">${ep.ace!=null?ep.ace.toFixed(1):'–'}</div></div>`;}).join('')}</div>`:''}</div>`;
     })()}
+      </div><!-- end sec-ace -->
+      <div id="sec-breakdown-${t.n}" style="display:${BREAKDOWN_EXPANDED?'block':'none'}">
     ${(()=>{
       const tMatches=fM.filter(m=>{const r=m.alliances?.red?.team_keys||[],b=m.alliances?.blue?.team_keys||[];return r.includes(t.k)||b.includes(t.k);}).filter(m=>(m.alliances?.red?.score??-1)>=0);
       const avg=teamHubAvg(t.k,tMatches);
@@ -1316,8 +1330,8 @@ function renderTPCard(t){
         ${row('Total',avg.total,'var(--green)',false,true)}
       </div>`;
     })()}
-      </div><!-- end analytics collapse -->
-    </div><!-- end analytics wrapper -->
+      </div><!-- end sec-breakdown -->
+    </div><!-- end sections wrapper -->
     ${mtype==='all'?`<div style="margin-top:8px;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,230,100,.15);outline:1px solid rgba(255,140,66,.6);vertical-align:middle;margin-right:3px"></span>playoff match</div>`:''}
   </div>`;}
 
@@ -1392,15 +1406,15 @@ ${renderTrackerSetup()}
   </div>
   <div class="tw" id="tmTbl">${renderTmTable(allTm)}</div>
 </div>`;
-  // Restore expand state for each tracked card after DOM re-render
+  // Restore section expand states after DOM re-render
   TRACKED.forEach(n=>{
-    if(ANALYTICS_EXPANDED){
-      CARD_EXPAND[n]=true;
-      const el=document.getElementById(`analytics-${n}`);
-      const btn=el?.previousElementSibling;
-      if(el) el.style.display='block';
-      if(btn){ const ch=btn.querySelector('.chevron'); if(ch) ch.style.transform='rotate(180deg)'; }
-    }
+    ['epa','ace','breakdown'].forEach(which=>{
+      const expanded=which==='epa'?EPA_EXPANDED:which==='ace'?ACE_EXPANDED:BREAKDOWN_EXPANDED;
+      const sec=document.getElementById(`sec-${which}-${n}`);
+      const btn=document.getElementById(`btn-${which}-${n}`);
+      if(sec) sec.style.display=expanded?'block':'none';
+      if(btn) btn.style.cssText=sectionBtnStyle(expanded);
+    });
   });
 }function filterTm(){
   if(!window._allTm)return;
