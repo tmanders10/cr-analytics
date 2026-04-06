@@ -1168,7 +1168,7 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
       const clickable=hasHubData?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
       return`<tr class="${row.teams.some(t=>TRACKED.includes(parseInt(t)))?'hl':''}" ${clickable}>
         <td class="dim">${i+1}</td><td><span class="badge ${row.ec}">${row.esh}</span></td>
-        <td class="r dim">${row.isQm?'QM':'PO'}${row.mn}</td>
+        <td class="r dim">${row.isQm?`QM${row.mn}`:row.m.comp_level==='f'?`Final ${row.m.set_number}-${row.m.match_number}`:`SF ${row.m.set_number}-${row.m.match_number}`}</td>
         <td class="r" style="padding:0 2px">${videoLink(matchVideoUrl(row.m))}</td>
         <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
         <td>${row.teams.map(t=>{const tc=teamColor(parseInt(t));return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${t}</span>`;}).join(' · ')}</td>
@@ -2007,8 +2007,8 @@ function renderMxTable(matches){
     const clickable=!isUnplayed&&bdPanel?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
     return`${evBoundary}<tr class="${hasT?'hl':''}" ${clickable}>
       <td><span class="badge ${m._ec}">${m._esh}</span></td>
-      <td><span style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;color:var(--text3)">${m.comp_level==='qm'?'QUAL':'PO'}</span></td>
-      <td class="r dim">${m.match_number}</td>
+      <td><span style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;color:var(--text3)">${m.comp_level==='qm'?'QUAL':m.comp_level==='f'?'FINAL':m.comp_level==='sf'?'SF':m.comp_level.toUpperCase()}</span></td>
+      <td class="r dim">${m.comp_level==='qm'?m.match_number:`${m.set_number}-${m.match_number}`}</td>
       <td style="padding:0 4px">${timOrVid}</td>
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${rWin?'background:rgba(255,61,90,.04)':''}">${rt}</td>
       <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${rWin?700:400};color:${rWin?'var(--loss)':'var(--text3)'};${rWin?'background:rgba(255,61,90,.04)':''}">${rs}</td>
