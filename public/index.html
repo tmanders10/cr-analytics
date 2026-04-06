@@ -294,7 +294,7 @@ const EVENTS=[
 
 let TRACKED=[];  // ordered array instead of Set for drag-and-drop support
 let ACTIVE_FILTER=new Set();
-let DB={matches:{},rankings:{},alliances:{},teams:{},epa:{},webcasts:{},ace:{}};
+let DB={matches:{},rankings:{},alliances:{},teams:{},epa:{},webcasts:{},ace:{},oprs:{}};
 let allM=[],distRank=[];
 const loadedEvents=new Set();
 
@@ -440,6 +440,7 @@ async function init(){
       DB.rankings[ev.key]=evData.rankings||{};
       DB.alliances[ev.key]=evData.alliances||[];
       DB.webcasts[ev.key]=evData.webcasts||[];
+      DB.oprs[ev.key]=evData.oprs||{};
       matches.forEach(m=>{
         m._ev=ev.key;m._esh=ev.short;m._en=ev.name;m._ec=ev.cls;m._wk=ev.week;
       });
@@ -1114,12 +1115,30 @@ const CARD_EXPAND = {};
 let EPA_EXPANDED = false;
 let ACE_EXPANDED = false;
 let BREAKDOWN_EXPANDED = false;
+let OPR_EXPANDED = false;
+
+// Get OPR/DPR/CCWM for a team across all loaded events
+function getTeamOPRs(tk){
+  const results=[];
+  EVENTS.forEach(ev=>{
+    if(!loadedEvents.has(ev.key)) return;
+    const oprs=DB.oprs[ev.key]||{};
+    const opr=oprs.oprs?.[tk]??null;
+    const dpr=oprs.dprs?.[tk]??null;
+    const ccwm=oprs.ccwms?.[tk]??null;
+    if(opr!==null||dpr!==null||ccwm!==null){
+      results.push({ev,opr,dpr,ccwm});
+    }
+  });
+  return results;
+}
 
 function sectionBtnStyle(active){
   return `background:${active?'rgba(0,230,100,.15)':'transparent'};border:1px solid ${active?'var(--green)':'var(--border2)'};color:${active?'var(--green)':'var(--text3)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;cursor:pointer;transition:all .2s`;
 }
 
 function toggleSection(which){
+  if(which==='opr')       OPR_EXPANDED=!OPR_EXPANDED;
   if(which==='epa')       EPA_EXPANDED=!EPA_EXPANDED;
   if(which==='ace')       ACE_EXPANDED=!ACE_EXPANDED;
   if(which==='breakdown') BREAKDOWN_EXPANDED=!BREAKDOWN_EXPANDED;
@@ -1127,7 +1146,7 @@ function toggleSection(which){
   TRACKED.forEach(n=>{
     const sec=document.getElementById(`sec-${which}-${n}`);
     const btn=document.getElementById(`btn-${which}-${n}`);
-    const expanded=which==='epa'?EPA_EXPANDED:which==='ace'?ACE_EXPANDED:BREAKDOWN_EXPANDED;
+    const expanded=which==='opr'?OPR_EXPANDED:which==='epa'?EPA_EXPANDED:which==='ace'?ACE_EXPANDED:BREAKDOWN_EXPANDED;
     if(sec) sec.style.display=expanded?'block':'none';
     if(btn) btn.style.cssText=sectionBtnStyle(expanded);
   });
@@ -1240,6 +1259,7 @@ function renderTPCard(t){
         <span style="width:7px;height:7px;border-radius:50%;background:${tc.dot};flex-shrink:0"></span>${tc.name}
       </div>
       <div style="display:flex;align-items:center;gap:5px">
+        <button onclick="toggleSection('opr')" id="btn-opr-${t.n}" style="${sectionBtnStyle(OPR_EXPANDED)}">OPR</button>
         <button onclick="toggleSection('epa')" id="btn-epa-${t.n}" style="${sectionBtnStyle(EPA_EXPANDED)}">EPA</button>
         <button onclick="toggleSection('ace')" id="btn-ace-${t.n}" style="${sectionBtnStyle(ACE_EXPANDED)}">ACE</button>
         <button onclick="toggleSection('breakdown')" id="btn-breakdown-${t.n}" style="${sectionBtnStyle(BREAKDOWN_EXPANDED)}">Shifts</button>
@@ -1271,6 +1291,36 @@ function renderTPCard(t){
     <div class="mhd">${s.matches.map(mx=>`<div class="mhdot ${dotClass(mx)}" style="${dotBorder(mx)}" title="${mx.m._esh} ${mx.m.comp_level==='qm'?'QM':'PO'}${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
     :`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No ${mtypeLabel.toLowerCase()} data in current filter.</div>`}
     <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:2px">
+      <div id="sec-opr-${t.n}" style="display:${OPR_EXPANDED?'block':'none'}">
+        ${(()=>{
+          const oprData=getTeamOPRs(t.k);
+          if(!oprData.length) return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">OPR not yet available — run a Full Refresh after events are played.</div>`;
+          const allOprs=oprData.map(e=>e.opr).filter(v=>v!=null);
+          const maxOpr=Math.max(...allOprs,1);
+          return`<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3)">OPR — Offensive Power Rating</div>
+              <div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">via <a href="https://www.thebluealliance.com/team/${t.n}" target="_blank" style="color:var(--blue);text-decoration:none">TBA</a></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(${Math.min(oprData.length,3)},1fr);gap:8px;margin-bottom:10px">
+              ${oprData.map(e=>`<div style="background:var(--bg3);border-radius:5px;padding:7px 8px;text-align:center">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:3px">${e.ev.short}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:16px;color:var(--blue)">${e.opr!=null?e.opr.toFixed(1):'–'}</div>
+                ${e.dpr!=null?`<div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--text3);margin-top:2px">DPR ${e.dpr.toFixed(1)}</div>`:''}
+                ${e.ccwm!=null?`<div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--text3)">CCWM ${e.ccwm.toFixed(1)}</div>`:''}
+              </div>`).join('')}
+            </div>
+            ${oprData.length>1?`<div style="margin-top:4px">${oprData.map(e=>{
+              const pct=e.opr!=null?Math.round((e.opr/maxOpr)*100):0;
+              return`<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                <span style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);width:32px;flex-shrink:0">${e.ev.short}</span>
+                <div style="flex:1;background:var(--bg3);border-radius:3px;height:6px;overflow:hidden"><div style="width:${pct}%;height:100%;background:var(--blue);border-radius:3px"></div></div>
+                <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--blue);width:36px;text-align:right;flex-shrink:0">${e.opr!=null?e.opr.toFixed(1):'–'}</span>
+              </div>`;
+            }).join('')}</div>`:''}
+          </div>`;
+        })()}
+      </div><!-- end sec-opr -->
       <div id="sec-epa-${t.n}" style="display:${EPA_EXPANDED?'block':'none'}">
         ${epaSection}
       </div>
@@ -1409,8 +1459,8 @@ ${renderTrackerSetup()}
 </div>`;
   // Restore section expand states after DOM re-render
   TRACKED.forEach(n=>{
-    ['epa','ace','breakdown'].forEach(which=>{
-      const expanded=which==='epa'?EPA_EXPANDED:which==='ace'?ACE_EXPANDED:BREAKDOWN_EXPANDED;
+    ['opr','epa','ace','breakdown'].forEach(which=>{
+      const expanded=which==='opr'?OPR_EXPANDED:which==='epa'?EPA_EXPANDED:which==='ace'?ACE_EXPANDED:BREAKDOWN_EXPANDED;
       const sec=document.getElementById(`sec-${which}-${n}`);
       const btn=document.getElementById(`btn-${which}-${n}`);
       if(sec) sec.style.display=expanded?'block':'none';
