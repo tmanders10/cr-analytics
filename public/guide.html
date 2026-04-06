@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CR Analytics — User Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00e664;
+    --blue: #38a8ff;
+    --orange: #ff8c42;
+    --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #f9f9f9;
+    color: #111;
+    font-family: 'Barlow', Georgia, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .guide-header {
+    background: #060906;
+    border-bottom: 3px solid #00e664;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .guide-header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #00e664;
+    line-height: 1;
+  }
+  .guide-header-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #8aa090;
+    margin-top: 3px;
+  }
+  .guide-header-back {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid rgba(0,230,100,.3);
+    color: #8aa090;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .2s;
+  }
+  .guide-header-back:hover {
+    border-color: #00e664;
+    color: #00e664;
+  }
+
+  /* ── LAYOUT ── */
+  .guide-body {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 40px;
+  }
+  .toc-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 12px;
+  }
+  .toc ol {
+    padding-left: 20px;
+    columns: 2;
+    gap: 24px;
+  }
+  .toc li { margin-bottom: 5px; }
+  .toc a { color: #00913f; text-decoration: none; font-size: 14px; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: 44px; }
+  .section-anchor { display: block; height: 80px; margin-top: -80px; visibility: hidden; }
+
+  h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #111;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e8e8e8;
+  }
+  h2 span { color: #00913f; }
+
+  h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #333;
+    margin: 18px 0 8px;
+  }
+
+  p { margin-bottom: 14px; color: #222; }
+  p:last-child { margin-bottom: 0; }
+
+  ul, ol { padding-left: 22px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; color: #222; }
+
+  code {
+    background: #f0f0f0;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #333;
+  }
+
+  strong { color: #111; }
+  em { font-style: italic; }
+
+  /* ── TABLES ── */
+  .guide-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 20px;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .guide-table thead tr { background: #f7f7f7; }
+  .guide-table th {
+    text-align: left;
+    padding: 10px 16px;
+    border-bottom: 1px solid #e8e8e8;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: 700;
+  }
+  .guide-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .guide-table tr:last-child td { border-bottom: none; }
+  .guide-table tr:nth-child(even) { background: #fafafa; }
+  .tab-name { font-weight: 700; white-space: nowrap; }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-left: 4px solid #00e664;
+    background: #f0fdf4;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .callout.blue { border-color: #38a8ff; background: #eff8ff; }
+  .callout.orange { border-color: #ff8c42; background: #fff7f0; }
+  .callout.purple { border-color: #a78bfa; background: #f5f3ff; }
+
+  /* ── COLOR CHIPS ── */
+  .chip {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: .06em;
+    margin: 1px 2px;
+    text-transform: uppercase;
+  }
+
+  /* ── FOOTER ── */
+  .guide-footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 2px solid #e8e8e8;
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+  }
+
+  @media(max-width:600px){
+    .guide-body { padding: 24px 16px 60px; }
+    .guide-header { padding: 14px 16px; }
+    .toc ol { columns: 1; }
+    .guide-table { font-size: 13px; }
+    .guide-table th, .guide-table td { padding: 8px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="guide-header">
+  <div>
+    <div class="guide-header-title">CR Analytics</div>
+    <div class="guide-header-sub">FRC Team 1002 Circuit Runners · 2026 PCH District Season</div>
+  </div>
+  <a href="/" class="guide-header-back">← Back to App</a>
+</div>
+
+<div class="guide-body">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#what-is">What is CR Analytics?</a></li>
+      <li><a href="#tabs">Tabs Overview</a></li>
+      <li><a href="#data-sources">Data Sources</a></li>
+      <li><a href="#team-tracker">Team Tracker</a></li>
+      <li><a href="#match-log">Match Log</a></li>
+      <li><a href="#event-standings">Event Standings</a></li>
+      <li><a href="#filtering">Filtering</a></li>
+      <li><a href="#epa-ace">EPA vs ACE</a></li>
+    </ol>
+  </div>
+
+  <!-- WHAT IS -->
+  <div class="section">
+    <span class="section-anchor" id="what-is"></span>
+    <h2>What is <span>CR Analytics?</span></h2>
+    <p>CR Analytics is a scouting and performance dashboard built for the 2026 PCH District season. It pulls live data from three external sources — <strong>The Blue Alliance (TBA)</strong>, <strong>Statbotics</strong>, and <strong>Peekorobo</strong> — and presents them in one unified view optimized for competition day use.</p>
+    <p>Data is stored in a <code>data.json</code> file and refreshed on demand by the site administrator. You do not need to do anything to keep the data current — simply reload the page to pick up the latest refresh.</p>
+    <div class="callout">
+      <strong>Live event days:</strong> The app prioritizes the currently active event across all tabs automatically. Live webcasts appear on the Overview tab when an event is in progress.
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="section">
+    <span class="section-anchor" id="tabs"></span>
+    <h2>Tabs <span>Overview</span></h2>
+    <table class="guide-table">
+      <thead>
+        <tr><th style="width:140px">Tab</th><th>What it shows</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tab-name">Overview</td>
+          <td>Season summary with match counts, avg scores, and phase breakdowns by event. When an event is live, shows two embedded YouTube streams (Overhead and Field view). Also displays tracked team cards for quick reference.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">District Rankings</td>
+          <td>Official PCH district point standings for all 71 teams. Columns include District Pts, Event 1 &amp; 2 points, Rookie Bonus, ACE, Confidence, and three rank columns — GA (state), US (country), and Global — all sourced from Peekorobo.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Scoring Analysis</td>
+          <td>Phase-level scoring breakdown (Auto, Teleop, Endgame) across all events with bar charts, a score distribution histogram, and the top single-alliance scores of the season.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Team Tracker</td>
+          <td>Track up to 6 teams with full detail cards. See match history, phase averages, EPA (Statbotics), ACE with state/US/global rankings (Peekorobo), and an average point breakdown by shift. Tracked teams are color-coded and highlighted across every tab.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Alliances &amp; Playoffs</td>
+          <td>Alliance selection picks and full playoff bracket results for each event. Active event sorts to the top automatically.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Match Log</td>
+          <td>Complete match history across all events, sorted with the active event at the top. Unplayed matches show estimated start times from TBA. Click any played match row to expand a phase-by-phase score breakdown (Auto, Transition, Shift 1/2, Shift 3/4, Endgame, Teleop, Total) for both alliances side-by-side. ACE-based win predictions with probability % and ⚡ upset indicators show when data is loaded.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Event Standings</td>
+          <td>Per-event rankings combining TBA's official metrics with additional analytics. Blue columns are event-specific (RS, game sort orders, ranking points, avg score, avg auto). Green columns are season-level (EPA, ACE, Confidence). Defaults to the live event; use the dropdown to switch events independently of the site-wide pill filter.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DATA SOURCES -->
+  <div class="section">
+    <span class="section-anchor" id="data-sources"></span>
+    <h2>Data <span>Sources</span></h2>
+    <table class="guide-table">
+      <thead>
+        <tr><th style="width:160px">Source</th><th>What it provides</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tab-name">The Blue Alliance</td>
+          <td>Match results and scores, score breakdowns by phase, event rankings, alliance selections, district point totals, team info, webcasts, and estimated match schedule times.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Statbotics</td>
+          <td><strong>EPA (Expected Points Added)</strong> — a model-based measure of a team's expected contribution per match, broken down into Auto, Teleop, and Endgame components. Both event-specific and season-level EPA are shown throughout the app.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Peekorobo</td>
+          <td><strong>ACE (Adjusted Contribution Estimate)</strong> — an Elo-style model that weights raw contribution scores by a confidence factor based on consistency, dominance, veteran status, and event count. Also provides state (GA), US, district, and global team rankings updated throughout the season.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TEAM TRACKER -->
+  <div class="section">
+    <span class="section-anchor" id="team-tracker"></span>
+    <h2>Team <span>Tracker</span></h2>
+
+    <h3>Adding &amp; removing teams</h3>
+    <ul>
+      <li>Enter a team number in the input box at the top of the Team Tracker tab and press Enter or click <strong>+ Add</strong>.</li>
+      <li>Alternatively, click <strong>+ Track</strong> next to any team in the All Teams table at the bottom of the tab.</li>
+      <li>Up to <strong>6 teams</strong> can be tracked simultaneously.</li>
+      <li>To remove a team, click the <strong>✕ Remove</strong> button in the top-right corner of the team's card.</li>
+    </ul>
+
+    <h3>Color coding</h3>
+    <p>Each tracked team is automatically assigned one of six colors:
+      <span class="chip" style="background:rgba(0,230,100,.15);color:#00e664">Green</span>
+      <span class="chip" style="background:rgba(56,168,255,.15);color:#38a8ff">Blue</span>
+      <span class="chip" style="background:rgba(255,193,7,.15);color:#f0c040">Amber</span>
+      <span class="chip" style="background:rgba(167,139,250,.15);color:#a78bfa">Purple</span>
+      <span class="chip" style="background:rgba(255,140,66,.15);color:#ff8c42">Coral</span>
+      <span class="chip" style="background:rgba(236,72,153,.15);color:#ec4899">Pink</span>.
+      The color follows the card's position — drag cards to reorder them and the colors reassign accordingly. Tracked team colors appear as highlights throughout all tabs.
+    </p>
+
+    <h3>Card controls</h3>
+    <ul>
+      <li><strong>Type:</strong> Quals / Playoffs / All — filters the match history and averages shown on the card.</li>
+      <li><strong>Avg:</strong> All / Last 10 / Trimmed — controls which matches are included in the phase averages. Trimmed removes the 2 highest and 2 lowest scores.</li>
+      <li>Changing Type or Avg on one card does not affect other cards.</li>
+    </ul>
+
+    <h3>Collapsible analytics section</h3>
+    <p>Each card has a collapsible <strong>EPA · ACE · Breakdown</strong> section at the bottom. Click it to expand or collapse. Expanding on any card expands all tracked cards simultaneously — the toggle is global across all cards.</p>
+    <p>When expanded, you'll see:</p>
+    <ul>
+      <li><strong>EPA</strong> — Total, Auto, Teleop, Endgame from Statbotics, plus event progression and consistency score.</li>
+      <li><strong>ACE</strong> — Total, Auto, Teleop, Endgame from Peekorobo, plus a 2×2 rank grid showing State, District, Country, and Global rank with counts.</li>
+      <li><strong>Avg Point Breakdown by Shift</strong> — horizontal bar chart showing the team's alliance average per phase (Auto, Transition, Shift 1–4, Teleop, Endgame) across their played matches. Note: these are <em>alliance totals</em>, not individual robot contributions, since TBA's score breakdown is at the alliance level.</li>
+    </ul>
+
+    <div class="callout blue">
+      <strong>Alliance-level note:</strong> The shift breakdown shows what the entire alliance scored in each phase during matches when that team was present — not that team's individual contribution. Use EPA and ACE for individual contribution estimates.
+    </div>
+  </div>
+
+  <!-- MATCH LOG -->
+  <div class="section">
+    <span class="section-anchor" id="match-log"></span>
+    <h2>Match <span>Log</span></h2>
+    <p>The Match Log shows all played and scheduled matches across every PCH event. The event with the most upcoming unplayed matches sorts to the top automatically — during competition this means the active event is always first.</p>
+
+    <h3>Match time estimates</h3>
+    <p>Unplayed matches show TBA's estimated start time (e.g. <code>9:30 AM</code>) in the video column instead of a YouTube link. Once a match is played and a video is available, the link replaces the time.</p>
+
+    <h3>ACE win predictions</h3>
+    <p>When Peekorobo ACE data is loaded, each match row shows two columns on the right:</p>
+    <ul>
+      <li><strong>Pred</strong> — the predicted winning alliance with probability % based on the sum of each alliance's ACE scores.</li>
+      <li><strong>Result</strong> — the actual winning alliance badge (RED / BLUE / TIE).</li>
+      <li>A <strong>⚡</strong> bolt icon appears when the underdog won.</li>
+    </ul>
+
+    <h3>Phase breakdown (click to expand)</h3>
+    <p>Click any played match row to expand a full phase breakdown panel. The panel shows Red Alliance on the left and Blue Alliance on the right, with each phase as a labeled row in the center:</p>
+    <ul>
+      <li>Auto · Transition · Shift 1/2 · Shift 3/4 · Endgame</li>
+      <li><strong>Teleop</strong> (subtotal of Transition + Shifts + Endgame)</li>
+      <li><strong>Total</strong></li>
+    </ul>
+    <p>Each row has proportional filled bars so you can visually compare phase performance at a glance. Shift 1 and Shift 2 are combined into one row (as are Shift 3 and 4) since each alliance scores in one or the other, never both.</p>
+    <p>Click the row again to collapse the panel.</p>
+
+    <h3>Filtering</h3>
+    <p>Use the dropdowns above the table to filter by event, match type (Qual / Playoff), or a specific team number. The site-wide event pill filter also applies to the Match Log.</p>
+  </div>
+
+  <!-- EVENT STANDINGS -->
+  <div class="section">
+    <span class="section-anchor" id="event-standings"></span>
+    <h2>Event <span>Standings</span></h2>
+    <p>The Event Standings tab provides a detailed per-event rankings view that combines TBA's official data with Statbotics EPA and Peekorobo ACE.</p>
+
+    <h3>Column groups</h3>
+    <ul>
+      <li><strong style="color:#38a8ff">Blue columns (Event data)</strong> — Ranking Score (RS), game-specific sort order metrics (e.g. Avg Match, Avg Auto Fuel, Avg Tower), Total Ranking Points, Avg Alliance Score, and Avg Auto. All sourced from TBA for the selected event.</li>
+      <li><strong style="color:#00913f">Green columns (Season data)</strong> — EPA Total (Statbotics), ACE (Peekorobo), and ACE Confidence. These are season-level metrics and reflect the team's performance across all events.</li>
+    </ul>
+
+    <h3>Event selector</h3>
+    <p>The dropdown at the top of the tab lets you switch between events. This selector is independent of the site-wide event pill filter — changing the pills won't change the standings view, and vice versa. The tab defaults to the live event when one is active, or to the most recently completed event otherwise.</p>
+
+    <div class="callout">
+      Disabled options in the dropdown indicate events that haven't been loaded yet. Run a Full Refresh after an event begins to populate its data.
+    </div>
+  </div>
+
+  <!-- FILTERING -->
+  <div class="section">
+    <span class="section-anchor" id="filtering"></span>
+    <h2><span>Filtering</span></h2>
+    <p>The colored event pills in the status bar (DAL, GWI, COL, ALB, GAI, CMP) let you filter all statistics and views to one or more specific events. Click a pill to activate it — click again to deselect. Multiple pills can be active simultaneously.</p>
+    <p>The filter applies to: Overview, District Rankings, Scoring Analysis, Team Tracker, Alliances &amp; Playoffs, and Match Log.</p>
+    <div class="callout orange">
+      <strong>Event Standings is not affected</strong> by the pill filter. It has its own independent event selector dropdown.
+    </div>
+  </div>
+
+  <!-- EPA VS ACE -->
+  <div class="section">
+    <span class="section-anchor" id="epa-ace"></span>
+    <h2>EPA <span>vs</span> ACE</h2>
+
+    <h3>EPA — Expected Points Added (Statbotics)</h3>
+    <p>EPA is computed directly from score breakdowns and measures how many points above average a team contributes per match. It is broken down into Auto, Teleop, and Endgame components. Event-specific EPA reflects performance at a single event, while the season EPA aggregates across all events. EPA updates in near-real-time and is highly accurate for measuring raw scoring contribution.</p>
+
+    <h3>ACE — Adjusted Contribution Estimate (Peekorobo)</h3>
+    <p>ACE multiplies a team's raw contribution estimate by a <em>confidence score</em> (shown as a percentage) that adjusts for:</p>
+    <ul>
+      <li><strong>Consistency</strong> — teams that perform reliably across all matches score higher</li>
+      <li><strong>Win rate alignment</strong> — how well the team's contribution predicts wins</li>
+      <li><strong>Veteran status &amp; event count</strong> — more events played = higher confidence</li>
+    </ul>
+    <p>ACE tends to reward consistent, reliable veterans and penalize rookie or inconsistent teams relative to their raw scores. State, US, district, and global rankings in the app are all based on ACE.</p>
+
+    <div class="callout purple">
+      <strong>Which to use?</strong> Use <strong>EPA</strong> to compare raw scoring output — it's the most precise measure of what a team actually puts on the board. Use <strong>ACE</strong> to assess overall competitive value and reliability — it's better for predicting alliance performance across a full event.
+    </div>
+  </div>
+
+  <div class="guide-footer">
+    CR Analytics · FRC Team 1002 Circuit Runners · Built with The Blue Alliance, Statbotics &amp; Peekorobo APIs<br>
+    <span style="font-size:11px;margin-top:4px;display:block">To update this guide, edit <code>public/guide.html</code> directly in your GitHub repository.</span>
+  </div>
+
+</div>
+</body>
+</html>
