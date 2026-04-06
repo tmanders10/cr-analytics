@@ -137,11 +137,12 @@ module.exports = async function handler(req, res) {
       }
 
       try {
-        const [matches, rankings, alliances, eventDetail] = await Promise.all([
+        const [matches, rankings, alliances, eventDetail, oprs] = await Promise.all([
           tbaFetch(`/event/${ev.key}/matches`, TBA_KEY),
           tbaFetch(`/event/${ev.key}/rankings`, TBA_KEY),
           tbaFetch(`/event/${ev.key}/alliances`, TBA_KEY),
           tbaFetch(`/event/${ev.key}`, TBA_KEY).catch(() => null),
+          tbaFetch(`/event/${ev.key}/oprs`, TBA_KEY).catch(() => null),
         ]);
         output.events[ev.key] = {
           meta: ev,
@@ -149,10 +150,11 @@ module.exports = async function handler(req, res) {
           rankings: rankings || {},
           alliances: alliances || [],
           webcasts: eventDetail?.webcasts || [],
+          oprs: oprs || {},
         };
       } catch (e) {
         output.events[ev.key] = existing.events?.[ev.key] ||
-          { meta: ev, matches: [], rankings: {}, alliances: [], webcasts: [] };
+          { meta: ev, matches: [], rankings: {}, alliances: [], webcasts: [], oprs: {} };
       }
     }
 
