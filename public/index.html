@@ -1023,17 +1023,92 @@ function renderSc(){
   const margins=ms.filter(m=>m.winning_alliance).map(m=>Math.abs((m.alliances?.red?.score||0)-(m.alliances?.blue?.score||0)));
   const avgMar=margins.length?margins.reduce((a,b)=>a+b,0)/margins.length:0;
   const close=margins.filter(m=>m<=10).length,blow=margins.filter(m=>m>40).length;
-  const bsz=20,bkts=Array(12).fill(0);
-  ms.forEach(m=>['red','blue'].forEach(a=>{const s=m.alliances?.[a]?.score??0;bkts[Math.min(Math.floor(s/bsz),11)]++;}));
-  const mx=Math.max(...bkts,1);
   const topRows=[];
-  ms.forEach(m=>['red','blue'].forEach(a=>{const sc=m.alliances?.[a]?.score??0;topRows.push({sc,teams:(m.alliances?.[a]?.team_keys||[]).map(tnum),a,mn:m.match_number,esh:m._esh,ec:m._ec,au:phS(m,a,'auto'),tl:phS(m,a,'teleop'),eg:phS(m,a,'endgame'),won:m.winning_alliance===a,isQm:m.comp_level==='qm',m});}));
+  ms.forEach(m=>['red','blue'].forEach(a=>{const sc=m.alliances?.[a]?.score??0;if(sc<0)return;topRows.push({sc,teams:(m.alliances?.[a]?.team_keys||[]).map(tnum),a,mn:m.match_number,esh:m._esh,ec:m._ec,au:phS(m,a,'auto'),tl:phS(m,a,'teleop'),eg:phS(m,a,'endgame'),won:m.winning_alliance===a,isQm:m.comp_level==='qm',m});}));
   topRows.sort((a,b)=>b.sc-a.sc);
   const btnStyle=(active)=>active?`background:var(--green);color:#030803;border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;letter-spacing:.08em;padding:5px 14px;border-radius:4px;cursor:pointer;text-transform:uppercase`:`background:transparent;color:var(--text3);border:1px solid var(--border2);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 14px;border-radius:4px;cursor:pointer;text-transform:uppercase`;
   const evMs=ek=>ms.filter(m=>m._ev===ek);
   const evAvgSc=ek=>{const v=evMs(ek);let s=0,c=0;v.forEach(m=>{if((m.alliances?.red?.score??-1)>=0){s+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){s+=m.alliances.blue.score;c++;}});return c?s/c:0;};
   const evMxSc=ek=>{let mx=0;evMs(ek).forEach(m=>{if((m.alliances?.red?.score||0)>mx)mx=m.alliances.red.score;if((m.alliances?.blue?.score||0)>mx)mx=m.alliances.blue.score;});return mx;};
   const evAvgPhSc=(ek,ph)=>{const v=[];evMs(ek).forEach(m=>['red','blue'].forEach(a=>{const x=phS(m,a,ph);if(x!==null)v.push(x);}));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;};
+
+  // Avg hub phase per event
+  function evAvgHub(ek){
+    const acc={auto:0,transition:0,s1:0,s2:0,s3:0,s4:0,endgame:0,teleop:0};
+    let n=0;
+    evMs(ek).forEach(m=>{
+      ['red','blue'].forEach(a=>{
+        const hs=hubS(m,a);
+        if(!hs||hs.total===0) return;
+        Object.keys(acc).forEach(k=>acc[k]+=hs[k]||0);
+        n++;
+      });
+    });
+    if(!n) return null;
+    const avg={};Object.keys(acc).forEach(k=>avg[k]=acc[k]/n);avg.n=n;
+    return avg;
+  }
+
+  // Build shift breakdown table rows
+  const loadedEvKeys=EVENTS.filter(ev=>loadedEvents.has(ev.key)&&(ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key)));
+  const allHubs=loadedEvKeys.map(ev=>evAvgHub(ev.key)).filter(Boolean);
+  const phases=[
+    {label:'Auto',       k:'auto',         col:'var(--blue)'},
+    {label:'Transition', k:'transition',    col:'var(--text2)'},
+    {label:'Sh 1/2',     k:'s12',          col:'#a78bfa'},
+    {label:'Sh 3/4',     k:'s34',          col:'#a78bfa'},
+    {label:'Endgame',    k:'endgame',       col:'var(--orange)'},
+    {label:'Teleop',     k:'teleop',        col:'#00c8aa', sub:true},
+  ];
+  // Compute paired shifts
+  const hubsWithPaired=allHubs.map(h=>({...h,s12:(h.s1||0)+(h.s2||0),s34:(h.s3||0)+(h.s4||0)}));
+  const maxPerPhase={};
+  phases.forEach(p=>{maxPerPhase[p.k]=Math.max(...hubsWithPaired.map(h=>h[p.k]||0),1);});
+
+  // Build top-20 breakdown panels (same as match log)
+  function topRowPanel(row,idx){
+    const m=row.m;
+    const rhs=hubS(m,'red'),bhs=hubS(m,'blue');
+    if(!rhs&&!bhs) return '';
+    const rWin=m.winning_alliance==='red',bWin=m.winning_alliance==='blue';
+    const bdPhases=[
+      {label:'Auto',       k:'auto',    col:'var(--blue)'},
+      {label:'Transition', k:'transition',col:'var(--text2)'},
+      {label:'Sh 1 / 2',  k1:'s1',k2:'s2', col:'#a78bfa'},
+      {label:'Sh 3 / 4',  k1:'s3',k2:'s4', col:'#a78bfa'},
+      {label:'Endgame',   k:'endgame', col:'var(--orange)'},
+      {label:'Teleop',    k:'teleop',  col:'#00c8aa',sub:true},
+      {label:'Total',     k:'total',   col:'var(--green)',total:true},
+    ];
+    const f=(hs,p)=>p.k1!=null?((hs?hs[p.k1]:0)||0)+((hs?hs[p.k2]:0)||0):(hs?hs[p.k]:0)||0;
+    const maxV=Math.max(...bdPhases.map(p=>Math.max(f(rhs,p),f(bhs,p))),1);
+    const makeRow=(p)=>{
+      const rv=f(rhs,p),bv=f(bhs,p);
+      const isTotal=!!p.total,isSub=!!p.sub;
+      const pctR=Math.round((rv/maxV)*100),pctB=Math.round((bv/maxV)*100);
+      const rCol=rWin&&isTotal?'var(--loss)':rv>bv?'rgba(255,100,100,.9)':'var(--text3)';
+      const bCol=bWin&&isTotal?'var(--blue)':bv>rv?'rgba(80,180,255,.9)':'var(--text3)';
+      const barR=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctR}%;height:100%;background:var(--loss);opacity:${rWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;right:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${rCol}">${rv}</div></div>`;
+      const barB=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctB}%;height:100%;background:var(--blue);opacity:${bWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;left:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${bCol}">${bv}</div></div>`;
+      const topStyle=isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':isSub?'padding-top:5px;border-top:1px dashed rgba(255,255,255,.1);margin-top:2px;margin-bottom:4px':'margin-bottom:4px';
+      return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${topStyle}">${barR}<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal||isSub?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':p.col}">${p.label}${isSub?'<div style="font-size:8px;font-weight:400;color:var(--text3);letter-spacing:.04em;margin-top:1px">subtotal</div>':''}</div>${barB}</div>`;
+    };
+    const bdId=`sc-bd-${idx}`;
+    return`<tr id="${bdId}" class="mx-bd">
+      <td colspan="11" style="padding:0">
+        <div style="padding:14px 24px 16px">
+          <div style="display:grid;grid-template-columns:1fr 90px 1fr;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            <div style="text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${rWin?'var(--loss)':'var(--text3)'}">RED ALLIANCE</div>
+            <div></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${bWin?'var(--blue)':'var(--text3)'}">BLUE ALLIANCE</div>
+          </div>
+          ${bdPhases.map(makeRow).join('')}
+          <div style="margin-top:10px;text-align:right;font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase">Alliance totals · click row to close</div>
+        </div>
+      </td>
+    </tr>`;
+  }
+
   document.getElementById('pg-scoring').innerHTML=`
 <div class="sh"><h2>Scoring <span>Analysis</span></h2><span class="sub">${scLabel} matches${filterLabel()}</span></div>
 <div style="display:flex;gap:6px;align-items:center;margin-bottom:16px">
@@ -1062,28 +1137,55 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
       return`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r" style="color:var(--green);font-weight:600">${evAvgSc(ev.key).toFixed(1)}</td><td class="r">${evMxSc(ev.key)}</td></tr>`;
     }).join('')}</tbody></table>
   </div>
-  <div class="card"><div class="ctitle">Score Distribution — ${scLabel} (${bsz}pt buckets)</div>
-    <div class="hbars">${bkts.map((c,i)=>`<div class="hbc"><div class="hb" style="height:${c/mx*100}%;min-height:${c>0?2:0}px"></div><div class="hbl">${i*bsz}</div></div>`).join('')}</div>
-    <div style="font-size:10px;color:var(--text3);text-align:center;font-family:'JetBrains Mono',monospace">Alliance score</div>
+  <div class="card"><div class="ctitle">Avg Shift Breakdown by Event — ${scLabel}</div>
+    ${loadedEvKeys.length===0?`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No data loaded.</div>`:`
+    <table><thead><tr>
+      <th>Event</th>
+      ${phases.map(p=>`<th class="r" style="color:${p.col};font-size:10px">${p.label}</th>`).join('')}
+      <th class="r" style="color:var(--green);font-size:10px">n</th>
+    </tr></thead><tbody>
+    ${loadedEvKeys.map((ev,ei)=>{
+      const h=hubsWithPaired[ei];
+      if(!h) return`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span></td><td colspan="7" class="r dim">No data</td></tr>`;
+      return`<tr>
+        <td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td>
+        ${phases.map(p=>{
+          const v=h[p.k]||0;
+          const pct=Math.round((v/maxPerPhase[p.k])*100);
+          return`<td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px">
+            <div style="display:flex;align-items:center;gap:4px;justify-content:flex-end">
+              <div style="width:40px;background:var(--bg3);border-radius:2px;height:4px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${p.col};border-radius:2px"></div></div>
+              <span style="color:${p.col};min-width:34px;text-align:right">${v>0?v.toFixed(1):'–'}</span>
+            </div>
+          </td>`;
+        }).join('')}
+        <td class="r dim" style="font-size:11px">${h.n}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`}
   </div>
 </div>
-<div class="card"><div class="ctitle">Top 20 Single-Alliance Scores — ${scLabel}</div>
+<div class="card"><div class="ctitle">Top 20 Single-Alliance Scores — ${scLabel} <span style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace;font-weight:400;margin-left:6px">click row to expand breakdown</span></div>
   <div class="tw"><table>
     <thead><tr><th>#</th><th>Event</th><th class="r">Match</th><th class="r"></th><th>Alliance</th><th>Teams</th><th class="r">Score</th><th class="r" style="color:var(--blue)">Auto</th><th class="r">Teleop</th><th class="r" style="color:var(--orange)">Endgame</th><th>Result</th></tr></thead>
-    <tbody>${topRows.slice(0,20).map((row,i)=>`<tr class="${row.teams.some(t=>TRACKED.includes(parseInt(t)))?'hl':''}">
-      <td class="dim">${i+1}</td><td><span class="badge ${row.ec}">${row.esh}</span></td>
-      <td class="r dim">${row.isQm?'QM':'PO'}${row.mn}</td>
-      <td class="r" style="padding:0 2px">${videoLink(matchVideoUrl(row.m))}</td>
-      <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
-      <td>${row.teams.map(t=>{const tc=teamColor(parseInt(t));return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${t}</span>`;}).join(' · ')}</td>
-      <td class="r" style="color:var(--green);font-weight:600">${row.sc}</td>
-      <td class="r" style="color:var(--blue)">${row.au??'–'}</td><td class="r">${row.tl??'–'}</td>
-      <td class="r" style="color:var(--orange)">${row.eg??'–'}</td>
-      <td><span class="rp ${row.won?'rw':'rl'}">${row.won?'WIN':'LOSS'}</span></td>
-    </tr>`).join('')}</tbody>
+    <tbody>${topRows.slice(0,20).map((row,i)=>{
+      const bdId=`sc-bd-${i}`;
+      const hasHubData=!!(hubS(row.m,'red')||hubS(row.m,'blue'));
+      const clickable=hasHubData?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
+      return`<tr class="${row.teams.some(t=>TRACKED.includes(parseInt(t)))?'hl':''}" ${clickable}>
+        <td class="dim">${i+1}</td><td><span class="badge ${row.ec}">${row.esh}</span></td>
+        <td class="r dim">${row.isQm?'QM':'PO'}${row.mn}</td>
+        <td class="r" style="padding:0 2px">${videoLink(matchVideoUrl(row.m))}</td>
+        <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
+        <td>${row.teams.map(t=>{const tc=teamColor(parseInt(t));return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${t}</span>`;}).join(' · ')}</td>
+        <td class="r" style="color:var(--green);font-weight:600">${row.sc}</td>
+        <td class="r" style="color:var(--blue)">${row.au??'–'}</td><td class="r">${row.tl??'–'}</td>
+        <td class="r" style="color:var(--orange)">${row.eg??'–'}</td>
+        <td><span class="rp ${row.won?'rw':'rl'}">${row.won?'WIN':'LOSS'}</span></td>
+      </tr>${hasHubData?topRowPanel(row,i):''}`;
+    }).join('')}</tbody>
   </table></div>
-</div>`;
-}
+</div>`;}
 
 // ════════ TEAM TRACKER ════════
 function addTrackedTeam(){
