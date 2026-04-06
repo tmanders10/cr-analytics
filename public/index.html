@@ -1871,13 +1871,13 @@ function renderMxTable(matches){
   return`<table style="table-layout:fixed;width:100%"><colgroup>
     <col style="width:52px"/>
     <col style="width:46px"/>
-    <col style="width:42px"/>
+    <col style="width:54px"/>
     <col style="width:58px"/>
-    <col style="width:calc(50% - 180px)"/>
+    <col style="width:calc(50% - 187px)"/>
     <col style="width:48px"/>
     <col style="width:10px"/>
     <col style="width:48px"/>
-    <col style="width:calc(50% - 180px)"/>
+    <col style="width:calc(50% - 187px)"/>
     <col style="width:${aceLoaded?'80px':'56px'}"/>
     <col style="width:${aceLoaded?'52px':'0px'}"/>
   </colgroup>
@@ -2008,7 +2008,7 @@ function renderMxTable(matches){
     return`${evBoundary}<tr class="${hasT?'hl':''}" ${clickable}>
       <td><span class="badge ${m._ec}">${m._esh}</span></td>
       <td><span style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;color:var(--text3)">${m.comp_level==='qm'?'QUAL':m.comp_level==='f'?'FINAL':m.comp_level==='sf'?'SF':m.comp_level.toUpperCase()}</span></td>
-      <td class="r dim">${m.comp_level==='qm'?m.match_number:`${m.set_number}-${m.match_number}`}</td>
+      <td class="r dim" style="white-space:nowrap">${m.comp_level==='qm'?m.match_number:`${m.set_number}-${m.match_number}`}</td>
       <td style="padding:0 4px">${timOrVid}</td>
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${rWin?'background:rgba(255,61,90,.04)':''}">${rt}</td>
       <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${rWin?700:400};color:${rWin?'var(--loss)':'var(--text3)'};${rWin?'background:rgba(255,61,90,.04)':''}">${rs}</td>
