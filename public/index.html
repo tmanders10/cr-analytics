@@ -1359,8 +1359,17 @@ function renderTPCard(t){
       </div><!-- end sec-ace -->
       <div id="sec-breakdown-${t.n}" style="display:${BREAKDOWN_EXPANDED?'block':'none'}">
     ${(()=>{
-      const tMatches=fM.filter(m=>{const r=m.alliances?.red?.team_keys||[],b=m.alliances?.blue?.team_keys||[];return r.includes(t.k)||b.includes(t.k);}).filter(m=>(m.alliances?.red?.score??-1)>=0);
-      const avg=teamHubAvg(t.k,tMatches);
+      // Apply same mtype filter as the phase bars above
+      let tMatches=s.matches.filter(mx=>(mx.m.alliances?.red?.score??-1)>=0);
+      // Apply mode trimming (last10 / trimmed) same as calcPhaseStats
+      if(mode==='last10') tMatches=tMatches.slice(-10);
+      else if(mode==='trimmed'&&tMatches.length>4){
+        const sorted=[...tMatches].sort((a,b)=>a.my-b.my);
+        tMatches=sorted.slice(2,sorted.length-2);
+      }
+      // Extract raw match objects for teamHubAvg
+      const rawMatches=tMatches.map(mx=>mx.m);
+      const avg=teamHubAvg(t.k,rawMatches);
       if(!avg||avg.n<1) return '';
       // Use same phase order as match log: Auto, Transition, Sh1/2, Sh3/4, Endgame, Teleop (sub), Total
       const maxVal=Math.max(avg.auto,avg.transition,avg.s1+avg.s2,avg.s3+avg.s4,avg.endgame,avg.teleop,1);
