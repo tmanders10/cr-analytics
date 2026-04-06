@@ -247,7 +247,7 @@
       <li><a href="#match-log">Match Log</a></li>
       <li><a href="#event-standings">Event Standings</a></li>
       <li><a href="#filtering">Filtering</a></li>
-      <li><a href="#epa-ace">EPA vs ACE</a></li>
+      <li><a href="#epa-ace-opr">EPA vs ACE vs OPR</a></li>
     </ol>
   </div>
 
@@ -314,7 +314,7 @@
       <tbody>
         <tr>
           <td class="tab-name">The Blue Alliance</td>
-          <td>Match results and scores, score breakdowns by phase, event rankings, alliance selections, district point totals, team info, webcasts, and estimated match schedule times.</td>
+          <td>Match results and scores, score breakdowns by phase, event rankings, alliance selections, district point totals, team info, webcasts, estimated match schedule times, and <strong>OPR/DPR/CCWM</strong> (Offensive Power Rating, Defensive Power Rating, and Calculated Contribution to Winning Margin) per event.</td>
         </tr>
         <tr>
           <td class="tab-name">Statbotics</td>
@@ -359,17 +359,33 @@
       <li>Changing Type or Avg on one card does not affect other cards.</li>
     </ul>
 
-    <h3>Collapsible analytics section</h3>
-    <p>Each card has a collapsible <strong>EPA · ACE · Breakdown</strong> section at the bottom. Click it to expand or collapse. Expanding on any card expands all tracked cards simultaneously — the toggle is global across all cards.</p>
-    <p>When expanded, you'll see:</p>
-    <ul>
-      <li><strong>EPA</strong> — Total, Auto, Teleop, Endgame from Statbotics, plus event progression and consistency score.</li>
-      <li><strong>ACE</strong> — Total, Auto, Teleop, Endgame from Peekorobo, plus a 2×2 rank grid showing State, District, Country, and Global rank with counts.</li>
-      <li><strong>Avg Point Breakdown by Shift</strong> — horizontal bar chart showing the team's alliance average per phase (Auto, Transition, Shift 1–4, Teleop, Endgame) across their played matches. Note: these are <em>alliance totals</em>, not individual robot contributions, since TBA's score breakdown is at the alliance level.</li>
-    </ul>
+    <h3>Analytics toggles</h3>
+    <p>Each card has four independent toggle buttons in the top-right corner — <strong>OPR</strong>, <strong>EPA</strong>, <strong>ACE</strong>, and <strong>Shifts</strong>. Each button is highlighted green when active. Toggling any one of them turns that section on or off across <em>all tracked cards simultaneously</em>.</p>
+
+    <table class="guide-table" style="margin-top:10px">
+      <thead><tr><th style="width:80px">Toggle</th><th>What it shows</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="tab-name" style="color:#38a8ff">OPR</td>
+          <td><strong>Offensive Power Rating</strong> from TBA — per-event OPR tiles showing OPR, DPR (Defensive Power Rating), and CCWM (Calculated Contribution to Winning Margin). A bar chart compares OPR progression across events when multiple are loaded.</td>
+        </tr>
+        <tr>
+          <td class="tab-name" style="color:#00913f">EPA</td>
+          <td><strong>Expected Points Added</strong> from Statbotics — Total, Auto, Teleop, and Endgame tiles, plus a consistency score (standard deviation) and per-event EPA progression tiles.</td>
+        </tr>
+        <tr>
+          <td class="tab-name" style="color:#a78bfa">ACE</td>
+          <td><strong>Adjusted Contribution Estimate</strong> from Peekorobo — Total, Auto, Teleop, and Endgame tiles, plus a 2×2 rank grid showing State (GA), District, Country (US), and Global rankings with counts. Includes a confidence bar and per-event ACE tiles.</td>
+        </tr>
+        <tr>
+          <td class="tab-name" style="color:#a78bfa">Shifts</td>
+          <td><strong>Avg Point Breakdown by Shift</strong> — horizontal bar chart of the alliance's average scoring per phase across the team's played matches: Auto → Transition → Shift 1/2 → Shift 3/4 → Endgame → Teleop (subtotal) → Total. Note: these are <em>alliance totals</em> for matches the team played in, not individual robot contributions.</td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="callout blue">
-      <strong>Alliance-level note:</strong> The shift breakdown shows what the entire alliance scored in each phase during matches when that team was present — not that team's individual contribution. Use EPA and ACE for individual contribution estimates.
+      <strong>Alliance-level note:</strong> OPR and the Shifts breakdown reflect alliance-level scoring during matches when that team was present — not individual robot contributions. Use EPA and ACE for individual contribution estimates.
     </div>
   </div>
 
@@ -435,10 +451,18 @@
     </div>
   </div>
 
-  <!-- EPA VS ACE -->
+  <!-- EPA VS ACE VS OPR -->
   <div class="section">
-    <span class="section-anchor" id="epa-ace"></span>
-    <h2>EPA <span>vs</span> ACE</h2>
+    <span class="section-anchor" id="epa-ace-opr"></span>
+    <h2>EPA <span>vs</span> ACE <span>vs</span> OPR</h2>
+
+    <h3>OPR — Offensive Power Rating (The Blue Alliance)</h3>
+    <p>OPR is a linear regression model that estimates how many points each team contributes to their alliance's score per match at a specific event. It is calculated from match scores alone without any prior knowledge of individual robot actions. Two companion metrics are also available:</p>
+    <ul>
+      <li><strong>DPR (Defensive Power Rating)</strong> — estimates how many points the team prevented the opposing alliance from scoring.</li>
+      <li><strong>CCWM (Calculated Contribution to Winning Margin)</strong> — OPR minus DPR, representing the team's net impact on the score margin.</li>
+    </ul>
+    <p>OPR is event-specific and resets at each event. It is most reliable after 6+ qualification matches have been played.</p>
 
     <h3>EPA — Expected Points Added (Statbotics)</h3>
     <p>EPA is computed directly from score breakdowns and measures how many points above average a team contributes per match. It is broken down into Auto, Teleop, and Endgame components. Event-specific EPA reflects performance at a single event, while the season EPA aggregates across all events. EPA updates in near-real-time and is highly accurate for measuring raw scoring contribution.</p>
@@ -453,7 +477,7 @@
     <p>ACE tends to reward consistent, reliable veterans and penalize rookie or inconsistent teams relative to their raw scores. State, US, district, and global rankings in the app are all based on ACE.</p>
 
     <div class="callout purple">
-      <strong>Which to use?</strong> Use <strong>EPA</strong> to compare raw scoring output — it's the most precise measure of what a team actually puts on the board. Use <strong>ACE</strong> to assess overall competitive value and reliability — it's better for predicting alliance performance across a full event.
+      <strong>Which to use?</strong> Use <strong>OPR</strong> for a quick, event-specific scoring estimate based purely on match results. Use <strong>EPA</strong> for the most precise measure of individual phase contributions (Auto/Teleop/Endgame) across the season. Use <strong>ACE</strong> to assess overall competitive reliability and predict consistent alliance performance — it rewards veterans and penalizes inconsistency.
     </div>
   </div>
 
