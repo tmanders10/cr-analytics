@@ -281,7 +281,7 @@
         </tr>
         <tr>
           <td class="tab-name">Scoring Analysis</td>
-          <td>Phase-level scoring breakdown (Auto, Teleop, Endgame) across all events with bar charts, a score distribution histogram, and the top single-alliance scores of the season.</td>
+          <td>Phase-level scoring breakdown (Auto, Teleop, Endgame) across all events, an Avg Shift Breakdown by Event table showing detailed phase averages (Auto, Transition, Shift 1/2, Shift 3/4, Endgame, Teleop), and the top 20 single-alliance scores of the season — click any row to expand a full Red vs Blue phase breakdown panel.</td>
         </tr>
         <tr>
           <td class="tab-name">Team Tracker</td>
@@ -289,7 +289,7 @@
         </tr>
         <tr>
           <td class="tab-name">Alliances &amp; Playoffs</td>
-          <td>Alliance selection picks and full playoff bracket results for each event. Active event sorts to the top automatically.</td>
+          <td>Alliance selection picks and full playoff bracket results for each event. Active event sorts to the top automatically. Click any played match row to expand the same Red vs Blue phase breakdown panel as the Match Log.</td>
         </tr>
         <tr>
           <td class="tab-name">Match Log</td>
@@ -354,9 +354,8 @@
 
     <h3>Card controls</h3>
     <ul>
-      <li><strong>Type:</strong> Quals / Playoffs / All — filters the match history and averages shown on the card.</li>
-      <li><strong>Avg:</strong> All / Last 10 / Trimmed — controls which matches are included in the phase averages. Trimmed removes the 2 highest and 2 lowest scores.</li>
-      <li>Changing Type or Avg on one card does not affect other cards.</li>
+      <li><strong>Avg:</strong> All / Last 10 / Trimmed — controls which matches are included in the phase averages. Trimmed removes the 2 highest and 2 lowest scores. This setting is per-card and does not affect other cards.</li>
+      <li>Match type (Quals / Playoffs / All) is controlled globally by the <strong>status bar pills</strong> and applies to all cards simultaneously — see the Filtering section.</li>
     </ul>
 
     <h3>Analytics toggles</h3>
@@ -417,7 +416,7 @@
     <p>Click the row again to collapse the panel.</p>
 
     <h3>Filtering</h3>
-    <p>Use the dropdowns above the table to filter by event, match type (Qual / Playoff), or a specific team number. The site-wide event pill filter also applies to the Match Log.</p>
+    <p>Use the <strong>Filter by team #</strong> input above the table to narrow matches to a specific team. Match type (Quals / Playoffs / All) and event filtering are both controlled by the global status bar pills.</p>
   </div>
 
   <!-- EVENT STANDINGS -->
@@ -444,10 +443,18 @@
   <div class="section">
     <span class="section-anchor" id="filtering"></span>
     <h2><span>Filtering</span></h2>
-    <p>The colored event pills in the status bar (DAL, GWI, COL, ALB, GAI, CMP) let you filter all statistics and views to one or more specific events. Click a pill to activate it — click again to deselect. Multiple pills can be active simultaneously.</p>
-    <p>The filter applies to: Overview, District Rankings, Scoring Analysis, Team Tracker, Alliances &amp; Playoffs, and Match Log.</p>
+    <p>The status bar contains two groups of filter pills on the right side, separated by a thin divider:</p>
+
+    <h3>Match type pills (green) — Quals · Playoffs · All</h3>
+    <p>Controls which match type is shown across the entire site. The active pill is filled green. This affects: Scoring Analysis, Team Tracker cards, Match Log, and the Overview phase stats. Defaults to <strong>Quals</strong> on each page load.</p>
+
+    <h3>Event pills (blue) — DAL · GWI · COL · ALB · GAI · CMP</h3>
+    <p>Filters all statistics and views to one or more specific events. Click a pill to activate it — click again to deselect. Multiple pills can be active simultaneously. Active pills are filled blue. Unloaded events appear dimmed and are not clickable.</p>
+
+    <p>The event filter applies to: Overview, District Rankings, Scoring Analysis, Team Tracker, Alliances &amp; Playoffs, and Match Log.</p>
+
     <div class="callout orange">
-      <strong>Event Standings is not affected</strong> by the pill filter. It has its own independent event selector dropdown.
+      <strong>Event Standings is not affected</strong> by either pill filter. It has its own independent event selector dropdown.
     </div>
   </div>
 
