@@ -243,10 +243,10 @@
       <li><a href="#what-is">What is CR Analytics?</a></li>
       <li><a href="#tabs">Tabs Overview</a></li>
       <li><a href="#data-sources">Data Sources</a></li>
+      <li><a href="#filtering">Filtering</a></li>
       <li><a href="#team-tracker">Team Tracker</a></li>
       <li><a href="#match-log">Match Log</a></li>
       <li><a href="#event-standings">Event Standings</a></li>
-      <li><a href="#filtering">Filtering</a></li>
       <li><a href="#epa-ace-opr">EPA vs ACE vs OPR</a></li>
     </ol>
   </div>
@@ -326,6 +326,25 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- FILTERING -->
+  <div class="section">
+    <span class="section-anchor" id="filtering"></span>
+    <h2><span>Filtering</span></h2>
+    <p>The status bar contains two groups of filter pills on the right side, separated by a thin divider:</p>
+
+    <h3>Match type pills (green) — Quals · Playoffs · All</h3>
+    <p>Controls which match type is shown across the entire site. The active pill is filled green. This affects: Scoring Analysis, Team Tracker cards, Match Log, and the Overview phase stats. Defaults to <strong>Quals</strong> on each page load.</p>
+
+    <h3>Event pills (blue) — DAL · GWI · COL · ALB · GAI · CMP</h3>
+    <p>Filters all statistics and views to one or more specific events. Click a pill to activate it — click again to deselect. Multiple pills can be active simultaneously. Active pills are filled blue. Unloaded events appear dimmed and are not clickable.</p>
+
+    <p>The event filter applies to: Overview, District Rankings, Scoring Analysis, Team Tracker, Alliances &amp; Playoffs, and Match Log.</p>
+
+    <div class="callout orange">
+      <strong>Event Standings is not affected</strong> by either pill filter. It has its own independent event selector dropdown.
+    </div>
   </div>
 
   <!-- TEAM TRACKER -->
@@ -433,29 +452,6 @@
 
     <h3>Event selector</h3>
     <p>The dropdown at the top of the tab lets you switch between events. This selector is independent of the site-wide event pill filter — changing the pills won't change the standings view, and vice versa. The tab defaults to the live event when one is active, or to the most recently completed event otherwise.</p>
-
-    <div class="callout">
-      Disabled options in the dropdown indicate events that haven't been loaded yet. Run a Full Refresh after an event begins to populate its data.
-    </div>
-  </div>
-
-  <!-- FILTERING -->
-  <div class="section">
-    <span class="section-anchor" id="filtering"></span>
-    <h2><span>Filtering</span></h2>
-    <p>The status bar contains two groups of filter pills on the right side, separated by a thin divider:</p>
-
-    <h3>Match type pills (green) — Quals · Playoffs · All</h3>
-    <p>Controls which match type is shown across the entire site. The active pill is filled green. This affects: Scoring Analysis, Team Tracker cards, Match Log, and the Overview phase stats. Defaults to <strong>Quals</strong> on each page load.</p>
-
-    <h3>Event pills (blue) — DAL · GWI · COL · ALB · GAI · CMP</h3>
-    <p>Filters all statistics and views to one or more specific events. Click a pill to activate it — click again to deselect. Multiple pills can be active simultaneously. Active pills are filled blue. Unloaded events appear dimmed and are not clickable.</p>
-
-    <p>The event filter applies to: Overview, District Rankings, Scoring Analysis, Team Tracker, Alliances &amp; Playoffs, and Match Log.</p>
-
-    <div class="callout orange">
-      <strong>Event Standings is not affected</strong> by either pill filter. It has its own independent event selector dropdown.
-    </div>
   </div>
 
   <!-- EPA VS ACE VS OPR -->
