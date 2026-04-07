@@ -34,15 +34,16 @@
   .sdot.error{background:var(--loss)}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
   @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-  .ev-pills{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
-  .mtype-pills{display:flex;gap:4px;margin-right:8px}
+  .ev-pills{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;align-items:center}
+  .mtype-pills{display:flex;gap:4px;align-items:center}
   .mtype-pill{padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.08em;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;border:1px solid var(--border2);color:var(--text3);cursor:pointer;transition:all .2s;background:transparent}
   .mtype-pill:hover{border-color:var(--green);color:var(--green)}
   .mtype-pill.on{border-color:var(--green);color:#030803;background:var(--green)}
   .ev-pill{padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.08em;border:1px solid var(--border2);color:var(--text3);transition:all .2s;cursor:default}
-  .ev-pill.loaded{border-color:rgba(0,230,100,.4);color:rgba(0,230,100,.5);cursor:pointer}
-  .ev-pill.loaded:hover{border-color:var(--green);color:var(--green)}
-  .ev-pill.loaded.on{border-color:var(--green);color:#030803;background:var(--green);box-shadow:0 0 8px rgba(0,230,100,.35)}
+  .ev-pill.loaded{border-color:rgba(56,168,255,.4);color:rgba(56,168,255,.6);cursor:pointer}
+  .ev-pill.loaded:hover{border-color:var(--blue);color:var(--blue)}
+  .ev-pill.loaded.on{border-color:var(--blue);color:#030803;background:var(--blue);box-shadow:0 0 8px rgba(56,168,255,.35)}
+  .pills-divider{width:1px;height:16px;background:rgba(0,230,100,.2);flex-shrink:0;margin:0 2px}
   .guide-btn-icon{display:none}
   .filter-hint{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-right:4px;white-space:nowrap}
   .nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:2px;overflow-x:auto;position:sticky;top:94px;z-index:98;box-shadow:0 2px 8px rgba(0,0,0,.3)}
@@ -167,7 +168,6 @@
     .g2,.g3,.g4{grid-template-columns:1fr}
     .agrid{grid-template-columns:1fr 1fr}
     .ev-pills,.header-sub,.hdiv{display:none}
-    .mtype-pills{display:none}
   }
   @media(max-width:600px){
     /* Use short nav labels */
@@ -263,12 +263,15 @@
 <div class="status-bar">
   <div class="sdot" id="sdot"></div>
   <span id="stxt">Loading data…</span>
-  <div class="mtype-pills">
-    <button id="mtype-pill-qm"  class="mtype-pill on"  onclick="setMatchType('qm')">Quals</button>
-    <button id="mtype-pill-po"  class="mtype-pill"     onclick="setMatchType('po')">Playoffs</button>
-    <button id="mtype-pill-all" class="mtype-pill"     onclick="setMatchType('all')">All</button>
+  <div class="ev-pills" id="pillWrap">
+    <div class="mtype-pills">
+      <button id="mtype-pill-qm"  class="mtype-pill on"  onclick="setMatchType('qm')">Quals</button>
+      <button id="mtype-pill-po"  class="mtype-pill"     onclick="setMatchType('po')">Playoffs</button>
+      <button id="mtype-pill-all" class="mtype-pill"     onclick="setMatchType('all')">All</button>
+    </div>
+    <div class="pills-divider"></div>
+    <span class="filter-hint" id="filterHint" style="display:none">Filter:</span>
   </div>
-  <div class="ev-pills" id="pillWrap"><span class="filter-hint" id="filterHint" style="display:none">Filter:</span></div>
 </div>
 
 <div class="nav">
@@ -367,10 +370,11 @@ function coloredTeamNumByKey(k,extra=''){return coloredTeamNum(parseInt(k.replac
 // ── INIT PILLS ──
 (function(){
   const wrap=document.getElementById('pillWrap');
+  const hint=document.getElementById('filterHint');
   EVENTS.forEach(ev=>{
     const d=document.createElement('div');
     d.className='ev-pill';d.id='pill-'+ev.key;d.textContent=ev.short;
-    wrap.appendChild(d);
+    wrap.insertBefore(d,hint);
   });
 })();
 
