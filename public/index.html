@@ -35,6 +35,10 @@
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
   @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
   .ev-pills{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+  .mtype-pills{display:flex;gap:4px;margin-right:8px}
+  .mtype-pill{padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.08em;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;border:1px solid var(--border2);color:var(--text3);cursor:pointer;transition:all .2s;background:transparent}
+  .mtype-pill:hover{border-color:var(--green);color:var(--green)}
+  .mtype-pill.on{border-color:var(--green);color:#030803;background:var(--green)}
   .ev-pill{padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.08em;border:1px solid var(--border2);color:var(--text3);transition:all .2s;cursor:default}
   .ev-pill.loaded{border-color:rgba(0,230,100,.4);color:rgba(0,230,100,.5);cursor:pointer}
   .ev-pill.loaded:hover{border-color:var(--green);color:var(--green)}
@@ -163,6 +167,7 @@
     .g2,.g3,.g4{grid-template-columns:1fr}
     .agrid{grid-template-columns:1fr 1fr}
     .ev-pills,.header-sub,.hdiv{display:none}
+    .mtype-pills{display:none}
   }
   @media(max-width:600px){
     /* Use short nav labels */
@@ -258,6 +263,11 @@
 <div class="status-bar">
   <div class="sdot" id="sdot"></div>
   <span id="stxt">Loading data…</span>
+  <div class="mtype-pills">
+    <button id="mtype-pill-qm"  class="mtype-pill on"  onclick="setMatchType('qm')">Quals</button>
+    <button id="mtype-pill-po"  class="mtype-pill"     onclick="setMatchType('po')">Playoffs</button>
+    <button id="mtype-pill-all" class="mtype-pill"     onclick="setMatchType('all')">All</button>
+  </div>
   <div class="ev-pills" id="pillWrap"><span class="filter-hint" id="filterHint" style="display:none">Filter:</span></div>
 </div>
 
@@ -398,9 +408,8 @@ function showPage(name,el){
 function saveState(){
   sessionStorage.setItem('cr_tracked', JSON.stringify(TRACKED));
   sessionStorage.setItem('cr_filter',  JSON.stringify([...ACTIVE_FILTER]));
-  sessionStorage.setItem('cr_scType',  SC_TYPE);
+  sessionStorage.setItem('cr_matchType', MATCH_TYPE);
   sessionStorage.setItem('cr_ovType',  OV_TYPE);
-  sessionStorage.setItem('cr_cardType', JSON.stringify(CARD_TYPE));
   sessionStorage.setItem('cr_cardMode', JSON.stringify(CARD_MODE));
   // Stream overrides persist automatically (already in sessionStorage by key)
 }
@@ -411,12 +420,10 @@ function restoreState(){
     if(tracked){ TRACKED.length=0; JSON.parse(tracked).forEach(v=>{ if(!TRACKED.includes(v)) TRACKED.push(v); }); }
     const filter=sessionStorage.getItem('cr_filter');
     if(filter){ ACTIVE_FILTER.clear(); JSON.parse(filter).forEach(v=>ACTIVE_FILTER.add(v)); }
-    const scType=sessionStorage.getItem('cr_scType');
-    if(scType) SC_TYPE=scType;
+    const matchType=sessionStorage.getItem('cr_matchType');
+    if(matchType){ MATCH_TYPE=matchType; SC_TYPE=matchType; }
     const ovType=sessionStorage.getItem('cr_ovType');
     if(ovType) OV_TYPE=ovType;
-    const cardType=sessionStorage.getItem('cr_cardType');
-    if(cardType) Object.assign(CARD_TYPE, JSON.parse(cardType));
     const cardMode=sessionStorage.getItem('cr_cardMode');
     if(cardMode) Object.assign(CARD_MODE, JSON.parse(cardMode));
     // Restore admin mode
@@ -503,10 +510,16 @@ async function init(){
         if(pill) pill.classList.add('on');
       });
       if(ACTIVE_FILTER.size) document.getElementById('filterHint').style.display='inline';
+      // Restore match type pill UI
+      ['qm','po','all'].forEach(v=>{
+        const el=document.getElementById('mtype-pill-'+v);
+        if(el) el.className='mtype-pill'+(MATCH_TYPE===v?' on':'');
+      });
     } else {
       // Clean slate — clear any saved state from previous sessions
       sessionStorage.removeItem('cr_tracked');
       sessionStorage.removeItem('cr_filter');
+      sessionStorage.removeItem('cr_matchType');
       sessionStorage.removeItem('cr_scType');
       sessionStorage.removeItem('cr_ovType');
       sessionStorage.removeItem('cr_cardType');
@@ -1013,13 +1026,27 @@ ${!aceLoaded?`<div style="margin-top:10px;font-size:11px;color:var(--text3);font
 }
 
 // ════════ SCORING ════════
-let SC_TYPE = 'qm';
+let SC_TYPE = 'qm'; // kept for compatibility, mirrors MATCH_TYPE
+let MATCH_TYPE = 'qm'; // global match type filter: 'qm' | 'po' | 'all'
+
+function setMatchType(t){
+  MATCH_TYPE=t; SC_TYPE=t;
+  // Update pill UI
+  ['qm','po','all'].forEach(v=>{
+    const el=document.getElementById('mtype-pill-'+v);
+    if(el) el.className='mtype-pill'+(t===v?' on':'');
+  });
+  // Re-render affected tabs
+  renderSc();
+  renderTm();
+  renderMx();
+}
 function renderSc(){
   const fM=filteredMatches();
-  const ms = SC_TYPE==='qm' ? fM.filter(m=>m.comp_level==='qm')
-           : SC_TYPE==='po' ? fM.filter(m=>m.comp_level!=='qm')
+  const ms = MATCH_TYPE==='qm' ? fM.filter(m=>m.comp_level==='qm')
+           : MATCH_TYPE==='po' ? fM.filter(m=>m.comp_level!=='qm')
            : fM;
-  const scLabel = SC_TYPE==='qm'?'Qualification':SC_TYPE==='po'?'Playoff':'All';
+  const scLabel = MATCH_TYPE==='qm'?'Qualification':MATCH_TYPE==='po'?'Playoff':'All';
   const margins=ms.filter(m=>m.winning_alliance).map(m=>Math.abs((m.alliances?.red?.score||0)-(m.alliances?.blue?.score||0)));
   const avgMar=margins.length?margins.reduce((a,b)=>a+b,0)/margins.length:0;
   const close=margins.filter(m=>m<=10).length,blow=margins.filter(m=>m>40).length;
@@ -1111,13 +1138,6 @@ function renderSc(){
 
   document.getElementById('pg-scoring').innerHTML=`
 <div class="sh"><h2>Scoring <span>Analysis</span></h2><span class="sub">${scLabel} matches${filterLabel()}</span></div>
-<div style="display:flex;gap:6px;align-items:center;margin-bottom:16px">
-  <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Match Type:</span>
-  <button style="${btnStyle(SC_TYPE==='qm')}"  onclick="SC_TYPE='qm';renderSc()">Qualifiers</button>
-  <button style="${btnStyle(SC_TYPE==='po')}"  onclick="SC_TYPE='po';renderSc()">Playoffs</button>
-  <button style="${btnStyle(SC_TYPE==='all')}" onclick="SC_TYPE='all';renderSc()">All</button>
-  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-left:4px">${ms.length} matches</span>
-</div>
 ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3);margin-bottom:16px">🔍 Filtered to: ${EVENTS.filter(ev=>ACTIVE_FILTER.has(ev.key)).map(e=>`<span class="badge ${e.cls}">${e.short}</span>`).join(' ')}</div>`:''}
 <div class="g3" style="margin-bottom:16px">
   <div class="metric"><div class="mlabel">Avg Margin of Victory</div><div class="mval" style="color:var(--loss)">${avgMar.toFixed(1)}</div><div class="msub">points</div></div>
@@ -1275,7 +1295,7 @@ function calcPhaseStats(matches, mode) {
 function renderTPCard(t, sharedMax){
   const fM=filteredMatches();
   const mode = CARD_MODE[t.n] || 'all';
-  const mtype = CARD_TYPE[t.n] || 'qm';
+  const mtype = MATCH_TYPE; // use global match type filter
   const s=teamStatsF(t.k, fM, mtype);
   const hasData=(s.wins+s.losses+s.ties)>0;
   const wpt=s.n?Math.round(s.wins/s.n*100):0;
@@ -1369,12 +1389,6 @@ function renderTPCard(t, sharedMax){
       <div class="tprec" style="color:${tc.text}">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
     </div>
     ${hasData?`
-    <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
-      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Type:</span>
-      <button style="${btnStyle(mtype==='qm')}"  onclick="CARD_TYPE[${t.n}]='qm'; CARD_MODE[${t.n}]=CARD_MODE[${t.n}]||'all'; renderTm()">Quals</button>
-      <button style="${btnStyle(mtype==='po')}"  onclick="CARD_TYPE[${t.n}]='po'; CARD_MODE[${t.n}]=CARD_MODE[${t.n}]||'all'; renderTm()">Playoffs</button>
-      <button style="${btnStyle(mtype==='all')}" onclick="CARD_TYPE[${t.n}]='all'; CARD_MODE[${t.n}]=CARD_MODE[${t.n}]||'all'; renderTm()">All</button>
-    </div>
     <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
       <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Avg:</span>
       <button style="${btnStyle(mode==='all')}"     onclick="CARD_MODE[${t.n}]='all';renderTm()">All</button>
@@ -1497,7 +1511,7 @@ function renderTPCard(t, sharedMax){
     })()}
       </div><!-- end sec-breakdown -->
     </div><!-- end sections wrapper -->
-    ${mtype==='all'?`<div style="margin-top:8px;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,230,100,.15);outline:1px solid rgba(255,140,66,.6);vertical-align:middle;margin-right:3px"></span>playoff match</div>`:''}
+    ${MATCH_TYPE==='all'?`<div style="margin-top:8px;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,230,100,.15);outline:1px solid rgba(255,140,66,.6);vertical-align:middle;margin-right:3px"></span>playoff match</div>`:''}
   </div>`;}
 
 function renderTmTable(teams){
@@ -1550,9 +1564,8 @@ function renderTm(){
   // Compute shared scale maxes across all tracked teams
   const trackedStats=TRACKED.map(n=>{
     const k=`frc${n}`;
-    const mtype=CARD_TYPE[n]||'qm';
     const mode=CARD_MODE[n]||'all';
-    const s=teamStatsF(k,fM,mtype);
+    const s=teamStatsF(k,fM,MATCH_TYPE);
     const cs=mode==='all'?{avgS:s.avgS,avgA:s.avgA,avgTl:s.avgTl,avgEg:s.avgEg}:calcPhaseStats(s.matches,mode);
     // Shift breakdown matches
     let tMatches=s.matches.filter(mx=>(mx.m.alliances?.red?.score??-1)>=0);
@@ -1857,25 +1870,24 @@ ${rkList.length===0
 
 // ════════ MATCH LOG ════════
 function renderMx(){
-  const fM=filteredMatches();const initMs=fM;
+  const fM=filteredMatches();
+  const ms = MATCH_TYPE==='qm' ? fM.filter(m=>m.comp_level==='qm')
+           : MATCH_TYPE==='po' ? fM.filter(m=>m.comp_level!=='qm')
+           : fM;
+  const scLabel = MATCH_TYPE==='qm'?'Qualification':MATCH_TYPE==='po'?'Playoff':'All';
   document.getElementById('pg-matches').innerHTML=`
 <div class="sh"><h2>Match <span>Log</span></h2><span class="sub">${fM.filter(m=>m.comp_level==='qm').length} qual · ${fM.filter(m=>m.comp_level!=='qm').length} playoff matches${filterLabel()}</span></div>
 ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3);margin-bottom:12px">🔍 Pill filter active.</div>`:''}
 <div class="sr">
-  <select class="ss" id="mxEv" onchange="filterMx()">
-    <option value="">All events</option>
-    ${EVENTS.filter(ev=>ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key)).map(ev=>`<option value="${ev.key}" ${!loadedEvents.has(ev.key)?'disabled':''}>${ev.name}${!loadedEvents.has(ev.key)?' (pending)':''}</option>`).join('')}
-  </select>
-  <select class="ss" id="mxLv" onchange="filterMx()"><option value="">Qual + Playoff</option><option value="qm">Qual Only</option><option value="po">Playoff Only</option></select>
-  <input type="text" class="si" id="mxTm" placeholder="Filter by team #…" oninput="filterMx()" style="width:160px"/>
+  <input type="text" class="si" id="mxTm" placeholder="Filter by team #…" oninput="filterMx()" style="width:180px"/>
 </div>
-<div class="card" style="padding:0"><div class="tw" id="mxTbl">${renderMxTable(initMs)}</div></div>`;}
+<div class="card" style="padding:0"><div class="tw" id="mxTbl">${renderMxTable(ms)}</div></div>`;}
 function filterMx(){
-  const ev=document.getElementById('mxEv').value;const lv=document.getElementById('mxLv').value;const team=document.getElementById('mxTm').value.trim();
+  const team=document.getElementById('mxTm').value.trim();
   let ms=filteredMatches();
-  if(ev)ms=ms.filter(m=>m._ev===ev);
-  if(lv==='qm')ms=ms.filter(m=>m.comp_level==='qm');else if(lv==='po')ms=ms.filter(m=>m.comp_level!=='qm');
-  if(team)ms=ms.filter(m=>[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])].some(k=>k.includes(team)));
+  if(MATCH_TYPE==='qm') ms=ms.filter(m=>m.comp_level==='qm');
+  else if(MATCH_TYPE==='po') ms=ms.filter(m=>m.comp_level!=='qm');
+  if(team) ms=ms.filter(m=>[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])].some(k=>k.includes(team)));
   document.getElementById('mxTbl').innerHTML=renderMxTable(ms);}
 function renderMxTable(matches){
   // Determine priority week: unplayed matches first, then active event, then chronological
