@@ -990,12 +990,6 @@ ${(()=>{
 <div class="card" id="ovPhaseCard">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
     <div class="ctitle" style="margin-bottom:0">Per-Event Phase Averages</div>
-    <div style="display:flex;gap:5px;align-items:center">
-      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-right:2px">Type:</span>
-      <button style="${OV_TYPE==='qm'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='qm';renderOv()">Quals</button>
-      <button style="${OV_TYPE==='po'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='po';renderOv()">Playoffs</button>
-      <button style="${OV_TYPE==='all'?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)'};font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase" onclick="OV_TYPE='all';renderOv()">All</button>
-    </div>
   </div>
   <div class="tw"><table><thead><tr><th>Event</th><th>Status</th><th class="r">Matches</th><th class="r">Avg Total</th><th class="r" style="color:var(--blue)">Avg Auto</th><th class="r">Avg Teleop</th><th class="r" style="color:var(--orange)">Avg Endgame</th><th class="r">Peak</th></tr></thead>
   <tbody>${EVENTS.map(ev=>{
@@ -1003,7 +997,7 @@ ${(()=>{
     const status=evStatus(ev);
     if(status==='pending')return`<tr style="opacity:.45"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--text3)">Pending</span></td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td></tr>`;
     if(!inFilter)return`<tr style="opacity:.3"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td><span style="font-size:11px;color:var(--text3)">Filtered out</span></td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td><td class="r dim">–</td></tr>`;
-    const ovMs=OV_TYPE==='qm'?fM.filter(m=>m._ev===ev.key&&m.comp_level==='qm'):OV_TYPE==='po'?fM.filter(m=>m._ev===ev.key&&m.comp_level!=='qm'):fM.filter(m=>m._ev===ev.key);
+    const ovMs=MATCH_TYPE==='qm'?fM.filter(m=>m._ev===ev.key&&m.comp_level==='qm'):MATCH_TYPE==='po'?fM.filter(m=>m._ev===ev.key&&m.comp_level!=='qm'):fM.filter(m=>m._ev===ev.key);
     const cnt=ovMs.length;
     const avgTot=cnt?ovMs.reduce((s,m)=>{let c=0,sc=0;if((m.alliances?.red?.score??-1)>=0){sc+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){sc+=m.alliances.blue.score;c++;}return s+(c?sc/c:0);},0)/cnt:0;
     const phAvg=ph=>{const v=[];ovMs.forEach(m=>['red','blue'].forEach(a=>{const x=phS(m,a,ph);if(x!==null)v.push(x);}));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;};
@@ -1075,6 +1069,7 @@ function setMatchType(t){
     });
   });
   // Re-render affected tabs
+  renderOv();
   renderSc();
   renderTm();
   renderMx();
