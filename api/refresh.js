@@ -259,6 +259,26 @@ module.exports = async function handler(req, res) {
       } catch (e) {}
     }
 
+    // ── Statbotics: match predictions (epa_winner + epa_win_prob) ──
+    const matchPreds = existing.matchPreds || {};
+    for (const ev of EVENTS) {
+      if (!output.events?.[ev.key]?.matches?.length) continue;
+      try {
+        const records = await statboticsFetch(`/matches?event=${ev.key}&limit=200`);
+        if (Array.isArray(records)) {
+          records.forEach(m => {
+            if (!m.key) return;
+            const winner = m.epa_winner ?? null;      // 'red', 'blue', or null
+            const prob   = m.epa_win_prob ?? null;    // 0-1 probability of winner
+            if (winner !== null && prob !== null) {
+              matchPreds[m.key] = { winner, prob };
+            }
+          });
+        }
+      } catch (e) {}
+    }
+    output.matchPreds = matchPreds;
+
     // ── Write to GitHub (both public/data.json and root data.json) ──
     const content = Buffer.from(JSON.stringify(output, null, 2)).toString('base64');
     const commitMsg = `chore: refresh data ${new Date().toISOString()}`;
