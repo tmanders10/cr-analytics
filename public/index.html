@@ -926,10 +926,12 @@ ${(()=>{
   const activeEv=EVENTS.find(ev=>evStatus(ev)==='active');
   if(!activeEv) return '';
   const allCasts=(DB.webcasts[activeEv.key]||[]).filter(c=>c.type==='youtube');
-  // Prefer the most recent day's streams — group by date and take the latest
-  const latestDate=allCasts.reduce((max,c)=>c.date>max?c.date:max,'');
-  const todayCasts=allCasts.filter(c=>c.date===latestDate);
-  const useCasts=todayCasts.length>=2?todayCasts:allCasts;
+  // Match streams to today's date first; fall back to most recent past date if none match today
+  const todayStr=new Date().toISOString().slice(0,10); // YYYY-MM-DD
+  const castDates=[...new Set(allCasts.map(c=>c.date).filter(Boolean))].sort();
+  // Find the most recent date that is <= today
+  const bestDate=castDates.filter(d=>d<=todayStr).pop() || castDates[0] || '';
+  const useCasts=bestDate?allCasts.filter(c=>c.date===bestDate):allCasts;
   const castOverhead = useCasts.length>1 ? useCasts[1] : useCasts[0] || null;
   const castField    = useCasts.length>1 ? useCasts[0] : null;
   // Check sessionStorage for user overrides
