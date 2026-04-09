@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-09T16:12:11.014Z",
+  "fetchedAt": "2026-04-09T21:18:16.217Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -55703,11 +55703,11 @@
       },
       "matches": [
         {
-          "actual_time": null,
+          "actual_time": 1775768437,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 236,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc7451",
@@ -55717,7 +55717,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 154,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc832",
@@ -55730,13 +55730,104 @@
           "event_key": "2026gacmp",
           "key": "2026gacmp_qm1",
           "match_number": 1,
-          "post_result_time": null,
+          "post_result_time": 1775768680,
           "predicted_time": 1775768400,
-          "score_breakdown": null,
+          "score_breakdown": {
+            "blue": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 64,
+                "autoPoints": 64,
+                "endgameCount": 35,
+                "endgamePoints": 35,
+                "shift1Count": 0,
+                "shift1Points": 0,
+                "shift2Count": 71,
+                "shift2Points": 71,
+                "shift3Count": 0,
+                "shift3Points": 0,
+                "shift4Count": 46,
+                "shift4Points": 46,
+                "teleopCount": 172,
+                "teleopPoints": 172,
+                "totalCount": 236,
+                "totalPoints": 236,
+                "transitionCount": 20,
+                "transitionPoints": 20,
+                "uncounted": 0
+              },
+              "majorFoulCount": 1,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 3,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 64,
+              "totalPoints": 236,
+              "totalTeleopPoints": 172,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            },
+            "red": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 15,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 19,
+                "autoPoints": 19,
+                "endgameCount": 57,
+                "endgamePoints": 57,
+                "shift1Count": 30,
+                "shift1Points": 30,
+                "shift2Count": 0,
+                "shift2Points": 0,
+                "shift3Count": 30,
+                "shift3Points": 30,
+                "shift4Count": 0,
+                "shift4Points": 0,
+                "teleopCount": 120,
+                "teleopPoints": 120,
+                "totalCount": 139,
+                "totalPoints": 139,
+                "transitionCount": 3,
+                "transitionPoints": 3,
+                "uncounted": 0
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 19,
+              "totalPoints": 154,
+              "totalTeleopPoints": 120,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            }
+          },
           "set_number": 1,
           "time": 1775768400,
           "videos": [],
-          "winning_alliance": ""
+          "winning_alliance": "blue"
         },
         {
           "actual_time": null,
@@ -55767,7 +55858,7 @@
           "key": "2026gacmp_qm10",
           "match_number": 10,
           "post_result_time": null,
-          "predicted_time": 1775773200,
+          "predicted_time": 1775772865,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775773200,
@@ -55803,7 +55894,7 @@
           "key": "2026gacmp_qm11",
           "match_number": 11,
           "post_result_time": null,
-          "predicted_time": 1775773680,
+          "predicted_time": 1775773351,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775773680,
@@ -55839,7 +55930,7 @@
           "key": "2026gacmp_qm12",
           "match_number": 12,
           "post_result_time": null,
-          "predicted_time": 1775774160,
+          "predicted_time": 1775773837,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775774160,
@@ -55875,7 +55966,7 @@
           "key": "2026gacmp_qm13",
           "match_number": 13,
           "post_result_time": null,
-          "predicted_time": 1775826000,
+          "predicted_time": 1775826306,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775826000,
@@ -55911,7 +56002,7 @@
           "key": "2026gacmp_qm14",
           "match_number": 14,
           "post_result_time": null,
-          "predicted_time": 1775826480,
+          "predicted_time": 1775826792,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775826480,
@@ -55947,7 +56038,7 @@
           "key": "2026gacmp_qm15",
           "match_number": 15,
           "post_result_time": null,
-          "predicted_time": 1775826960,
+          "predicted_time": 1775827278,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775826960,
@@ -55983,7 +56074,7 @@
           "key": "2026gacmp_qm16",
           "match_number": 16,
           "post_result_time": null,
-          "predicted_time": 1775827440,
+          "predicted_time": 1775827764,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775827440,
@@ -56019,7 +56110,7 @@
           "key": "2026gacmp_qm17",
           "match_number": 17,
           "post_result_time": null,
-          "predicted_time": 1775827920,
+          "predicted_time": 1775828250,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775827920,
@@ -56055,7 +56146,7 @@
           "key": "2026gacmp_qm18",
           "match_number": 18,
           "post_result_time": null,
-          "predicted_time": 1775828400,
+          "predicted_time": 1775828736,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775828400,
@@ -56091,7 +56182,7 @@
           "key": "2026gacmp_qm19",
           "match_number": 19,
           "post_result_time": null,
-          "predicted_time": 1775828880,
+          "predicted_time": 1775829222,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775828880,
@@ -56099,11 +56190,11 @@
           "winning_alliance": ""
         },
         {
-          "actual_time": null,
+          "actual_time": 1775768965,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 98,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc3344",
@@ -56113,7 +56204,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 148,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc4509",
@@ -56126,13 +56217,104 @@
           "event_key": "2026gacmp",
           "key": "2026gacmp_qm2",
           "match_number": 2,
-          "post_result_time": null,
+          "post_result_time": 1775769154,
           "predicted_time": 1775768940,
-          "score_breakdown": null,
+          "score_breakdown": {
+            "blue": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 21,
+                "autoPoints": 21,
+                "endgameCount": 18,
+                "endgamePoints": 18,
+                "shift1Count": 0,
+                "shift1Points": 0,
+                "shift2Count": 46,
+                "shift2Points": 46,
+                "shift3Count": 0,
+                "shift3Points": 0,
+                "shift4Count": 13,
+                "shift4Points": 13,
+                "teleopCount": 77,
+                "teleopPoints": 77,
+                "totalCount": 98,
+                "totalPoints": 98,
+                "transitionCount": 0,
+                "transitionPoints": 0,
+                "uncounted": 0
+              },
+              "majorFoulCount": 1,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 21,
+              "totalPoints": 98,
+              "totalTeleopPoints": 77,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            },
+            "red": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 15,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 17,
+                "autoPoints": 17,
+                "endgameCount": 63,
+                "endgamePoints": 63,
+                "shift1Count": 20,
+                "shift1Points": 20,
+                "shift2Count": 0,
+                "shift2Points": 0,
+                "shift3Count": 33,
+                "shift3Points": 33,
+                "shift4Count": 0,
+                "shift4Points": 0,
+                "teleopCount": 116,
+                "teleopPoints": 116,
+                "totalCount": 133,
+                "totalPoints": 133,
+                "transitionCount": 0,
+                "transitionPoints": 0,
+                "uncounted": 0
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 3,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 17,
+              "totalPoints": 148,
+              "totalTeleopPoints": 116,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            }
+          },
           "set_number": 1,
           "time": 1775768940,
           "videos": [],
-          "winning_alliance": ""
+          "winning_alliance": "red"
         },
         {
           "actual_time": null,
@@ -56163,7 +56345,7 @@
           "key": "2026gacmp_qm20",
           "match_number": 20,
           "post_result_time": null,
-          "predicted_time": 1775829360,
+          "predicted_time": 1775829708,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775829360,
@@ -56199,7 +56381,7 @@
           "key": "2026gacmp_qm21",
           "match_number": 21,
           "post_result_time": null,
-          "predicted_time": 1775829840,
+          "predicted_time": 1775830194,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775829840,
@@ -56235,7 +56417,7 @@
           "key": "2026gacmp_qm22",
           "match_number": 22,
           "post_result_time": null,
-          "predicted_time": 1775830320,
+          "predicted_time": 1775830680,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775830320,
@@ -56271,7 +56453,7 @@
           "key": "2026gacmp_qm23",
           "match_number": 23,
           "post_result_time": null,
-          "predicted_time": 1775830800,
+          "predicted_time": 1775831166,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775830800,
@@ -56307,7 +56489,7 @@
           "key": "2026gacmp_qm24",
           "match_number": 24,
           "post_result_time": null,
-          "predicted_time": 1775831280,
+          "predicted_time": 1775831652,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775831280,
@@ -56343,7 +56525,7 @@
           "key": "2026gacmp_qm25",
           "match_number": 25,
           "post_result_time": null,
-          "predicted_time": 1775831760,
+          "predicted_time": 1775832138,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775831760,
@@ -56379,7 +56561,7 @@
           "key": "2026gacmp_qm26",
           "match_number": 26,
           "post_result_time": null,
-          "predicted_time": 1775832240,
+          "predicted_time": 1775832624,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775832240,
@@ -56415,7 +56597,7 @@
           "key": "2026gacmp_qm27",
           "match_number": 27,
           "post_result_time": null,
-          "predicted_time": 1775832720,
+          "predicted_time": 1775833110,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775832720,
@@ -56451,7 +56633,7 @@
           "key": "2026gacmp_qm28",
           "match_number": 28,
           "post_result_time": null,
-          "predicted_time": 1775833200,
+          "predicted_time": 1775833596,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775833200,
@@ -56487,7 +56669,7 @@
           "key": "2026gacmp_qm29",
           "match_number": 29,
           "post_result_time": null,
-          "predicted_time": 1775833680,
+          "predicted_time": 1775834082,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775833680,
@@ -56523,7 +56705,7 @@
           "key": "2026gacmp_qm3",
           "match_number": 3,
           "post_result_time": null,
-          "predicted_time": 1775769480,
+          "predicted_time": 1775769463,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775769480,
@@ -56559,7 +56741,7 @@
           "key": "2026gacmp_qm30",
           "match_number": 30,
           "post_result_time": null,
-          "predicted_time": 1775834160,
+          "predicted_time": 1775834568,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775834160,
@@ -56595,7 +56777,7 @@
           "key": "2026gacmp_qm31",
           "match_number": 31,
           "post_result_time": null,
-          "predicted_time": 1775834640,
+          "predicted_time": 1775835054,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775834640,
@@ -56631,7 +56813,7 @@
           "key": "2026gacmp_qm32",
           "match_number": 32,
           "post_result_time": null,
-          "predicted_time": 1775835120,
+          "predicted_time": 1775835540,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775835120,
@@ -56703,7 +56885,7 @@
           "key": "2026gacmp_qm34",
           "match_number": 34,
           "post_result_time": null,
-          "predicted_time": 1775840880,
+          "predicted_time": 1775840886,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775840880,
@@ -56739,7 +56921,7 @@
           "key": "2026gacmp_qm35",
           "match_number": 35,
           "post_result_time": null,
-          "predicted_time": 1775841360,
+          "predicted_time": 1775841372,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775841360,
@@ -56775,7 +56957,7 @@
           "key": "2026gacmp_qm36",
           "match_number": 36,
           "post_result_time": null,
-          "predicted_time": 1775841840,
+          "predicted_time": 1775841858,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775841840,
@@ -56811,7 +56993,7 @@
           "key": "2026gacmp_qm37",
           "match_number": 37,
           "post_result_time": null,
-          "predicted_time": 1775842320,
+          "predicted_time": 1775842344,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775842320,
@@ -56847,7 +57029,7 @@
           "key": "2026gacmp_qm38",
           "match_number": 38,
           "post_result_time": null,
-          "predicted_time": 1775842800,
+          "predicted_time": 1775842830,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775842800,
@@ -56883,7 +57065,7 @@
           "key": "2026gacmp_qm39",
           "match_number": 39,
           "post_result_time": null,
-          "predicted_time": 1775843280,
+          "predicted_time": 1775843316,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775843280,
@@ -56919,7 +57101,7 @@
           "key": "2026gacmp_qm4",
           "match_number": 4,
           "post_result_time": null,
-          "predicted_time": 1775770020,
+          "predicted_time": 1775769949,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775770020,
@@ -56955,7 +57137,7 @@
           "key": "2026gacmp_qm40",
           "match_number": 40,
           "post_result_time": null,
-          "predicted_time": 1775843760,
+          "predicted_time": 1775843802,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775843760,
@@ -56991,7 +57173,7 @@
           "key": "2026gacmp_qm41",
           "match_number": 41,
           "post_result_time": null,
-          "predicted_time": 1775844240,
+          "predicted_time": 1775844288,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775844240,
@@ -57027,7 +57209,7 @@
           "key": "2026gacmp_qm42",
           "match_number": 42,
           "post_result_time": null,
-          "predicted_time": 1775844720,
+          "predicted_time": 1775844774,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775844720,
@@ -57063,7 +57245,7 @@
           "key": "2026gacmp_qm43",
           "match_number": 43,
           "post_result_time": null,
-          "predicted_time": 1775845200,
+          "predicted_time": 1775845260,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775845200,
@@ -57099,7 +57281,7 @@
           "key": "2026gacmp_qm44",
           "match_number": 44,
           "post_result_time": null,
-          "predicted_time": 1775845680,
+          "predicted_time": 1775845746,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775845680,
@@ -57135,7 +57317,7 @@
           "key": "2026gacmp_qm45",
           "match_number": 45,
           "post_result_time": null,
-          "predicted_time": 1775846160,
+          "predicted_time": 1775846232,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775846160,
@@ -57171,7 +57353,7 @@
           "key": "2026gacmp_qm46",
           "match_number": 46,
           "post_result_time": null,
-          "predicted_time": 1775846640,
+          "predicted_time": 1775846718,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775846640,
@@ -57207,7 +57389,7 @@
           "key": "2026gacmp_qm47",
           "match_number": 47,
           "post_result_time": null,
-          "predicted_time": 1775847120,
+          "predicted_time": 1775847204,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775847120,
@@ -57243,7 +57425,7 @@
           "key": "2026gacmp_qm48",
           "match_number": 48,
           "post_result_time": null,
-          "predicted_time": 1775847600,
+          "predicted_time": 1775847690,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775847600,
@@ -57279,7 +57461,7 @@
           "key": "2026gacmp_qm49",
           "match_number": 49,
           "post_result_time": null,
-          "predicted_time": 1775848080,
+          "predicted_time": 1775848176,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775848080,
@@ -57315,7 +57497,7 @@
           "key": "2026gacmp_qm5",
           "match_number": 5,
           "post_result_time": null,
-          "predicted_time": 1775770560,
+          "predicted_time": 1775770435,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775770560,
@@ -57351,7 +57533,7 @@
           "key": "2026gacmp_qm50",
           "match_number": 50,
           "post_result_time": null,
-          "predicted_time": 1775848560,
+          "predicted_time": 1775848662,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775848560,
@@ -57387,7 +57569,7 @@
           "key": "2026gacmp_qm51",
           "match_number": 51,
           "post_result_time": null,
-          "predicted_time": 1775849040,
+          "predicted_time": 1775849148,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775849040,
@@ -57423,7 +57605,7 @@
           "key": "2026gacmp_qm52",
           "match_number": 52,
           "post_result_time": null,
-          "predicted_time": 1775849520,
+          "predicted_time": 1775849634,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775849520,
@@ -57459,7 +57641,7 @@
           "key": "2026gacmp_qm53",
           "match_number": 53,
           "post_result_time": null,
-          "predicted_time": 1775850000,
+          "predicted_time": 1775850120,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775850000,
@@ -57495,7 +57677,7 @@
           "key": "2026gacmp_qm54",
           "match_number": 54,
           "post_result_time": null,
-          "predicted_time": 1775850480,
+          "predicted_time": 1775850606,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775850480,
@@ -57531,7 +57713,7 @@
           "key": "2026gacmp_qm55",
           "match_number": 55,
           "post_result_time": null,
-          "predicted_time": 1775850960,
+          "predicted_time": 1775851092,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775850960,
@@ -57567,7 +57749,7 @@
           "key": "2026gacmp_qm56",
           "match_number": 56,
           "post_result_time": null,
-          "predicted_time": 1775851440,
+          "predicted_time": 1775851578,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775851440,
@@ -57603,7 +57785,7 @@
           "key": "2026gacmp_qm57",
           "match_number": 57,
           "post_result_time": null,
-          "predicted_time": 1775851920,
+          "predicted_time": 1775852064,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775851920,
@@ -57639,7 +57821,7 @@
           "key": "2026gacmp_qm58",
           "match_number": 58,
           "post_result_time": null,
-          "predicted_time": 1775852400,
+          "predicted_time": 1775852550,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775852400,
@@ -57675,7 +57857,7 @@
           "key": "2026gacmp_qm59",
           "match_number": 59,
           "post_result_time": null,
-          "predicted_time": 1775852880,
+          "predicted_time": 1775853036,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775852880,
@@ -57711,7 +57893,7 @@
           "key": "2026gacmp_qm6",
           "match_number": 6,
           "post_result_time": null,
-          "predicted_time": 1775771100,
+          "predicted_time": 1775770921,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775771100,
@@ -57747,7 +57929,7 @@
           "key": "2026gacmp_qm60",
           "match_number": 60,
           "post_result_time": null,
-          "predicted_time": 1775853360,
+          "predicted_time": 1775853522,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775853360,
@@ -57783,7 +57965,7 @@
           "key": "2026gacmp_qm61",
           "match_number": 61,
           "post_result_time": null,
-          "predicted_time": 1775853840,
+          "predicted_time": 1775854008,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775853840,
@@ -57819,7 +58001,7 @@
           "key": "2026gacmp_qm62",
           "match_number": 62,
           "post_result_time": null,
-          "predicted_time": 1775854320,
+          "predicted_time": 1775854494,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775854320,
@@ -57855,7 +58037,7 @@
           "key": "2026gacmp_qm63",
           "match_number": 63,
           "post_result_time": null,
-          "predicted_time": 1775854800,
+          "predicted_time": 1775854980,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775854800,
@@ -57891,7 +58073,7 @@
           "key": "2026gacmp_qm64",
           "match_number": 64,
           "post_result_time": null,
-          "predicted_time": 1775855280,
+          "predicted_time": 1775855466,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775855280,
@@ -57927,7 +58109,7 @@
           "key": "2026gacmp_qm65",
           "match_number": 65,
           "post_result_time": null,
-          "predicted_time": 1775855760,
+          "predicted_time": 1775855952,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775855760,
@@ -57963,7 +58145,7 @@
           "key": "2026gacmp_qm66",
           "match_number": 66,
           "post_result_time": null,
-          "predicted_time": 1775856240,
+          "predicted_time": 1775856438,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775856240,
@@ -57999,7 +58181,7 @@
           "key": "2026gacmp_qm67",
           "match_number": 67,
           "post_result_time": null,
-          "predicted_time": 1775856720,
+          "predicted_time": 1775856924,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775856720,
@@ -58035,7 +58217,7 @@
           "key": "2026gacmp_qm68",
           "match_number": 68,
           "post_result_time": null,
-          "predicted_time": 1775912400,
+          "predicted_time": 1775912706,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775912400,
@@ -58071,7 +58253,7 @@
           "key": "2026gacmp_qm69",
           "match_number": 69,
           "post_result_time": null,
-          "predicted_time": 1775912880,
+          "predicted_time": 1775913192,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775912880,
@@ -58107,7 +58289,7 @@
           "key": "2026gacmp_qm7",
           "match_number": 7,
           "post_result_time": null,
-          "predicted_time": 1775771640,
+          "predicted_time": 1775771407,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775771640,
@@ -58143,7 +58325,7 @@
           "key": "2026gacmp_qm70",
           "match_number": 70,
           "post_result_time": null,
-          "predicted_time": 1775913360,
+          "predicted_time": 1775913678,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775913360,
@@ -58179,7 +58361,7 @@
           "key": "2026gacmp_qm71",
           "match_number": 71,
           "post_result_time": null,
-          "predicted_time": 1775913840,
+          "predicted_time": 1775914164,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775913840,
@@ -58215,7 +58397,7 @@
           "key": "2026gacmp_qm72",
           "match_number": 72,
           "post_result_time": null,
-          "predicted_time": 1775914320,
+          "predicted_time": 1775914650,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775914320,
@@ -58251,7 +58433,7 @@
           "key": "2026gacmp_qm73",
           "match_number": 73,
           "post_result_time": null,
-          "predicted_time": 1775914800,
+          "predicted_time": 1775915136,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775914800,
@@ -58287,7 +58469,7 @@
           "key": "2026gacmp_qm74",
           "match_number": 74,
           "post_result_time": null,
-          "predicted_time": 1775915280,
+          "predicted_time": 1775915622,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775915280,
@@ -58323,7 +58505,7 @@
           "key": "2026gacmp_qm75",
           "match_number": 75,
           "post_result_time": null,
-          "predicted_time": 1775915760,
+          "predicted_time": 1775916108,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775915760,
@@ -58359,7 +58541,7 @@
           "key": "2026gacmp_qm76",
           "match_number": 76,
           "post_result_time": null,
-          "predicted_time": 1775916240,
+          "predicted_time": 1775916594,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775916240,
@@ -58395,7 +58577,7 @@
           "key": "2026gacmp_qm77",
           "match_number": 77,
           "post_result_time": null,
-          "predicted_time": 1775916720,
+          "predicted_time": 1775917080,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775916720,
@@ -58431,7 +58613,7 @@
           "key": "2026gacmp_qm78",
           "match_number": 78,
           "post_result_time": null,
-          "predicted_time": 1775917200,
+          "predicted_time": 1775917566,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775917200,
@@ -58467,7 +58649,7 @@
           "key": "2026gacmp_qm79",
           "match_number": 79,
           "post_result_time": null,
-          "predicted_time": 1775917680,
+          "predicted_time": 1775918052,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775917680,
@@ -58503,7 +58685,7 @@
           "key": "2026gacmp_qm8",
           "match_number": 8,
           "post_result_time": null,
-          "predicted_time": 1775772180,
+          "predicted_time": 1775771893,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775772180,
@@ -58539,7 +58721,7 @@
           "key": "2026gacmp_qm80",
           "match_number": 80,
           "post_result_time": null,
-          "predicted_time": 1775918160,
+          "predicted_time": 1775918538,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775918160,
@@ -58575,7 +58757,7 @@
           "key": "2026gacmp_qm81",
           "match_number": 81,
           "post_result_time": null,
-          "predicted_time": 1775918640,
+          "predicted_time": 1775919024,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775918640,
@@ -58611,7 +58793,7 @@
           "key": "2026gacmp_qm82",
           "match_number": 82,
           "post_result_time": null,
-          "predicted_time": 1775919120,
+          "predicted_time": 1775919510,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775919120,
@@ -58647,7 +58829,7 @@
           "key": "2026gacmp_qm83",
           "match_number": 83,
           "post_result_time": null,
-          "predicted_time": 1775919600,
+          "predicted_time": 1775919996,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775919600,
@@ -58683,7 +58865,7 @@
           "key": "2026gacmp_qm84",
           "match_number": 84,
           "post_result_time": null,
-          "predicted_time": 1775920080,
+          "predicted_time": 1775920482,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775920080,
@@ -58719,7 +58901,7 @@
           "key": "2026gacmp_qm85",
           "match_number": 85,
           "post_result_time": null,
-          "predicted_time": 1775920560,
+          "predicted_time": 1775920968,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775920560,
@@ -58755,7 +58937,7 @@
           "key": "2026gacmp_qm86",
           "match_number": 86,
           "post_result_time": null,
-          "predicted_time": 1775921040,
+          "predicted_time": 1775921454,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775921040,
@@ -58791,7 +58973,7 @@
           "key": "2026gacmp_qm87",
           "match_number": 87,
           "post_result_time": null,
-          "predicted_time": 1775921520,
+          "predicted_time": 1775921940,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775921520,
@@ -58827,7 +59009,7 @@
           "key": "2026gacmp_qm88",
           "match_number": 88,
           "post_result_time": null,
-          "predicted_time": 1775922000,
+          "predicted_time": 1775922426,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775922000,
@@ -58863,7 +59045,7 @@
           "key": "2026gacmp_qm89",
           "match_number": 89,
           "post_result_time": null,
-          "predicted_time": 1775922480,
+          "predicted_time": 1775922912,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775922480,
@@ -58899,7 +59081,7 @@
           "key": "2026gacmp_qm9",
           "match_number": 9,
           "post_result_time": null,
-          "predicted_time": 1775772720,
+          "predicted_time": 1775772379,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775772720,
@@ -58935,7 +59117,7 @@
           "key": "2026gacmp_qm90",
           "match_number": 90,
           "post_result_time": null,
-          "predicted_time": 1775922960,
+          "predicted_time": 1775923398,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775922960,
@@ -58944,8 +59126,290 @@
         }
       ],
       "rankings": {
-        "extra_stats_info": [],
-        "rankings": [],
+        "extra_stats_info": [
+          {
+            "name": "Total Ranking Points",
+            "precision": 0
+          }
+        ],
+        "rankings": [
+          {
+            "dq": 0,
+            "extra_stats": [
+              3
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 1,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              3,
+              236,
+              64,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc7451"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              3
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 2,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              3,
+              236,
+              64,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc4189"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              3
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 3,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              3,
+              236,
+              64,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc1414"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              3
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 4,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              3,
+              133,
+              17,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc5219"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              3
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 5,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              3,
+              133,
+              17,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc4188"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              3
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 6,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              3,
+              133,
+              17,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc4509"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              0
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 7,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 0
+            },
+            "sort_orders": [
+              0,
+              139,
+              19,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc832"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              0
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 8,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 0
+            },
+            "sort_orders": [
+              0,
+              139,
+              19,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc6910"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              0
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 9,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 0
+            },
+            "sort_orders": [
+              0,
+              139,
+              19,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc8577"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              0
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 10,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 0
+            },
+            "sort_orders": [
+              0,
+              98,
+              21,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc3344"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              0
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 11,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 0
+            },
+            "sort_orders": [
+              0,
+              98,
+              21,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc3329"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              0
+            ],
+            "matches_played": 1,
+            "qual_average": null,
+            "rank": 12,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 0
+            },
+            "sort_orders": [
+              0,
+              98,
+              21,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc5608"
+          }
+        ],
         "sort_order_info": [
           {
             "name": "Ranking Score",
@@ -59004,45 +59468,45 @@
           "frc10482": 0,
           "frc11174": 0,
           "frc11214": 0,
-          "frc1261": 0,
-          "frc1414": 0,
+          "frc1261": 1.1644456420503312e-15,
+          "frc1414": 27.333333333333336,
           "frc1648": 0,
           "frc1683": 0,
           "frc1746": 0,
           "frc1771": 0,
-          "frc1833": 0,
+          "frc1833": 2.671576286672732e-15,
           "frc2974": 0,
-          "frc3091": 0,
-          "frc3329": 0,
-          "frc3344": 0,
-          "frc3635": 0,
+          "frc3091": 1.0291671287444571e-15,
+          "frc3329": -16.666666666666675,
+          "frc3344": -16.66666666666667,
+          "frc3635": -1.0397482752516185e-15,
           "frc3815": 0,
           "frc4026": 0,
           "frc4112": 0,
-          "frc4188": 0,
-          "frc4189": 0,
-          "frc4509": 0,
+          "frc4188": 16.666666666666668,
+          "frc4189": 27.333333333333336,
+          "frc4509": 16.666666666666668,
           "frc5109": 0,
-          "frc5219": 0,
-          "frc5608": 0,
+          "frc5219": 16.666666666666668,
+          "frc5608": -16.666666666666664,
           "frc5900": 0,
           "frc6023": 0,
           "frc6340": 0,
           "frc6705": 0,
           "frc6772": 0,
-          "frc6829": 0,
+          "frc6829": -3.700743415417188e-15,
           "frc6887": 0,
-          "frc6905": 0,
-          "frc6910": 0,
+          "frc6905": 1.0397482752516191e-15,
+          "frc6910": -27.333333333333336,
           "frc6919": 0,
           "frc6925": 0,
-          "frc7451": 0,
+          "frc7451": 27.333333333333336,
           "frc8080": 0,
-          "frc832": 0,
-          "frc8577": 0,
+          "frc832": -27.33333333333334,
+          "frc8577": -27.333333333333336,
           "frc8736": 0,
           "frc8866": 0,
-          "frc9477": 0,
+          "frc9477": 1.039748275251619e-15,
           "frc9480": 0,
           "frc9522": 0
         },
@@ -59051,45 +59515,45 @@
           "frc10482": 0,
           "frc11174": 0,
           "frc11214": 0,
-          "frc1261": 0,
-          "frc1414": 0,
+          "frc1261": -3.4467591004689808e-15,
+          "frc1414": 51.33333333333334,
           "frc1648": 0,
           "frc1683": 0,
           "frc1746": 0,
           "frc1771": 0,
-          "frc1833": 0,
+          "frc1833": -7.907865808551287e-15,
           "frc2974": 0,
-          "frc3091": 0,
-          "frc3329": 0,
-          "frc3344": 0,
-          "frc3635": 0,
+          "frc3091": -3.0463347010835934e-15,
+          "frc3329": 49.33333333333336,
+          "frc3344": 49.33333333333335,
+          "frc3635": 3.077654894744791e-15,
           "frc3815": 0,
           "frc4026": 0,
           "frc4112": 0,
-          "frc4188": 0,
-          "frc4189": 0,
-          "frc4509": 0,
+          "frc4188": 32.66666666666667,
+          "frc4189": 51.33333333333334,
+          "frc4509": 32.66666666666667,
           "frc5109": 0,
-          "frc5219": 0,
-          "frc5608": 0,
+          "frc5219": 32.66666666666667,
+          "frc5608": 49.33333333333333,
           "frc5900": 0,
           "frc6023": 0,
           "frc6340": 0,
           "frc6705": 0,
           "frc6772": 0,
-          "frc6829": 0,
+          "frc6829": 1.0954200509634877e-14,
           "frc6887": 0,
-          "frc6905": 0,
-          "frc6910": 0,
+          "frc6905": -3.077654894744793e-15,
+          "frc6910": 78.66666666666669,
           "frc6919": 0,
           "frc6925": 0,
-          "frc7451": 0,
+          "frc7451": 51.33333333333334,
           "frc8080": 0,
-          "frc832": 0,
-          "frc8577": 0,
+          "frc832": 78.6666666666667,
+          "frc8577": 78.66666666666669,
           "frc8736": 0,
           "frc8866": 0,
-          "frc9477": 0,
+          "frc9477": -3.0776548947447926e-15,
           "frc9480": 0,
           "frc9522": 0
         },
@@ -59098,45 +59562,45 @@
           "frc10482": 0,
           "frc11174": 0,
           "frc11214": 0,
-          "frc1261": 0,
-          "frc1414": 0,
+          "frc1261": -2.2823134584186494e-15,
+          "frc1414": 78.66666666666669,
           "frc1648": 0,
           "frc1683": 0,
           "frc1746": 0,
           "frc1771": 0,
-          "frc1833": 0,
+          "frc1833": -5.2362895218785545e-15,
           "frc2974": 0,
-          "frc3091": 0,
-          "frc3329": 0,
-          "frc3344": 0,
-          "frc3635": 0,
+          "frc3091": -2.017167572339136e-15,
+          "frc3329": 32.66666666666668,
+          "frc3344": 32.66666666666667,
+          "frc3635": 2.0379066194931725e-15,
           "frc3815": 0,
           "frc4026": 0,
           "frc4112": 0,
-          "frc4188": 0,
-          "frc4189": 0,
-          "frc4509": 0,
+          "frc4188": 49.33333333333334,
+          "frc4189": 78.66666666666669,
+          "frc4509": 49.33333333333334,
           "frc5109": 0,
-          "frc5219": 0,
-          "frc5608": 0,
+          "frc5219": 49.33333333333334,
+          "frc5608": 32.666666666666664,
           "frc5900": 0,
           "frc6023": 0,
           "frc6340": 0,
           "frc6705": 0,
           "frc6772": 0,
-          "frc6829": 0,
+          "frc6829": 7.253457094217689e-15,
           "frc6887": 0,
-          "frc6905": 0,
-          "frc6910": 0,
+          "frc6905": -2.0379066194931737e-15,
+          "frc6910": 51.33333333333334,
           "frc6919": 0,
           "frc6925": 0,
-          "frc7451": 0,
+          "frc7451": 78.66666666666669,
           "frc8080": 0,
-          "frc832": 0,
-          "frc8577": 0,
+          "frc832": 51.33333333333334,
+          "frc8577": 51.33333333333334,
           "frc8736": 0,
           "frc8866": 0,
-          "frc9477": 0,
+          "frc9477": -2.0379066194931733e-15,
           "frc9480": 0,
           "frc9522": 0
         }
@@ -59144,6 +59608,78 @@
     }
   },
   "districtRankings": [
+    {
+      "adjustments": 0,
+      "event_points": [
+        {
+          "alliance_points": 16,
+          "award_points": 10,
+          "district_cmp": false,
+          "elim_points": 30,
+          "event_key": "2026gacol",
+          "qual_points": 21,
+          "total": 77
+        },
+        {
+          "alliance_points": 16,
+          "award_points": 8,
+          "district_cmp": false,
+          "elim_points": 20,
+          "event_key": "2026gaalb",
+          "qual_points": 22,
+          "total": 66
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 45,
+          "total": 45
+        }
+      ],
+      "point_total": 188,
+      "rank": 1,
+      "rookie_bonus": 0,
+      "team_key": "frc4188"
+    },
+    {
+      "adjustments": 0,
+      "event_points": [
+        {
+          "alliance_points": 14,
+          "award_points": 0,
+          "district_cmp": false,
+          "elim_points": 20,
+          "event_key": "2026gagwi",
+          "qual_points": 16,
+          "total": 50
+        },
+        {
+          "alliance_points": 15,
+          "award_points": 5,
+          "district_cmp": false,
+          "elim_points": 13,
+          "event_key": "2026gagai",
+          "qual_points": 21,
+          "total": 54
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 57,
+          "total": 57
+        }
+      ],
+      "point_total": 161,
+      "rank": 2,
+      "rookie_bonus": 0,
+      "team_key": "frc4189"
+    },
     {
       "adjustments": 0,
       "event_points": [
@@ -59167,7 +59703,7 @@
         }
       ],
       "point_total": 149,
-      "rank": 1,
+      "rank": 3,
       "rookie_bonus": 0,
       "team_key": "frc1833"
     },
@@ -59194,9 +59730,45 @@
         }
       ],
       "point_total": 147,
-      "rank": 2,
+      "rank": 4,
       "rookie_bonus": 0,
       "team_key": "frc6919"
+    },
+    {
+      "adjustments": 0,
+      "event_points": [
+        {
+          "alliance_points": 14,
+          "award_points": 10,
+          "district_cmp": false,
+          "elim_points": 0,
+          "event_key": "2026gadal",
+          "qual_points": 18,
+          "total": 42
+        },
+        {
+          "alliance_points": 14,
+          "award_points": 0,
+          "district_cmp": false,
+          "elim_points": 9,
+          "event_key": "2026gacol",
+          "qual_points": 15,
+          "total": 38
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 66,
+          "total": 66
+        }
+      ],
+      "point_total": 146,
+      "rank": 5,
+      "rookie_bonus": 0,
+      "team_key": "frc7451"
     },
     {
       "adjustments": 0,
@@ -59221,36 +59793,9 @@
         }
       ],
       "point_total": 143,
-      "rank": 3,
+      "rank": 6,
       "rookie_bonus": 0,
       "team_key": "frc1002"
-    },
-    {
-      "adjustments": 0,
-      "event_points": [
-        {
-          "alliance_points": 16,
-          "award_points": 10,
-          "district_cmp": false,
-          "elim_points": 30,
-          "event_key": "2026gacol",
-          "qual_points": 21,
-          "total": 77
-        },
-        {
-          "alliance_points": 16,
-          "award_points": 8,
-          "district_cmp": false,
-          "elim_points": 20,
-          "event_key": "2026gaalb",
-          "qual_points": 22,
-          "total": 66
-        }
-      ],
-      "point_total": 143,
-      "rank": 4,
-      "rookie_bonus": 0,
-      "team_key": "frc4188"
     },
     {
       "adjustments": 0,
@@ -59275,7 +59820,7 @@
         }
       ],
       "point_total": 133,
-      "rank": 5,
+      "rank": 7,
       "rookie_bonus": 0,
       "team_key": "frc2974"
     },
@@ -59302,7 +59847,7 @@
         }
       ],
       "point_total": 132,
-      "rank": 6,
+      "rank": 8,
       "rookie_bonus": 0,
       "team_key": "frc1771"
     },
@@ -59329,9 +59874,117 @@
         }
       ],
       "point_total": 128,
-      "rank": 7,
+      "rank": 9,
       "rookie_bonus": 0,
       "team_key": "frc1683"
+    },
+    {
+      "adjustments": 0,
+      "event_points": [
+        {
+          "alliance_points": 10,
+          "award_points": 5,
+          "district_cmp": false,
+          "elim_points": 0,
+          "event_key": "2026gacol",
+          "qual_points": 14,
+          "total": 29
+        },
+        {
+          "alliance_points": 12,
+          "award_points": 5,
+          "district_cmp": false,
+          "elim_points": 15,
+          "event_key": "2026gagai",
+          "qual_points": 16,
+          "total": 48
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 51,
+          "total": 51
+        }
+      ],
+      "point_total": 128,
+      "rank": 10,
+      "rookie_bonus": 0,
+      "team_key": "frc1414"
+    },
+    {
+      "adjustments": 0,
+      "event_points": [
+        {
+          "alliance_points": 12,
+          "award_points": 10,
+          "district_cmp": false,
+          "elim_points": 7,
+          "event_key": "2026gagwi",
+          "qual_points": 17,
+          "total": 46
+        },
+        {
+          "alliance_points": 13,
+          "award_points": 8,
+          "district_cmp": false,
+          "elim_points": 0,
+          "event_key": "2026gagai",
+          "qual_points": 17,
+          "total": 38
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 42,
+          "total": 42
+        }
+      ],
+      "point_total": 126,
+      "rank": 11,
+      "rookie_bonus": 0,
+      "team_key": "frc4509"
+    },
+    {
+      "adjustments": 0,
+      "event_points": [
+        {
+          "alliance_points": 11,
+          "award_points": 0,
+          "district_cmp": false,
+          "elim_points": 0,
+          "event_key": "2026gadal",
+          "qual_points": 14,
+          "total": 25
+        },
+        {
+          "alliance_points": 15,
+          "award_points": 5,
+          "district_cmp": false,
+          "elim_points": 20,
+          "event_key": "2026gacol",
+          "qual_points": 20,
+          "total": 60
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 36,
+          "total": 36
+        }
+      ],
+      "point_total": 121,
+      "rank": 12,
+      "rookie_bonus": 0,
+      "team_key": "frc832"
     },
     {
       "adjustments": 0,
@@ -59356,7 +60009,7 @@
         }
       ],
       "point_total": 111,
-      "rank": 8,
+      "rank": 13,
       "rookie_bonus": 0,
       "team_key": "frc6829"
     },
@@ -59364,28 +60017,73 @@
       "adjustments": 0,
       "event_points": [
         {
-          "alliance_points": 14,
+          "alliance_points": 11,
           "award_points": 0,
           "district_cmp": false,
-          "elim_points": 20,
-          "event_key": "2026gagwi",
+          "elim_points": 0,
+          "event_key": "2026gadal",
           "qual_points": 16,
-          "total": 50
+          "total": 27
         },
         {
-          "alliance_points": 15,
-          "award_points": 5,
+          "alliance_points": 3,
+          "award_points": 0,
           "district_cmp": false,
-          "elim_points": 13,
+          "elim_points": 7,
           "event_key": "2026gagai",
-          "qual_points": 21,
-          "total": 54
+          "qual_points": 12,
+          "total": 22
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 48,
+          "total": 48
         }
       ],
-      "point_total": 104,
-      "rank": 9,
+      "point_total": 97,
+      "rank": 14,
       "rookie_bonus": 0,
-      "team_key": "frc4189"
+      "team_key": "frc5219"
+    },
+    {
+      "adjustments": 0,
+      "event_points": [
+        {
+          "alliance_points": 3,
+          "award_points": 0,
+          "district_cmp": false,
+          "elim_points": 13,
+          "event_key": "2026gacol",
+          "qual_points": 10,
+          "total": 26
+        },
+        {
+          "alliance_points": 5,
+          "award_points": 5,
+          "district_cmp": false,
+          "elim_points": 20,
+          "event_key": "2026gagai",
+          "qual_points": 12,
+          "total": 42
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 27,
+          "total": 27
+        }
+      ],
+      "point_total": 95,
+      "rank": 15,
+      "rookie_bonus": 0,
+      "team_key": "frc3344"
     },
     {
       "adjustments": 0,
@@ -59410,7 +60108,7 @@
         }
       ],
       "point_total": 92,
-      "rank": 10,
+      "rank": 16,
       "rookie_bonus": 10,
       "team_key": "frc11174"
     },
@@ -59437,7 +60135,7 @@
         }
       ],
       "point_total": 91,
-      "rank": 11,
+      "rank": 17,
       "rookie_bonus": 0,
       "team_key": "frc1261"
     },
@@ -59464,9 +60162,45 @@
         }
       ],
       "point_total": 88,
-      "rank": 12,
+      "rank": 18,
       "rookie_bonus": 0,
       "team_key": "frc4026"
+    },
+    {
+      "adjustments": 0,
+      "event_points": [
+        {
+          "alliance_points": 8,
+          "award_points": 0,
+          "district_cmp": false,
+          "elim_points": 13,
+          "event_key": "2026gadal",
+          "qual_points": 13,
+          "total": 34
+        },
+        {
+          "alliance_points": 13,
+          "award_points": 0,
+          "district_cmp": false,
+          "elim_points": 0,
+          "event_key": "2026gacol",
+          "qual_points": 17,
+          "total": 30
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 24,
+          "total": 24
+        }
+      ],
+      "point_total": 88,
+      "rank": 19,
+      "rookie_bonus": 0,
+      "team_key": "frc3329"
     },
     {
       "adjustments": 0,
@@ -59491,7 +60225,7 @@
         }
       ],
       "point_total": 86,
-      "rank": 13,
+      "rank": 20,
       "rookie_bonus": 0,
       "team_key": "frc1648"
     },
@@ -59499,55 +60233,37 @@
       "adjustments": 0,
       "event_points": [
         {
-          "alliance_points": 11,
+          "alliance_points": 10,
           "award_points": 0,
           "district_cmp": false,
           "elim_points": 0,
-          "event_key": "2026gadal",
-          "qual_points": 14,
+          "event_key": "2026gagwi",
+          "qual_points": 15,
           "total": 25
         },
         {
-          "alliance_points": 15,
+          "alliance_points": 8,
           "award_points": 5,
           "district_cmp": false,
-          "elim_points": 20,
-          "event_key": "2026gacol",
-          "qual_points": 20,
-          "total": 60
-        }
-      ],
-      "point_total": 85,
-      "rank": 14,
-      "rookie_bonus": 0,
-      "team_key": "frc832"
-    },
-    {
-      "adjustments": 0,
-      "event_points": [
-        {
-          "alliance_points": 12,
-          "award_points": 10,
-          "district_cmp": false,
-          "elim_points": 7,
-          "event_key": "2026gagwi",
-          "qual_points": 17,
-          "total": 46
+          "elim_points": 0,
+          "event_key": "2026gaalb",
+          "qual_points": 13,
+          "total": 26
         },
         {
-          "alliance_points": 13,
-          "award_points": 8,
-          "district_cmp": false,
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
           "elim_points": 0,
-          "event_key": "2026gagai",
-          "qual_points": 17,
-          "total": 38
+          "event_key": "2026gacmp",
+          "qual_points": 33,
+          "total": 33
         }
       ],
       "point_total": 84,
-      "rank": 15,
+      "rank": 21,
       "rookie_bonus": 0,
-      "team_key": "frc4509"
+      "team_key": "frc6910"
     },
     {
       "adjustments": 0,
@@ -59572,7 +60288,7 @@
         }
       ],
       "point_total": 82,
-      "rank": 16,
+      "rank": 22,
       "rookie_bonus": 0,
       "team_key": "frc6705"
     },
@@ -59599,7 +60315,7 @@
         }
       ],
       "point_total": 81,
-      "rank": 17,
+      "rank": 23,
       "rookie_bonus": 0,
       "team_key": "frc5900"
     },
@@ -59607,55 +60323,37 @@
       "adjustments": 0,
       "event_points": [
         {
-          "alliance_points": 14,
-          "award_points": 10,
+          "alliance_points": 9,
+          "award_points": 5,
           "district_cmp": false,
-          "elim_points": 0,
+          "elim_points": 13,
           "event_key": "2026gadal",
-          "qual_points": 18,
-          "total": 42
+          "qual_points": 8,
+          "total": 35
         },
         {
-          "alliance_points": 14,
+          "alliance_points": 6,
           "award_points": 0,
           "district_cmp": false,
-          "elim_points": 9,
+          "elim_points": 7,
           "event_key": "2026gacol",
-          "qual_points": 15,
-          "total": 38
-        }
-      ],
-      "point_total": 80,
-      "rank": 18,
-      "rookie_bonus": 0,
-      "team_key": "frc7451"
-    },
-    {
-      "adjustments": 0,
-      "event_points": [
-        {
-          "alliance_points": 10,
-          "award_points": 5,
-          "district_cmp": false,
-          "elim_points": 0,
-          "event_key": "2026gacol",
-          "qual_points": 14,
-          "total": 29
+          "qual_points": 12,
+          "total": 25
         },
         {
-          "alliance_points": 12,
-          "award_points": 5,
-          "district_cmp": false,
-          "elim_points": 15,
-          "event_key": "2026gagai",
-          "qual_points": 16,
-          "total": 48
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 18,
+          "total": 18
         }
       ],
-      "point_total": 77,
-      "rank": 19,
+      "point_total": 78,
+      "rank": 24,
       "rookie_bonus": 0,
-      "team_key": "frc1414"
+      "team_key": "frc5608"
     },
     {
       "adjustments": 0,
@@ -59680,7 +60378,7 @@
         }
       ],
       "point_total": 77,
-      "rank": 20,
+      "rank": 25,
       "rookie_bonus": 0,
       "team_key": "frc6340"
     },
@@ -59707,9 +60405,45 @@
         }
       ],
       "point_total": 76,
-      "rank": 21,
+      "rank": 26,
       "rookie_bonus": 0,
       "team_key": "frc6772"
+    },
+    {
+      "adjustments": 0,
+      "event_points": [
+        {
+          "alliance_points": 9,
+          "award_points": 0,
+          "district_cmp": false,
+          "elim_points": 0,
+          "event_key": "2026gagwi",
+          "qual_points": 14,
+          "total": 23
+        },
+        {
+          "alliance_points": 10,
+          "award_points": 0,
+          "district_cmp": false,
+          "elim_points": 0,
+          "event_key": "2026gagai",
+          "qual_points": 13,
+          "total": 23
+        },
+        {
+          "alliance_points": 0,
+          "award_points": 0,
+          "district_cmp": true,
+          "elim_points": 0,
+          "event_key": "2026gacmp",
+          "qual_points": 30,
+          "total": 30
+        }
+      ],
+      "point_total": 76,
+      "rank": 27,
+      "rookie_bonus": 0,
+      "team_key": "frc8577"
     },
     {
       "adjustments": 0,
@@ -59734,7 +60468,7 @@
         }
       ],
       "point_total": 75,
-      "rank": 22,
+      "rank": 28,
       "rookie_bonus": 0,
       "team_key": "frc5109"
     },
@@ -59761,7 +60495,7 @@
         }
       ],
       "point_total": 75,
-      "rank": 23,
+      "rank": 29,
       "rookie_bonus": 0,
       "team_key": "frc8080"
     },
@@ -59788,7 +60522,7 @@
         }
       ],
       "point_total": 73,
-      "rank": 24,
+      "rank": 30,
       "rookie_bonus": 0,
       "team_key": "frc3815"
     },
@@ -59815,7 +60549,7 @@
         }
       ],
       "point_total": 73,
-      "rank": 25,
+      "rank": 31,
       "rookie_bonus": 10,
       "team_key": "frc11214"
     },
@@ -59842,7 +60576,7 @@
         }
       ],
       "point_total": 72,
-      "rank": 26,
+      "rank": 32,
       "rookie_bonus": 0,
       "team_key": "frc8866"
     },
@@ -59869,36 +60603,9 @@
         }
       ],
       "point_total": 71,
-      "rank": 27,
+      "rank": 33,
       "rookie_bonus": 0,
       "team_key": "frc9477"
-    },
-    {
-      "adjustments": 0,
-      "event_points": [
-        {
-          "alliance_points": 3,
-          "award_points": 0,
-          "district_cmp": false,
-          "elim_points": 13,
-          "event_key": "2026gacol",
-          "qual_points": 10,
-          "total": 26
-        },
-        {
-          "alliance_points": 5,
-          "award_points": 5,
-          "district_cmp": false,
-          "elim_points": 20,
-          "event_key": "2026gagai",
-          "qual_points": 12,
-          "total": 42
-        }
-      ],
-      "point_total": 68,
-      "rank": 28,
-      "rookie_bonus": 0,
-      "team_key": "frc3344"
     },
     {
       "adjustments": 0,
@@ -59923,7 +60630,7 @@
         }
       ],
       "point_total": 66,
-      "rank": 29,
+      "rank": 34,
       "rookie_bonus": 0,
       "team_key": "frc6905"
     },
@@ -59950,36 +60657,9 @@
         }
       ],
       "point_total": 66,
-      "rank": 30,
+      "rank": 35,
       "rookie_bonus": 0,
       "team_key": "frc8736"
-    },
-    {
-      "adjustments": 0,
-      "event_points": [
-        {
-          "alliance_points": 8,
-          "award_points": 0,
-          "district_cmp": false,
-          "elim_points": 13,
-          "event_key": "2026gadal",
-          "qual_points": 13,
-          "total": 34
-        },
-        {
-          "alliance_points": 13,
-          "award_points": 0,
-          "district_cmp": false,
-          "elim_points": 0,
-          "event_key": "2026gacol",
-          "qual_points": 17,
-          "total": 30
-        }
-      ],
-      "point_total": 64,
-      "rank": 31,
-      "rookie_bonus": 0,
-      "team_key": "frc3329"
     },
     {
       "adjustments": 0,
@@ -60004,7 +60684,7 @@
         }
       ],
       "point_total": 64,
-      "rank": 32,
+      "rank": 36,
       "rookie_bonus": 0,
       "team_key": "frc6925"
     },
@@ -60031,36 +60711,9 @@
         }
       ],
       "point_total": 63,
-      "rank": 33,
+      "rank": 37,
       "rookie_bonus": 0,
       "team_key": "frc6887"
-    },
-    {
-      "adjustments": 0,
-      "event_points": [
-        {
-          "alliance_points": 9,
-          "award_points": 5,
-          "district_cmp": false,
-          "elim_points": 13,
-          "event_key": "2026gadal",
-          "qual_points": 8,
-          "total": 35
-        },
-        {
-          "alliance_points": 6,
-          "award_points": 0,
-          "district_cmp": false,
-          "elim_points": 7,
-          "event_key": "2026gacol",
-          "qual_points": 12,
-          "total": 25
-        }
-      ],
-      "point_total": 60,
-      "rank": 34,
-      "rookie_bonus": 0,
-      "team_key": "frc5608"
     },
     {
       "adjustments": 0,
@@ -60085,7 +60738,7 @@
         }
       ],
       "point_total": 59,
-      "rank": 35,
+      "rank": 38,
       "rookie_bonus": 0,
       "team_key": "frc1746"
     },
@@ -60112,7 +60765,7 @@
         }
       ],
       "point_total": 56,
-      "rank": 36,
+      "rank": 39,
       "rookie_bonus": 0,
       "team_key": "frc3091"
     },
@@ -60139,7 +60792,7 @@
         }
       ],
       "point_total": 55,
-      "rank": 37,
+      "rank": 40,
       "rookie_bonus": 5,
       "team_key": "frc10482"
     },
@@ -60166,7 +60819,7 @@
         }
       ],
       "point_total": 53,
-      "rank": 38,
+      "rank": 41,
       "rookie_bonus": 0,
       "team_key": "frc6023"
     },
@@ -60193,7 +60846,7 @@
         }
       ],
       "point_total": 53,
-      "rank": 39,
+      "rank": 42,
       "rookie_bonus": 0,
       "team_key": "frc9522"
     },
@@ -60220,7 +60873,7 @@
         }
       ],
       "point_total": 52,
-      "rank": 40,
+      "rank": 43,
       "rookie_bonus": 0,
       "team_key": "frc9480"
     },
@@ -60247,7 +60900,7 @@
         }
       ],
       "point_total": 51,
-      "rank": 41,
+      "rank": 44,
       "rookie_bonus": 0,
       "team_key": "frc8815"
     },
@@ -60274,36 +60927,9 @@
         }
       ],
       "point_total": 51,
-      "rank": 42,
+      "rank": 45,
       "rookie_bonus": 0,
       "team_key": "frc3635"
-    },
-    {
-      "adjustments": 0,
-      "event_points": [
-        {
-          "alliance_points": 10,
-          "award_points": 0,
-          "district_cmp": false,
-          "elim_points": 0,
-          "event_key": "2026gagwi",
-          "qual_points": 15,
-          "total": 25
-        },
-        {
-          "alliance_points": 8,
-          "award_points": 5,
-          "district_cmp": false,
-          "elim_points": 0,
-          "event_key": "2026gaalb",
-          "qual_points": 13,
-          "total": 26
-        }
-      ],
-      "point_total": 51,
-      "rank": 43,
-      "rookie_bonus": 0,
-      "team_key": "frc6910"
     },
     {
       "adjustments": 0,
@@ -60328,36 +60954,9 @@
         }
       ],
       "point_total": 49,
-      "rank": 44,
+      "rank": 46,
       "rookie_bonus": 0,
       "team_key": "frc9561"
-    },
-    {
-      "adjustments": 0,
-      "event_points": [
-        {
-          "alliance_points": 11,
-          "award_points": 0,
-          "district_cmp": false,
-          "elim_points": 0,
-          "event_key": "2026gadal",
-          "qual_points": 16,
-          "total": 27
-        },
-        {
-          "alliance_points": 3,
-          "award_points": 0,
-          "district_cmp": false,
-          "elim_points": 7,
-          "event_key": "2026gagai",
-          "qual_points": 12,
-          "total": 22
-        }
-      ],
-      "point_total": 49,
-      "rank": 45,
-      "rookie_bonus": 0,
-      "team_key": "frc5219"
     },
     {
       "adjustments": 0,
@@ -60382,36 +60981,9 @@
         }
       ],
       "point_total": 49,
-      "rank": 46,
-      "rookie_bonus": 0,
-      "team_key": "frc4112"
-    },
-    {
-      "adjustments": 0,
-      "event_points": [
-        {
-          "alliance_points": 9,
-          "award_points": 0,
-          "district_cmp": false,
-          "elim_points": 0,
-          "event_key": "2026gagwi",
-          "qual_points": 14,
-          "total": 23
-        },
-        {
-          "alliance_points": 10,
-          "award_points": 0,
-          "district_cmp": false,
-          "elim_points": 0,
-          "event_key": "2026gagai",
-          "qual_points": 13,
-          "total": 23
-        }
-      ],
-      "point_total": 46,
       "rank": 47,
       "rookie_bonus": 0,
-      "team_key": "frc8577"
+      "team_key": "frc4112"
     },
     {
       "adjustments": 0,
@@ -61838,12 +62410,12 @@
         "norm": 1499
       },
       "2026gacmp": {
-        "total": 40.57,
-        "auto": 10.7,
-        "teleop": 22.68,
-        "endgame": 7.19,
-        "sd": 13.3,
-        "norm": 1499
+        "total": 42.88,
+        "auto": 10.51,
+        "teleop": 22.95,
+        "endgame": 9.42,
+        "sd": 12.76,
+        "norm": 1505
       }
     },
     "frc1002": {
@@ -61942,12 +62514,12 @@
         "norm": 1502
       },
       "2026gacmp": {
-        "total": 41.66,
-        "auto": 8.49,
-        "teleop": 24.03,
-        "endgame": 9.15,
-        "sd": 12.16,
-        "norm": 1502
+        "total": 35.52,
+        "auto": 6.96,
+        "teleop": 20.94,
+        "endgame": 7.61,
+        "sd": 16.42,
+        "norm": 1486
       }
     },
     "frc4026": {
@@ -62038,12 +62610,12 @@
         "norm": 1460
       },
       "2026gacmp": {
-        "total": 26.56,
-        "auto": 4.91,
-        "teleop": 10.49,
-        "endgame": 11.15,
-        "sd": 10.78,
-        "norm": 1460
+        "total": 14.97,
+        "auto": 2.7,
+        "teleop": 3.93,
+        "endgame": 8.34,
+        "sd": 25.11,
+        "norm": 1414
       }
     },
     "frc5608": {
@@ -62064,12 +62636,12 @@
         "norm": 1426
       },
       "2026gacmp": {
-        "total": 17.67,
-        "auto": 8.04,
-        "teleop": 5.32,
-        "endgame": 4.31,
-        "sd": 6.73,
-        "norm": 1426
+        "total": 11.52,
+        "auto": 6.51,
+        "teleop": 2.23,
+        "endgame": 2.78,
+        "sd": 13.69,
+        "norm": 1397
       }
     },
     "frc5900": {
@@ -62290,12 +62862,12 @@
         "norm": 1493
       },
       "2026gacmp": {
-        "total": 38.14,
-        "auto": 8.27,
-        "teleop": 20.75,
-        "endgame": 9.13,
-        "sd": 11.75,
-        "norm": 1493
+        "total": 41.15,
+        "auto": 9.9,
+        "teleop": 22.68,
+        "endgame": 8.57,
+        "sd": 12.11,
+        "norm": 1500
       }
     },
     "frc7514": {
@@ -62782,12 +63354,12 @@
         "norm": 1620
       },
       "2026gacmp": {
-        "total": 95.91,
-        "auto": 18.58,
-        "teleop": 56.13,
-        "endgame": 21.19,
-        "sd": 21.63,
-        "norm": 1620
+        "total": 98.92,
+        "auto": 20.22,
+        "teleop": 58.06,
+        "endgame": 20.64,
+        "sd": 20.26,
+        "norm": 1626
       }
     },
     "frc4468": {
@@ -62826,12 +63398,12 @@
         "norm": 1488
       },
       "2026gacmp": {
-        "total": 36.42,
-        "auto": 5.48,
-        "teleop": 22.96,
-        "endgame": 7.98,
-        "sd": 10.15,
-        "norm": 1488
+        "total": 24.83,
+        "auto": 3.27,
+        "teleop": 16.4,
+        "endgame": 5.16,
+        "sd": 24.9,
+        "norm": 1454
       }
     },
     "frc4701": {
@@ -63002,12 +63574,12 @@
         "norm": 1446
       },
       "2026gacmp": {
-        "total": 22.68,
-        "auto": 4.16,
-        "teleop": 10.61,
-        "endgame": 7.9,
-        "sd": 12.8,
-        "norm": 1446
+        "total": 24.99,
+        "auto": 3.97,
+        "teleop": 10.89,
+        "endgame": 10.13,
+        "sd": 12.35,
+        "norm": 1454
       }
     },
     "frc7538": {
@@ -63064,12 +63636,12 @@
         "norm": 1500
       },
       "2026gacmp": {
-        "total": 41.09,
-        "auto": 6.96,
-        "teleop": 25.58,
-        "endgame": 8.55,
-        "sd": 12.73,
-        "norm": 1500
+        "total": 43.4,
+        "auto": 6.77,
+        "teleop": 25.85,
+        "endgame": 10.78,
+        "sd": 12.29,
+        "norm": 1506
       }
     },
     "frc8815": {
@@ -63240,12 +63812,12 @@
         "norm": 1537
       },
       "2026gacmp": {
-        "total": 56.84,
-        "auto": 12.66,
-        "teleop": 31.17,
-        "endgame": 13.02,
-        "sd": 14.23,
-        "norm": 1537
+        "total": 59.85,
+        "auto": 14.29,
+        "teleop": 33.1,
+        "endgame": 12.46,
+        "sd": 14.08,
+        "norm": 1543
       }
     },
     "frc3344": {
@@ -63266,12 +63838,12 @@
         "norm": 1479
       },
       "2026gacmp": {
-        "total": 32.89,
-        "auto": 6.35,
-        "teleop": 16.97,
-        "endgame": 9.57,
-        "sd": 16.54,
-        "norm": 1479
+        "total": 26.74,
+        "auto": 4.82,
+        "teleop": 13.89,
+        "endgame": 8.04,
+        "sd": 19.24,
+        "norm": 1460
       }
     },
     "frc3635": {
@@ -63344,12 +63916,12 @@
         "norm": 1647
       },
       "2026gacmp": {
-        "total": 110.9,
-        "auto": 22.81,
-        "teleop": 64.93,
-        "endgame": 23.16,
-        "sd": 19.92,
-        "norm": 1647
+        "total": 99.31,
+        "auto": 20.59,
+        "teleop": 58.37,
+        "endgame": 20.34,
+        "sd": 29.24,
+        "norm": 1627
       }
     },
     "frc4240": {
@@ -63525,39 +64097,48 @@
   },
   "ace": {
     "832": {
-      "ace": 60.64,
-      "raw": 68.3,
-      "confidence": 0.89,
-      "auto_raw": 13.68,
-      "teleop_raw": 54.62,
+      "ace": 59.97,
+      "raw": 69.03,
+      "confidence": 0.87,
+      "auto_raw": 10.79,
+      "teleop_raw": 58.24,
       "endgame_raw": 0,
       "wins": 21,
-      "losses": 12,
-      "ties": 0,
-      "rank_global": 1888,
-      "rank_country": 1573,
-      "rank_state": 21,
-      "rank_district": 21,
+      "losses": 13,
+      "ties": 11,
+      "rank_global": 1829,
+      "rank_country": 1529,
+      "rank_state": 18,
+      "rank_district": 18,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 38.98,
+          "ace": 72.7,
+          "raw": 77.2,
+          "auto_raw": 15.34,
+          "event_key": "2026gacol",
+          "confidence": 0.94,
+          "teleop_raw": 61.86,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 39.94,
           "raw": 47.86,
           "auto_raw": 9.86,
           "event_key": "2026gadal",
-          "confidence": 0.81,
+          "confidence": 0.83,
           "teleop_raw": 38,
           "endgame_raw": 0
         },
         {
-          "ace": 71.08,
-          "raw": 77.2,
-          "auto_raw": 15.34,
-          "event_key": "2026gacol",
-          "confidence": 0.92,
-          "teleop_raw": 61.86,
+          "ace": 57.06,
+          "raw": 70.04,
+          "auto_raw": 6.79,
+          "event_key": "2026gacmp",
+          "confidence": 0.81,
+          "teleop_raw": 63.26,
           "endgame_raw": 0
         }
       ]
@@ -63572,14 +64153,23 @@
       "wins": 32,
       "losses": 5,
       "ties": 0,
-      "rank_global": 176,
-      "rank_country": 139,
+      "rank_global": 178,
+      "rank_country": 141,
       "rank_state": 2,
       "rank_district": 2,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
+        {
+          "ace": 157.51,
+          "raw": 165.94,
+          "auto_raw": 30.7,
+          "event_key": "2026gaalb",
+          "confidence": 0.95,
+          "teleop_raw": 135.24,
+          "endgame_raw": 0
+        },
         {
           "ace": 102.19,
           "raw": 109.72,
@@ -63590,12 +64180,12 @@
           "endgame_raw": 0.81
         },
         {
-          "ace": 157.51,
-          "raw": 165.94,
-          "auto_raw": 30.7,
-          "event_key": "2026gaalb",
-          "confidence": 0.95,
-          "teleop_raw": 135.24,
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.4,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -63610,8 +64200,8 @@
       "wins": 17,
       "losses": 14,
       "ties": 1,
-      "rank_global": 1100,
-      "rank_country": 916,
+      "rank_global": 1115,
+      "rank_country": 931,
       "rank_state": 11,
       "rank_district": 11,
       "count_global": 3865,
@@ -63635,43 +64225,61 @@
           "confidence": 0.83,
           "teleop_raw": 44.78,
           "endgame_raw": 0
+        },
+        {
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.4,
+          "teleop_raw": 0,
+          "endgame_raw": 0
         }
       ]
     },
     "1414": {
-      "ace": 60.68,
-      "raw": 72.44,
-      "confidence": 0.84,
-      "auto_raw": 12.86,
-      "teleop_raw": 59.39,
-      "endgame_raw": 0.2,
-      "wins": 14,
+      "ace": 70.07,
+      "raw": 80.54,
+      "confidence": 0.87,
+      "auto_raw": 16.18,
+      "teleop_raw": 64.23,
+      "endgame_raw": 0.13,
+      "wins": 15,
       "losses": 16,
-      "ties": 1,
-      "rank_global": 1884,
-      "rank_country": 1570,
-      "rank_state": 20,
-      "rank_district": 20,
+      "ties": 12,
+      "rank_global": 1821,
+      "rank_country": 1521,
+      "rank_state": 17,
+      "rank_district": 17,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 53.72,
+          "ace": 54.97,
           "raw": 62.76,
           "auto_raw": 11.25,
           "event_key": "2026gacol",
-          "confidence": 0.86,
+          "confidence": 0.88,
           "teleop_raw": 50.99,
           "endgame_raw": 0.53
         },
         {
-          "ace": 64.66,
+          "ace": 66.22,
           "raw": 78.2,
           "auto_raw": 13.82,
           "event_key": "2026gagai",
-          "confidence": 0.83,
+          "confidence": 0.85,
           "teleop_raw": 64.39,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 86.69,
+          "raw": 96.85,
+          "auto_raw": 22.88,
+          "event_key": "2026gacmp",
+          "confidence": 0.89,
+          "teleop_raw": 73.98,
           "endgame_raw": 0
         }
       ]
@@ -63686,8 +64294,8 @@
       "wins": 36,
       "losses": 14,
       "ties": 2,
-      "rank_global": 1310,
-      "rank_country": 1096,
+      "rank_global": 1324,
+      "rank_country": 1110,
       "rank_state": 13,
       "rank_district": 13,
       "count_global": 3865,
@@ -63704,6 +64312,15 @@
           "endgame_raw": 0
         },
         {
+          "ace": 95.33,
+          "raw": 104.79,
+          "auto_raw": 21.71,
+          "event_key": "2026sccha",
+          "confidence": 0.91,
+          "teleop_raw": 83.08,
+          "endgame_raw": 0
+        },
+        {
           "ace": 55.79,
           "raw": 67.54,
           "auto_raw": 15.03,
@@ -63713,12 +64330,12 @@
           "endgame_raw": 0
         },
         {
-          "ace": 95.33,
-          "raw": 104.79,
-          "auto_raw": 21.71,
-          "event_key": "2026sccha",
-          "confidence": 0.91,
-          "teleop_raw": 83.08,
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.42,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -63733,8 +64350,8 @@
       "wins": 24,
       "losses": 8,
       "ties": 1,
-      "rank_global": 695,
-      "rank_country": 578,
+      "rank_global": 707,
+      "rank_country": 590,
       "rank_state": 7,
       "rank_district": 7,
       "count_global": 3865,
@@ -63757,6 +64374,15 @@
           "event_key": "2026gagai",
           "confidence": 0.91,
           "teleop_raw": 97.28,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.4,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -63809,8 +64435,8 @@
       "wins": 28,
       "losses": 6,
       "ties": 0,
-      "rank_global": 211,
-      "rank_country": 163,
+      "rank_global": 214,
+      "rank_country": 166,
       "rank_state": 3,
       "rank_district": 3,
       "count_global": 3865,
@@ -63833,6 +64459,15 @@
           "event_key": "2026gagwi",
           "confidence": 0.91,
           "teleop_raw": 122.03,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.4,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -63885,8 +64520,8 @@
       "wins": 34,
       "losses": 0,
       "ties": 0,
-      "rank_global": 61,
-      "rank_country": 49,
+      "rank_global": 63,
+      "rank_country": 51,
       "rank_state": 1,
       "rank_district": 1,
       "count_global": 3865,
@@ -63909,6 +64544,15 @@
           "event_key": "2026gagai",
           "confidence": 0.89,
           "teleop_raw": 167.75,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.35,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -63961,14 +64605,23 @@
       "wins": 26,
       "losses": 8,
       "ties": 0,
-      "rank_global": 295,
-      "rank_country": 231,
+      "rank_global": 297,
+      "rank_country": 233,
       "rank_state": 5,
       "rank_district": 5,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
+        {
+          "ace": 136.34,
+          "raw": 143.15,
+          "auto_raw": 21.91,
+          "event_key": "2026gacol",
+          "confidence": 0.95,
+          "teleop_raw": 121.24,
+          "endgame_raw": 0
+        },
         {
           "ace": 90.8,
           "raw": 97.76,
@@ -63979,12 +64632,12 @@
           "endgame_raw": 0
         },
         {
-          "ace": 136.34,
-          "raw": 143.15,
-          "auto_raw": 21.91,
-          "event_key": "2026gacol",
-          "confidence": 0.95,
-          "teleop_raw": 121.24,
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.4,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -64066,9 +64719,9 @@
       ]
     },
     "3329": {
-      "ace": 55.82,
+      "ace": 57.1,
       "raw": 63.96,
-      "confidence": 0.87,
+      "confidence": 0.89,
       "auto_raw": 10.7,
       "teleop_raw": 53.26,
       "endgame_raw": 0,
@@ -64084,29 +64737,38 @@
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 50.38,
+          "ace": 60.54,
+          "raw": 66.64,
+          "auto_raw": 12.4,
+          "event_key": "2026gacol",
+          "confidence": 0.91,
+          "teleop_raw": 54.24,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 51.57,
           "raw": 59.48,
           "auto_raw": 7.85,
           "event_key": "2026gadal",
-          "confidence": 0.85,
+          "confidence": 0.87,
           "teleop_raw": 51.63,
           "endgame_raw": 0
         },
         {
-          "ace": 59.18,
-          "raw": 66.64,
-          "auto_raw": 12.4,
-          "event_key": "2026gacol",
-          "confidence": 0.89,
-          "teleop_raw": 54.24,
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.42,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
     },
     "3344": {
-      "ace": 54.55,
+      "ace": 55.86,
       "raw": 65.64,
-      "confidence": 0.83,
+      "confidence": 0.85,
       "auto_raw": 10.86,
       "teleop_raw": 54.79,
       "endgame_raw": 0,
@@ -64122,21 +64784,30 @@
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 45.43,
+          "ace": 46.51,
           "raw": 54.13,
           "auto_raw": 10.11,
           "event_key": "2026gacol",
-          "confidence": 0.84,
+          "confidence": 0.86,
           "teleop_raw": 44.02,
           "endgame_raw": 0
         },
         {
-          "ace": 60.33,
+          "ace": 61.79,
           "raw": 73.08,
           "auto_raw": 11.34,
           "event_key": "2026gagai",
-          "confidence": 0.83,
+          "confidence": 0.85,
           "teleop_raw": 61.74,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.42,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -64227,14 +64898,23 @@
       "wins": 20,
       "losses": 12,
       "ties": 0,
-      "rank_global": 1075,
-      "rank_country": 894,
+      "rank_global": 1090,
+      "rank_country": 909,
       "rank_state": 10,
       "rank_district": 10,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
+        {
+          "ace": 87.72,
+          "raw": 95.37,
+          "auto_raw": 19.89,
+          "event_key": "2026gacol",
+          "confidence": 0.92,
+          "teleop_raw": 75.48,
+          "endgame_raw": 0
+        },
         {
           "ace": 53.56,
           "raw": 59.09,
@@ -64245,12 +64925,12 @@
           "endgame_raw": 0
         },
         {
-          "ace": 87.72,
-          "raw": 95.37,
-          "auto_raw": 19.89,
-          "event_key": "2026gacol",
-          "confidence": 0.92,
-          "teleop_raw": 75.48,
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.4,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -64294,17 +64974,17 @@
       ]
     },
     "4188": {
-      "ace": 114.57,
+      "ace": 117.13,
       "raw": 121.61,
-      "confidence": 0.94,
+      "confidence": 0.96,
       "auto_raw": 22.15,
       "teleop_raw": 99.45,
       "endgame_raw": 0,
       "wins": 30,
       "losses": 4,
       "ties": 0,
-      "rank_global": 357,
-      "rank_country": 284,
+      "rank_global": 362,
+      "rank_country": 289,
       "rank_state": 6,
       "rank_district": 6,
       "count_global": 3865,
@@ -64312,60 +64992,78 @@
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 99.99,
+          "ace": 102.23,
           "raw": 106.62,
           "auto_raw": 19.52,
           "event_key": "2026gacol",
-          "confidence": 0.94,
+          "confidence": 0.96,
           "teleop_raw": 87.09,
           "endgame_raw": 0.01
         },
         {
-          "ace": 126.9,
+          "ace": 129.72,
           "raw": 134.18,
           "auto_raw": 24.35,
           "event_key": "2026gaalb",
-          "confidence": 0.95,
+          "confidence": 0.97,
           "teleop_raw": 109.82,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.42,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
     },
     "4189": {
-      "ace": 83.74,
-      "raw": 92.59,
-      "confidence": 0.9,
-      "auto_raw": 16.26,
-      "teleop_raw": 76.32,
+      "ace": 86.04,
+      "raw": 94.02,
+      "confidence": 0.92,
+      "auto_raw": 18.47,
+      "teleop_raw": 75.54,
       "endgame_raw": 0.01,
-      "wins": 23,
+      "wins": 24,
       "losses": 10,
-      "ties": 1,
-      "rank_global": 870,
-      "rank_country": 726,
-      "rank_state": 9,
-      "rank_district": 9,
+      "ties": 12,
+      "rank_global": 829,
+      "rank_country": 691,
+      "rank_state": 8,
+      "rank_district": 8,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 58.8,
+          "ace": 60.16,
           "raw": 68.16,
           "auto_raw": 15.31,
           "event_key": "2026gagwi",
-          "confidence": 0.86,
+          "confidence": 0.88,
           "teleop_raw": 52.85,
           "endgame_raw": 0
         },
         {
-          "ace": 101.91,
+          "ace": 104.2,
           "raw": 109.12,
           "auto_raw": 16.91,
           "event_key": "2026gagai",
-          "confidence": 0.93,
+          "confidence": 0.95,
           "teleop_raw": 92.19,
           "endgame_raw": 0.02
+        },
+        {
+          "ace": 86.69,
+          "raw": 96.85,
+          "auto_raw": 22.88,
+          "event_key": "2026gacmp",
+          "confidence": 0.89,
+          "teleop_raw": 73.98,
+          "endgame_raw": 0
         }
       ]
     },
@@ -64484,17 +65182,17 @@
       ]
     },
     "4509": {
-      "ace": 55.42,
+      "ace": 56.71,
       "raw": 62.06,
-      "confidence": 0.89,
+      "confidence": 0.91,
       "auto_raw": 10.11,
       "teleop_raw": 51.89,
       "endgame_raw": 0.05,
       "wins": 17,
       "losses": 11,
       "ties": 1,
-      "rank_global": 2180,
-      "rank_country": 1810,
+      "rank_global": 2191,
+      "rank_country": 1821,
       "rank_state": 29,
       "rank_district": 29,
       "count_global": 3865,
@@ -64502,22 +65200,31 @@
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 53.21,
+          "ace": 54.43,
           "raw": 59.69,
           "auto_raw": 12.88,
           "event_key": "2026gagwi",
-          "confidence": 0.89,
+          "confidence": 0.91,
           "teleop_raw": 46.81,
           "endgame_raw": 0
         },
         {
-          "ace": 56.86,
+          "ace": 58.17,
           "raw": 63.59,
           "auto_raw": 8.33,
           "event_key": "2026gagai",
-          "confidence": 0.89,
+          "confidence": 0.91,
           "teleop_raw": 55.17,
           "endgame_raw": 0.09
+        },
+        {
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.42,
+          "teleop_raw": 0,
+          "endgame_raw": 0
         }
       ]
     },
@@ -64674,40 +65381,49 @@
       ]
     },
     "5219": {
-      "ace": 53.88,
+      "ace": 55.11,
       "raw": 61.27,
-      "confidence": 0.88,
+      "confidence": 0.9,
       "auto_raw": 9.33,
       "teleop_raw": 50.5,
       "endgame_raw": 1.44,
       "wins": 17,
       "losses": 13,
       "ties": 0,
-      "rank_global": 2282,
-      "rank_country": 1896,
-      "rank_state": 35,
-      "rank_district": 35,
+      "rank_global": 2283,
+      "rank_country": 1897,
+      "rank_state": 36,
+      "rank_district": 36,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 39.89,
+          "ace": 60.42,
+          "raw": 67.5,
+          "auto_raw": 9.56,
+          "event_key": "2026gagai",
+          "confidence": 0.9,
+          "teleop_raw": 55.95,
+          "endgame_raw": 1.99
+        },
+        {
+          "ace": 40.81,
           "raw": 44.77,
           "auto_raw": 8.71,
           "event_key": "2026gadal",
-          "confidence": 0.89,
+          "confidence": 0.91,
           "teleop_raw": 36.06,
           "endgame_raw": 0
         },
         {
-          "ace": 59.07,
-          "raw": 67.5,
-          "auto_raw": 9.56,
-          "event_key": "2026gagai",
-          "confidence": 0.88,
-          "teleop_raw": 55.95,
-          "endgame_raw": 1.99
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.42,
+          "teleop_raw": 0,
+          "endgame_raw": 0
         }
       ]
     },
@@ -64987,8 +65703,8 @@
       "wins": 17,
       "losses": 17,
       "ties": 1,
-      "rank_global": 2540,
-      "rank_country": 2108,
+      "rank_global": 2547,
+      "rank_country": 2115,
       "rank_state": 41,
       "rank_district": 41,
       "count_global": 3865,
@@ -65011,6 +65727,15 @@
           "event_key": "2026gagai",
           "confidence": 0.85,
           "teleop_raw": 50.29,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.4,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -65101,14 +65826,23 @@
       "wins": 24,
       "losses": 10,
       "ties": 0,
-      "rank_global": 826,
-      "rank_country": 688,
-      "rank_state": 8,
-      "rank_district": 8,
+      "rank_global": 840,
+      "rank_country": 702,
+      "rank_state": 9,
+      "rank_district": 9,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
+        {
+          "ace": 84.07,
+          "raw": 95.83,
+          "auto_raw": 13,
+          "event_key": "2026gacol",
+          "confidence": 0.88,
+          "teleop_raw": 82.83,
+          "endgame_raw": 0
+        },
         {
           "ace": 87.45,
           "raw": 98.85,
@@ -65119,12 +65853,12 @@
           "endgame_raw": 0
         },
         {
-          "ace": 84.07,
-          "raw": 95.83,
-          "auto_raw": 13,
-          "event_key": "2026gacol",
-          "confidence": 0.88,
-          "teleop_raw": 82.83,
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.4,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -65206,39 +65940,48 @@
       ]
     },
     "6910": {
-      "ace": 52.91,
-      "raw": 63.34,
+      "ace": 55.36,
+      "raw": 65.95,
       "confidence": 0.84,
-      "auto_raw": 12.28,
-      "teleop_raw": 51.06,
+      "auto_raw": 10.14,
+      "teleop_raw": 55.81,
       "endgame_raw": 0,
       "wins": 13,
-      "losses": 16,
-      "ties": 0,
-      "rank_global": 2338,
-      "rank_country": 1941,
-      "rank_state": 36,
-      "rank_district": 36,
+      "losses": 17,
+      "ties": 11,
+      "rank_global": 2260,
+      "rank_country": 1878,
+      "rank_state": 35,
+      "rank_district": 35,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 70.2,
+          "ace": 71.8,
           "raw": 79.41,
           "auto_raw": 14.52,
           "event_key": "2026gaalb",
-          "confidence": 0.88,
+          "confidence": 0.9,
           "teleop_raw": 64.89,
           "endgame_raw": 0
         },
         {
-          "ace": 32.24,
+          "ace": 33.08,
           "raw": 41.86,
           "auto_raw": 9.29,
           "event_key": "2026gagwi",
-          "confidence": 0.77,
+          "confidence": 0.79,
           "teleop_raw": 32.57,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 57.06,
+          "raw": 70.04,
+          "auto_raw": 6.79,
+          "event_key": "2026gacmp",
+          "confidence": 0.81,
+          "teleop_raw": 63.26,
           "endgame_raw": 0
         }
       ]
@@ -65253,14 +65996,23 @@
       "wins": 29,
       "losses": 8,
       "ties": 0,
-      "rank_global": 282,
-      "rank_country": 220,
+      "rank_global": 284,
+      "rank_country": 222,
       "rank_state": 4,
       "rank_district": 4,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
+        {
+          "ace": 132.87,
+          "raw": 142.15,
+          "auto_raw": 24.64,
+          "event_key": "2026gaalb",
+          "confidence": 0.93,
+          "teleop_raw": 117.51,
+          "endgame_raw": 0
+        },
         {
           "ace": 99.22,
           "raw": 106.1,
@@ -65271,12 +66023,12 @@
           "endgame_raw": 0.81
         },
         {
-          "ace": 132.87,
-          "raw": 142.15,
-          "auto_raw": 24.64,
-          "event_key": "2026gaalb",
-          "confidence": 0.93,
-          "teleop_raw": 117.51,
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.4,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
@@ -65358,39 +66110,48 @@
       ]
     },
     "7451": {
-      "ace": 49.81,
-      "raw": 60.07,
-      "confidence": 0.83,
-      "auto_raw": 10.67,
-      "teleop_raw": 49.4,
+      "ace": 66.62,
+      "raw": 76.6,
+      "confidence": 0.87,
+      "auto_raw": 16.16,
+      "teleop_raw": 60.44,
       "endgame_raw": 0,
-      "wins": 17,
+      "wins": 18,
       "losses": 12,
-      "ties": 1,
-      "rank_global": 2508,
-      "rank_country": 2080,
-      "rank_state": 40,
-      "rank_district": 40,
+      "ties": 12,
+      "rank_global": 2454,
+      "rank_country": 2037,
+      "rank_state": 39,
+      "rank_district": 39,
       "count_global": 3865,
       "count_state": 76,
       "count_district": 76,
       "event_perfs": [
         {
-          "ace": 53.69,
+          "ace": 48.97,
+          "raw": 58,
+          "auto_raw": 11.26,
+          "event_key": "2026gacol",
+          "confidence": 0.84,
+          "teleop_raw": 46.74,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 54.97,
           "raw": 64.04,
           "auto_raw": 9.55,
           "event_key": "2026gadal",
-          "confidence": 0.84,
+          "confidence": 0.86,
           "teleop_raw": 54.48,
           "endgame_raw": 0.01
         },
         {
-          "ace": 47.81,
-          "raw": 58,
-          "auto_raw": 11.26,
-          "event_key": "2026gacol",
-          "confidence": 0.82,
-          "teleop_raw": 46.74,
+          "ace": 86.69,
+          "raw": 96.85,
+          "auto_raw": 22.88,
+          "event_key": "2026gacmp",
+          "confidence": 0.89,
+          "teleop_raw": 73.98,
           "endgame_raw": 0
         }
       ]
@@ -66307,8 +67068,8 @@
       "wins": 17,
       "losses": 14,
       "ties": 0,
-      "rank_global": 2706,
-      "rank_country": 2235,
+      "rank_global": 2712,
+      "rank_country": 2241,
       "rank_state": 44,
       "rank_district": 44,
       "count_global": 3865,
@@ -66331,6 +67092,15 @@
           "event_key": "2026gagai",
           "confidence": 0.81,
           "teleop_raw": 41.26,
+          "endgame_raw": 0
+        },
+        {
+          "ace": 0,
+          "raw": 0,
+          "auto_raw": 0,
+          "event_key": "2026gacmp",
+          "confidence": 0.34,
+          "teleop_raw": 0,
           "endgame_raw": 0
         }
       ]
