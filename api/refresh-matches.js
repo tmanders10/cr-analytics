@@ -36,6 +36,14 @@ async function tbaFetch(path, tbaKey) {
   return res.json();
 }
 
+async function statboticsFetch(path) {
+  const res = await fetch(`https://api.statbotics.io/v3${path}`, {
+    headers: { 'Accept': 'application/json' }
+  });
+  if (!res.ok) throw new Error(`Statbotics HTTP ${res.status}`);
+  return res.json();
+}
+
 async function getFileSHA(url, token) {
   const res = await fetch(url, {
     headers: { Authorization: `token ${token}`, 'User-Agent': 'cr-analytics' }
@@ -117,10 +125,29 @@ module.exports = async function handler(req, res) {
     // Fetch only matches for the active event
     const matches = await tbaFetch(`/event/${activeEvent.key}/matches`, TBA_KEY);
 
+    // Fetch Statbotics match predictions for the active event
+    let matchPreds = { ...(existing.matchPreds || {}) };
+    try {
+      const sbMatches = await statboticsFetch(`/matches?event=${activeEvent.key}&limit=200`);
+      if (Array.isArray(sbMatches)) {
+        sbMatches.forEach(m => {
+          if (!m.key) return;
+          const winner = m.epa_winner ?? null;
+          const prob   = m.epa_win_prob ?? null;
+          if (winner !== null && prob !== null) {
+            matchPreds[m.key] = { winner, prob };
+          }
+        });
+      }
+    } catch (e) {
+      // Non-fatal — keep existing predictions if Statbotics is unavailable
+    }
+
     // Merge into existing data — replace only the active event's matches
     const output = {
       ...existing,
       fetchedAt: new Date().toISOString(),
+      matchPreds,
       events: {
         ...existing.events,
         [activeEvent.key]: {
