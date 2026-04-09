@@ -318,7 +318,7 @@ const EVENTS=[
 
 let TRACKED=[];  // ordered array instead of Set for drag-and-drop support
 let ACTIVE_FILTER=new Set();
-let DB={matches:{},rankings:{},alliances:{},teams:{},epa:{},webcasts:{},ace:{},oprs:{}};
+let DB={matches:{},rankings:{},alliances:{},teams:{},epa:{},webcasts:{},ace:{},oprs:{},matchPreds:{}};
 let allM=[],distRank=[];
 const loadedEvents=new Set();
 
@@ -497,6 +497,7 @@ async function init(){
     DB.teams=data.teams||{};
     DB.epa=data.epa||{};
     DB.ace=data.ace||{};
+    DB.matchPreds=data.matchPreds||{};
     loadACEFromDB();
 
     // Try to load 1002 avatar if stored in data
@@ -1928,7 +1929,7 @@ function renderMxTable(matches){
     return(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||(a.set_number||0)-(b.set_number||0)||a.match_number-b.match_number;
   });
   if(!sorted.length)return`<div class="empty"><div class="empty-s">No matches match your filters.</div></div>`;
-  const aceLoaded=Object.keys(ACE_DATA).length>0;
+  const aceLoaded=Object.keys(ACE_DATA).length>0 || Object.keys(DB.matchPreds).length>0;
   // Format a TBA Unix timestamp as local time string
   function fmtMatchTime(m){
     const t=m.predicted_time||m.scheduled_time||null;
@@ -1937,13 +1938,21 @@ function renderMxTable(matches){
     return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
   }
   // Win probability from ACE: logistic function of ACE sum difference
-  function aceWinProb(redKeys, blueKeys){
+  function aceWinProb(redKeys, blueKeys, matchKey){
+    // Prefer Statbotics EPA prediction if available
+    const sbPred = DB.matchPreds[matchKey];
+    if (sbPred && sbPred.winner && sbPred.prob != null) {
+      const redProb  = sbPred.winner === 'red'  ? sbPred.prob : 1 - sbPred.prob;
+      const blueProb = sbPred.winner === 'blue' ? sbPred.prob : 1 - sbPred.prob;
+      return { red: redProb, blue: blueProb, source: 'epa' };
+    }
+    // Fallback: ACE-based sigmoid calculation
     const redAce=redKeys.reduce((s,k)=>{const a=ACE_DATA[parseInt(tnum(k))];return s+(a?.ace??0);},0);
     const blueAce=blueKeys.reduce((s,k)=>{const a=ACE_DATA[parseInt(tnum(k))];return s+(a?.ace??0);},0);
     if(redAce===0&&blueAce===0) return null;
     const diff=redAce-blueAce;
     const redProb=1/(1+Math.exp(-diff/30));
-    return {red:redProb, blue:1-redProb, redAce, blueAce};
+    return {red:redProb, blue:1-redProb, redAce, blueAce, source: 'ace'};
   }
   return`<table style="table-layout:fixed;width:100%"><colgroup>
     <col style="width:52px"/>
@@ -1979,7 +1988,7 @@ function renderMxTable(matches){
     const rs=m.alliances?.red?.score??'–',bs=m.alliances?.blue?.score??'–',w=m.winning_alliance;
     const hasT=[...redKeys,...blueKeys].some(isTr);
     const rWin=w==='red', bWin=w==='blue';
-    const prob=aceLoaded?aceWinProb(redKeys,blueKeys):null;
+    const prob=aceLoaded?aceWinProb(redKeys,blueKeys,m.key):null;
     const resultBadge=rWin
       ?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`
       :bWin
@@ -1997,7 +2006,10 @@ function renderMxTable(matches){
           ?`<span style="color:var(--loss);font-family:'JetBrains Mono',monospace;font-size:11px">RED</span>`
           :`<span style="color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:11px">BLUE</span>`;
         const upsetBadge=upset?`<span style="color:var(--orange)" title="Upset — predicted ${predRed?'RED':'BLUE'} but ${w.toUpperCase()} won"> ⚡</span>`:'';
-        predCell=`${predLabel}<span style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px"> ${pct}%</span>${upsetBadge}`;
+        const srcTag=prob.source==='epa'
+          ?`<span style="font-size:8px;color:var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;opacity:.8"> EPA</span>`
+          :`<span style="font-size:8px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;opacity:.8"> ACE</span>`;
+        predCell=`${predLabel}<span style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px"> ${pct}%</span>${srcTag}${upsetBadge}`;
       }
       resultCell=resultBadge;
     }
