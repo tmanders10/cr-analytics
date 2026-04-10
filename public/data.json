@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-10T13:21:41.449Z",
+  "fetchedAt": "2026-04-10T13:31:41.083Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -56370,7 +56370,16 @@
           },
           "set_number": 1,
           "time": 1775826000,
-          "videos": [],
+          "videos": [
+            {
+              "key": "h3fsn1GKOf0",
+              "type": "youtube"
+            },
+            {
+              "key": "AGvLWTI633Y",
+              "type": "youtube"
+            }
+          ],
           "winning_alliance": "red"
         },
         {
@@ -56497,7 +56506,16 @@
           },
           "set_number": 1,
           "time": 1775826480,
-          "videos": [],
+          "videos": [
+            {
+              "key": "DmuifWESEtQ",
+              "type": "youtube"
+            },
+            {
+              "key": "2qLpIOBVRKU",
+              "type": "youtube"
+            }
+          ],
           "winning_alliance": "blue"
         },
         {
@@ -56624,15 +56642,24 @@
           },
           "set_number": 1,
           "time": 1775826960,
-          "videos": [],
+          "videos": [
+            {
+              "key": "xArtygn7uME",
+              "type": "youtube"
+            },
+            {
+              "key": "FxBifeVxiSA",
+              "type": "youtube"
+            }
+          ],
           "winning_alliance": "blue"
         },
         {
-          "actual_time": null,
+          "actual_time": 1775827404,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 158,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc5219",
@@ -56642,7 +56669,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 199,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc1746",
@@ -56655,13 +56682,104 @@
           "event_key": "2026gacmp",
           "key": "2026gacmp_qm16",
           "match_number": 16,
-          "post_result_time": null,
-          "predicted_time": 1775827510,
-          "score_breakdown": null,
+          "post_result_time": 1775827589,
+          "predicted_time": 1775827871,
+          "score_breakdown": {
+            "blue": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 55,
+                "autoPoints": 55,
+                "endgameCount": 8,
+                "endgamePoints": 8,
+                "shift1Count": 0,
+                "shift1Points": 0,
+                "shift2Count": 52,
+                "shift2Points": 52,
+                "shift3Count": 0,
+                "shift3Points": 0,
+                "shift4Count": 16,
+                "shift4Points": 16,
+                "teleopCount": 103,
+                "teleopPoints": 103,
+                "totalCount": 158,
+                "totalPoints": 158,
+                "transitionCount": 27,
+                "transitionPoints": 27,
+                "uncounted": 0
+              },
+              "majorFoulCount": 1,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 55,
+              "totalPoints": 158,
+              "totalTeleopPoints": 103,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            },
+            "red": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 15,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 26,
+                "autoPoints": 26,
+                "endgameCount": 71,
+                "endgamePoints": 71,
+                "shift1Count": 54,
+                "shift1Points": 54,
+                "shift2Count": 0,
+                "shift2Points": 0,
+                "shift3Count": 33,
+                "shift3Points": 33,
+                "shift4Count": 0,
+                "shift4Points": 0,
+                "teleopCount": 158,
+                "teleopPoints": 158,
+                "totalCount": 184,
+                "totalPoints": 184,
+                "transitionCount": 0,
+                "transitionPoints": 0,
+                "uncounted": 0
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 3,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 26,
+              "totalPoints": 199,
+              "totalTeleopPoints": 158,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            }
+          },
           "set_number": 1,
           "time": 1775827440,
           "videos": [],
-          "winning_alliance": ""
+          "winning_alliance": "red"
         },
         {
           "actual_time": null,
@@ -56692,7 +56810,7 @@
           "key": "2026gacmp_qm17",
           "match_number": 17,
           "post_result_time": null,
-          "predicted_time": 1775827996,
+          "predicted_time": 1775827968,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775827920,
@@ -56728,7 +56846,7 @@
           "key": "2026gacmp_qm18",
           "match_number": 18,
           "post_result_time": null,
-          "predicted_time": 1775828482,
+          "predicted_time": 1775828454,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775828400,
@@ -56764,7 +56882,7 @@
           "key": "2026gacmp_qm19",
           "match_number": 19,
           "post_result_time": null,
-          "predicted_time": 1775828968,
+          "predicted_time": 1775828940,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775828880,
@@ -56936,7 +57054,7 @@
           "key": "2026gacmp_qm20",
           "match_number": 20,
           "post_result_time": null,
-          "predicted_time": 1775829454,
+          "predicted_time": 1775829426,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775829360,
@@ -56972,7 +57090,7 @@
           "key": "2026gacmp_qm21",
           "match_number": 21,
           "post_result_time": null,
-          "predicted_time": 1775829940,
+          "predicted_time": 1775829912,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775829840,
@@ -57008,7 +57126,7 @@
           "key": "2026gacmp_qm22",
           "match_number": 22,
           "post_result_time": null,
-          "predicted_time": 1775830426,
+          "predicted_time": 1775830398,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775830320,
@@ -57044,7 +57162,7 @@
           "key": "2026gacmp_qm23",
           "match_number": 23,
           "post_result_time": null,
-          "predicted_time": 1775830912,
+          "predicted_time": 1775830884,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775830800,
@@ -57080,7 +57198,7 @@
           "key": "2026gacmp_qm24",
           "match_number": 24,
           "post_result_time": null,
-          "predicted_time": 1775831398,
+          "predicted_time": 1775831370,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775831280,
@@ -57116,7 +57234,7 @@
           "key": "2026gacmp_qm25",
           "match_number": 25,
           "post_result_time": null,
-          "predicted_time": 1775831884,
+          "predicted_time": 1775831856,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775831760,
@@ -57152,7 +57270,7 @@
           "key": "2026gacmp_qm26",
           "match_number": 26,
           "post_result_time": null,
-          "predicted_time": 1775832370,
+          "predicted_time": 1775832342,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775832240,
@@ -57188,7 +57306,7 @@
           "key": "2026gacmp_qm27",
           "match_number": 27,
           "post_result_time": null,
-          "predicted_time": 1775832856,
+          "predicted_time": 1775832828,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775832720,
@@ -57224,7 +57342,7 @@
           "key": "2026gacmp_qm28",
           "match_number": 28,
           "post_result_time": null,
-          "predicted_time": 1775833342,
+          "predicted_time": 1775833314,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775833200,
@@ -57260,7 +57378,7 @@
           "key": "2026gacmp_qm29",
           "match_number": 29,
           "post_result_time": null,
-          "predicted_time": 1775833828,
+          "predicted_time": 1775833800,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775833680,
@@ -57432,7 +57550,7 @@
           "key": "2026gacmp_qm30",
           "match_number": 30,
           "post_result_time": null,
-          "predicted_time": 1775834314,
+          "predicted_time": 1775834286,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775834160,
@@ -57468,7 +57586,7 @@
           "key": "2026gacmp_qm31",
           "match_number": 31,
           "post_result_time": null,
-          "predicted_time": 1775834800,
+          "predicted_time": 1775834772,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775834640,
@@ -57504,7 +57622,7 @@
           "key": "2026gacmp_qm32",
           "match_number": 32,
           "post_result_time": null,
-          "predicted_time": 1775835286,
+          "predicted_time": 1775835258,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775835120,
@@ -71101,7 +71219,7 @@
     },
     "2026gacmp_qm23": {
       "winner": "blue",
-      "prob": 0.4762
+      "prob": 0.4899
     },
     "2026gacmp_qm24": {
       "winner": "red",
@@ -71109,15 +71227,15 @@
     },
     "2026gacmp_qm25": {
       "winner": "red",
-      "prob": 0.8871
+      "prob": 0.8973
     },
     "2026gacmp_qm26": {
       "winner": "red",
-      "prob": 0.7534
+      "prob": 0.7581
     },
     "2026gacmp_qm27": {
       "winner": "blue",
-      "prob": 0.3541
+      "prob": 0.3727
     },
     "2026gacmp_qm28": {
       "winner": "blue",
@@ -71137,15 +71255,15 @@
     },
     "2026gacmp_qm31": {
       "winner": "blue",
-      "prob": 0.0396
+      "prob": 0.0386
     },
     "2026gacmp_qm32": {
       "winner": "blue",
-      "prob": 0.4473
+      "prob": 0.4275
     },
     "2026gacmp_qm33": {
       "winner": "blue",
-      "prob": 0.0507
+      "prob": 0.0481
     },
     "2026gacmp_qm34": {
       "winner": "red",
@@ -71153,11 +71271,11 @@
     },
     "2026gacmp_qm35": {
       "winner": "red",
-      "prob": 0.6515
+      "prob": 0.6457
     },
     "2026gacmp_qm36": {
       "winner": "blue",
-      "prob": 0.2203
+      "prob": 0.2345
     },
     "2026gacmp_qm37": {
       "winner": "blue",
@@ -71165,11 +71283,11 @@
     },
     "2026gacmp_qm38": {
       "winner": "red",
-      "prob": 0.8078
+      "prob": 0.8117
     },
     "2026gacmp_qm39": {
       "winner": "red",
-      "prob": 0.952
+      "prob": 0.9555
     },
     "2026gacmp_qm4": {
       "winner": "blue",
@@ -71177,11 +71295,11 @@
     },
     "2026gacmp_qm40": {
       "winner": "blue",
-      "prob": 0.4849
+      "prob": 0.4648
     },
     "2026gacmp_qm41": {
       "winner": "blue",
-      "prob": 0.4544
+      "prob": 0.4607
     },
     "2026gacmp_qm42": {
       "winner": "red",
@@ -71189,7 +71307,7 @@
     },
     "2026gacmp_qm43": {
       "winner": "blue",
-      "prob": 0.0317
+      "prob": 0.0343
     },
     "2026gacmp_qm44": {
       "winner": "red",
@@ -71197,7 +71315,7 @@
     },
     "2026gacmp_qm45": {
       "winner": "blue",
-      "prob": 0.3756
+      "prob": 0.3816
     },
     "2026gacmp_qm46": {
       "winner": "red",
@@ -71205,15 +71323,15 @@
     },
     "2026gacmp_qm47": {
       "winner": "blue",
-      "prob": 0.099
+      "prob": 0.1013
     },
     "2026gacmp_qm48": {
       "winner": "red",
-      "prob": 0.6698
+      "prob": 0.6641
     },
     "2026gacmp_qm49": {
       "winner": "blue",
-      "prob": 0.4602
+      "prob": 0.4403
     },
     "2026gacmp_qm5": {
       "winner": "red",
@@ -71221,11 +71339,11 @@
     },
     "2026gacmp_qm50": {
       "winner": "blue",
-      "prob": 0.1119
+      "prob": 0.1041
     },
     "2026gacmp_qm51": {
       "winner": "blue",
-      "prob": 0.4093
+      "prob": 0.39
     },
     "2026gacmp_qm52": {
       "winner": "blue",
@@ -71233,11 +71351,11 @@
     },
     "2026gacmp_qm53": {
       "winner": "blue",
-      "prob": 0.154
+      "prob": 0.1574
     },
     "2026gacmp_qm54": {
       "winner": "blue",
-      "prob": 0.2629
+      "prob": 0.2476
     },
     "2026gacmp_qm55": {
       "winner": "blue",
@@ -71245,19 +71363,19 @@
     },
     "2026gacmp_qm56": {
       "winner": "red",
-      "prob": 0.8683
+      "prob": 0.8653
     },
     "2026gacmp_qm57": {
       "winner": "red",
-      "prob": 0.6698
+      "prob": 0.6874
     },
     "2026gacmp_qm58": {
       "winner": "red",
-      "prob": 0.953
+      "prob": 0.9518
     },
     "2026gacmp_qm59": {
       "winner": "red",
-      "prob": 0.5838
+      "prob": 0.5578
     },
     "2026gacmp_qm6": {
       "winner": "red",
@@ -71273,11 +71391,11 @@
     },
     "2026gacmp_qm62": {
       "winner": "blue",
-      "prob": 0.2296
+      "prob": 0.2251
     },
     "2026gacmp_qm63": {
       "winner": "blue",
-      "prob": 0.4383
+      "prob": 0.4518
     },
     "2026gacmp_qm64": {
       "winner": "red",
@@ -71285,19 +71403,19 @@
     },
     "2026gacmp_qm65": {
       "winner": "blue",
-      "prob": 0.3088
+      "prob": 0.3034
     },
     "2026gacmp_qm66": {
       "winner": "blue",
-      "prob": 0.1486
+      "prob": 0.159
     },
     "2026gacmp_qm67": {
       "winner": "blue",
-      "prob": 0.3535
+      "prob": 0.3721
     },
     "2026gacmp_qm68": {
       "winner": "blue",
-      "prob": 0.1627
+      "prob": 0.1592
     },
     "2026gacmp_qm69": {
       "winner": "red",
@@ -71313,7 +71431,7 @@
     },
     "2026gacmp_qm71": {
       "winner": "blue",
-      "prob": 0.3592
+      "prob": 0.3533
     },
     "2026gacmp_qm72": {
       "winner": "red",
@@ -71325,7 +71443,7 @@
     },
     "2026gacmp_qm74": {
       "winner": "red",
-      "prob": 0.5447
+      "prob": 0.5183
     },
     "2026gacmp_qm75": {
       "winner": "red",
@@ -71341,11 +71459,11 @@
     },
     "2026gacmp_qm78": {
       "winner": "red",
-      "prob": 0.6873
+      "prob": 0.6818
     },
     "2026gacmp_qm79": {
       "winner": "red",
-      "prob": 0.5906
+      "prob": 0.61
     },
     "2026gacmp_qm8": {
       "winner": "blue",
@@ -71353,19 +71471,19 @@
     },
     "2026gacmp_qm80": {
       "winner": "blue",
-      "prob": 0.4315
+      "prob": 0.4378
     },
     "2026gacmp_qm81": {
       "winner": "red",
-      "prob": 0.5892
+      "prob": 0.5696
     },
     "2026gacmp_qm82": {
       "winner": "red",
-      "prob": 0.6217
+      "prob": 0.6026
     },
     "2026gacmp_qm83": {
       "winner": "red",
-      "prob": 0.7377
+      "prob": 0.7426
     },
     "2026gacmp_qm84": {
       "winner": "red",
@@ -71373,15 +71491,15 @@
     },
     "2026gacmp_qm85": {
       "winner": "blue",
-      "prob": 0.2102
+      "prob": 0.2239
     },
     "2026gacmp_qm86": {
       "winner": "red",
-      "prob": 0.8107
+      "prob": 0.7938
     },
     "2026gacmp_qm87": {
       "winner": "red",
-      "prob": 0.9672
+      "prob": 0.9654
     },
     "2026gacmp_qm88": {
       "winner": "red",
@@ -71389,7 +71507,7 @@
     },
     "2026gacmp_qm89": {
       "winner": "red",
-      "prob": 0.5975
+      "prob": 0.5913
     },
     "2026gacmp_qm9": {
       "winner": "blue",
