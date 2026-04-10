@@ -125,6 +125,12 @@ module.exports = async function handler(req, res) {
     // Fetch only matches for the active event
     const matches = await tbaFetch(`/event/${activeEvent.key}/matches`, TBA_KEY);
 
+    // Fetch rankings for the active event (keeps Event Standings current)
+    let rankings = existing.events?.[activeEvent.key]?.rankings || {};
+    try {
+      rankings = await tbaFetch(`/event/${activeEvent.key}/rankings`, TBA_KEY) || rankings;
+    } catch (e) {}
+
     // Fetch Statbotics match predictions for the active event
     let matchPreds = { ...(existing.matchPreds || {}) };
     try {
@@ -153,6 +159,7 @@ module.exports = async function handler(req, res) {
         [activeEvent.key]: {
           ...(existing.events[activeEvent.key] || { meta: activeEvent }),
           matches: matches || [],
+          rankings,
         },
       },
     };
