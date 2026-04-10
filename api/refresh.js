@@ -1,8 +1,9 @@
 /**
- * CR Analytics — /api/refresh
- * ----------------------------
- * Smart serverless refresh: only fetches TBA data for active/upcoming events.
- * Completed events reuse existing data. EPA always refreshes.
+ * CR Analytics — /api/refresh-matches
+ * -------------------------------------
+ * Lightweight refresh: only fetches match data for the currently active event.
+ * No rankings, no alliances, no team info, no Statbotics EPA.
+ * Designed for quick mid-event updates between matches (~3-5 seconds).
  */
 
 const EVENTS = [
@@ -14,16 +15,17 @@ const EVENTS = [
   { key: '2026gacmp', short: 'CMP', name: 'District Champs', week: 6, start: '2026-04-08', end: '2026-04-11' },
 ];
 
-function eventStatus(ev) {
+function getActiveEvent() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const start = new Date(ev.start);
-  const end   = new Date(ev.end);
-  const grace = new Date(end);
-  grace.setDate(grace.getDate() + 2);
-  if (today > grace)  return 'complete';
-  if (today >= start) return 'active';
-  return 'upcoming';
+  // Find event whose window includes today (with 1-day lead and 1-day grace)
+  return EVENTS.find(ev => {
+    const start = new Date(ev.start);
+    start.setDate(start.getDate() - 1);
+    const end = new Date(ev.end);
+    end.setDate(end.getDate() + 1);
+    return today >= start && today <= end;
+  }) || null;
 }
 
 async function tbaFetch(path, tbaKey) {
@@ -40,20 +42,6 @@ async function statboticsFetch(path) {
   });
   if (!res.ok) throw new Error(`Statbotics HTTP ${res.status}`);
   return res.json();
-}
-
-function extractEPA(record) {
-  if (!record?.epa) return null;
-  const e = record.epa;
-  const bd = e.breakdown || {};
-  return {
-    total:   e.total_points?.mean   ?? null,
-    auto:    bd.auto_points         ?? null,
-    teleop:  bd.teleop_points       ?? null,
-    endgame: bd.endgame_points      ?? null,
-    sd:      e.total_points?.sd     ?? null,
-    norm:    e.norm                 ?? null,
-  };
 }
 
 async function getFileSHA(url, token) {
@@ -92,196 +80,93 @@ module.exports = async function handler(req, res) {
   if (!GITHUB_TOKEN) return res.status(500).json({ error: 'GITHUB_TOKEN not configured' });
   if (!GITHUB_REPO)  return res.status(500).json({ error: 'GITHUB_REPO not configured' });
 
+  const activeEvent = getActiveEvent();
+  if (!activeEvent) {
+    return res.status(200).json({
+      success: false,
+      message: 'No active event today — use Full Refresh instead.',
+    });
+  }
+
   try {
-    // Load existing data.json from GitHub to preserve completed event data
-    // Uses blob API to handle files > 1MB (contents API silently truncates)
-    let existing = { events: {}, districtRankings: [], teams: {}, epa: {}, ace: {} };
+    // Load existing data.json from GitHub using blob API (handles files > 1MB)
+    // The contents API silently truncates large files, so we use the blob SHA instead
+    let existing;
     try {
+      // Step 1: Get the blob SHA for public/data.json via contents API
       const metaRes = await fetch(
         `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
         { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics' } }
       );
-      if (metaRes.ok) {
-        const meta = await metaRes.json();
-        let decoded;
-        if (meta.content && meta.encoding === 'base64' && meta.size < 900000) {
-          decoded = Buffer.from(meta.content.replace(/\n/g, ''), 'base64').toString('utf8');
-        } else {
-          const blobRes = await fetch(
-            `https://api.github.com/repos/${GITHUB_REPO}/git/blobs/${meta.sha}`,
-            { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics', Accept: 'application/vnd.github.v3.raw' } }
-          );
-          if (blobRes.ok) decoded = await blobRes.text();
-        }
-        if (decoded) existing = JSON.parse(decoded);
-      }
-    } catch (e) {}
+      if (!metaRes.ok) throw new Error(`Metadata fetch failed: HTTP ${metaRes.status}`);
+      const meta = await metaRes.json();
 
-    const output = {
-      fetchedAt: new Date().toISOString(),
-      events: {},
-      districtRankings: existing.districtRankings || [],
-      teams: existing.teams || {},
-      epa: existing.epa || {},
-      ace: existing.ace || {},
-    };
-
-    // ── TBA: smart event fetching ──
-    for (const ev of EVENTS) {
-      const status = eventStatus(ev);
-
-      if (status === 'complete' && existing.events?.[ev.key]?.matches?.length > 0) {
-        // Reuse cached data for completed events — but backfill OPR if missing
-        const cached = existing.events[ev.key];
-        if (cached.oprs && Object.keys(cached.oprs).length > 0) {
-          output.events[ev.key] = cached;
-          continue;
-        }
-        // OPR missing from cache — fetch it now and merge in
-        try {
-          const oprs = await tbaFetch(`/event/${ev.key}/oprs`, TBA_KEY).catch(() => null);
-          output.events[ev.key] = { ...cached, oprs: oprs || {} };
-        } catch(e) {
-          output.events[ev.key] = { ...cached, oprs: {} };
-        }
-        continue;
+      // Step 2: If file is small enough, use content directly; otherwise fetch via blob API
+      let decoded;
+      if (meta.content && meta.encoding === 'base64' && meta.size < 900000) {
+        // Small enough — use inline content
+        decoded = Buffer.from(meta.content.replace(/\n/g, ''), 'base64').toString('utf8');
+      } else {
+        // Large file — fetch via blob API using the sha
+        const blobRes = await fetch(
+          `https://api.github.com/repos/${GITHUB_REPO}/git/blobs/${meta.sha}`,
+          { headers: { Authorization: `token ${GITHUB_TOKEN}`, 'User-Agent': 'cr-analytics', Accept: 'application/vnd.github.v3.raw' } }
+        );
+        if (!blobRes.ok) throw new Error(`Blob fetch failed: HTTP ${blobRes.status}`);
+        decoded = await blobRes.text();
       }
 
-      try {
-        const [matches, rankings, alliances, eventDetail, oprs] = await Promise.all([
-          tbaFetch(`/event/${ev.key}/matches`, TBA_KEY),
-          tbaFetch(`/event/${ev.key}/rankings`, TBA_KEY),
-          tbaFetch(`/event/${ev.key}/alliances`, TBA_KEY),
-          tbaFetch(`/event/${ev.key}`, TBA_KEY).catch(() => null),
-          tbaFetch(`/event/${ev.key}/oprs`, TBA_KEY).catch(() => null),
-        ]);
-        output.events[ev.key] = {
-          meta: ev,
-          matches: matches || [],
-          rankings: rankings || {},
-          alliances: alliances || [],
-          webcasts: eventDetail?.webcasts || [],
-          oprs: oprs || {},
-        };
-      } catch (e) {
-        output.events[ev.key] = existing.events?.[ev.key] ||
-          { meta: ev, matches: [], rankings: {}, alliances: [], webcasts: [], oprs: {} };
-      }
+      existing = JSON.parse(decoded);
+    } catch (e) {
+      // Safety abort — never proceed without existing data or we'll wipe all other events
+      return res.status(500).json({ error: `Aborted: could not load existing data — ${e.message}. Use Full Refresh instead.` });
     }
 
-    // ── TBA: district rankings (always refresh) ──
+    // Fetch only matches for the active event
+    const matches = await tbaFetch(`/event/${activeEvent.key}/matches`, TBA_KEY);
+
+    // Fetch rankings for the active event (keeps Event Standings current)
+    let rankings = existing.events?.[activeEvent.key]?.rankings || {};
     try {
-      output.districtRankings = await tbaFetch('/district/2026pch/rankings', TBA_KEY) || [];
+      rankings = await tbaFetch(`/event/${activeEvent.key}/rankings`, TBA_KEY) || rankings;
     } catch (e) {}
 
-    // ── TBA: team info (only new teams) ──
-    const teamKeys = new Set();
-    Object.values(output.events).forEach(ev => {
-      (ev.matches || []).forEach(m => {
-        (m.alliances?.red?.team_keys  || []).forEach(k => teamKeys.add(k));
-        (m.alliances?.blue?.team_keys || []).forEach(k => teamKeys.add(k));
-      });
-    });
-    const newTeams = [...teamKeys].filter(k => !output.teams[k]);
-    for (let i = 0; i < newTeams.length; i += 10) {
-      await Promise.all(newTeams.slice(i, i + 10).map(async k => {
-        try { output.teams[k] = await tbaFetch(`/team/${k}/simple`, TBA_KEY); } catch (e) {}
-      }));
-    }
-
-    // ── Peekorobo: ACE data for all district teams ──
+    // Fetch Statbotics match predictions for the active event
+    let matchPreds = { ...(existing.matchPreds || {}) };
     try {
-      const PEEKOROBO_KEY = process.env.PEEKOROBO_API_KEY;
-      if (PEEKOROBO_KEY) {
-        const distTeamNums = (output.districtRankings || [])
-          .map(r => parseInt(r.team_key.replace('frc', '')))
-          .filter(Boolean);
-
-        const BATCH = 20;
-        const aceData = existing.ace || {};
-
-        for (let i = 0; i < distTeamNums.length; i += BATCH) {
-          const batch = distTeamNums.slice(i, i + BATCH);
-          await Promise.all(batch.map(async num => {
-            try {
-              const res = await fetch(
-                `https://www.peekorobo.com/api/team_perfs/${num}`,
-                { headers: { 'X-Api-Key': PEEKOROBO_KEY } }
-              );
-              if (!res.ok) return;
-              const data = await res.json();
-              // rank fields live inside the team_perfs entry, not at root level
-              const perfs = (data.team_perfs || []).find(p => p.year === 2026) || null;
-              if (perfs) {
-                aceData[num] = {
-                  ace:            perfs.ace            ?? null,
-                  raw:            perfs.raw            ?? null,
-                  confidence:     perfs.confidence     ?? null,
-                  auto_raw:       perfs.auto_raw       ?? null,
-                  teleop_raw:     perfs.teleop_raw     ?? null,
-                  endgame_raw:    perfs.endgame_raw    ?? null,
-                  wins:           perfs.wins           ?? null,
-                  losses:         perfs.losses         ?? null,
-                  ties:           perfs.ties           ?? null,
-                  rank_global:    perfs.rank_global    ?? null,
-                  rank_country:   perfs.rank_country   ?? null,
-                  rank_state:     perfs.rank_state     ?? null,
-                  rank_district:  perfs.rank_district  ?? null,
-                  count_global:   perfs.count_global   ?? null,
-                  count_state:    perfs.count_state    ?? null,
-                  count_district: perfs.count_district ?? null,
-                  event_perfs:    perfs.event_perf     ?? [],
-                };
-              }
-            } catch (e) {}
-          }));
-        }
-        output.ace = aceData;
+      const sbMatches = await statboticsFetch(`/matches?event=${activeEvent.key}&limit=200`);
+      if (Array.isArray(sbMatches)) {
+        sbMatches.forEach(m => {
+          if (!m.key || !m.pred) return;
+          const winner = m.pred.winner ?? null;
+          const prob   = m.pred.red_win_prob ?? null;
+          if (winner !== null && prob !== null) {
+            matchPreds[m.key] = { winner, prob };
+          }
+        });
       }
     } catch (e) {
-      output.ace = existing.ace || {};
+      // Non-fatal — keep existing predictions if Statbotics is unavailable
     }
 
-    // ── Statbotics: EPA (always refresh active/complete events) ──
-    for (const ev of EVENTS) {
-      const status = eventStatus(ev);
-      if (status === 'upcoming' && !existing.events?.[ev.key]?.matches?.length) continue;
-      try {
-        const records = await statboticsFetch(`/team_events?event=${ev.key}&limit=100`);
-        if (Array.isArray(records)) {
-          records.forEach(record => {
-            const teamKey = `frc${record.team}`;
-            if (!output.epa[teamKey]) output.epa[teamKey] = {};
-            const epa = extractEPA(record);
-            if (epa) output.epa[teamKey][ev.key] = epa;
-          });
-        }
-      } catch (e) {}
-    }
+    // Merge into existing data — replace only the active event's matches
+    const output = {
+      ...existing,
+      fetchedAt: new Date().toISOString(),
+      matchPreds,
+      events: {
+        ...existing.events,
+        [activeEvent.key]: {
+          ...(existing.events[activeEvent.key] || { meta: activeEvent }),
+          matches: matches || [],
+          rankings,
+        },
+      },
+    };
 
-    // ── Statbotics: match predictions (epa_winner + epa_win_prob) ──
-    const matchPreds = existing.matchPreds || {};
-    for (const ev of EVENTS) {
-      if (!output.events?.[ev.key]?.matches?.length) continue;
-      try {
-        const records = await statboticsFetch(`/matches?event=${ev.key}&limit=200`);
-        if (Array.isArray(records)) {
-          records.forEach(m => {
-            if (!m.key || !m.pred) return;
-            const winner = m.pred.winner ?? null;
-            const prob   = m.pred.red_win_prob ?? null;
-            if (winner !== null && prob !== null) {
-              matchPreds[m.key] = { winner, prob };
-            }
-          });
-        }
-      } catch (e) {}
-    }
-    output.matchPreds = matchPreds;
-
-    // ── Write to GitHub (both public/data.json and root data.json) ──
+    // Commit to both data files
     const content = Buffer.from(JSON.stringify(output, null, 2)).toString('base64');
-    const commitMsg = `chore: refresh data ${new Date().toISOString()}`;
+    const commitMsg = `chore: quick match update ${activeEvent.short} ${new Date().toISOString()}`;
     const files = [
       `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
       `https://api.github.com/repos/${GITHUB_REPO}/contents/data.json`,
@@ -292,19 +177,16 @@ module.exports = async function handler(req, res) {
       await commitFile(fileUrl, content, sha, GITHUB_TOKEN, commitMsg);
     }
 
-    const matchCount = Object.values(output.events)
-      .reduce((s, ev) => s + (ev.matches?.length || 0), 0);
-
     return res.status(200).json({
       success: true,
       fetchedAt: output.fetchedAt,
-      matches: matchCount,
-      teams: Object.keys(output.teams).length,
-      epaTeams: Object.keys(output.epa).length,
+      event: activeEvent.short,
+      eventName: activeEvent.name,
+      matches: (matches || []).length,
     });
 
   } catch (err) {
-    console.error('Refresh error:', err);
+    console.error('Quick refresh error:', err);
     return res.status(500).json({ error: err.message });
   }
 };
