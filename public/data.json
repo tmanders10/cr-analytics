@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-10T16:37:18.319Z",
+  "fetchedAt": "2026-04-10T17:40:47.757Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -59239,11 +59239,11 @@
           "winning_alliance": "blue"
         },
         {
-          "actual_time": null,
+          "actual_time": 1775840553,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 270,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc1683",
@@ -59253,7 +59253,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 145,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc3344",
@@ -59266,20 +59266,120 @@
           "event_key": "2026gacmp",
           "key": "2026gacmp_qm33",
           "match_number": 33,
-          "post_result_time": null,
-          "predicted_time": 1775840100,
-          "score_breakdown": null,
+          "post_result_time": 1775840735,
+          "predicted_time": 1775841014,
+          "score_breakdown": {
+            "blue": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": true,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 47,
+                "autoPoints": 47,
+                "endgameCount": 111,
+                "endgamePoints": 111,
+                "shift1Count": 0,
+                "shift1Points": 0,
+                "shift2Count": 27,
+                "shift2Points": 27,
+                "shift3Count": 0,
+                "shift3Points": 0,
+                "shift4Count": 72,
+                "shift4Points": 72,
+                "teleopCount": 223,
+                "teleopPoints": 223,
+                "totalCount": 270,
+                "totalPoints": 270,
+                "transitionCount": 13,
+                "transitionPoints": 13,
+                "uncounted": 0
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 4,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 47,
+              "totalPoints": 270,
+              "totalTeleopPoints": 223,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            },
+            "red": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 21,
+                "autoPoints": 21,
+                "endgameCount": 51,
+                "endgamePoints": 51,
+                "shift1Count": 26,
+                "shift1Points": 26,
+                "shift2Count": 0,
+                "shift2Points": 0,
+                "shift3Count": 47,
+                "shift3Points": 47,
+                "shift4Count": 0,
+                "shift4Points": 0,
+                "teleopCount": 124,
+                "teleopPoints": 124,
+                "totalCount": 145,
+                "totalPoints": 145,
+                "transitionCount": 0,
+                "transitionPoints": 0,
+                "uncounted": 0
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 21,
+              "totalPoints": 145,
+              "totalTeleopPoints": 124,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            }
+          },
           "set_number": 1,
           "time": 1775840400,
-          "videos": [],
-          "winning_alliance": ""
+          "videos": [
+            {
+              "key": "WpahC-dPE5s",
+              "type": "youtube"
+            },
+            {
+              "key": "kHrNXuBuYSs",
+              "type": "youtube"
+            }
+          ],
+          "winning_alliance": "blue"
         },
         {
-          "actual_time": null,
+          "actual_time": 1775841039,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 105,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc8866",
@@ -59289,7 +59389,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 320,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc4189",
@@ -59302,20 +59402,120 @@
           "event_key": "2026gacmp",
           "key": "2026gacmp_qm34",
           "match_number": 34,
-          "post_result_time": null,
-          "predicted_time": 1775840586,
-          "score_breakdown": null,
+          "post_result_time": 1775841277,
+          "predicted_time": 1775841381,
+          "score_breakdown": {
+            "blue": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 49,
+                "autoPoints": 49,
+                "endgameCount": 37,
+                "endgamePoints": 37,
+                "shift1Count": 8,
+                "shift1Points": 8,
+                "shift2Count": 0,
+                "shift2Points": 0,
+                "shift3Count": 2,
+                "shift3Points": 2,
+                "shift4Count": 0,
+                "shift4Points": 0,
+                "teleopCount": 56,
+                "teleopPoints": 56,
+                "totalCount": 105,
+                "totalPoints": 105,
+                "transitionCount": 9,
+                "transitionPoints": 9,
+                "uncounted": 2
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 49,
+              "totalPoints": 105,
+              "totalTeleopPoints": 56,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            },
+            "red": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": true,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 81,
+                "autoPoints": 81,
+                "endgameCount": 69,
+                "endgamePoints": 69,
+                "shift1Count": 0,
+                "shift1Points": 0,
+                "shift2Count": 63,
+                "shift2Points": 63,
+                "shift3Count": 0,
+                "shift3Points": 0,
+                "shift4Count": 92,
+                "shift4Points": 92,
+                "teleopCount": 239,
+                "teleopPoints": 239,
+                "totalCount": 320,
+                "totalPoints": 320,
+                "transitionCount": 15,
+                "transitionPoints": 15,
+                "uncounted": 0
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 4,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 81,
+              "totalPoints": 320,
+              "totalTeleopPoints": 239,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            }
+          },
           "set_number": 1,
           "time": 1775840880,
-          "videos": [],
-          "winning_alliance": ""
+          "videos": [
+            {
+              "key": "6-R-UbJunMc",
+              "type": "youtube"
+            },
+            {
+              "key": "A5xxPY--TFM",
+              "type": "youtube"
+            }
+          ],
+          "winning_alliance": "red"
         },
         {
-          "actual_time": null,
+          "actual_time": 1775841578,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 111,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc3635",
@@ -59325,7 +59525,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 222,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc6910",
@@ -59338,20 +59538,120 @@
           "event_key": "2026gacmp",
           "key": "2026gacmp_qm35",
           "match_number": 35,
-          "post_result_time": null,
-          "predicted_time": 1775841072,
-          "score_breakdown": null,
+          "post_result_time": 1775841758,
+          "predicted_time": 1775841593,
+          "score_breakdown": {
+            "blue": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 20,
+                "autoPoints": 20,
+                "endgameCount": 19,
+                "endgamePoints": 19,
+                "shift1Count": 59,
+                "shift1Points": 59,
+                "shift2Count": 0,
+                "shift2Points": 0,
+                "shift3Count": 13,
+                "shift3Points": 13,
+                "shift4Count": 0,
+                "shift4Points": 0,
+                "teleopCount": 91,
+                "teleopPoints": 91,
+                "totalCount": 111,
+                "totalPoints": 111,
+                "transitionCount": 0,
+                "transitionPoints": 0,
+                "uncounted": 0
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 20,
+              "totalPoints": 111,
+              "totalTeleopPoints": 91,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            },
+            "red": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 62,
+                "autoPoints": 62,
+                "endgameCount": 42,
+                "endgamePoints": 42,
+                "shift1Count": 0,
+                "shift1Points": 0,
+                "shift2Count": 47,
+                "shift2Points": 47,
+                "shift3Count": 0,
+                "shift3Points": 0,
+                "shift4Count": 54,
+                "shift4Points": 54,
+                "teleopCount": 160,
+                "teleopPoints": 160,
+                "totalCount": 222,
+                "totalPoints": 222,
+                "transitionCount": 17,
+                "transitionPoints": 17,
+                "uncounted": 1
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 3,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 62,
+              "totalPoints": 222,
+              "totalTeleopPoints": 160,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            }
+          },
           "set_number": 1,
           "time": 1775841360,
-          "videos": [],
-          "winning_alliance": ""
+          "videos": [
+            {
+              "key": "1mS10nP_F3U",
+              "type": "youtube"
+            },
+            {
+              "key": "Mf-Mgj8WgBc",
+              "type": "youtube"
+            }
+          ],
+          "winning_alliance": "red"
         },
         {
-          "actual_time": null,
+          "actual_time": 1775842100,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 329,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc1771",
@@ -59361,7 +59661,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 229,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc1648",
@@ -59374,13 +59674,113 @@
           "event_key": "2026gacmp",
           "key": "2026gacmp_qm36",
           "match_number": 36,
-          "post_result_time": null,
-          "predicted_time": 1775841558,
-          "score_breakdown": null,
+          "post_result_time": 1775842283,
+          "predicted_time": 1775842266,
+          "score_breakdown": {
+            "blue": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": true,
+              "foulPoints": 5,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 82,
+                "autoPoints": 82,
+                "endgameCount": 52,
+                "endgamePoints": 52,
+                "shift1Count": 0,
+                "shift1Points": 0,
+                "shift2Count": 89,
+                "shift2Points": 89,
+                "shift3Count": 0,
+                "shift3Points": 0,
+                "shift4Count": 65,
+                "shift4Points": 65,
+                "teleopCount": 242,
+                "teleopPoints": 242,
+                "totalCount": 324,
+                "totalPoints": 324,
+                "transitionCount": 36,
+                "transitionPoints": 36,
+                "uncounted": 0
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 4,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 82,
+              "totalPoints": 329,
+              "totalTeleopPoints": 242,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            },
+            "red": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 0,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 43,
+                "autoPoints": 43,
+                "endgameCount": 71,
+                "endgamePoints": 71,
+                "shift1Count": 66,
+                "shift1Points": 66,
+                "shift2Count": 0,
+                "shift2Points": 0,
+                "shift3Count": 49,
+                "shift3Points": 49,
+                "shift4Count": 0,
+                "shift4Points": 0,
+                "teleopCount": 186,
+                "teleopPoints": 186,
+                "totalCount": 229,
+                "totalPoints": 229,
+                "transitionCount": 0,
+                "transitionPoints": 0,
+                "uncounted": 2
+              },
+              "majorFoulCount": 0,
+              "minorFoulCount": 1,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 43,
+              "totalPoints": 229,
+              "totalTeleopPoints": 186,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            }
+          },
           "set_number": 1,
           "time": 1775841840,
-          "videos": [],
-          "winning_alliance": ""
+          "videos": [
+            {
+              "key": "lnSv-GHfBXE",
+              "type": "youtube"
+            },
+            {
+              "key": "yD9w_WqEWMM",
+              "type": "youtube"
+            }
+          ],
+          "winning_alliance": "blue"
         },
         {
           "actual_time": null,
@@ -59411,7 +59811,7 @@
           "key": "2026gacmp_qm37",
           "match_number": 37,
           "post_result_time": null,
-          "predicted_time": 1775842044,
+          "predicted_time": 1775842621,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775842320,
@@ -59447,7 +59847,7 @@
           "key": "2026gacmp_qm38",
           "match_number": 38,
           "post_result_time": null,
-          "predicted_time": 1775842530,
+          "predicted_time": 1775843107,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775842800,
@@ -59483,7 +59883,7 @@
           "key": "2026gacmp_qm39",
           "match_number": 39,
           "post_result_time": null,
-          "predicted_time": 1775843016,
+          "predicted_time": 1775843593,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775843280,
@@ -59655,7 +60055,7 @@
           "key": "2026gacmp_qm40",
           "match_number": 40,
           "post_result_time": null,
-          "predicted_time": 1775843502,
+          "predicted_time": 1775844079,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775843760,
@@ -59691,7 +60091,7 @@
           "key": "2026gacmp_qm41",
           "match_number": 41,
           "post_result_time": null,
-          "predicted_time": 1775843988,
+          "predicted_time": 1775844565,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775844240,
@@ -59727,7 +60127,7 @@
           "key": "2026gacmp_qm42",
           "match_number": 42,
           "post_result_time": null,
-          "predicted_time": 1775844474,
+          "predicted_time": 1775845051,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775844720,
@@ -59763,7 +60163,7 @@
           "key": "2026gacmp_qm43",
           "match_number": 43,
           "post_result_time": null,
-          "predicted_time": 1775844960,
+          "predicted_time": 1775845537,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775845200,
@@ -59799,7 +60199,7 @@
           "key": "2026gacmp_qm44",
           "match_number": 44,
           "post_result_time": null,
-          "predicted_time": 1775845446,
+          "predicted_time": 1775846023,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775845680,
@@ -59835,7 +60235,7 @@
           "key": "2026gacmp_qm45",
           "match_number": 45,
           "post_result_time": null,
-          "predicted_time": 1775845932,
+          "predicted_time": 1775846509,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775846160,
@@ -59871,7 +60271,7 @@
           "key": "2026gacmp_qm46",
           "match_number": 46,
           "post_result_time": null,
-          "predicted_time": 1775846418,
+          "predicted_time": 1775846995,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775846640,
@@ -59907,7 +60307,7 @@
           "key": "2026gacmp_qm47",
           "match_number": 47,
           "post_result_time": null,
-          "predicted_time": 1775846904,
+          "predicted_time": 1775847481,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775847120,
@@ -59943,7 +60343,7 @@
           "key": "2026gacmp_qm48",
           "match_number": 48,
           "post_result_time": null,
-          "predicted_time": 1775847390,
+          "predicted_time": 1775847967,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775847600,
@@ -59979,7 +60379,7 @@
           "key": "2026gacmp_qm49",
           "match_number": 49,
           "post_result_time": null,
-          "predicted_time": 1775847876,
+          "predicted_time": 1775848453,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775848080,
@@ -60151,7 +60551,7 @@
           "key": "2026gacmp_qm50",
           "match_number": 50,
           "post_result_time": null,
-          "predicted_time": 1775848362,
+          "predicted_time": 1775848939,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775848560,
@@ -60187,7 +60587,7 @@
           "key": "2026gacmp_qm51",
           "match_number": 51,
           "post_result_time": null,
-          "predicted_time": 1775848848,
+          "predicted_time": 1775849425,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775849040,
@@ -60223,7 +60623,7 @@
           "key": "2026gacmp_qm52",
           "match_number": 52,
           "post_result_time": null,
-          "predicted_time": 1775849334,
+          "predicted_time": 1775849911,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775849520,
@@ -60259,7 +60659,7 @@
           "key": "2026gacmp_qm53",
           "match_number": 53,
           "post_result_time": null,
-          "predicted_time": 1775849820,
+          "predicted_time": 1775850397,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775850000,
@@ -60295,7 +60695,7 @@
           "key": "2026gacmp_qm54",
           "match_number": 54,
           "post_result_time": null,
-          "predicted_time": 1775850306,
+          "predicted_time": 1775850883,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775850480,
@@ -60331,7 +60731,7 @@
           "key": "2026gacmp_qm55",
           "match_number": 55,
           "post_result_time": null,
-          "predicted_time": 1775850792,
+          "predicted_time": 1775851369,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775850960,
@@ -60367,7 +60767,7 @@
           "key": "2026gacmp_qm56",
           "match_number": 56,
           "post_result_time": null,
-          "predicted_time": 1775851278,
+          "predicted_time": 1775851855,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775851440,
@@ -60403,7 +60803,7 @@
           "key": "2026gacmp_qm57",
           "match_number": 57,
           "post_result_time": null,
-          "predicted_time": 1775851764,
+          "predicted_time": 1775852341,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775851920,
@@ -60439,7 +60839,7 @@
           "key": "2026gacmp_qm58",
           "match_number": 58,
           "post_result_time": null,
-          "predicted_time": 1775852250,
+          "predicted_time": 1775852827,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775852400,
@@ -60475,7 +60875,7 @@
           "key": "2026gacmp_qm59",
           "match_number": 59,
           "post_result_time": null,
-          "predicted_time": 1775852736,
+          "predicted_time": 1775853313,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775852880,
@@ -60647,7 +61047,7 @@
           "key": "2026gacmp_qm60",
           "match_number": 60,
           "post_result_time": null,
-          "predicted_time": 1775853222,
+          "predicted_time": 1775853799,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775853360,
@@ -60683,7 +61083,7 @@
           "key": "2026gacmp_qm61",
           "match_number": 61,
           "post_result_time": null,
-          "predicted_time": 1775853708,
+          "predicted_time": 1775854285,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775853840,
@@ -60719,7 +61119,7 @@
           "key": "2026gacmp_qm62",
           "match_number": 62,
           "post_result_time": null,
-          "predicted_time": 1775854194,
+          "predicted_time": 1775854771,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775854320,
@@ -60755,7 +61155,7 @@
           "key": "2026gacmp_qm63",
           "match_number": 63,
           "post_result_time": null,
-          "predicted_time": 1775854680,
+          "predicted_time": 1775855257,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775854800,
@@ -60791,7 +61191,7 @@
           "key": "2026gacmp_qm64",
           "match_number": 64,
           "post_result_time": null,
-          "predicted_time": 1775855166,
+          "predicted_time": 1775855743,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775855280,
@@ -60827,7 +61227,7 @@
           "key": "2026gacmp_qm65",
           "match_number": 65,
           "post_result_time": null,
-          "predicted_time": 1775855652,
+          "predicted_time": 1775856229,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775855760,
@@ -60863,7 +61263,7 @@
           "key": "2026gacmp_qm66",
           "match_number": 66,
           "post_result_time": null,
-          "predicted_time": 1775856138,
+          "predicted_time": 1775856715,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775856240,
@@ -60899,7 +61299,7 @@
           "key": "2026gacmp_qm67",
           "match_number": 67,
           "post_result_time": null,
-          "predicted_time": 1775856624,
+          "predicted_time": 1775857201,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775856720,
@@ -62177,20 +62577,89 @@
           {
             "dq": 0,
             "extra_stats": [
-              16
+              18
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
             "rank": 2,
             "record": {
               "losses": 0,
               "ties": 0,
+              "wins": 5
+            },
+            "sort_orders": [
+              3.6,
+              285,
+              64.6,
+              2,
+              0,
+              0
+            ],
+            "team_key": "frc2974"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              18
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 3,
+            "record": {
+              "losses": 0,
+              "ties": 0,
+              "wins": 5
+            },
+            "sort_orders": [
+              3.6,
+              280.8,
+              65,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc4189"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              16
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 4,
+            "record": {
+              "losses": 1,
+              "ties": 0,
               "wins": 4
             },
             "sort_orders": [
+              3.2,
+              301.6,
+              55.6,
               4,
-              314.25,
-              56.5,
+              0,
+              0
+            ],
+            "team_key": "frc6919"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              16
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 5,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 4
+            },
+            "sort_orders": [
+              3.2,
+              273.6,
+              49.2,
               0,
               0,
               0
@@ -62202,92 +62671,23 @@
             "extra_stats": [
               15
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
-            "rank": 3,
+            "rank": 6,
             "record": {
-              "losses": 0,
-              "ties": 0,
-              "wins": 4
-            },
-            "sort_orders": [
-              3.75,
-              300.75,
-              65.25,
-              2.5,
-              0,
-              0
-            ],
-            "team_key": "frc2974"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              14
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 4,
-            "record": {
-              "losses": 0,
-              "ties": 0,
-              "wins": 4
-            },
-            "sort_orders": [
-              3.5,
-              271,
-              61,
-              0,
-              0,
-              0
-            ],
-            "team_key": "frc4189"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              13
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 5,
-            "record": {
-              "losses": 1,
+              "losses": 2,
               "ties": 0,
               "wins": 3
             },
             "sort_orders": [
-              3.25,
-              312.75,
-              64.75,
+              3,
+              319.4,
+              73,
               0,
               0,
               0
             ],
-            "team_key": "frc8866"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              13
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 6,
-            "record": {
-              "losses": 0,
-              "ties": 0,
-              "wins": 4
-            },
-            "sort_orders": [
-              3.25,
-              219.75,
-              58.25,
-              0,
-              0,
-              0
-            ],
-            "team_key": "frc3635"
+            "team_key": "frc1771"
           },
           {
             "dq": 0,
@@ -62297,29 +62697,6 @@
             "matches_played": 4,
             "qual_average": null,
             "rank": 7,
-            "record": {
-              "losses": 1,
-              "ties": 0,
-              "wins": 3
-            },
-            "sort_orders": [
-              3,
-              309.5,
-              57.75,
-              5,
-              0,
-              0
-            ],
-            "team_key": "frc6919"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              12
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 8,
             "record": {
               "losses": 1,
               "ties": 0,
@@ -62342,7 +62719,7 @@
             ],
             "matches_played": 4,
             "qual_average": null,
-            "rank": 9,
+            "rank": 8,
             "record": {
               "losses": 0,
               "ties": 1,
@@ -62361,34 +62738,11 @@
           {
             "dq": 0,
             "extra_stats": [
-              12
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 10,
-            "record": {
-              "losses": 1,
-              "ties": 0,
-              "wins": 3
-            },
-            "sort_orders": [
-              3,
-              261.75,
-              38.25,
-              0,
-              0,
-              0
-            ],
-            "team_key": "frc1746"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
               14
             ],
             "matches_played": 5,
             "qual_average": null,
-            "rank": 11,
+            "rank": 9,
             "record": {
               "losses": 1,
               "ties": 1,
@@ -62411,7 +62765,7 @@
             ],
             "matches_played": 5,
             "qual_average": null,
-            "rank": 12,
+            "rank": 10,
             "record": {
               "losses": 1,
               "ties": 0,
@@ -62430,48 +62784,94 @@
           {
             "dq": 0,
             "extra_stats": [
-              11
+              13
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
-            "rank": 13,
+            "rank": 11,
             "record": {
               "losses": 2,
-              "ties": 0,
-              "wins": 2
-            },
-            "sort_orders": [
-              2.75,
-              318.25,
-              70.75,
-              0,
-              0,
-              0
-            ],
-            "team_key": "frc1771"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              10
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 14,
-            "record": {
-              "losses": 1,
               "ties": 0,
               "wins": 3
             },
             "sort_orders": [
-              2.5,
-              199.5,
-              67,
+              2.6,
+              274.4,
+              57.4,
+              4,
+              0,
+              0
+            ],
+            "team_key": "frc8736"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              13
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 12,
+            "record": {
+              "losses": 2,
+              "ties": 0,
+              "wins": 3
+            },
+            "sort_orders": [
+              2.6,
+              271.2,
+              61.6,
               0,
               0,
               0
             ],
-            "team_key": "frc1648"
+            "team_key": "frc8866"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              13
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 13,
+            "record": {
+              "losses": 1,
+              "ties": 0,
+              "wins": 4
+            },
+            "sort_orders": [
+              2.6,
+              198,
+              50.6,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc3635"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              12
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 14,
+            "record": {
+              "losses": 2,
+              "ties": 0,
+              "wins": 3
+            },
+            "sort_orders": [
+              2.4,
+              240.2,
+              37.8,
+              5,
+              0,
+              0
+            ],
+            "team_key": "frc6705"
           },
           {
             "dq": 0,
@@ -62481,6 +62881,29 @@
             "matches_played": 5,
             "qual_average": null,
             "rank": 15,
+            "record": {
+              "losses": 2,
+              "ties": 0,
+              "wins": 3
+            },
+            "sort_orders": [
+              2.4,
+              238.4,
+              34.8,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc1746"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              12
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 16,
             "record": {
               "losses": 1,
               "ties": 1,
@@ -62495,29 +62918,6 @@
               0
             ],
             "team_key": "frc5109"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              9
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 16,
-            "record": {
-              "losses": 2,
-              "ties": 0,
-              "wins": 2
-            },
-            "sort_orders": [
-              2.25,
-              263,
-              51.5,
-              5,
-              0,
-              0
-            ],
-            "team_key": "frc8736"
           },
           {
             "dq": 0,
@@ -62545,48 +62945,48 @@
           {
             "dq": 0,
             "extra_stats": [
-              8
+              10
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
             "rank": 18,
             "record": {
-              "losses": 2,
+              "losses": 3,
               "ties": 0,
               "wins": 2
             },
             "sort_orders": [
               2,
-              219.25,
-              26.75,
-              6.25,
+              270,
+              53.4,
+              0,
               0,
               0
             ],
-            "team_key": "frc6705"
+            "team_key": "frc1683"
           },
           {
             "dq": 0,
             "extra_stats": [
-              8
+              10
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
             "rank": 19,
             "record": {
               "losses": 2,
               "ties": 0,
-              "wins": 2
+              "wins": 3
             },
             "sort_orders": [
               2,
-              188.25,
-              38.5,
+              205.4,
+              62.2,
               0,
               0,
               0
             ],
-            "team_key": "frc8577"
+            "team_key": "frc1648"
           },
           {
             "dq": 0,
@@ -62596,6 +62996,29 @@
             "matches_played": 5,
             "qual_average": null,
             "rank": 20,
+            "record": {
+              "losses": 2,
+              "ties": 1,
+              "wins": 2
+            },
+            "sort_orders": [
+              1.8,
+              228.8,
+              37.4,
+              4,
+              0,
+              0
+            ],
+            "team_key": "frc6829"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              9
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 21,
             "record": {
               "losses": 2,
               "ties": 0,
@@ -62610,29 +63033,6 @@
               0
             ],
             "team_key": "frc5219"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              7
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 21,
-            "record": {
-              "losses": 2,
-              "ties": 0,
-              "wins": 2
-            },
-            "sort_orders": [
-              1.75,
-              190.75,
-              50.5,
-              5,
-              0,
-              0
-            ],
-            "team_key": "frc6887"
           },
           {
             "dq": 0,
@@ -62660,25 +63060,25 @@
           {
             "dq": 0,
             "extra_stats": [
-              7
+              8
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
             "rank": 23,
             "record": {
-              "losses": 1,
-              "ties": 1,
+              "losses": 3,
+              "ties": 0,
               "wins": 2
             },
             "sort_orders": [
-              1.75,
-              152.75,
-              33.5,
+              1.6,
+              199.6,
+              42.6,
               0,
               0,
               0
             ],
-            "team_key": "frc3815"
+            "team_key": "frc3329"
           },
           {
             "dq": 0,
@@ -62695,13 +63095,13 @@
             },
             "sort_orders": [
               1.6,
-              199.6,
-              42.6,
+              196.4,
+              39.4,
               0,
               0,
               0
             ],
-            "team_key": "frc3329"
+            "team_key": "frc8577"
           },
           {
             "dq": 0,
@@ -62729,25 +63129,25 @@
           {
             "dq": 0,
             "extra_stats": [
-              6
+              8
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
             "rank": 26,
             "record": {
               "losses": 3,
               "ties": 0,
-              "wins": 1
+              "wins": 2
             },
             "sort_orders": [
-              1.5,
-              270,
-              55,
+              1.6,
+              184.2,
+              41.6,
               0,
               0,
               0
             ],
-            "team_key": "frc1683"
+            "team_key": "frc9522"
           },
           {
             "dq": 0,
@@ -62798,44 +63198,136 @@
           {
             "dq": 0,
             "extra_stats": [
-              5
+              7
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
             "rank": 29,
             "record": {
-              "losses": 2,
-              "ties": 1,
-              "wins": 1
+              "losses": 3,
+              "ties": 0,
+              "wins": 2
             },
             "sort_orders": [
-              1.25,
-              218.5,
-              35,
-              5,
+              1.4,
+              173.6,
+              50.2,
+              4,
               0,
               0
             ],
-            "team_key": "frc6829"
+            "team_key": "frc6887"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              7
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 30,
+            "record": {
+              "losses": 2,
+              "ties": 1,
+              "wins": 2
+            },
+            "sort_orders": [
+              1.4,
+              143.2,
+              36.6,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc3815"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              6
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 31,
+            "record": {
+              "losses": 3,
+              "ties": 0,
+              "wins": 2
+            },
+            "sort_orders": [
+              1.2,
+              164.2,
+              38.6,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc6910"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              6
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 32,
+            "record": {
+              "losses": 3,
+              "ties": 0,
+              "wins": 2
+            },
+            "sort_orders": [
+              1.2,
+              138.2,
+              43.6,
+              2,
+              0,
+              0
+            ],
+            "team_key": "frc6905"
           },
           {
             "dq": 0,
             "extra_stats": [
               5
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
-            "rank": 30,
+            "rank": 33,
             "record": {
-              "losses": 3,
+              "losses": 4,
               "ties": 0,
               "wins": 1
             },
             "sort_orders": [
-              1.25,
-              206.5,
-              40.5,
-              2.5,
+              1,
+              195.2,
+              36.2,
+              5,
+              0,
+              0
+            ],
+            "team_key": "frc832"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              5
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 34,
+            "record": {
+              "losses": 4,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              1,
+              187.4,
+              36.4,
+              2,
               0,
               0
             ],
@@ -62848,30 +63340,7 @@
             ],
             "matches_played": 4,
             "qual_average": null,
-            "rank": 31,
-            "record": {
-              "losses": 3,
-              "ties": 0,
-              "wins": 1
-            },
-            "sort_orders": [
-              1,
-              183.25,
-              38.5,
-              0,
-              0,
-              0
-            ],
-            "team_key": "frc3344"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              4
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 32,
+            "rank": 35,
             "record": {
               "losses": 3,
               "ties": 0,
@@ -62892,18 +63361,41 @@
             "extra_stats": [
               4
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
-            "rank": 33,
+            "rank": 36,
             "record": {
-              "losses": 3,
+              "losses": 4,
               "ties": 0,
               "wins": 1
             },
             "sort_orders": [
-              1,
-              153,
-              37.75,
+              0.8,
+              175.6,
+              35,
+              0,
+              0,
+              0
+            ],
+            "team_key": "frc3344"
+          },
+          {
+            "dq": 0,
+            "extra_stats": [
+              4
+            ],
+            "matches_played": 5,
+            "qual_average": null,
+            "rank": 37,
+            "record": {
+              "losses": 4,
+              "ties": 0,
+              "wins": 1
+            },
+            "sort_orders": [
+              0.8,
+              168.2,
+              38.8,
               0,
               0,
               0
@@ -62915,32 +63407,9 @@
             "extra_stats": [
               4
             ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 34,
-            "record": {
-              "losses": 3,
-              "ties": 0,
-              "wins": 1
-            },
-            "sort_orders": [
-              1,
-              149.25,
-              31.5,
-              0,
-              0,
-              0
-            ],
-            "team_key": "frc9522"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              4
-            ],
             "matches_played": 5,
             "qual_average": null,
-            "rank": 35,
+            "rank": 38,
             "record": {
               "losses": 4,
               "ties": 0,
@@ -62963,30 +63432,7 @@
             ],
             "matches_played": 4,
             "qual_average": null,
-            "rank": 36,
-            "record": {
-              "losses": 3,
-              "ties": 0,
-              "wins": 1
-            },
-            "sort_orders": [
-              0.75,
-              149.75,
-              32.75,
-              0,
-              0,
-              0
-            ],
-            "team_key": "frc6910"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              3
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 37,
+            "rank": 39,
             "record": {
               "losses": 3,
               "ties": 0,
@@ -63009,30 +63455,7 @@
             ],
             "matches_played": 4,
             "qual_average": null,
-            "rank": 38,
-            "record": {
-              "losses": 3,
-              "ties": 0,
-              "wins": 1
-            },
-            "sort_orders": [
-              0.75,
-              117.25,
-              39,
-              2.5,
-              0,
-              0
-            ],
-            "team_key": "frc6905"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              3
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 39,
+            "rank": 40,
             "record": {
               "losses": 3,
               "ties": 0,
@@ -63047,29 +63470,6 @@
               0
             ],
             "team_key": "frc5608"
-          },
-          {
-            "dq": 0,
-            "extra_stats": [
-              3
-            ],
-            "matches_played": 4,
-            "qual_average": null,
-            "rank": 40,
-            "record": {
-              "losses": 3,
-              "ties": 0,
-              "wins": 1
-            },
-            "sort_orders": [
-              0.75,
-              105.25,
-              26.75,
-              0,
-              0,
-              0
-            ],
-            "team_key": "frc3091"
           },
           {
             "dq": 0,
@@ -63143,25 +63543,25 @@
           {
             "dq": 0,
             "extra_stats": [
-              1
+              3
             ],
-            "matches_played": 4,
+            "matches_played": 5,
             "qual_average": null,
             "rank": 44,
             "record": {
               "losses": 4,
               "ties": 0,
-              "wins": 0
+              "wins": 1
             },
             "sort_orders": [
-              0.25,
-              164,
-              25,
-              6.25,
+              0.6,
+              113.2,
+              25.6,
+              0,
               0,
               0
             ],
-            "team_key": "frc832"
+            "team_key": "frc3091"
           },
           {
             "dq": 0,
@@ -72892,31 +73292,31 @@
     },
     "2026gacmp_qm38": {
       "winner": "red",
-      "prob": 0.8091
+      "prob": 0.8
     },
     "2026gacmp_qm39": {
       "winner": "red",
-      "prob": 0.957
+      "prob": 0.9528
     },
     "2026gacmp_qm4": {
       "winner": "blue",
       "prob": 0.1081
     },
     "2026gacmp_qm40": {
-      "winner": "red",
-      "prob": 0.5015
+      "winner": "blue",
+      "prob": 0.4684
     },
     "2026gacmp_qm41": {
       "winner": "red",
-      "prob": 0.535
+      "prob": 0.5385
     },
     "2026gacmp_qm42": {
       "winner": "red",
-      "prob": 0.6796
+      "prob": 0.6837
     },
     "2026gacmp_qm43": {
       "winner": "blue",
-      "prob": 0.027
+      "prob": 0.026
     },
     "2026gacmp_qm44": {
       "winner": "red",
@@ -72928,19 +73328,19 @@
     },
     "2026gacmp_qm46": {
       "winner": "red",
-      "prob": 0.7658
+      "prob": 0.7382
     },
     "2026gacmp_qm47": {
       "winner": "blue",
-      "prob": 0.0838
+      "prob": 0.0889
     },
     "2026gacmp_qm48": {
       "winner": "red",
-      "prob": 0.6186
+      "prob": 0.6433
     },
     "2026gacmp_qm49": {
       "winner": "blue",
-      "prob": 0.3743
+      "prob": 0.3939
     },
     "2026gacmp_qm5": {
       "winner": "red",
@@ -72948,43 +73348,43 @@
     },
     "2026gacmp_qm50": {
       "winner": "blue",
-      "prob": 0.1232
+      "prob": 0.1279
     },
     "2026gacmp_qm51": {
       "winner": "blue",
-      "prob": 0.3897
+      "prob": 0.4059
     },
     "2026gacmp_qm52": {
       "winner": "blue",
-      "prob": 0.1427
+      "prob": 0.1458
     },
     "2026gacmp_qm53": {
       "winner": "blue",
-      "prob": 0.1607
+      "prob": 0.137
     },
     "2026gacmp_qm54": {
       "winner": "blue",
-      "prob": 0.2748
+      "prob": 0.286
     },
     "2026gacmp_qm55": {
       "winner": "blue",
-      "prob": 0.2391
+      "prob": 0.2426
     },
     "2026gacmp_qm56": {
       "winner": "red",
-      "prob": 0.8884
+      "prob": 0.8737
     },
     "2026gacmp_qm57": {
       "winner": "red",
-      "prob": 0.6787
+      "prob": 0.6403
     },
     "2026gacmp_qm58": {
       "winner": "red",
-      "prob": 0.9462
+      "prob": 0.9494
     },
     "2026gacmp_qm59": {
       "winner": "blue",
-      "prob": 0.4981
+      "prob": 0.4973
     },
     "2026gacmp_qm6": {
       "winner": "red",
@@ -72992,43 +73392,43 @@
     },
     "2026gacmp_qm60": {
       "winner": "red",
-      "prob": 0.7677
+      "prob": 0.7117
     },
     "2026gacmp_qm61": {
       "winner": "red",
-      "prob": 0.5737
+      "prob": 0.606
     },
     "2026gacmp_qm62": {
       "winner": "blue",
-      "prob": 0.2037
+      "prob": 0.2077
     },
     "2026gacmp_qm63": {
       "winner": "blue",
-      "prob": 0.46
+      "prob": 0.4871
     },
     "2026gacmp_qm64": {
       "winner": "red",
-      "prob": 0.6296
+      "prob": 0.6162
     },
     "2026gacmp_qm65": {
       "winner": "blue",
-      "prob": 0.3478
+      "prob": 0.3069
     },
     "2026gacmp_qm66": {
       "winner": "blue",
-      "prob": 0.1622
+      "prob": 0.1519
     },
     "2026gacmp_qm67": {
       "winner": "blue",
-      "prob": 0.3791
+      "prob": 0.3846
     },
     "2026gacmp_qm68": {
       "winner": "blue",
-      "prob": 0.1469
+      "prob": 0.1747
     },
     "2026gacmp_qm69": {
       "winner": "red",
-      "prob": 0.7745
+      "prob": 0.7373
     },
     "2026gacmp_qm7": {
       "winner": "red",
@@ -73036,19 +73436,19 @@
     },
     "2026gacmp_qm70": {
       "winner": "blue",
-      "prob": 0.1163
+      "prob": 0.1272
     },
     "2026gacmp_qm71": {
       "winner": "blue",
-      "prob": 0.386
+      "prob": 0.3754
     },
     "2026gacmp_qm72": {
       "winner": "red",
-      "prob": 0.5585
+      "prob": 0.5564
     },
     "2026gacmp_qm73": {
       "winner": "blue",
-      "prob": 0.1643
+      "prob": 0.1808
     },
     "2026gacmp_qm74": {
       "winner": "blue",
@@ -73056,23 +73456,23 @@
     },
     "2026gacmp_qm75": {
       "winner": "red",
-      "prob": 0.9192
+      "prob": 0.9126
     },
     "2026gacmp_qm76": {
       "winner": "blue",
-      "prob": 0.2298
+      "prob": 0.2186
     },
     "2026gacmp_qm77": {
       "winner": "blue",
-      "prob": 0.2468
+      "prob": 0.1993
     },
     "2026gacmp_qm78": {
       "winner": "red",
-      "prob": 0.7096
+      "prob": 0.6985
     },
     "2026gacmp_qm79": {
       "winner": "red",
-      "prob": 0.5528
+      "prob": 0.5993
     },
     "2026gacmp_qm8": {
       "winner": "blue",
@@ -73080,43 +73480,43 @@
     },
     "2026gacmp_qm80": {
       "winner": "blue",
-      "prob": 0.4768
+      "prob": 0.4993
     },
     "2026gacmp_qm81": {
       "winner": "red",
-      "prob": 0.6804
+      "prob": 0.6697
     },
     "2026gacmp_qm82": {
       "winner": "red",
-      "prob": 0.5142
+      "prob": 0.5033
     },
     "2026gacmp_qm83": {
       "winner": "red",
-      "prob": 0.7995
+      "prob": 0.8053
     },
     "2026gacmp_qm84": {
       "winner": "red",
-      "prob": 0.6005
+      "prob": 0.6382
     },
     "2026gacmp_qm85": {
       "winner": "blue",
-      "prob": 0.1693
+      "prob": 0.1584
     },
     "2026gacmp_qm86": {
       "winner": "red",
-      "prob": 0.7312
+      "prob": 0.7099
     },
     "2026gacmp_qm87": {
       "winner": "red",
-      "prob": 0.9651
+      "prob": 0.9702
     },
     "2026gacmp_qm88": {
       "winner": "red",
-      "prob": 0.9333
+      "prob": 0.9385
     },
     "2026gacmp_qm89": {
-      "winner": "red",
-      "prob": 0.5248
+      "winner": "blue",
+      "prob": 0.4951
     },
     "2026gacmp_qm9": {
       "winner": "blue",
@@ -73124,7 +73524,7 @@
     },
     "2026gacmp_qm90": {
       "winner": "red",
-      "prob": 0.5391
+      "prob": 0.5326
     }
   }
 }
