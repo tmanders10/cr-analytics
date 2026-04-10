@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-10T01:16:22.006Z",
+  "fetchedAt": "2026-04-10T13:01:40.561Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -56247,11 +56247,11 @@
           "winning_alliance": "red"
         },
         {
-          "actual_time": null,
+          "actual_time": 1775825729,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 194,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc6919",
@@ -56261,7 +56261,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 348,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc4026",
@@ -56274,13 +56274,13 @@
           "event_key": "2026gacmp",
           "key": "2026gacmp_qm13",
           "match_number": 13,
-          "post_result_time": null,
+          "post_result_time": 1775826024,
           "predicted_time": 1775826000,
           "score_breakdown": null,
           "set_number": 1,
           "time": 1775826000,
           "videos": [],
-          "winning_alliance": ""
+          "winning_alliance": "red"
         },
         {
           "actual_time": null,
