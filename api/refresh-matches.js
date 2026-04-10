@@ -131,9 +131,9 @@ module.exports = async function handler(req, res) {
       const sbMatches = await statboticsFetch(`/matches?event=${activeEvent.key}&limit=200`);
       if (Array.isArray(sbMatches)) {
         sbMatches.forEach(m => {
-          if (!m.key) return;
-          const winner = m.epa_winner ?? null;
-          const prob   = m.epa_win_prob ?? null;
+          if (!m.key || !m.pred) return;
+          const winner = m.pred.winner ?? null;
+          const prob   = m.pred.red_win_prob ?? null;
           if (winner !== null && prob !== null) {
             matchPreds[m.key] = { winner, prob };
           }
