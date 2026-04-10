@@ -603,7 +603,7 @@ async function manualRefresh(){
     const data=await res.json();
     if(!res.ok||!data.success) throw new Error(data.error||'Refresh failed');
     document.getElementById('dataInfo').innerHTML=`Refreshed just now<br><span style="opacity:.6">${data.matches} matches · ${data.epaTeams} EPA teams</span>`;
-    let secs=10;
+    let secs=30;
     setS('loading',`Data saved — reloading in ${secs}…`);
     const cd=setInterval(()=>{
       secs--;
