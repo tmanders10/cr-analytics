@@ -1,5 +1,16 @@
 {
   "version": 2,
+  "headers": [
+    {
+      "source": "/data.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
+    }
+  ],
   "routes": [
     { "src": "/api/refresh-matches", "dest": "/api/refresh-matches.js" },
     { "src": "/api/refresh", "dest": "/api/refresh.js" },
