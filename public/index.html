@@ -1942,8 +1942,9 @@ function renderMxTable(matches){
     // Prefer Statbotics EPA prediction if available
     const sbPred = DB.matchPreds[matchKey];
     if (sbPred && sbPred.winner && sbPred.prob != null) {
-      const redProb  = sbPred.winner === 'red'  ? sbPred.prob : 1 - sbPred.prob;
-      const blueProb = sbPred.winner === 'blue' ? sbPred.prob : 1 - sbPred.prob;
+      // sbPred.prob is always red_win_prob (0-1 from Red's perspective)
+      const redProb  = sbPred.prob;
+      const blueProb = 1 - sbPred.prob;
       return { red: redProb, blue: blueProb, source: 'epa' };
     }
     // Fallback: ACE-based sigmoid calculation
