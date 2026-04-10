@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-10T22:35:30.268Z",
+  "fetchedAt": "2026-04-10T22:38:57.404Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -76344,23 +76344,23 @@
     },
     "2026gacmp_qm27": {
       "winner": "blue",
-      "prob": 0.3847
+      "prob": 0.3828
     },
     "2026gacmp_qm28": {
       "winner": "blue",
-      "prob": 0.3111
+      "prob": 0.2915
     },
     "2026gacmp_qm29": {
       "winner": "blue",
-      "prob": 0.0906
+      "prob": 0.0832
     },
     "2026gacmp_qm3": {
       "winner": "red",
       "prob": 0.5582
     },
     "2026gacmp_qm30": {
-      "winner": "red",
-      "prob": 0.5042
+      "winner": "blue",
+      "prob": 0.483
     },
     "2026gacmp_qm31": {
       "winner": "blue",
@@ -76368,7 +76368,7 @@
     },
     "2026gacmp_qm32": {
       "winner": "blue",
-      "prob": 0.4925
+      "prob": 0.4906
     },
     "2026gacmp_qm33": {
       "winner": "blue",
@@ -76376,27 +76376,27 @@
     },
     "2026gacmp_qm34": {
       "winner": "red",
-      "prob": 0.6928
+      "prob": 0.694
     },
     "2026gacmp_qm35": {
       "winner": "red",
-      "prob": 0.5859
+      "prob": 0.565
     },
     "2026gacmp_qm36": {
       "winner": "blue",
-      "prob": 0.1879
+      "prob": 0.2015
     },
     "2026gacmp_qm37": {
       "winner": "blue",
-      "prob": 0.0779
+      "prob": 0.0721
     },
     "2026gacmp_qm38": {
       "winner": "red",
-      "prob": 0.8
+      "prob": 0.8003
     },
     "2026gacmp_qm39": {
       "winner": "red",
-      "prob": 0.9528
+      "prob": 0.9526
     },
     "2026gacmp_qm4": {
       "winner": "blue",
@@ -76404,23 +76404,23 @@
     },
     "2026gacmp_qm40": {
       "winner": "blue",
-      "prob": 0.4684
+      "prob": 0.4867
     },
     "2026gacmp_qm41": {
       "winner": "red",
-      "prob": 0.5385
+      "prob": 0.5401
     },
     "2026gacmp_qm42": {
       "winner": "red",
-      "prob": 0.7128
+      "prob": 0.6964
     },
     "2026gacmp_qm43": {
       "winner": "blue",
-      "prob": 0.027
+      "prob": 0.0271
     },
     "2026gacmp_qm44": {
       "winner": "red",
-      "prob": 0.9827
+      "prob": 0.9838
     },
     "2026gacmp_qm45": {
       "winner": "blue",
@@ -76428,19 +76428,19 @@
     },
     "2026gacmp_qm46": {
       "winner": "red",
-      "prob": 0.7183
+      "prob": 0.7344
     },
     "2026gacmp_qm47": {
       "winner": "blue",
-      "prob": 0.0727
+      "prob": 0.0734
     },
     "2026gacmp_qm48": {
       "winner": "red",
-      "prob": 0.6563
+      "prob": 0.6575
     },
     "2026gacmp_qm49": {
       "winner": "blue",
-      "prob": 0.3518
+      "prob": 0.352
     },
     "2026gacmp_qm5": {
       "winner": "red",
@@ -76452,39 +76452,39 @@
     },
     "2026gacmp_qm51": {
       "winner": "blue",
-      "prob": 0.4102
+      "prob": 0.4105
     },
     "2026gacmp_qm52": {
       "winner": "blue",
-      "prob": 0.1452
+      "prob": 0.1365
     },
     "2026gacmp_qm53": {
       "winner": "blue",
-      "prob": 0.1152
+      "prob": 0.1077
     },
     "2026gacmp_qm54": {
       "winner": "blue",
-      "prob": 0.3145
+      "prob": 0.3317
     },
     "2026gacmp_qm55": {
       "winner": "blue",
-      "prob": 0.2376
+      "prob": 0.2364
     },
     "2026gacmp_qm56": {
       "winner": "red",
-      "prob": 0.8839
+      "prob": 0.8843
     },
     "2026gacmp_qm57": {
       "winner": "red",
-      "prob": 0.7316
+      "prob": 0.7328
     },
     "2026gacmp_qm58": {
       "winner": "red",
-      "prob": 0.9454
+      "prob": 0.9487
     },
     "2026gacmp_qm59": {
       "winner": "blue",
-      "prob": 0.4713
+      "prob": 0.4542
     },
     "2026gacmp_qm6": {
       "winner": "red",
@@ -76492,43 +76492,43 @@
     },
     "2026gacmp_qm60": {
       "winner": "red",
-      "prob": 0.6817
+      "prob": 0.6805
     },
     "2026gacmp_qm61": {
       "winner": "red",
-      "prob": 0.7126
+      "prob": 0.6983
     },
     "2026gacmp_qm62": {
       "winner": "blue",
-      "prob": 0.1323
+      "prob": 0.1325
     },
     "2026gacmp_qm63": {
       "winner": "blue",
-      "prob": 0.3974
+      "prob": 0.3855
     },
     "2026gacmp_qm64": {
       "winner": "red",
-      "prob": 0.6085
+      "prob": 0.5954
     },
     "2026gacmp_qm65": {
       "winner": "blue",
-      "prob": 0.354
+      "prob": 0.3532
     },
     "2026gacmp_qm66": {
       "winner": "blue",
-      "prob": 0.1059
+      "prob": 0.1069
     },
     "2026gacmp_qm67": {
       "winner": "blue",
-      "prob": 0.4496
+      "prob": 0.4481
     },
     "2026gacmp_qm68": {
       "winner": "blue",
-      "prob": 0.1834
+      "prob": 0.1854
     },
     "2026gacmp_qm69": {
       "winner": "red",
-      "prob": 0.7261
+      "prob": 0.7412
     },
     "2026gacmp_qm7": {
       "winner": "red",
@@ -76536,43 +76536,43 @@
     },
     "2026gacmp_qm70": {
       "winner": "blue",
-      "prob": 0.1211
+      "prob": 0.122
     },
     "2026gacmp_qm71": {
       "winner": "blue",
-      "prob": 0.3775
+      "prob": 0.3789
     },
     "2026gacmp_qm72": {
       "winner": "red",
-      "prob": 0.6445
+      "prob": 0.6448
     },
     "2026gacmp_qm73": {
       "winner": "blue",
-      "prob": 0.1971
+      "prob": 0.1964
     },
     "2026gacmp_qm74": {
       "winner": "blue",
-      "prob": 0.4251
+      "prob": 0.4232
     },
     "2026gacmp_qm75": {
       "winner": "red",
-      "prob": 0.8992
+      "prob": 0.9001
     },
     "2026gacmp_qm76": {
       "winner": "blue",
-      "prob": 0.2618
+      "prob": 0.2496
     },
     "2026gacmp_qm77": {
       "winner": "blue",
-      "prob": 0.1859
+      "prob": 0.1858
     },
     "2026gacmp_qm78": {
       "winner": "red",
-      "prob": 0.7651
+      "prob": 0.7625
     },
     "2026gacmp_qm79": {
       "winner": "red",
-      "prob": 0.5302
+      "prob": 0.5335
     },
     "2026gacmp_qm8": {
       "winner": "blue",
@@ -76580,43 +76580,43 @@
     },
     "2026gacmp_qm80": {
       "winner": "red",
-      "prob": 0.5859
+      "prob": 0.5698
     },
     "2026gacmp_qm81": {
       "winner": "red",
-      "prob": 0.6635
+      "prob": 0.6486
     },
     "2026gacmp_qm82": {
       "winner": "red",
-      "prob": 0.5774
+      "prob": 0.5804
     },
     "2026gacmp_qm83": {
       "winner": "red",
-      "prob": 0.7705
+      "prob": 0.7661
     },
     "2026gacmp_qm84": {
       "winner": "red",
-      "prob": 0.6055
+      "prob": 0.6027
     },
     "2026gacmp_qm85": {
       "winner": "blue",
-      "prob": 0.1253
+      "prob": 0.1334
     },
     "2026gacmp_qm86": {
       "winner": "red",
-      "prob": 0.6842
+      "prob": 0.6958
     },
     "2026gacmp_qm87": {
       "winner": "red",
-      "prob": 0.9811
+      "prob": 0.9823
     },
     "2026gacmp_qm88": {
       "winner": "red",
-      "prob": 0.9059
+      "prob": 0.9048
     },
     "2026gacmp_qm89": {
       "winner": "blue",
-      "prob": 0.459
+      "prob": 0.461
     },
     "2026gacmp_qm9": {
       "winner": "blue",
@@ -76624,7 +76624,7 @@
     },
     "2026gacmp_qm90": {
       "winner": "blue",
-      "prob": 0.4279
+      "prob": 0.4316
     }
   }
 }
