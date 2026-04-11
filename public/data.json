@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-11T20:03:24.230Z",
+  "fetchedAt": "2026-04-11T20:39:27.875Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -55703,6 +55703,114 @@
       },
       "matches": [
         {
+          "actual_time": null,
+          "alliances": {
+            "blue": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc3635",
+                "frc6919",
+                "frc1002"
+              ]
+            },
+            "red": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc4509",
+                "frc1833",
+                "frc1771"
+              ]
+            }
+          },
+          "comp_level": "f",
+          "event_key": "2026gacmp",
+          "key": "2026gacmp_f1m1",
+          "match_number": 1,
+          "post_result_time": null,
+          "predicted_time": 1775940640,
+          "score_breakdown": null,
+          "set_number": 1,
+          "time": 1775939340,
+          "videos": [],
+          "winning_alliance": ""
+        },
+        {
+          "actual_time": null,
+          "alliances": {
+            "blue": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc3635",
+                "frc6919",
+                "frc1002"
+              ]
+            },
+            "red": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc4509",
+                "frc1833",
+                "frc1771"
+              ]
+            }
+          },
+          "comp_level": "f",
+          "event_key": "2026gacmp",
+          "key": "2026gacmp_f1m2",
+          "match_number": 2,
+          "post_result_time": null,
+          "predicted_time": 1775942080,
+          "score_breakdown": null,
+          "set_number": 1,
+          "time": 1775940600,
+          "videos": [],
+          "winning_alliance": ""
+        },
+        {
+          "actual_time": null,
+          "alliances": {
+            "blue": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc3635",
+                "frc6919",
+                "frc1002"
+              ]
+            },
+            "red": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc4509",
+                "frc1833",
+                "frc1771"
+              ]
+            }
+          },
+          "comp_level": "f",
+          "event_key": "2026gacmp",
+          "key": "2026gacmp_f1m3",
+          "match_number": 3,
+          "post_result_time": null,
+          "predicted_time": 1775943520,
+          "score_breakdown": null,
+          "set_number": 1,
+          "time": 1775941860,
+          "videos": [],
+          "winning_alliance": ""
+        },
+        {
           "actual_time": 1775768437,
           "alliances": {
             "blue": {
@@ -68346,15 +68454,24 @@
           },
           "set_number": 12,
           "time": 1775936820,
-          "videos": [],
+          "videos": [
+            {
+              "key": "p0vswpV1Bbk",
+              "type": "youtube"
+            },
+            {
+              "key": "ctnBV7w5-_Q",
+              "type": "youtube"
+            }
+          ],
           "winning_alliance": "blue"
         },
         {
-          "actual_time": null,
+          "actual_time": 1775939077,
           "alliances": {
             "blue": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 396,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc1261",
@@ -68364,7 +68481,7 @@
             },
             "red": {
               "dq_team_keys": [],
-              "score": -1,
+              "score": 491,
               "surrogate_team_keys": [],
               "team_keys": [
                 "frc3635",
@@ -68377,13 +68494,104 @@
           "event_key": "2026gacmp",
           "key": "2026gacmp_sf13m1",
           "match_number": 1,
-          "post_result_time": null,
-          "predicted_time": 1775938796,
-          "score_breakdown": null,
+          "post_result_time": 1775939355,
+          "predicted_time": 1775939617,
+          "score_breakdown": {
+            "blue": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 15,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 93,
+                "autoPoints": 93,
+                "endgameCount": 116,
+                "endgamePoints": 116,
+                "shift1Count": 58,
+                "shift1Points": 58,
+                "shift2Count": 0,
+                "shift2Points": 0,
+                "shift3Count": 93,
+                "shift3Points": 93,
+                "shift4Count": 0,
+                "shift4Points": 0,
+                "teleopCount": 288,
+                "teleopPoints": 288,
+                "totalCount": 381,
+                "totalPoints": 381,
+                "transitionCount": 21,
+                "transitionPoints": 21,
+                "uncounted": 1
+              },
+              "majorFoulCount": 1,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 93,
+              "totalPoints": 396,
+              "totalTeleopPoints": 288,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            },
+            "red": {
+              "adjustPoints": 0,
+              "autoTowerPoints": 0,
+              "autoTowerRobot1": "None",
+              "autoTowerRobot2": "None",
+              "autoTowerRobot3": "None",
+              "endGameTowerPoints": 0,
+              "endGameTowerRobot1": "None",
+              "endGameTowerRobot2": "None",
+              "endGameTowerRobot3": "None",
+              "energizedAchieved": false,
+              "foulPoints": 15,
+              "g206Penalty": false,
+              "hubScore": {
+                "autoCount": 100,
+                "autoPoints": 100,
+                "endgameCount": 113,
+                "endgamePoints": 113,
+                "shift1Count": 0,
+                "shift1Points": 0,
+                "shift2Count": 144,
+                "shift2Points": 144,
+                "shift3Count": 0,
+                "shift3Points": 0,
+                "shift4Count": 87,
+                "shift4Points": 87,
+                "teleopCount": 376,
+                "teleopPoints": 376,
+                "totalCount": 476,
+                "totalPoints": 476,
+                "transitionCount": 32,
+                "transitionPoints": 32,
+                "uncounted": 0
+              },
+              "majorFoulCount": 1,
+              "minorFoulCount": 0,
+              "penalties": "None",
+              "rp": 0,
+              "superchargedAchieved": false,
+              "totalAutoPoints": 100,
+              "totalPoints": 491,
+              "totalTeleopPoints": 376,
+              "totalTowerPoints": 0,
+              "traversalAchieved": false
+            }
+          },
           "set_number": 13,
           "time": 1775938080,
           "videos": [],
-          "winning_alliance": ""
+          "winning_alliance": "red"
         },
         {
           "actual_time": 1775930516,
@@ -80640,6 +80848,10 @@
     "2026gacmp_sf9m1": {
       "winner": "red",
       "prob": 0.6395
+    },
+    "2026gacmp_sf13m1": {
+      "winner": "red",
+      "prob": 0.7442
     }
   }
 }
