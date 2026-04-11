@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-11T16:20:10.188Z",
+  "fetchedAt": "2026-04-11T16:57:55.114Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -67938,8 +67938,161 @@
           },
           "set_number": 1,
           "time": 1775922960,
-          "videos": [],
+          "videos": [
+            {
+              "key": "Rsl-teZd1UI",
+              "type": "youtube"
+            },
+            {
+              "key": "H9fsxkp9Gxk",
+              "type": "youtube"
+            }
+          ],
           "winning_alliance": "blue"
+        },
+        {
+          "actual_time": null,
+          "alliances": {
+            "blue": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc1683",
+                "frc6023",
+                "frc5109"
+              ]
+            },
+            "red": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc1833",
+                "frc1771",
+                "frc4509"
+              ]
+            }
+          },
+          "comp_level": "sf",
+          "event_key": "2026gacmp",
+          "key": "2026gacmp_sf1m1",
+          "match_number": 1,
+          "post_result_time": null,
+          "predicted_time": 1775930700,
+          "score_breakdown": null,
+          "set_number": 1,
+          "time": 1775930700,
+          "videos": [],
+          "winning_alliance": ""
+        },
+        {
+          "actual_time": null,
+          "alliances": {
+            "blue": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc6829",
+                "frc6705",
+                "frc3344"
+              ]
+            },
+            "red": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc1261",
+                "frc4188",
+                "frc8080"
+              ]
+            }
+          },
+          "comp_level": "sf",
+          "event_key": "2026gacmp",
+          "key": "2026gacmp_sf2m1",
+          "match_number": 1,
+          "post_result_time": null,
+          "predicted_time": 1775931240,
+          "score_breakdown": null,
+          "set_number": 2,
+          "time": 1775931240,
+          "videos": [],
+          "winning_alliance": ""
+        },
+        {
+          "actual_time": null,
+          "alliances": {
+            "blue": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc4026",
+                "frc1648",
+                "frc1414"
+              ]
+            },
+            "red": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc6919",
+                "frc1002",
+                "frc3635"
+              ]
+            }
+          },
+          "comp_level": "sf",
+          "event_key": "2026gacmp",
+          "key": "2026gacmp_sf3m1",
+          "match_number": 1,
+          "post_result_time": null,
+          "predicted_time": 1775931780,
+          "score_breakdown": null,
+          "set_number": 3,
+          "time": 1775931780,
+          "videos": [],
+          "winning_alliance": ""
+        },
+        {
+          "actual_time": null,
+          "alliances": {
+            "blue": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc8866",
+                "frc9477",
+                "frc1746"
+              ]
+            },
+            "red": {
+              "dq_team_keys": [],
+              "score": -1,
+              "surrogate_team_keys": [],
+              "team_keys": [
+                "frc2974",
+                "frc4189",
+                "frc8736"
+              ]
+            }
+          },
+          "comp_level": "sf",
+          "event_key": "2026gacmp",
+          "key": "2026gacmp_sf4m1",
+          "match_number": 1,
+          "post_result_time": null,
+          "predicted_time": 1775932320,
+          "score_breakdown": null,
+          "set_number": 4,
+          "time": 1775932320,
+          "videos": [],
+          "winning_alliance": ""
         }
       ],
       "rankings": {
@@ -78924,6 +79077,22 @@
     "2026gacmp_qm90": {
       "winner": "blue",
       "prob": 0.4622
+    },
+    "2026gacmp_sf1m1": {
+      "winner": "red",
+      "prob": 0.9902
+    },
+    "2026gacmp_sf2m1": {
+      "winner": "red",
+      "prob": 0.765
+    },
+    "2026gacmp_sf3m1": {
+      "winner": "red",
+      "prob": 0.8447
+    },
+    "2026gacmp_sf4m1": {
+      "winner": "red",
+      "prob": 0.8701
     }
   }
 }
