@@ -928,7 +928,8 @@ ${(()=>{
   if(!activeEv){
     const logoEl=document.getElementById('logoImg');
     const logoSrc=logoEl?logoEl.src:'';
-    return`<div style="background:#060906;border:1px solid rgba(0,230,100,.3);border-radius:10px;overflow:hidden;margin-bottom:16px;position:relative">
+    return`<div style="display:flex;justify-content:center;margin-bottom:16px">
+    <div style="background:#060906;border:1px solid rgba(0,230,100,.3);border-radius:10px;overflow:hidden;position:relative;width:100%;max-width:860px">
       <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,230,100,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(0,230,100,.018) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0"></div>
       <div style="position:relative;z-index:1;padding:28px 32px 22px">
         <div style="display:flex;align-items:flex-start;gap:18px">
@@ -956,7 +957,7 @@ ${(()=>{
         </div>
         <div style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(56,168,255,.5);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap">Apr 29 – May 1</div>
       </div>
-    </div>`;
+    </div></div>`;
   }
   const allCasts=(DB.webcasts[activeEv.key]||[]).filter(c=>c.type==='youtube');
   // Match streams to today's date first; fall back to most recent past date if none match today
