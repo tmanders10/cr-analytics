@@ -321,6 +321,8 @@ let ACTIVE_FILTER=new Set();
 let DB={matches:{},rankings:{},alliances:{},teams:{},epa:{},webcasts:{},ace:{},oprs:{},matchPreds:{}};
 let allM=[],distRank=[];
 const loadedEvents=new Set();
+// Sort state: {col, dir} per table. col=null means default sort.
+const SORT={rk:{col:null,dir:1},sc:{col:null,dir:1},tm:{col:null,dir:1},mx:{col:null,dir:1},al:{col:null,dir:1},ev:{col:null,dir:1}};
 
 // ── PEEKOROBO ACE DATA ──
 // ACE data is pre-fetched at refresh time and stored in data.json under 'ace'.
@@ -828,6 +830,19 @@ function toggleStream(url1, url2){
   const isOverhead=next===url1;
   if(btn) btn.textContent=isOverhead?'Switch Stream':'Switch to Overhead';
 }
+function setSort(tbl,col){
+  if(SORT[tbl].col===col){SORT[tbl].dir*=-1;}
+  else{SORT[tbl].col=col;SORT[tbl].dir=1;}
+  if(tbl==='rk')renderRk();
+  else if(tbl==='sc')renderSc();
+  else if(tbl==='tm')renderTm();
+  else if(tbl==='mx')renderMx();
+  else if(tbl==='al')renderAl();
+  else if(tbl==='ev')renderEv();
+}
+function thSort(tbl,col,label,cls){
+  return`<th class="${cls||''}" style="cursor:pointer;user-select:none" onclick="setSort('${tbl}','${col}')">${label}</th>`;
+}
 function renderAll(){renderOv();renderRk();renderSc();renderTm();renderAl();renderMx();renderEv();}
 function evQmF(ek,fM){return fM.filter(m=>m._ev===ek&&m.comp_level==='qm');}
 function evAvgScoreF(ek,fM){let s=0,c=0;evQmF(ek,fM).forEach(m=>{if((m.alliances?.red?.score??-1)>=0){s+=m.alliances.red.score;c++;}if((m.alliances?.blue?.score??-1)>=0){s+=m.alliances.blue.score;c++;}});return c?s/c:0;}
@@ -1062,37 +1077,63 @@ ${(()=>{
 
 // ════════ RANKINGS ════════
 function renderRk(){
-  const rows=(distRank||[]).slice(0,80);
+  const {col,dir}=SORT.rk;
+  let rows=(distRank||[]).slice(0,80).map(r=>{
+    const teamNum=parseInt(tnum(r.team_key));
+    const ace=ACE_DATA[teamNum];
+    // Find DCMP event points
+    const evPts=r.event_points||[];
+    const dcmpEntry=evPts.find(e=>e.district_cmp===true);
+    const nonDcmp=evPts.filter(e=>e.district_cmp!==true);
+    return{...r,teamNum,ace,dcmpPts:dcmpEntry?.total??null,ev1:nonDcmp[0]?.total??null,ev2:nonDcmp[1]?.total??null};
+  });
+  if(col){
+    rows.sort((a,b)=>{
+      let av,bv;
+      if(col==='rank')   {av=a.rank??999;bv=b.rank??999;}
+      else if(col==='pts')    {av=a.point_total??a.total_points??0;bv=b.point_total??b.total_points??0;}
+      else if(col==='ev1')    {av=a.ev1??-1;bv=b.ev1??-1;}
+      else if(col==='ev2')    {av=a.ev2??-1;bv=b.ev2??-1;}
+      else if(col==='dcmp')   {av=a.dcmpPts??-1;bv=b.dcmpPts??-1;}
+      else if(col==='rookie') {av=a.rookie_bonus??0;bv=b.rookie_bonus??0;}
+      else if(col==='ace')    {av=a.ace?.ace??-1;bv=b.ace?.ace??-1;}
+      else if(col==='conf')   {av=a.ace?.confidence??-1;bv=b.ace?.confidence??-1;}
+      else if(col==='ga')     {av=a.ace?.rank_state??999;bv=b.ace?.rank_state??999;}
+      else if(col==='us')     {av=a.ace?.rank_country??999;bv=b.ace?.rank_country??999;}
+      else if(col==='gl')     {av=a.ace?.rank_global??999;bv=b.ace?.rank_global??999;}
+      return (av-bv)*dir;
+    });
+  }
   const aceLoaded=Object.keys(ACE_DATA).length>0;
+  const th=(c,l,cls)=>thSort('rk',c,l,cls);
   document.getElementById('pg-rankings').innerHTML=`
 <div class="sh"><h2>District <span>Rankings</span></h2><span class="sub">${rows.length} teams · 2026pch</span></div>
 <div class="card" style="padding:0 18px 0"><div class="tw"><table>
   <thead><tr>
-    <th>Rank</th>
-    <th style="max-width:160px">Team</th>
-    <th class="r">Pts</th><th class="r">Ev1</th><th class="r">Ev2</th><th class="r">Rookie</th>
-    <th class="r" style="color:var(--green)" title="ACE — Adjusted Contribution Estimate (Peekorobo)">ACE</th>
-    <th class="r" style="color:#b464ff" title="ACE Confidence score (Peekorobo)">Conf</th>
-    <th class="r" style="color:#b464ff" title="Georgia state rank (Peekorobo)">GA</th>
-    <th class="r" style="color:#b464ff" title="US country rank (Peekorobo)">US</th>
-    <th class="r" style="color:#b464ff" title="Global rank (Peekorobo)">🌐</th>
+    ${th('rank','Rank','')}
+    ${th('team','Team','')}
+    ${th('pts','Pts','r')}${th('ev1','Ev1','r')}${th('ev2','Ev2','r')}${th('dcmp','DCMP','r')}${th('rookie','Rookie','r')}
+    <th class="r" style="cursor:pointer;user-select:none;color:var(--green)" onclick="setSort('rk','ace')" title="ACE — Adjusted Contribution Estimate (Peekorobo)">ACE</th>
+    <th class="r" style="cursor:pointer;user-select:none;color:#b464ff" onclick="setSort('rk','conf')" title="ACE Confidence score (Peekorobo)">Conf</th>
+    <th class="r" style="cursor:pointer;user-select:none;color:#b464ff" onclick="setSort('rk','ga')" title="Georgia state rank (Peekorobo)">GA</th>
+    <th class="r" style="cursor:pointer;user-select:none;color:#b464ff" onclick="setSort('rk','us')" title="US country rank (Peekorobo)">US</th>
+    <th class="r" style="cursor:pointer;user-select:none;color:#b464ff" onclick="setSort('rk','gl')" title="Global rank (Peekorobo)">🌐</th>
   </tr></thead>
   <tbody>${rows.map(r=>{
     const tr=isTr(r.team_key);const tc=teamColorByKey(r.team_key);
-    const teamNum=parseInt(tnum(r.team_key));
-    const ace=ACE_DATA[teamNum];
-    const aceVal=ace?.ace!=null?ace.ace.toFixed(1):'–';
-    const confVal=ace?.confidence!=null?Math.round(ace.confidence*100)+'%':'–';
-    const confCol=ace?.confidence!=null?(ace.confidence>=0.9?'var(--green)':ace.confidence>=0.75?'#f0c040':'var(--loss)'):'var(--text3)';
-    const stRank=ace?.rank_state!=null?`#${ace.rank_state}`:'–';
-    const usRank=ace?.rank_country!=null?`#${ace.rank_country}`:'–';
-    const glRank=ace?.rank_global!=null?`#${ace.rank_global}`:'–';
+    const aceVal=r.ace?.ace!=null?r.ace.ace.toFixed(1):'–';
+    const confVal=r.ace?.confidence!=null?Math.round(r.ace.confidence*100)+'%':'–';
+    const confCol=r.ace?.confidence!=null?(r.ace.confidence>=0.9?'var(--green)':r.ace.confidence>=0.75?'#f0c040':'var(--loss)'):'var(--text3)';
+    const stRank=r.ace?.rank_state!=null?`#${r.ace.rank_state}`:'–';
+    const usRank=r.ace?.rank_country!=null?`#${r.ace.rank_country}`:'–';
+    const glRank=r.ace?.rank_global!=null?`#${r.ace.rank_global}`:'–';
     return`<tr class="${tr?'hl':''}" style="${tc?'border-left:3px solid '+tc.border+';':''}">
     <td><span class="rk ${r.rank<=3?'top':''}">${r.rank}</span></td>
     <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><a class="tlink" href="https://www.thebluealliance.com/team/${tnum(r.team_key)}" target="_blank" style="${tc?'color:'+tc.text:''}">${tn(r.team_key)}</a><span class="tnsm">${tnum(r.team_key)}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
     <td class="r" style="color:var(--green);font-weight:600">${r.point_total??r.total_points??'–'}</td>
-    <td class="r">${r.event_points?.[0]?.total??'–'}</td>
-    <td class="r">${r.event_points?.[1]?.total??'–'}</td>
+    <td class="r">${r.ev1??'–'}</td>
+    <td class="r">${r.ev2??'–'}</td>
+    <td class="r" style="color:var(--blue)">${r.dcmpPts??'–'}</td>
     <td class="r dim">${r.rookie_bonus??0}</td>
     <td class="r" style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:12px">${aceVal}</td>
     <td class="r" style="color:${confCol};font-family:'JetBrains Mono',monospace;font-size:12px">${confVal}</td>
@@ -1228,16 +1269,37 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
 </div>
 <div class="g2" style="margin-bottom:16px">
   <div class="card"><div class="ctitle">Phase Breakdown by Event — ${scLabel}</div>
-    <table><thead><tr><th>Event</th><th class="r" style="color:var(--blue)">Auto</th><th class="r">Teleop</th><th class="r" style="color:var(--orange)">Endgame</th><th class="r">Total Avg</th><th class="r">Peak</th></tr></thead>
-    <tbody>${EVENTS.map(ev=>{
-      if(!loadedEvents.has(ev.key))return`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">Pending</td></tr>`;
-      const inF=ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key);
-      if(!inF)return`<tr style="opacity:.25"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">Filtered out</td></tr>`;
-      const cnt=evMs(ev.key).length;
-      if(cnt===0)return`<tr style="opacity:.4"><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r dim" colspan="5">No ${scLabel.toLowerCase()} data</td></tr>`;
-      const au=evAvgPhSc(ev.key,'auto'),tl=evAvgPhSc(ev.key,'teleop'),eg=evAvgPhSc(ev.key,'endgame');
-      return`<tr><td><span class="badge ${ev.cls}">${ev.short}</span> ${ev.name}</td><td class="r" style="color:var(--blue)">${au!==null?au.toFixed(1):'–'}</td><td class="r">${tl!==null?tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${eg!==null?eg.toFixed(1):'–'}</td><td class="r" style="color:var(--green);font-weight:600">${evAvgSc(ev.key).toFixed(1)}</td><td class="r">${evMxSc(ev.key)}</td></tr>`;
-    }).join('')}</tbody></table>
+    <table><thead><tr>
+      ${thSort('sc','ev','Event','')}
+      ${thSort('sc','auto','Auto','r')}
+      ${thSort('sc','tl','Teleop','r')}
+      ${thSort('sc','eg','Endgame','r')}
+      ${thSort('sc','avg','Total Avg','r')}
+      ${thSort('sc','peak','Peak','r')}
+    </tr></thead>
+    <tbody>${(()=>{
+      const scRows=EVENTS.map(ev=>{
+        if(!loadedEvents.has(ev.key)) return{ev,skip:'pending'};
+        const inF=ACTIVE_FILTER.size===0||ACTIVE_FILTER.has(ev.key);
+        if(!inF) return{ev,skip:'filtered'};
+        const cnt=evMs(ev.key).length;
+        if(cnt===0) return{ev,skip:'nodata'};
+        return{ev,auto:evAvgPhSc(ev.key,'auto'),tl:evAvgPhSc(ev.key,'teleop'),eg:evAvgPhSc(ev.key,'endgame'),avg:evAvgSc(ev.key),peak:evMxSc(ev.key)};
+      });
+      const {col:sc,dir:sd}=SORT.sc;
+      if(sc&&sc!=='ev'){
+        const sortable=scRows.filter(r=>!r.skip);
+        const rest=scRows.filter(r=>r.skip);
+        sortable.sort((a,b)=>((a[sc]??-1)-(b[sc]??-1))*sd);
+        scRows.splice(0,scRows.length,...sortable,...rest);
+      }
+      return scRows.map(r=>{
+        if(r.skip==='pending') return`<tr style="opacity:.4"><td><span class="badge ${r.ev.cls}">${r.ev.short}</span> ${r.ev.name}</td><td class="r dim" colspan="5">Pending</td></tr>`;
+        if(r.skip==='filtered') return`<tr style="opacity:.25"><td><span class="badge ${r.ev.cls}">${r.ev.short}</span> ${r.ev.name}</td><td class="r dim" colspan="5">Filtered out</td></tr>`;
+        if(r.skip==='nodata') return`<tr style="opacity:.4"><td><span class="badge ${r.ev.cls}">${r.ev.short}</span> ${r.ev.name}</td><td class="r dim" colspan="5">No ${scLabel.toLowerCase()} data</td></tr>`;
+        return`<tr><td><span class="badge ${r.ev.cls}">${r.ev.short}</span> ${r.ev.name}</td><td class="r" style="color:var(--blue)">${r.auto!==null?r.auto.toFixed(1):'–'}</td><td class="r">${r.tl!==null?r.tl.toFixed(1):'–'}</td><td class="r" style="color:var(--orange)">${r.eg!==null?r.eg.toFixed(1):'–'}</td><td class="r" style="color:var(--green);font-weight:600">${r.avg.toFixed(1)}</td><td class="r">${r.peak}</td></tr>`;
+      }).join('');
+    })()}</tbody></table>
   </div>
   <div class="card"><div class="ctitle">Avg Shift Breakdown by Event — ${scLabel}</div>
     ${loadedEvKeys.length===0?`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No data loaded.</div>`:`
@@ -1587,19 +1649,42 @@ function renderTPCard(t, sharedMax){
   </div>`;}
 
 function renderTmTable(teams){
+  const {col,dir}=SORT.tm;
   const allTotals=allLatestEPAs();
+  const sorted=[...teams].sort((a,b)=>{
+    if(!col) return a.rank-b.rank;
+    const epaA=getLatestEPA(a.key),epaB=getLatestEPA(b.key);
+    const aceA=ACE_DATA[a.num],aceB=ACE_DATA[b.num];
+    let av,bv;
+    if(col==='rank')    {av=a.rank??999;bv=b.rank??999;}
+    else if(col==='w')  {av=a.stats.wins;bv=b.stats.wins;}
+    else if(col==='l')  {av=a.stats.losses;bv=b.stats.losses;}
+    else if(col==='t')  {av=a.stats.ties;bv=b.stats.ties;}
+    else if(col==='avg'){av=a.stats.avgS;bv=b.stats.avgS;}
+    else if(col==='auto'){av=a.stats.avgA;bv=b.stats.avgA;}
+    else if(col==='tl') {av=a.stats.avgTl;bv=b.stats.avgTl;}
+    else if(col==='eg') {av=a.stats.avgEg;bv=b.stats.avgEg;}
+    else if(col==='epa'){av=epaA?.total??-1;bv=epaB?.total??-1;}
+    else if(col==='epa_auto'){av=epaA?.auto??-1;bv=epaB?.auto??-1;}
+    else if(col==='epa_eg'){av=epaA?.endgame??-1;bv=epaB?.endgame??-1;}
+    else if(col==='ace'){av=aceA?.ace??-1;bv=aceB?.ace??-1;}
+    else if(col==='ga') {av=aceA?.rank_state??999;bv=aceB?.rank_state??999;}
+    return (av-bv)*dir;
+  });
+  const th=(c,l,cls,sty)=>`<th class="${cls||''}" style="cursor:pointer;user-select:none${sty?';'+sty:''}" onclick="setSort('tm','${c}')">${l}</th>`;
   return`<table><thead><tr>
-    <th>Rank</th><th>Team</th><th class="r">W</th><th class="r">L</th><th class="r">T</th>
-    <th class="r">Avg Score</th><th class="r" style="color:var(--blue)">Avg Auto</th>
-    <th class="r">Avg Teleop</th><th class="r" style="color:var(--orange)">Avg Endgame</th>
-    <th class="r" style="color:var(--green)">EPA</th>
-    <th class="r" style="color:var(--blue)">EPA Auto</th>
-    <th class="r" style="color:var(--orange)">EPA EG</th>
-    <th class="r" style="color:var(--green)" title="ACE — Adjusted Contribution Estimate (Peekorobo)">ACE</th>
-    <th class="r" style="color:#b464ff" title="Georgia state rank (Peekorobo)">GA</th>
+    ${th('rank','Rank','')}${th('team','Team','')}
+    ${th('w','W','r')}${th('l','L','r')}${th('t','T','r')}
+    ${th('avg','Avg Score','r')}${th('auto','Avg Auto','r','color:var(--blue)')}
+    ${th('tl','Avg Teleop','r')}${th('eg','Avg Endgame','r','color:var(--orange)')}
+    ${th('epa','EPA','r','color:var(--green)')}
+    ${th('epa_auto','EPA Auto','r','color:var(--blue)')}
+    ${th('epa_eg','EPA EG','r','color:var(--orange)')}
+    ${th('ace','ACE','r','color:var(--green)')}
+    ${th('ga','GA','r','color:#b464ff')}
     <th></th>
   </tr></thead>
-  <tbody>${teams.map(t=>{
+  <tbody>${sorted.map(t=>{
     const epa=getLatestEPA(t.key);
     const tc=teamColorByKey(t.key);
     const ace=ACE_DATA[t.num];
@@ -1673,16 +1758,6 @@ ${renderTrackerSetup()}
   <div class="ctitle" style="margin-bottom:12px">All Teams — Performance Summary${ACTIVE_FILTER.size?' (filtered)':''}</div>
   <div class="sr">
     <input type="text" class="si" id="tmSearch" placeholder="Search team…" oninput="filterTm()"/>
-    <select class="ss" id="tmSort" onchange="filterTm()">
-      <option value="rank">Sort: District Rank</option><option value="avg">Sort: Avg Score</option>
-      <option value="wins">Sort: Wins</option><option value="auto">Sort: Avg Auto</option>
-      <option value="endgame">Sort: Avg Endgame</option>
-      <option value="epa">Sort: EPA (Total)</option>
-      <option value="epaauto">Sort: EPA Auto</option>
-      <option value="epaeg">Sort: EPA Endgame</option>
-      <option value="ace">Sort: ACE</option>
-      <option value="acestate">Sort: GA State Rank</option>
-    </select>
   </div>
   <div class="tw" id="tmTbl">${renderTmTable(allTm)}</div>
 </div>`;
@@ -1699,18 +1774,7 @@ ${renderTrackerSetup()}
 }function filterTm(){
   if(!window._allTm)return;
   const q=document.getElementById('tmSearch').value.toLowerCase();
-  const srt=document.getElementById('tmSort').value;
-  let t=window._allTm.filter(x=>String(x.num).includes(q)||x.name.toLowerCase().includes(q));
-  if(srt==='avg')t.sort((a,b)=>b.stats.avgS-a.stats.avgS);
-  else if(srt==='wins')t.sort((a,b)=>b.stats.wins-a.stats.wins);
-  else if(srt==='auto')t.sort((a,b)=>b.stats.avgA-a.stats.avgA);
-  else if(srt==='endgame')t.sort((a,b)=>b.stats.avgEg-a.stats.avgEg);
-  else if(srt==='epa')t.sort((a,b)=>(getLatestEPA(a.key)?.total??-999)-(getLatestEPA(b.key)?.total??-999)).reverse();
-  else if(srt==='epaauto')t.sort((a,b)=>(getLatestEPA(a.key)?.auto??-999)-(getLatestEPA(b.key)?.auto??-999)).reverse();
-  else if(srt==='epaeg')t.sort((a,b)=>(getLatestEPA(a.key)?.endgame??-999)-(getLatestEPA(b.key)?.endgame??-999)).reverse();
-  else if(srt==='ace')t.sort((a,b)=>(ACE_DATA[b.num]?.ace??-999)-(ACE_DATA[a.num]?.ace??-999));
-  else if(srt==='acestate')t.sort((a,b)=>(ACE_DATA[a.num]?.rank_state??9999)-(ACE_DATA[b.num]?.rank_state??9999));
-  else t.sort((a,b)=>a.rank-b.rank);
+  const t=window._allTm.filter(x=>String(x.num).includes(q)||x.name.toLowerCase().includes(q));
   document.getElementById('tmTbl').innerHTML=renderTmTable(t);}
 
 // ════════ ALLIANCES ════════
@@ -1733,7 +1797,21 @@ function renderAl(){
     if(alliances.length){html+=`<div class="agrid" style="margin-bottom:14px">`;alliances.slice(0,8).forEach((al,i)=>{const picks=al.picks||[];html+=`<div class="acard"><div class="anum">Alliance ${i+1}</div>${picks.map((pk,pi)=>{const hl=isTr(pk);const tc=teamColorByKey(pk);return`<div class="ateam ${hl?'hl':''}">${pi===0?'<span class="acap">CAP</span>':'<span style="width:28px;display:inline-block"></span>'}${tn(pk)} <span style="font-size:11px;color:${tc?tc.text:'var(--text3)'}">${tnum(pk)}${hl?'★':''}</span></div>`;}).join('')}</div>`;});html+=`</div>`;}
     if(pm.length){
       const lo={qf:1,sf:2,f:3};
-      const sorted=[...pm].sort((a,b)=>(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||(a.set_number-b.set_number)||(a.match_number-b.match_number));
+      const sorted=[...pm].sort((a,b)=>{
+        const {col:ac,dir:ad}=SORT.al;
+        if(ac){
+          const lo2={qf:0,sf:1,f:2};
+          let av,bv;
+          if(ac==='round'){av=lo2[a.comp_level]||0;bv=lo2[b.comp_level]||0;}
+          else if(ac==='match'){av=a.match_number||0;bv=b.match_number||0;}
+          else if(ac==='red'){av=a.alliances?.red?.score??-1;bv=b.alliances?.red?.score??-1;}
+          else if(ac==='blue'){av=a.alliances?.blue?.score??-1;bv=b.alliances?.blue?.score??-1;}
+          else{av=lo2[a.comp_level]||0;bv=lo2[b.comp_level]||0;}
+          const r=(av-bv)*ad;
+          if(r!==0)return r;
+        }
+        return (lo[a.comp_level]||0)-(lo[b.comp_level]||0)||(a.set_number-b.set_number)||(a.match_number-b.match_number);
+      });
       html+=`<div class="card" style="padding:0 18px 0"><div class="tw"><table style="table-layout:fixed;width:100%">
         <colgroup>
           <col style="width:60px"/>
@@ -1747,13 +1825,13 @@ function renderAl(){
           <col style="width:64px"/>
         </colgroup>
         <thead><tr>
-          <th>Round</th>
-          <th>Match</th>
+          <th style="cursor:pointer;user-select:none" onclick="setSort('al','round')">Round</th>
+          <th style="cursor:pointer;user-select:none" onclick="setSort('al','match')">Match</th>
           <th></th>
           <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
-          <th class="r" style="color:var(--loss)">Red</th>
+          <th class="r" style="color:var(--loss);cursor:pointer;user-select:none" onclick="setSort('al','red')">Red</th>
           <th></th>
-          <th style="color:var(--blue)">Blue</th>
+          <th style="color:var(--blue);cursor:pointer;user-select:none" onclick="setSort('al','blue')">Blue</th>
           <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
           <th class="r">Winner</th>
         </tr></thead>
@@ -1888,12 +1966,27 @@ ${selector}
     const aceVal=ace?.ace!=null?ace.ace.toFixed(1):'–';
     const confVal=ace?.confidence!=null?Math.round(ace.confidence*100)+'%':'–';
     const confCol=ace?.confidence!=null?(ace.confidence>=0.9?'var(--green)':ace.confidence>=0.75?'#f0c040':'var(--loss)'):'var(--text3)';
-    return{rank,tk,teamNum,tc,isTrk,rec,dq,played,rs,metrics,extras,avgScore,avgAuto,epaVal,epaAutoVal,aceVal,confVal,confCol};
+    return{rank,tk,teamNum,tc,isTrk,rec,dq,played,rs,metrics,extras,avgScore,avgAuto,epaVal,epaAutoVal,aceVal,confVal,confCol,
+      _rank:r.rank??999,_rs:r.sort_orders?.[0]??-1,_played:r.matches_played??0,_avg:s.n>0?s.avgS:-1,_auto:s.n>0?s.avgA:-1,
+      _epa:epa?.total??-1,_ace:ACE_DATA[teamNum]?.ace??-1};
   });
+  const {col:ec,dir:ed}=SORT.ev;
+  if(ec){
+    rows.sort((a,b)=>{
+      let av,bv;
+      if(ec==='rank')   {av=a._rank;bv=b._rank;}
+      else if(ec==='rs'){av=a._rs;bv=b._rs;}
+      else if(ec==='pld'){av=a._played;bv=b._played;}
+      else if(ec==='avg'){av=a._avg;bv=b._avg;}
+      else if(ec==='auto'){av=a._auto;bv=b._auto;}
+      else if(ec==='epa'){av=a._epa;bv=b._epa;}
+      else if(ec==='ace'){av=a._ace;bv=b._ace;}
+      else {av=a._rank;bv=b._rank;}
+      return(av-bv)*ed;
+    });
+  }
 
-  const thStyle=`class="r" style="font-size:11px"`;
-  const thEv=`style="color:var(--blue);font-size:11px"`;   // event-specific = blue
-  const thSz=`style="color:var(--green);font-size:11px"`; // season = green
+  const thS=(c,l,sty)=>`<th class="r" style="cursor:pointer;user-select:none;font-size:11px${sty?';'+sty:''}" onclick="setSort('ev','${c}')">${l}</th>`;
 
   document.getElementById('pg-standings').innerHTML=`
 <div class="sh"><h2>Event <span>Standings</span></h2><span class="sub">${ev.name} · ${rkList.length} teams${isActive?` <span style="color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;margin-left:6px">● LIVE</span>`:''}</span></div>
@@ -1907,19 +2000,18 @@ ${rkList.length===0
     <div class="card" style="padding:0 18px 0"><div class="tw"><table>
   <thead>
     <tr>
-      <th>Rank</th>
+      <th style="cursor:pointer;user-select:none" onclick="setSort('ev','rank')">Rank</th>
       <th>Team</th>
-      <th class="r" style="color:var(--text3)">W-L-T</th>
-      <th class="r" style="color:var(--text3)">DQ</th>
-      <th class="r" style="color:var(--text3)">Pld</th>
-      <th class="r" style="color:var(--blue)" title="Ranking Score">RS</th>
-      ${metricCols.map(c=>`<th class="r" style="color:var(--blue)" title="${c}">${c.replace('Avg ','').replace('Average ','')}</th>`).join('')}
-      ${extraCols.map(c=>`<th class="r" style="color:var(--blue)" title="${c}">${c.replace('Total ','')}</th>`).join('')}
-      <th class="r" style="color:var(--blue)" title="Avg Alliance Score (this event)">Avg</th>
-      <th class="r" style="color:var(--blue)" title="Avg Auto Points (this event)">Auto</th>
-      <th class="r" style="color:var(--green);border-left:2px solid rgba(0,230,100,.2)" title="EPA Total - season (Statbotics)">EPA</th>
-      <th class="r" style="color:var(--green)" title="ACE - season (Peekorobo)">ACE</th>
-      <th class="r" style="color:#b464ff" title="ACE Confidence (Peekorobo)">Conf</th>
+      <th class="r" style="color:var(--text3);font-size:11px">W-L-T</th>
+      <th class="r" style="color:var(--text3);font-size:11px;cursor:pointer;user-select:none" onclick="setSort('ev','pld')">Pld</th>
+      ${thS('rs','RS','color:var(--blue)')}
+      ${metricCols.map(c=>`<th class="r" style="cursor:pointer;user-select:none;color:var(--blue);font-size:11px" onclick="setSort('ev','rs')" title="${c}">${c.replace('Avg ','').replace('Average ','')}</th>`).join('')}
+      ${extraCols.map(c=>`<th class="r" style="color:var(--blue);font-size:11px" title="${c}">${c.replace('Total ','')}</th>`).join('')}
+      ${thS('avg','Avg','color:var(--blue)')}
+      ${thS('auto','Auto','color:var(--blue)')}
+      <th class="r" style="cursor:pointer;user-select:none;color:var(--green);font-size:11px;border-left:2px solid rgba(0,230,100,.2)" onclick="setSort('ev','epa')" title="EPA Total - season (Statbotics)">EPA</th>
+      ${thS('ace','ACE','color:var(--green)')}
+      <th class="r" style="color:#b464ff;font-size:11px" title="ACE Confidence (Peekorobo)">Conf</th>
     </tr>
   </thead>
   <tbody>${rows.map(r=>`<tr class="${r.isTrk?'hl':''}" style="${r.tc?'border-left:3px solid '+r.tc.border+';':''}">
@@ -1974,7 +2066,23 @@ function renderMxTable(matches){
     const lo={qm:0,qf:1,sf:2,f:3};
     return(lo[a.comp_level]||0)-(lo[b.comp_level]||0)||(a.set_number||0)-(b.set_number||0)||a.match_number-b.match_number;
   });
-  if(!sorted.length)return`<div class="empty"><div class="empty-s">No matches match your filters.</div></div>`;
+  const {col:mc,dir:md}=SORT.mx;
+  if(mc){
+    const lo={qm:0,qf:1,sf:2,f:3};
+    sorted.sort((a,b)=>{
+      let av,bv;
+      if(mc==='ev')   {av=a._wk||0;bv=b._wk||0;}
+      else if(mc==='type'){av=lo[a.comp_level]||0;bv=lo[b.comp_level]||0;}
+      else if(mc==='match'){av=a.match_number||0;bv=b.match_number||0;}
+      else if(mc==='red') {av=a.alliances?.red?.score??-1;bv=b.alliances?.red?.score??-1;}
+      else if(mc==='pred') {
+        const pA=DB.matchPreds[a.key];const pB=DB.matchPreds[b.key];
+        av=pA?.prob??-1;bv=pB?.prob??-1;
+      }
+      else if(mc==='result'){const rA=a.winning_alliance;const rB=b.winning_alliance;av=rA?1:0;bv=rB?1:0;}
+      return(av-bv)*md;
+    });
+  }
   const aceLoaded=Object.keys(ACE_DATA).length>0 || Object.keys(DB.matchPreds).length>0;
   // Format a TBA Unix timestamp as local time string
   function fmtMatchTime(m){
@@ -2015,17 +2123,17 @@ function renderMxTable(matches){
     <col style="width:${aceLoaded?'52px':'0px'}"/>
   </colgroup>
   <thead><tr>
-    <th>Event</th>
-    <th>Type</th>
-    <th class="r">Match</th>
+    <th style="cursor:pointer;user-select:none" onclick="setSort('mx','ev')">Event</th>
+    <th style="cursor:pointer;user-select:none" onclick="setSort('mx','type')">Type</th>
+    <th class="r" style="cursor:pointer;user-select:none" onclick="setSort('mx','match')">Match</th>
     <th></th>
     <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
-    <th class="r" style="color:var(--loss)">Red</th>
+    <th class="r" style="color:var(--loss);cursor:pointer;user-select:none" onclick="setSort('mx','red')">Red</th>
     <th></th>
     <th style="color:var(--blue)">Blue</th>
     <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
-    <th class="r">${aceLoaded?'Pred':'Winner'}</th>
-    ${aceLoaded?'<th class="r">Result</th>':''}
+    <th class="r" style="cursor:pointer;user-select:none" onclick="setSort('mx','pred')">${aceLoaded?'Pred':'Winner'}</th>
+    ${aceLoaded?'<th class="r" style="cursor:pointer;user-select:none" onclick="setSort(\'mx\',\'result\')">Result</th>':''}
   </tr></thead>
   <tbody>${(()=>{ let lastEv=null; return sorted.map(m=>{
     const redKeys=m.alliances?.red?.team_keys||[];
