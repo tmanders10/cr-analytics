@@ -1083,9 +1083,16 @@ function renderRk(){
     const ace=ACE_DATA[teamNum];
     // Find DCMP event points
     const evPts=r.event_points||[];
-    const dcmpEntry=evPts.find(e=>e.district_cmp===true);
-    const nonDcmp=evPts.filter(e=>e.district_cmp!==true);
-    return{...r,teamNum,ace,dcmpPts:dcmpEntry?.total??null,ev1:nonDcmp[0]?.total??null,ev2:nonDcmp[1]?.total??null};
+    const dcmpEntry=evPts.find(e=>e.event_key==='2026gacmp'||e.district_cmp===true);
+    const nonDcmp=evPts.filter(e=>e.event_key!=='2026gacmp'&&e.district_cmp!==true);
+    const rookieBonus=r.rookie_bonus??0;
+    // Sum all event_points entries — more reliable than point_total which TBA sometimes doesn't update
+    const computedTotal=evPts.reduce((s,e)=>s+(e.total||0),0)+rookieBonus;
+    const pointTotal=computedTotal>0?computedTotal:(r.point_total??r.total_points??0);
+    const ev1pts=nonDcmp[0]?.total??0;
+    const ev2pts=nonDcmp[1]?.total??0;
+    const computedDcmp=dcmpEntry?.total??( pointTotal>0&&(pointTotal-ev1pts-ev2pts-rookieBonus)>0 ? pointTotal-ev1pts-ev2pts-rookieBonus : null );
+    return{...r,teamNum,ace,dcmpPts:computedDcmp,ev1:ev1pts||null,ev2:ev2pts||null,pointTotal};
   });
   if(col){
     rows.sort((a,b)=>{
@@ -1130,7 +1137,7 @@ function renderRk(){
     return`<tr class="${tr?'hl':''}" style="${tc?'border-left:3px solid '+tc.border+';':''}">
     <td><span class="rk ${r.rank<=3?'top':''}">${r.rank}</span></td>
     <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><a class="tlink" href="https://www.thebluealliance.com/team/${tnum(r.team_key)}" target="_blank" style="${tc?'color:'+tc.text:''}">${tn(r.team_key)}</a><span class="tnsm">${tnum(r.team_key)}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
-    <td class="r" style="color:var(--green);font-weight:600">${r.point_total??r.total_points??'–'}</td>
+    <td class="r" style="color:var(--green);font-weight:600">${r.pointTotal||(r.point_total??r.total_points??'–')}</td>
     <td class="r">${r.ev1??'–'}</td>
     <td class="r">${r.ev2??'–'}</td>
     <td class="r" style="color:var(--blue)">${r.dcmpPts??'–'}</td>
