@@ -929,19 +929,19 @@ ${(()=>{
     const logoEl=document.getElementById('logoImg');
     const logoSrc=logoEl?logoEl.src:'';
     return`<div style="display:flex;justify-content:center;margin-bottom:16px">
-    <div style="background:#060906;border:1px solid rgba(0,230,100,.3);border-radius:10px;overflow:hidden;position:relative;width:100%;max-width:860px">
+    <div style="background:#060906;border:2px solid rgba(0,230,100,.5);border-radius:10px;overflow:hidden;position:relative;width:100%;max-width:860px">
       <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,230,100,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(0,230,100,.018) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0"></div>
       <div style="position:relative;z-index:1;padding:28px 32px 22px">
-        <div style="display:flex;align-items:flex-start;gap:18px">
-          <div style="flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center">
+        <div style="display:flex;align-items:center;justify-content:center;gap:18px">
+          <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center">
             <img src="${logoSrc}" style="width:76px;height:76px;object-fit:contain;opacity:.9"/>
           </div>
-          <div style="flex:1">
+          <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(0,230,100,.6);margin-bottom:8px">2026 PCH District Championship</div>
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:50px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;color:#00e664;line-height:.95;margin-bottom:10px">District<br><span style="color:#c8d8ce">Finalists</span></div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8aa090">FRC Team 1002 · Circuit Runners · Wheeler High School</div>
           </div>
         </div>
+        <div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8aa090;margin-top:10px">FRC Team 1002 · Circuit Runners · Wheeler High School</div>
         <div style="display:flex;gap:0;margin-top:20px;border-top:1px solid rgba(0,230,100,.12);border-bottom:1px solid rgba(0,230,100,.12)">
           ${(()=>{const st=[['21W','Qual Wins','var(--green)'],['3L','Qual Losses','var(--green)'],['#3','District Seed','#c8d8ce'],['88%','Win Rate','#c8d8ce'],['225.9','Avg Score','#c8d8ce'],['HOU','Qualified','#38a8ff']];return st.map((s,i)=>'<div style="flex:1;padding:12px 0;text-align:center;'+(i<st.length-1?'border-right:1px solid rgba(0,230,100,.1)':'')+'"><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:24px;font-weight:900;color:'+s[2]+';line-height:1">'+s[0]+'</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8aa090;margin-top:3px">'+s[1]+'</div></div>').join('');})()}
         </div>
@@ -949,13 +949,12 @@ ${(()=>{
           ${(()=>{const wins=['Dalton · PCH District · Week 1','Albany · PCH District · Week 4'];return wins.map(t=>'<div style="display:flex;align-items:center;gap:7px;background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.3);border-radius:5px;padding:7px 18px;white-space:nowrap"><span style="font-size:16px;line-height:1">\uD83C\uDFC6</span><div><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#f0c040;line-height:1">'+t+'</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:rgba(240,192,64,.55);letter-spacing:.04em;margin-top:2px">Event Champions</div></div></div>').join('');})()}
         </div>
       </div>
-      <div style="background:rgba(56,168,255,.07);border-top:1px solid rgba(56,168,255,.2);padding:14px 32px;display:flex;align-items:center;gap:16px;position:relative;z-index:1">
+      <div style="background:rgba(56,168,255,.07);border-top:1px solid rgba(56,168,255,.2);padding:14px 32px;display:flex;align-items:center;justify-content:center;gap:16px;position:relative;z-index:1">
         <div style="background:rgba(56,168,255,.15);border:1px solid rgba(56,168,255,.4);border-radius:4px;padding:3px 10px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#38a8ff;white-space:nowrap;flex-shrink:0">Coming Soon</div>
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#38a8ff">Houston Mode — FIRST Championship Scouting</div>
+        <div style="text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#38a8ff;white-space:nowrap">Houston Mode — FIRST Championship Scouting · Apr 29 – May 1</div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(56,168,255,.55);letter-spacing:.04em;margin-top:1px">Full division scouting for all 75 competitors · launching once division is announced</div>
         </div>
-        <div style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(56,168,255,.5);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap">Apr 29 – May 1</div>
       </div>
     </div></div>`;
   }
