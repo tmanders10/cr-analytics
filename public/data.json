@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-04-11T21:42:11.125Z",
+  "fetchedAt": "2026-04-12T20:17:20.526Z",
   "events": {
     "2026gadal": {
       "meta": {
@@ -55962,7 +55962,16 @@
           },
           "set_number": 1,
           "time": 1775940600,
-          "videos": [],
+          "videos": [
+            {
+              "key": "3T9gts97PtQ",
+              "type": "youtube"
+            },
+            {
+              "key": "vxFhnfbJk-A",
+              "type": "youtube"
+            }
+          ],
           "winning_alliance": "red"
         },
         {
@@ -57995,10 +58004,6 @@
           "time": 1775830320,
           "videos": [
             {
-              "key": "v2Vftmddc24",
-              "type": "youtube"
-            },
-            {
               "key": "O2lmV7idY58",
               "type": "youtube"
             },
@@ -58007,7 +58012,15 @@
               "type": "youtube"
             },
             {
+              "key": "TLlcreGyeh4?t=35426",
+              "type": "youtube"
+            },
+            {
               "key": "sMmlAmQtips",
+              "type": "youtube"
+            },
+            {
+              "key": "v2Vftmddc24",
               "type": "youtube"
             }
           ],
