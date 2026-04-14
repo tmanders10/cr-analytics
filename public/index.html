@@ -625,6 +625,10 @@ async function toggleHoustonMode(){
   }
   applyHoustonMode();
   renderAll();
+  if(HOUSTON_MODE){
+    const rkTab=document.querySelector('.nav-tab[onclick*="\'rankings\'"]');
+    if(rkTab) showPage('rankings',rkTab);
+  }
   setS('ok',HOUSTON_MODE?`Houston Mode ON — ${HDB.division}`:'PCH District Mode');
   setTimeout(()=>setS('ok',''),3000);
 }
@@ -799,6 +803,9 @@ async function init(){
         H_TRACKED_FILTER.add(1002);
         applyHoustonMode();
         renderAll();
+        // Default to Global Rankings tab in Houston mode
+        const rkTab=document.querySelector('.nav-tab[onclick*="\'rankings\'"]');
+        if(rkTab) showPage('rankings',rkTab);
       }
     }
   }catch(err){
