@@ -2231,7 +2231,7 @@ function renderAl(){
 // ════════ EVENT STANDINGS ════════
 let EV_SELECTED=null;
 
-function renderEv(evKey){
+function renderEvPCH(evKey){
   if(!evKey){
     const active=EVENTS.find(ev=>evStatus(ev)==='active');
     const complete=[...EVENTS].reverse().find(ev=>loadedEvents.has(ev.key));
@@ -2607,10 +2607,8 @@ function renderHMxTable(sorted,aceLoaded){
   }).join('');})()}</tbody></table>`;
 }
 
-// ── Override renderEv for Houston Mode (no dropdown, fixed to division event) ──
-const _origRenderEv=renderEv;
 function renderEv(evKey){
-  if(!HOUSTON_MODE){_origRenderEv(evKey);return;}
+  if(!HOUSTON_MODE){renderEvPCH(evKey);return;}
   const divKey=HDB.divisionEventKey;
   const rkData=HDB.divisionEvent?.rankings||{};
   const rkList=rkData.rankings||[];
