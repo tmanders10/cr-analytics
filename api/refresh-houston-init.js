@@ -250,9 +250,8 @@ module.exports = async function handler(req, res) {
       matchPreds:      {},
     };
 
-    // ── Step 1: Collect all unique events across all 75 teams ──
-    // First pass: discover which events each team attended
-    const teamEventMap = {}; // teamNum -> [{key, short_name, name, week, event_type}]
+    // ── Step 1: Find the most recent 2026 event for each team ──
+    const teamEventMap = {}; // teamNum -> single most recent event {key, short_name, name, week}
     for (let i = 0; i < HOUSTON_TEAMS.length; i++) {
       const team = HOUSTON_TEAMS[i];
       const teamKey = `frc${team.num}`;
@@ -260,24 +259,32 @@ module.exports = async function handler(req, res) {
       output.epa[teamKey] = {};
       try {
         const events = await tbaFetch(`/team/${teamKey}/events/2026/simple`, TBA_KEY);
-        const regEvents = (events || []).filter(ev => ev.event_type <= 6 || ev.event_type === 99);
-        teamEventMap[team.num] = regEvents;
-        output.teamEventKeys[team.num] = regEvents.map(ev => ev.key);
+        const regEvents = (events || [])
+          .filter(ev => ev.event_type <= 6 || ev.event_type === 99)
+          .sort((a, b) => (b.week ?? 0) - (a.week ?? 0)); // most recent first
+        // Take only the most recent event (excludes Houston itself — event_type 3 = district CMP, etc.)
+        const mostRecent = regEvents[0] || null;
+        if (mostRecent) {
+          teamEventMap[team.num] = mostRecent;
+          output.teamEventKeys[team.num] = [mostRecent.key];
+        } else {
+          warn(`No 2026 events found for ${teamKey}`);
+        }
       } catch (e) {
         warn(`Events fetch failed for ${teamKey}: ${e.message}`);
-        teamEventMap[team.num] = [];
       }
       if (i % 10 === 9) await sleep(300);
     }
 
-    // ── Step 2: Fetch each unique event ONCE ──
+    // ── Step 2: Fetch each unique event ONCE (deduplicated) ──
+    // Many teams share events (e.g. multiple PCH teams all attended GACMP)
     const allEventKeys = new Set();
-    const eventMeta = {}; // eventKey -> { short_name, name, week }
-    Object.entries(teamEventMap).forEach(([teamNum, events]) => {
-      events.forEach(ev => {
+    const eventMeta = {};
+    Object.entries(teamEventMap).forEach(([teamNum, ev]) => {
+      if (ev) {
         allEventKeys.add(ev.key);
         eventMeta[ev.key] = { eventName: ev.short_name || ev.name, week: ev.week ?? 0 };
-      });
+      }
     });
 
     for (const evKey of allEventKeys) {
@@ -300,14 +307,17 @@ module.exports = async function handler(req, res) {
       await sleep(100);
     }
 
-    // ── Step 3: Statbotics EPA for all teams ──
+    // ── Step 3: Statbotics EPA — most recent event only per team ──
     for (const team of HOUSTON_TEAMS) {
       const teamKey = `frc${team.num}`;
+      const evKey = output.teamEventKeys[team.num]?.[0];
+      if (!evKey) continue;
       try {
         const records = await statboticsFetch(`/team_events?team=${team.num}&year=2026&limit=20`);
         if (Array.isArray(records)) {
           records.forEach(record => {
             const epa = extractEPA(record);
+            // Store all events' EPA for accurate "latest" lookup, but only if we have match data
             if (epa && record.event) output.epa[teamKey][record.event] = epa;
           });
         }
