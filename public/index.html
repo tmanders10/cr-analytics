@@ -494,6 +494,7 @@ async function loadHoustonData(){
   try{
     const res=await fetch('./houston.json?v='+Date.now());
     if(!res.ok) throw new Error('houston.json not found — run Houston Init first');
+    setS('loading','Parsing Houston data…');
     const data=await res.json();
     HDB.teams=data.teams||[];
     HDB.teamEvents=data.teamEvents||{};
@@ -503,26 +504,49 @@ async function loadHoustonData(){
     HDB.matchPreds=data.matchPreds||{};
     HDB.division=data.division||'Division TBD';
     HDB.divisionEventKey=data.divisionEventKey||'';
-    // Build hallM — all matches across all teams' season events
+    // Build hallM — deduplicated match list across all 75 teams' events
+    setS('loading','Building match index…');
     hallM=[];
     const seen=new Set();
-    Object.entries(HDB.teamEvents).forEach(([teamNum,events])=>{
-      Object.values(events).forEach(ev=>{
-        (ev.matches||[]).forEach(m=>{
-          if(!seen.has(m.key)){seen.add(m.key);hallM.push({...m,_hev:ev.eventKey,_hevName:ev.eventName,_hweek:ev.week});}
-        });
-      });
-    });
-    // Also add division event matches
-    (HDB.divisionEvent.matches||[]).forEach(m=>{
-      if(!seen.has(m.key)){seen.add(m.key);hallM.push({...m,_hev:HDB.divisionEventKey,_hevName:HDB.division,_hweek:99});}
-    });
+    const teamNums=Object.keys(HDB.teamEvents);
+    for(const teamNum of teamNums){
+      const events=HDB.teamEvents[teamNum];
+      for(const evKey of Object.keys(events)){
+        const ev=events[evKey];
+        const evMatches=ev.matches||[];
+        for(const m of evMatches){
+          if(!seen.has(m.key)){
+            seen.add(m.key);
+            m._hev=ev.eventKey||evKey;
+            m._hevName=ev.eventName||evKey;
+            m._hweek=ev.week||0;
+            hallM.push(m);
+          }
+        }
+      }
+    }
+    // Add division event matches
+    const divMatches=HDB.divisionEvent.matches||[];
+    for(const m of divMatches){
+      if(!seen.has(m.key)){
+        seen.add(m.key);
+        m._hev=HDB.divisionEventKey;
+        m._hevName=HDB.division;
+        m._hweek=99;
+        hallM.push(m);
+      }
+    }
     // Populate ACE_DATA from HDB.ace
     ACE_DATA={};
-    Object.entries(HDB.ace).forEach(([num,ace])=>{ACE_DATA[parseInt(num)]=ace;});
+    for(const [num,ace] of Object.entries(HDB.ace)){
+      ACE_DATA[parseInt(num)]=ace;
+    }
+    setS('ok',`Houston data loaded — ${HDB.teams.length} teams · ${hallM.length} matches`);
+    setTimeout(()=>setS('ok',''),3000);
     return true;
   }catch(err){
     setS('error','Houston data error: '+err.message);
+    console.error('loadHoustonData error:',err);
     return false;
   }
 }
