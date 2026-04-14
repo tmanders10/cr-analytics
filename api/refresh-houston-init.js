@@ -148,6 +148,81 @@ async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// Strip TBA match objects to only the fields the dashboard uses
+// Reduces per-match size from ~3KB to ~300 bytes — ~10x reduction
+function slimMatch(m) {
+  return {
+    key:               m.key,
+    comp_level:        m.comp_level,
+    match_number:      m.match_number,
+    set_number:        m.set_number       ?? 1,
+    winning_alliance:  m.winning_alliance ?? '',
+    predicted_time:    m.predicted_time   ?? null,
+    actual_time:       m.actual_time      ?? null,
+    videos:            (m.videos || []).filter(v => v.type === 'youtube').map(v => ({ key: v.key, type: v.type })),
+    alliances: {
+      red:  { team_keys: m.alliances?.red?.team_keys  || [], score: m.alliances?.red?.score  ?? -1 },
+      blue: { team_keys: m.alliances?.blue?.team_keys || [], score: m.alliances?.blue?.score ?? -1 },
+    },
+    // Keep only the phase scores from score_breakdown, not raw field data
+    score_breakdown: m.score_breakdown ? {
+      red:  slimBreakdown(m.score_breakdown.red),
+      blue: slimBreakdown(m.score_breakdown.blue),
+    } : null,
+  };
+}
+
+function slimBreakdown(bd) {
+  if (!bd) return null;
+  // Keep only the phase total fields the dashboard reads
+  return {
+    autoPoints:     bd.autoPoints     ?? bd.auto_points     ?? null,
+    teleopPoints:   bd.teleopPoints   ?? bd.teleop_points   ?? null,
+    endgamePoints:  bd.endgamePoints  ?? bd.endgame_points  ?? null,
+    // 2026-specific Reefscape shift fields
+    autoReef:           bd.autoReef           ?? null,
+    teleopReef:         bd.teleopReef         ?? null,
+    autoCoral:          bd.autoCoral          ?? null,
+    teleopCoral:        bd.teleopCoral        ?? null,
+    netAlgaePoints:     bd.netAlgaePoints     ?? null,
+    processorAlgaePoints: bd.processorAlgaePoints ?? null,
+    endGameBargePoints: bd.endGameBargePoints ?? null,
+    totalPoints:    bd.totalPoints    ?? bd.total_points    ?? null,
+    foulPoints:     bd.foulPoints     ?? bd.foul_points     ?? null,
+    rp:             bd.rp             ?? null,
+  };
+}
+
+// Slim OPR data — keep only team_keys we care about
+function slimOprs(oprs, teamKeys) {
+  if (!oprs || !oprs.oprs) return {};
+  const result = { oprs: {}, dprs: {}, ccwms: {} };
+  teamKeys.forEach(k => {
+    if (oprs.oprs[k]  != null) result.oprs[k]  = Math.round(oprs.oprs[k]  * 10) / 10;
+    if (oprs.dprs[k]  != null) result.dprs[k]  = Math.round(oprs.dprs[k]  * 10) / 10;
+    if (oprs.ccwms[k] != null) result.ccwms[k] = Math.round(oprs.ccwms[k] * 10) / 10;
+  });
+  return result;
+}
+
+// Slim rankings — keep only what Event Standings uses
+function slimRankings(rankings) {
+  if (!rankings || !rankings.rankings) return rankings || {};
+  return {
+    sort_order_info: rankings.sort_order_info || [],
+    extra_stats_info: rankings.extra_stats_info || [],
+    rankings: (rankings.rankings || []).map(r => ({
+      rank:           r.rank,
+      team_key:       r.team_key,
+      record:         r.record,
+      sort_orders:    r.sort_orders,
+      extra_stats:    r.extra_stats,
+      matches_played: r.matches_played,
+      dq:             r.dq,
+    })),
+  };
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -208,18 +283,28 @@ module.exports = async function handler(req, res) {
               tbaFetch(`/event/${ev.key}/rankings`, TBA_KEY).catch(() => ({})),
               tbaFetch(`/event/${ev.key}/oprs`, TBA_KEY).catch(() => ({})),
             ]);
-            // Only store matches involving this team
-            const teamMatches = (matches || []).filter(m =>
-              (m.alliances?.red?.team_keys || []).includes(teamKey) ||
-              (m.alliances?.blue?.team_keys || []).includes(teamKey)
-            );
+            // Only store matches involving this team, slimmed to essential fields
+            const teamMatches = (matches || [])
+              .filter(m =>
+                (m.alliances?.red?.team_keys || []).includes(teamKey) ||
+                (m.alliances?.blue?.team_keys || []).includes(teamKey)
+              )
+              .map(slimMatch);
+
+            // Get all team keys in this event for OPR slimming
+            const evTeamKeys = new Set();
+            (matches || []).forEach(m => {
+              (m.alliances?.red?.team_keys || []).forEach(k => evTeamKeys.add(k));
+              (m.alliances?.blue?.team_keys || []).forEach(k => evTeamKeys.add(k));
+            });
+
             output.teamEvents[team.num][ev.key] = {
               eventKey: ev.key,
               eventName: ev.short_name || ev.name,
               week: ev.week,
               matches: teamMatches,
-              rankings: rankings || {},
-              oprs: oprs || {},
+              rankings: slimRankings(rankings),
+              oprs: slimOprs(oprs, [...evTeamKeys]),
             };
           } catch (e) {
             warn(`Failed fetching event ${ev.key} for ${teamKey}: ${e.message}`);
@@ -297,8 +382,8 @@ module.exports = async function handler(req, res) {
           tbaFetch(`/event/${DIV_EVENT_KEY}/alliances`, TBA_KEY).catch(() => []),
         ]);
         output.divisionEvent = {
-          matches: matches || [],
-          rankings: rankings || {},
+          matches: (matches || []).map(slimMatch),
+          rankings: slimRankings(rankings),
           alliances: alliances || [],
         };
         // Statbotics match predictions for division event
