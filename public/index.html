@@ -497,31 +497,28 @@ async function loadHoustonData(){
     setS('loading','Parsing Houston data…');
     const data=await res.json();
     HDB.teams=data.teams||[];
-    HDB.teamEvents=data.teamEvents||{};
+    HDB.teamEventKeys=data.teamEventKeys||{};
+    HDB.events=data.events||{};
     HDB.epa=data.epa||{};
     HDB.ace=data.ace||{};
     HDB.divisionEvent=data.divisionEvent||{};
     HDB.matchPreds=data.matchPreds||{};
     HDB.division=data.division||'Division TBD';
     HDB.divisionEventKey=data.divisionEventKey||'';
-    // Build hallM — deduplicated match list across all 75 teams' events
+    // Build hallM — deduplicated match list across all unique events
+    // houston.json stores matches ONCE per event (not per team), so iterate events directly
     setS('loading','Building match index…');
     hallM=[];
     const seen=new Set();
-    const teamNums=Object.keys(HDB.teamEvents);
-    for(const teamNum of teamNums){
-      const events=HDB.teamEvents[teamNum];
-      for(const evKey of Object.keys(events)){
-        const ev=events[evKey];
-        const evMatches=ev.matches||[];
-        for(const m of evMatches){
-          if(!seen.has(m.key)){
-            seen.add(m.key);
-            m._hev=ev.eventKey||evKey;
-            m._hevName=ev.eventName||evKey;
-            m._hweek=ev.week||0;
-            hallM.push(m);
-          }
+    for(const [evKey,ev] of Object.entries(HDB.events)){
+      const evMatches=ev.matches||[];
+      for(const m of evMatches){
+        if(!seen.has(m.key)){
+          seen.add(m.key);
+          m._hev=evKey;
+          m._hevName=ev.eventName||evKey;
+          m._hweek=ev.week||0;
+          hallM.push(m);
         }
       }
     }
@@ -2398,12 +2395,12 @@ ${rkList.length===0
 
 // Helper: get all matches for a specific team from houston season data
 function hTeamMatches(teamNum){
-  const teamKey=`frc${teamNum}`;
-  const evs=HDB.teamEvents[teamNum]||{};
+  const evKeys=HDB.teamEventKeys[teamNum]||[];
   const matches=[];
-  Object.values(evs).forEach(ev=>{
+  evKeys.forEach(evKey=>{
+    const ev=HDB.events[evKey]||{};
     (ev.matches||[]).forEach(m=>{
-      matches.push({...m,_hev:ev.eventKey,_hevName:ev.eventName,_hweek:ev.week||0});
+      matches.push({...m,_hev:evKey,_hevName:ev.eventName||evKey,_hweek:ev.week||0});
     });
   });
   return matches;
@@ -2420,9 +2417,11 @@ function hGetLatestEPA(teamKey){
 
 // Helper: get latest OPR for a team (most recent event's OPR)
 function hGetLatestOPR(teamNum){
-  const evs=HDB.teamEvents[teamNum]||{};
-  const sorted=Object.values(evs).sort((a,b)=>(b.week||0)-(a.week||0));
-  for(const ev of sorted){
+  const evKeys=HDB.teamEventKeys[teamNum]||[];
+  // Sort by week descending to get most recent first
+  const sorted=[...evKeys].sort((a,b)=>(HDB.events[b]?.week||0)-(HDB.events[a]?.week||0));
+  for(const evKey of sorted){
+    const ev=HDB.events[evKey]||{};
     const oprs=ev.oprs?.oprs||{};
     const val=oprs[`frc${teamNum}`];
     if(val!=null) return val;
