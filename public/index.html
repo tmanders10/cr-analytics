@@ -2547,12 +2547,11 @@ ${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06
 </div>
 <div class="card"><div class="ctitle">Top 20 Single-Alliance Scores — ${scLabel} · ${sourceLabel} <span style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace;font-weight:400;margin-left:6px">click row to expand breakdown</span></div>
   <div class="tw"><table>
-    <thead><tr><th>#</th><th>Event</th><th>Match</th><th></th><th>Alliance</th><th>Teams</th><th class="r">Score</th><th>Result</th></tr></thead>
+    <thead><tr><th>#</th><th>Event</th><th>Match</th><th>Alliance</th><th>Teams</th><th class="r">Score</th><th>Result</th></tr></thead>
     <tbody>${topRows.slice(0,20).map((row,i)=>`<tr class="${row.teams.some(t=>TRACKED.includes(parseInt(t)))?'hl':''}">
       <td class="dim">${i+1}</td>
       <td class="dim" style="font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap">${(row.m._hev||row.m._ev||'').replace('2026','').toUpperCase()}</td>
-      <td class="r dim">${row.m.comp_level==='qm'?'QM'+row.m.match_number:'SF '+row.m.set_number+'-'+row.m.match_number}</td>
-      <td class="r" style="padding:0 2px">${videoLink(matchVideoUrl(row.m))}</td>
+      <td class="dim" style="white-space:nowrap">${row.m.comp_level==='qm'?'QM'+row.m.match_number:'SF '+row.m.set_number+'-'+row.m.match_number} ${videoLink(matchVideoUrl(row.m))}</td>
       <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
       <td>${row.teams.map(t=>{const tc=teamColor(parseInt(t));return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${t}</span>`;}).join(' · ')}</td>
       <td class="r" style="color:var(--green);font-weight:600">${row.sc}</td>
