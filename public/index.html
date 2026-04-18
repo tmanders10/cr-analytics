@@ -1513,10 +1513,8 @@ function setMatchType(t){
     });
   });
   // Re-render affected tabs
-  renderOv();
-  renderSc();
-  renderTm();
-  renderMx();
+  if(HOUSTON_MODE){ renderHSc(); renderTm(); renderHMx(); }
+  else { renderOv(); renderSc(); renderTm(); renderMx(); }
 }
 function renderSc(){
   const fM=filteredMatches();
@@ -2605,29 +2603,54 @@ ${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06
 // ── Match Log (Houston) — full season for all 75 teams ──
 function renderHMx(){
   let ms=MATCH_TYPE==='qm'?hallM.filter(m=>m.comp_level==='qm'):MATCH_TYPE==='po'?hallM.filter(m=>m.comp_level!=='qm'):hallM;
-  // Apply team filter: if any teams selected, show only their matches
-  if(H_TRACKED_FILTER.size>0){
-    ms=ms.filter(m=>{
-      const rk=m.alliances?.red?.team_keys||[];
-      const bk=m.alliances?.blue?.team_keys||[];
-      return [...rk,...bk].some(k=>H_TRACKED_FILTER.has(parseInt(k.replace('frc',''))));
+
+  // Build per-team match lists — each match appears once per team in it
+  // Group by team, tracked teams first, then alphabetical by team number
+  const teamMatchMap={};
+  ms.forEach(m=>{
+    const allKeys=[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])];
+    allKeys.forEach(k=>{
+      const num=parseInt(k.replace('frc',''));
+      if(!teamMatchMap[num]) teamMatchMap[num]=[];
+      if(!teamMatchMap[num].find(x=>x.key===m.key)) teamMatchMap[num].push(m);
     });
-  }
-  // Sort by week then match order
-  const sorted=[...ms].sort((a,b)=>{
-    if((a._hweek||0)!==(b._hweek||0)) return (a._hweek||0)-(b._hweek||0);
-    const lo={qm:0,qf:1,sf:2,f:3};
-    return (lo[a.comp_level]||0)-(lo[b.comp_level]||0)||(a.set_number||0)-(b.set_number||0)||a.match_number-b.match_number;
   });
+
+  // Apply team filter — if teams selected only show those teams' sections
+  let teamNums=Object.keys(teamMatchMap).map(Number);
+  if(H_TRACKED_FILTER.size>0) teamNums=teamNums.filter(n=>H_TRACKED_FILTER.has(n));
+
+  // Sort teams: tracked first (in TRACKED order), then remaining by team number
+  teamNums.sort((a,b)=>{
+    const aIdx=TRACKED.indexOf(a), bIdx=TRACKED.indexOf(b);
+    if(aIdx>-1&&bIdx>-1) return aIdx-bIdx;  // both tracked: preserve TRACKED order
+    if(aIdx>-1) return -1;  // a tracked, b not
+    if(bIdx>-1) return 1;   // b tracked, a not
+    return a-b;             // neither tracked: sort by team number
+  });
+
+  // Sort each team's matches by match order
+  const lo={qm:0,qf:1,sf:2,f:3};
+  teamNums.forEach(num=>{
+    teamMatchMap[num].sort((a,b)=>
+      (lo[a.comp_level]||0)-(lo[b.comp_level]||0)||
+      (a.set_number||0)-(b.set_number||0)||
+      a.match_number-b.match_number
+    );
+  });
+
+  const totalMatches=H_TRACKED_FILTER.size>0
+    ? new Set(teamNums.flatMap(n=>teamMatchMap[n].map(m=>m.key))).size
+    : ms.length;
+
   const aceLoaded=Object.keys(HDB.ace).length>0||Object.keys(HDB.matchPreds).length>0;
   document.getElementById('pg-matches').innerHTML=`
-<div class="sh"><h2>Match <span>Log</span></h2><span class="sub">${sorted.length} matches · Houston 2026 season history</span></div>
-${H_TRACKED_FILTER.size>0?`<div class="pending-banner" style="background:rgba(0,230,100,.06);border-color:rgba(0,230,100,.3);margin-bottom:16px">Showing matches for ${H_TRACKED_FILTER.size} tracked team${H_TRACKED_FILTER.size!==1?'s':''}</div>`:''}
-<div class="card" style="padding:0"><div class="tw">${renderHMxTable(sorted,aceLoaded)}</div></div>`;
+<div class="sh"><h2>Match <span>Log</span></h2><span class="sub">${teamNums.length} teams · ${totalMatches} matches · Houston 2026 season history</span></div>
+<div class="card" style="padding:0"><div class="tw">${renderHMxTable(teamNums,teamMatchMap,aceLoaded)}</div></div>`;
 }
 
-function renderHMxTable(sorted,aceLoaded){
-  if(!sorted.length) return`<div class="empty"><div class="empty-s">No matches in current filter.</div></div>`;
+function renderHMxTable(teamNums,teamMatchMap,aceLoaded){
+  if(!teamNums.length) return`<div class="empty"><div class="empty-s">No matches in current filter.</div></div>`;
   function aceWinProbH(redKeys,blueKeys,matchKey){
     const sbPred=HDB.matchPreds[matchKey];
     if(sbPred&&sbPred.winner&&sbPred.prob!=null){
@@ -2654,7 +2677,25 @@ function renderHMxTable(sorted,aceLoaded){
     <th class="r">${aceLoaded?'Pred':'Winner'}</th>
     ${aceLoaded?'<th class="r">Result</th>':''}
   </tr></thead>
-  <tbody>${(()=>{let lastEv=null;return sorted.map(m=>{
+  <tbody>${(()=>{
+    const colSpan=aceLoaded?11:10;
+    return teamNums.flatMap(teamNum=>{
+      const teamKey=`frc${teamNum}`;
+      const teamName=(HDB.teams||[]).find(t=>t.num===teamNum)?.name||String(teamNum);
+      const isTracked=TRACKED.includes(teamNum);
+      const tc=teamColor(teamNum);
+      const headerRow=`<tr style="background:${isTracked?'rgba(0,230,100,.07)':'rgba(255,255,255,.03)'};border-top:2px solid ${isTracked?'rgba(0,230,100,.4)':'var(--border2)'}">
+        <td colspan="${colSpan}" style="padding:6px 12px">
+          <div style="display:flex;align-items:center;gap:10px">
+            ${tc?`<span style="width:8px;height:8px;border-radius:50%;background:${tc.border};flex-shrink:0"></span>`:''}
+            <span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:${isTracked?'var(--green)':tc?tc.text:'var(--text2)'}">${teamNum}</span>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.04em;color:${isTracked?'rgba(0,230,100,.7)':'var(--text3)'}">${teamName}</span>
+            ${isTracked?'<span style="font-size:10px;color:var(--green);font-family:\'Barlow Condensed\',sans-serif;font-weight:700;letter-spacing:.08em">★ TRACKED</span>':''}
+            <span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--text3);margin-left:auto">${teamMatchMap[teamNum].length} matches</span>
+          </div>
+        </td>
+      </tr>`;
+      const matchRows=teamMatchMap[teamNum].map(m=>{
     const redKeys=m.alliances?.red?.team_keys||[];
     const blueKeys=m.alliances?.blue?.team_keys||[];
     const rt=redKeys.map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${k.replace('frc','')}</span>`;}).join(' · ');
@@ -2730,7 +2771,10 @@ function renderHMxTable(sorted,aceLoaded){
       <td class="r" style="white-space:nowrap">${aceLoaded?predCell:resultBadge}</td>
       ${aceLoaded?`<td class="r">${resultCell}</td>`:''}
     </tr>${bdPanel}`;
-  }).join('');})()}</tbody></table>`;
+      }).join('');
+      return headerRow+matchRows;
+    }).join('');
+  })()}</tbody></table>`;
 }
 
 function renderEv(evKey){
