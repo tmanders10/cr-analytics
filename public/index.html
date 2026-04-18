@@ -2569,10 +2569,31 @@ function renderHRk(){
 function renderHSc(){
   const divMatches=(HDB.divisionEvent?.matches||[]);
   const hasDivData=divMatches.filter(m=>(m.alliances?.red?.score??-1)>=0).length>0;
+  const hasTracked=H_TRACKED_FILTER.size>0;
 
-  // Use division matches if available, otherwise fall back to full season hallM
-  const sourceMatches=hasDivData?divMatches:hallM;
-  const sourceLabel=hasDivData?HDB.division:'Season History (all 76 teams)';
+  // Source: division > tracked teams from hallM > all hallM
+  let sourceMatches, sourceLabel;
+  if(hasDivData){
+    // Championship has started — use division matches, filtered to tracked if applicable
+    sourceMatches=hasDivData&&hasTracked
+      ? divMatches.filter(m=>{
+          const keys=[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])];
+          return keys.some(k=>H_TRACKED_FILTER.has(parseInt(k.replace('frc',''))));
+        })
+      : divMatches;
+    sourceLabel=hasTracked?`${HDB.division} · ${H_TRACKED_FILTER.size} tracked teams`:HDB.division;
+  } else {
+    // Pre-championship — use hallM filtered to tracked teams if any selected
+    sourceMatches=hasTracked
+      ? hallM.filter(m=>{
+          const keys=[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])];
+          return keys.some(k=>H_TRACKED_FILTER.has(parseInt(k.replace('frc',''))));
+        })
+      : hallM;
+    sourceLabel=hasTracked
+      ? `Season History · ${H_TRACKED_FILTER.size} tracked team${H_TRACKED_FILTER.size!==1?'s':''}`
+      : 'Season History (all 76 teams)';
+  }
 
   const useMatches=MATCH_TYPE==='qm'?sourceMatches.filter(m=>m.comp_level==='qm'):MATCH_TYPE==='po'?sourceMatches.filter(m=>m.comp_level!=='qm'):sourceMatches;
   const played=useMatches.filter(m=>(m.alliances?.red?.score??-1)>=0);
@@ -2588,9 +2609,8 @@ function renderHSc(){
       const sc=m.alliances?.[a]?.score||0;
       if(sc>0){
         const teams=(m.alliances?.[a]?.team_keys||[]).map(k=>k.replace('frc',''));
-        const evName=m._hevName||m._hev||'DIV';
-        const evShort=evName.length>10?evName.slice(0,10)+'…':evName;
-        topRows.push({m,a,sc,won:m.winning_alliance===a,teams,esh:hasDivData?'DIV':evShort,ec:'ev-cmp'});
+        const evShort=(m._hev||m._ev||'DIV').replace('2026','').toUpperCase();
+        topRows.push({m,a,sc,won:m.winning_alliance===a,teams,esh:evShort,ec:'ev-cmp'});
       }
     });
   });
@@ -2598,7 +2618,7 @@ function renderHSc(){
   const scLabel=MATCH_TYPE==='qm'?'Quals':MATCH_TYPE==='po'?'Playoffs':'All';
   document.getElementById('pg-scoring').innerHTML=`
 <div class="sh"><h2>Scoring <span>Analysis</span></h2><span class="sub">${sourceLabel} · ${played.length} ${scLabel.toLowerCase()} matches</span></div>
-${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06);border-color:rgba(56,168,255,.3);margin-bottom:16px">Showing 2026 pre-season data for all 76 Houston teams. Division scoring will appear here once the event begins.</div>`:''}
+${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06);border-color:rgba(56,168,255,.3);margin-bottom:16px">${hasTracked?`Showing pre-season data for ${H_TRACKED_FILTER.size} tracked team${H_TRACKED_FILTER.size!==1?'s':''}. Division scoring will appear once the event begins.`:'Showing 2026 pre-season data for all 76 Houston teams. Division scoring will appear here once the event begins.'}</div>`:''}
 <div class="g3" style="margin-bottom:16px">
   <div class="metric"><div class="mlabel">Avg Margin of Victory</div><div class="mval" style="color:var(--loss)">${avgMar.toFixed(1)}</div><div class="msub">points</div></div>
   <div class="metric"><div class="mlabel">Close Matches (≤10 pts)</div><div class="mval" style="color:var(--win)">${close}</div><div class="msub">of ${margins.length} decided</div></div>
