@@ -313,7 +313,10 @@
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#38a8ff">Team Tracking</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);margin-top:3px">Toggle teams to track — affects Team Tracker cards and Match Log highlights</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:3px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">Toggle teams to track — affects Team Tracker cards and Match Log</span>
+          <span id="teamTrackingCount" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--green);background:rgba(0,230,100,.1);border:1px solid rgba(0,230,100,.3);border-radius:4px;padding:1px 7px">0 / 9 selected</span>
+        </div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <button onclick="selectAllHoustonTeams(false)" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:5px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text3)">Clear All</button>
@@ -395,6 +398,9 @@ const TEAM_COLORS=[
   {name:'Purple', border:'#7F77DD',text:'#7F77DD',badge:'#EEEDFE',badgeText:'#3C3489',dot:'#7F77DD'},
   {name:'Coral',  border:'#D85A30',text:'#D85A30',badge:'#FAECE7',badgeText:'#712B13',dot:'#D85A30'},
   {name:'Pink',   border:'#D4537E',text:'#D4537E',badge:'#FBEAF0',badgeText:'#72243E',dot:'#D4537E'},
+  {name:'Cyan',   border:'#00bcd4',text:'#00bcd4',badge:'rgba(0,188,212,.12)',badgeText:'#007c8a',dot:'#00bcd4'},
+  {name:'Lime',   border:'#aeea00',text:'#aeea00',badge:'rgba(174,234,0,.12)',badgeText:'#6a9000',dot:'#aeea00'},
+  {name:'Gold',   border:'#ffd600',text:'#ffd600',badge:'rgba(255,214,0,.12)',badgeText:'#a08600',dot:'#ffd600'},
 ];
 const MAX_TRACKED=6;
 // Get color for a team number (by position in TRACKED array)
@@ -1117,16 +1123,25 @@ function openTeamTrackingPopup(){
   const overlay=document.getElementById('teamTrackingOverlay');
   const grid=document.getElementById('teamTrackingGrid');
   if(!overlay||!grid) return;
-  // Render team pills
+  const atMax=TRACKED.length>=MAX_TRACKED_HOUSTON;
   grid.innerHTML=HDB.teams.map(t=>{
     const on=H_TRACKED_FILTER.has(t.num);
     const is1002=t.num===1002;
-    return`<button onclick="toggleHoustonTeam(${t.num},this)" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;cursor:pointer;text-align:left;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:all .15s;${on?'background:rgba(0,230,100,.15);border:1px solid rgba(0,230,100,.5);color:var(--green)':'background:var(--bg3);border:1px solid var(--border2);color:var(--text3)'}">
-      <span style="font-size:13px;font-weight:900;min-width:36px;${on?'color:var(--green)':'color:var(--text2)'}">${t.num}</span>
+    const disabled=!on&&atMax;
+    const tc=teamColor(t.num);
+    // Show assigned color dot for tracked teams
+    const colorDot=on&&tc?`<span style="width:8px;height:8px;border-radius:50%;background:${tc.border};flex-shrink:0;margin-left:auto"></span>`:'';
+    const slotNum=on?`<span style="font-size:9px;color:${tc?tc.text:'var(--green)'};margin-right:2px;font-family:'JetBrains Mono',monospace">#${TRACKED.indexOf(t.num)+1}</span>`:'';
+    return`<button onclick="${disabled?'':'toggleHoustonTeam('+t.num+',this)'}" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;cursor:${disabled?'not-allowed':'pointer'};text-align:left;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:all .15s;opacity:${disabled?'.35':'1'};${on?`background:rgba(${tc?tc.border.replace('#','').match(/.{2}/g).map(x=>parseInt(x,16)).join(','):'0,230,100'},.15);border:1px solid ${tc?tc.border:'rgba(0,230,100,.5)'};color:${tc?tc.text:'var(--green)'}`:disabled?'background:var(--bg3);border:1px solid var(--border2);color:var(--text3)':'background:var(--bg3);border:1px solid var(--border2);color:var(--text3)'}">
+      <span style="font-size:13px;font-weight:900;min-width:36px;color:${on&&tc?tc.text:on?'var(--green)':'var(--text2)'}">${t.num}</span>
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name}</span>
-      ${is1002?'<span style="font-size:9px;color:var(--green);margin-left:auto">★</span>':''}
+      ${is1002?'<span style="font-size:9px;color:var(--green);margin-left:auto">★</span>':colorDot}
+      ${slotNum}
     </button>`;
   }).join('');
+  // Show count indicator
+  const countEl=document.getElementById('teamTrackingCount');
+  if(countEl) countEl.textContent=`${TRACKED.length} / ${MAX_TRACKED_HOUSTON} selected`;
   overlay.style.display='block';
   document.body.style.overflow='hidden';
 }
@@ -1134,17 +1149,16 @@ function openTeamTrackingPopup(){
 function toggleHoustonTeam(num,btn){
   if(H_TRACKED_FILTER.has(num)){
     H_TRACKED_FILTER.delete(num);
-    // Also remove from Team Tracker
     const idx=TRACKED.indexOf(num);
     if(idx>-1) TRACKED.splice(idx,1);
-    if(btn){btn.style.background='var(--bg3)';btn.style.borderColor='var(--border2)';btn.style.color='var(--text3)';btn.querySelector('span').style.color='var(--text2)';}
   }else{
+    if(TRACKED.length>=MAX_TRACKED_HOUSTON) return; // hard cap
     H_TRACKED_FILTER.add(num);
-    // Also add to Team Tracker (up to max)
-    if(!TRACKED.includes(num)&&TRACKED.length<MAX_TRACKED_HOUSTON) TRACKED.push(num);
-    if(btn){btn.style.background='rgba(0,230,100,.15)';btn.style.borderColor='rgba(0,230,100,.5)';btn.style.color='var(--green)';}
+    if(!TRACKED.includes(num)) TRACKED.push(num);
   }
   renderStatusPills();
+  // Re-render popup to update colors/disabled states
+  openTeamTrackingPopup();
 }
 
 function selectAllHoustonTeams(on){
