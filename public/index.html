@@ -404,9 +404,11 @@ const TEAM_COLORS=[
 ];
 const MAX_TRACKED=6;
 // Get color for a team number (by position in TRACKED array)
-function teamColor(n){const i=TRACKED.indexOf(parseInt(n));return i>=0?TEAM_COLORS[i]:null;}
+function teamColor(n){const i=TRACKED.indexOf(parseInt(n));return i>=0&&i<TEAM_COLORS.length?TEAM_COLORS[i]:null;}
 // Get color for a team key e.g. 'frc1002'
 function teamColorByKey(k){return teamColor(parseInt(k.replace('frc','')));}
+// Keep H_TRACKED_FILTER in sync with TRACKED array (call after any TRACKED mutation)
+function syncTrackedFilter(){H_TRACKED_FILTER.clear();TRACKED.forEach(n=>H_TRACKED_FILTER.add(n));}
 // Styled team number span with their assigned color
 function coloredTeamNum(n,extra=''){const c=teamColor(n);return c?`<span style="color:${c.text};font-weight:600${extra}">${n}</span>`:`<span>${n}</span>`;}
 function coloredTeamNumByKey(k,extra=''){return coloredTeamNum(parseInt(k.replace('frc','')),extra);}
@@ -1147,27 +1149,25 @@ function openTeamTrackingPopup(){
 }
 
 function toggleHoustonTeam(num,btn){
-  if(H_TRACKED_FILTER.has(num)){
-    H_TRACKED_FILTER.delete(num);
+  if(TRACKED.includes(num)){
     const idx=TRACKED.indexOf(num);
     if(idx>-1) TRACKED.splice(idx,1);
   }else{
     if(TRACKED.length>=MAX_TRACKED_HOUSTON) return; // hard cap
-    H_TRACKED_FILTER.add(num);
-    if(!TRACKED.includes(num)) TRACKED.push(num);
+    TRACKED.push(num);
   }
+  syncTrackedFilter(); // keep H_TRACKED_FILTER in sync with TRACKED
   renderStatusPills();
   // Re-render popup to update colors/disabled states
   openTeamTrackingPopup();
 }
 
 function selectAllHoustonTeams(on){
-  H_TRACKED_FILTER.clear();
   TRACKED=[];
   if(on){
-    HDB.teams.slice(0,MAX_TRACKED_HOUSTON).forEach(t=>{H_TRACKED_FILTER.add(t.num);TRACKED.push(t.num);});
+    HDB.teams.slice(0,MAX_TRACKED_HOUSTON).forEach(t=>TRACKED.push(t.num));
   }
-  // Re-render popup grid
+  syncTrackedFilter();
   openTeamTrackingPopup();
 }
 
@@ -1175,6 +1175,7 @@ function closeTeamTrackingPopup(){
   const overlay=document.getElementById('teamTrackingOverlay');
   if(overlay) overlay.style.display='none';
   document.body.style.overflow='';
+  syncTrackedFilter();
   renderStatusPills();
   renderAll();
 }
@@ -2780,7 +2781,7 @@ function renderHMxTable(teamNums,teamMatchMap,aceLoaded){
       </div></td></tr>`;
     })();
     const clickable=!isUnplayed&&bdPanel?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
-    return`<tr class="${hasT?'hl':''}" ${clickable}>
+    return`<tr ${clickable}>
       <td class="dim" style="font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${(m._hev||'').replace('2026','').toUpperCase()}</td>
       <td class="dim" style="font-size:10px;font-family:'Barlow Condensed',monospace;font-weight:700;letter-spacing:.06em">${typeLabel}</td>
       <td class="r dim" style="white-space:nowrap">${m.comp_level==='qm'?m.match_number:`${m.set_number}-${m.match_number}`}</td>
