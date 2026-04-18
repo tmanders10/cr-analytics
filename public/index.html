@@ -2841,33 +2841,37 @@ function renderMxTable(matches){
     // Build breakdown panel for played matches
     const bdPanel=(()=>{
       if(isUnplayed) return '';
-      const rbd=hBreakdownS(m,'red'), bbd=hBreakdownS(m,'blue');
-      if(!rbd&&!bbd) return '';
-      const phases=[
-        {label:'Auto',    rv:rbd?.auto??0,    bv:bbd?.auto??0,    col:'var(--blue)',   isTotal:false, isSub:false},
-        {label:'Teleop',  rv:rbd?.teleop??0,  bv:bbd?.teleop??0,  col:'#00c8aa',       isTotal:false, isSub:false},
-        {label:'Endgame', rv:rbd?.endgame??0, bv:bbd?.endgame??0, col:'var(--orange)', isTotal:false, isSub:false},
-        {label:'Total',   rv:rbd?.total??0,   bv:bbd?.total??0,   col:'var(--green)',  isTotal:true,  isSub:false},
+      const rhs=hubS(m,'red'), bhs=hubS(m,'blue');
+      if(!rhs&&!bhs) return '';
+      const bdPhases=[
+        {label:'Auto',       k:'auto',      col:'var(--blue)'},
+        {label:'Transition', k:'transition',col:'var(--text2)'},
+        {label:'Sh 1 / 2',  k1:'s1',k2:'s2', col:'#a78bfa'},
+        {label:'Sh 3 / 4',  k1:'s3',k2:'s4', col:'#a78bfa'},
+        {label:'Endgame',   k:'endgame',   col:'var(--orange)'},
+        {label:'Teleop',    k:'teleop',    col:'#00c8aa',sub:true},
+        {label:'Total',     k:'total',     col:'var(--green)',total:true},
       ];
-      const maxV=Math.max(...phases.map(p=>Math.max(p.rv,p.bv)),1);
+      const f=(hs,p)=>p.k1!=null?((hs?hs[p.k1]:0)||0)+((hs?hs[p.k2]:0)||0):(hs?hs[p.k]:0)||0;
+      const maxV=Math.max(...bdPhases.map(p=>Math.max(f(rhs,p),f(bhs,p))),1);
       const makeRow=(p)=>{
-        const pctR=Math.round((p.rv/maxV)*100), pctB=Math.round((p.bv/maxV)*100);
-        const rCol=rWin&&p.isTotal?'var(--loss)':p.rv>p.bv?'rgba(255,100,100,.9)':'var(--text3)';
-        const bCol=bWin&&p.isTotal?'var(--blue)':p.bv>p.rv?'rgba(80,180,255,.9)':'var(--text3)';
-        const barR=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${p.isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctR}%;height:100%;background:var(--loss);opacity:${rWin&&p.isTotal?'.35':'.2'};border-radius:3px;position:absolute;right:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-family:'JetBrains Mono',monospace;font-size:${p.isTotal?'13':'11'}px;font-weight:${p.isTotal?700:400};color:${rCol}">${p.rv||'–'}</div></div>`;
-        const barB=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${p.isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctB}%;height:100%;background:var(--blue);opacity:${bWin&&p.isTotal?'.35':'.2'};border-radius:3px;position:absolute;left:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:7px;font-family:'JetBrains Mono',monospace;font-size:${p.isTotal?'13':'11'}px;font-weight:${p.isTotal?700:400};color:${bCol}">${p.bv||'–'}</div></div>`;
-        const topStyle=p.isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':'margin-bottom:4px';
-        return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${topStyle}">${barR}<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${p.isTotal?900:700};font-size:${p.isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${p.isTotal?'var(--text2)':p.col}">${p.label}</div>${barB}</div>`;
+        const rv=f(rhs,p),bv=f(bhs,p);
+        const isTotal=!!p.total,isSub=!!p.sub;
+        const pctR=Math.round((rv/maxV)*100),pctB=Math.round((bv/maxV)*100);
+        const rCol=rWin&&isTotal?'var(--loss)':rv>bv?'rgba(255,100,100,.9)':'var(--text3)';
+        const bCol=bWin&&isTotal?'var(--blue)':bv>rv?'rgba(80,180,255,.9)':'var(--text3)';
+        const barR=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctR}%;height:100%;background:var(--loss);opacity:${rWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;right:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${rCol}">${rv}</div></div>`;
+        const barB=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctB}%;height:100%;background:var(--blue);opacity:${bWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;left:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${bCol}">${bv}</div></div>`;
+        const topStyle=isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':isSub?'padding-top:5px;border-top:1px dashed rgba(255,255,255,.1);margin-top:2px;margin-bottom:4px':'margin-bottom:4px';
+        return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${topStyle}">${barR}<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal||isSub?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':p.col}">${p.label}${isSub?'<div style="font-size:8px;font-weight:400;color:var(--text3);letter-spacing:.04em;margin-top:1px">subtotal</div>':''}</div>${barB}</div>`;
       };
-      const hasDetail=phases.some(p=>p.rv>0||p.bv>0);
-      if(!hasDetail) return '';
       return`<tr id="${bdId}" class="mx-bd"><td colspan="${colSpan}" style="padding:0"><div style="padding:14px 24px 16px">
         <div style="display:grid;grid-template-columns:1fr 90px 1fr;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">
           <div style="text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${rWin?'var(--loss)':'var(--text3)'}">RED ALLIANCE</div>
           <div></div>
           <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${bWin?'var(--blue)':'var(--text3)'}">BLUE ALLIANCE</div>
         </div>
-        ${phases.map(makeRow).join('')}
+        ${bdPhases.map(makeRow).join('')}
         <div style="margin-top:10px;text-align:right;font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase">Alliance totals · click row to close</div>
       </div></td></tr>`;
     })();
