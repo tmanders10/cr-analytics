@@ -2602,36 +2602,47 @@ ${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06
 
 // ── Match Log (Houston) — full season for all 75 teams ──
 function renderHMx(){
+  // If no teams selected, show prompt — avoids rendering 3000+ matches
+  if(H_TRACKED_FILTER.size===0){
+    document.getElementById('pg-matches').innerHTML=`
+<div class="sh"><h2>Match <span>Log</span></h2><span class="sub">Houston 2026 season history</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;gap:16px">
+  <div style="font-size:32px;opacity:.4">📋</div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2)">No Teams Selected</div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);max-width:360px;line-height:1.6">Use the <strong style="color:var(--text2)">Team Tracking</strong> pill in the status bar to select teams and view their match history here.</div>
+  <button onclick="openTeamTrackingPopup()" style="margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:8px 20px;border-radius:6px;cursor:pointer;background:rgba(0,230,100,.15);border:1px solid rgba(0,230,100,.4);color:var(--green)">Open Team Tracking</button>
+</div>`;
+    return;
+  }
+
   let ms=MATCH_TYPE==='qm'?hallM.filter(m=>m.comp_level==='qm'):MATCH_TYPE==='po'?hallM.filter(m=>m.comp_level!=='qm'):hallM;
 
-  // Build per-team match lists — each match appears once per team in it
-  // Group by team, tracked teams first, then alphabetical by team number
+  // Build per-team match lists for selected teams only
   const teamMatchMap={};
   ms.forEach(m=>{
     const allKeys=[...(m.alliances?.red?.team_keys||[]),...(m.alliances?.blue?.team_keys||[])];
     allKeys.forEach(k=>{
       const num=parseInt(k.replace('frc',''));
+      if(!H_TRACKED_FILTER.has(num)) return;
       if(!teamMatchMap[num]) teamMatchMap[num]=[];
       if(!teamMatchMap[num].find(x=>x.key===m.key)) teamMatchMap[num].push(m);
     });
   });
 
-  // Apply team filter — if teams selected only show those teams' sections
-  let teamNums=Object.keys(teamMatchMap).map(Number);
-  if(H_TRACKED_FILTER.size>0) teamNums=teamNums.filter(n=>H_TRACKED_FILTER.has(n));
-
-  // Sort teams: tracked first (in TRACKED order), then remaining by team number
+  // Sort teams: in TRACKED order first, then by team number
+  let teamNums=[...H_TRACKED_FILTER];
   teamNums.sort((a,b)=>{
     const aIdx=TRACKED.indexOf(a), bIdx=TRACKED.indexOf(b);
-    if(aIdx>-1&&bIdx>-1) return aIdx-bIdx;  // both tracked: preserve TRACKED order
-    if(aIdx>-1) return -1;  // a tracked, b not
-    if(bIdx>-1) return 1;   // b tracked, a not
-    return a-b;             // neither tracked: sort by team number
+    if(aIdx>-1&&bIdx>-1) return aIdx-bIdx;
+    if(aIdx>-1) return -1;
+    if(bIdx>-1) return 1;
+    return a-b;
   });
 
   // Sort each team's matches by match order
   const lo={qm:0,qf:1,sf:2,f:3};
   teamNums.forEach(num=>{
+    if(!teamMatchMap[num]) teamMatchMap[num]=[];
     teamMatchMap[num].sort((a,b)=>
       (lo[a.comp_level]||0)-(lo[b.comp_level]||0)||
       (a.set_number||0)-(b.set_number||0)||
@@ -2639,13 +2650,10 @@ function renderHMx(){
     );
   });
 
-  const totalMatches=H_TRACKED_FILTER.size>0
-    ? new Set(teamNums.flatMap(n=>teamMatchMap[n].map(m=>m.key))).size
-    : ms.length;
-
+  const totalMatches=new Set(teamNums.flatMap(n=>(teamMatchMap[n]||[]).map(m=>m.key))).size;
   const aceLoaded=Object.keys(HDB.ace).length>0||Object.keys(HDB.matchPreds).length>0;
   document.getElementById('pg-matches').innerHTML=`
-<div class="sh"><h2>Match <span>Log</span></h2><span class="sub">${teamNums.length} teams · ${totalMatches} matches · Houston 2026 season history</span></div>
+<div class="sh"><h2>Match <span>Log</span></h2><span class="sub">${teamNums.length} team${teamNums.length!==1?'s':''} · ${totalMatches} matches · Houston 2026 season history</span></div>
 <div class="card" style="padding:0"><div class="tw">${renderHMxTable(teamNums,teamMatchMap,aceLoaded)}</div></div>`;
 }
 
