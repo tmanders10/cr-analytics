@@ -1049,7 +1049,8 @@ function dragDrop(e,targetN){
   TRACKED.splice(fromIdx,1);
   TRACKED.splice(toIdx,0,_dragTeam);
   _dragTeam=null;
-  renderTm();
+  if(HOUSTON_MODE) syncTrackedFilter();
+  renderAll();
 }
 function dragEnd(e){
   e.currentTarget.classList.remove('dragging');
