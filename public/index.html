@@ -2625,7 +2625,7 @@ ${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06
 <div class="card"><div class="ctitle">Top 20 Single-Alliance Scores — ${scLabel} · ${sourceLabel} <span style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace;font-weight:400;margin-left:6px">click row to expand breakdown</span></div>
   <div class="tw"><table>
     <thead><tr>
-      <th>#</th><th>Event</th><th>Match</th><th></th>
+      <th>#</th><th>Event</th><th>Match</th><th>Result</th><th></th>
       <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
       <th class="r" style="color:var(--loss)">Red</th>
       <th></th>
@@ -2667,7 +2667,7 @@ ${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06
           const topStyle=isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':isSub?'padding-top:5px;border-top:1px dashed rgba(255,255,255,.1);margin-top:2px;margin-bottom:4px':'margin-bottom:4px';
           return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${topStyle}">${barR}<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal||isSub?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':p.col}">${p.label}${isSub?'<div style="font-size:8px;font-weight:400;color:var(--text3);letter-spacing:.04em;margin-top:1px">subtotal</div>':''}</div>${barB}</div>`;
         };
-        return`<tr id="${bdId}" class="mx-bd"><td colspan="10" style="padding:0"><div style="padding:14px 24px 16px">
+        return`<tr id="${bdId}" class="mx-bd"><td colspan="11" style="padding:0"><div style="padding:14px 24px 16px">
           <div style="display:grid;grid-template-columns:1fr 90px 1fr;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             <div style="text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${rWin?'var(--loss)':'var(--text3)'}">RED ALLIANCE</div>
             <div></div>
@@ -2682,6 +2682,7 @@ ${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06
         <td class="dim">${i+1}</td>
         <td class="dim" style="font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap">${row.evShort}</td>
         <td class="dim" style="white-space:nowrap">${m.comp_level==='qm'?'QM'+m.match_number:`${m.comp_level.toUpperCase()} ${m.set_number}-${m.match_number}`} ${videoLink(matchVideoUrl(m))}</td>
+        <td><span class="rp ${rWin||bWin?(m.winning_alliance==='red'?'rl':'rw'):'rt'}" style="font-size:10px">${rWin?'RED WIN':bWin?'BLUE WIN':'TIE'}</span></td>
         <td></td>
         <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${rWin?'background:rgba(255,61,90,.04)':''}">${rt}</td>
         <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${rWin?700:400};color:${rWin?'var(--loss)':'var(--text3)'};${rWin?'background:rgba(255,61,90,.04)':''}">${row.rs>=0?row.rs:'–'}</td>
