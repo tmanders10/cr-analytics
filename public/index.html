@@ -2548,15 +2548,56 @@ ${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06
 <div class="card"><div class="ctitle">Top 20 Single-Alliance Scores — ${scLabel} · ${sourceLabel} <span style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace;font-weight:400;margin-left:6px">click row to expand breakdown</span></div>
   <div class="tw"><table>
     <thead><tr><th>#</th><th>Event</th><th>Match</th><th>Alliance</th><th>Teams</th><th class="r">Score</th><th>Result</th></tr></thead>
-    <tbody>${topRows.slice(0,20).map((row,i)=>`<tr class="${row.teams.some(t=>TRACKED.includes(parseInt(t)))?'hl':''}">
-      <td class="dim">${i+1}</td>
-      <td class="dim" style="font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap">${(row.m._hev||row.m._ev||'').replace('2026','').toUpperCase()}</td>
-      <td class="dim" style="white-space:nowrap">${row.m.comp_level==='qm'?'QM'+row.m.match_number:'SF '+row.m.set_number+'-'+row.m.match_number} ${videoLink(matchVideoUrl(row.m))}</td>
-      <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
-      <td>${row.teams.map(t=>{const tc=teamColor(parseInt(t));return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${t}</span>`;}).join(' · ')}</td>
-      <td class="r" style="color:var(--green);font-weight:600">${row.sc}</td>
-      <td><span class="rp ${row.won?'rw':'rl'}">${row.won?'WIN':'LOSS'}</span></td>
-    </tr>`).join('')}</tbody>
+    <tbody>${topRows.slice(0,20).map((row,i)=>{
+      const m=row.m;
+      const rWin=m.winning_alliance==='red', bWin=m.winning_alliance==='blue';
+      const bdId=`hsc-bd-${i}`;
+      const bdPanel=(()=>{
+        const rhs=hubS(m,'red'), bhs=hubS(m,'blue');
+        if(!rhs&&!bhs) return '';
+        const bdPhases=[
+          {label:'Auto',      k:'auto',      col:'var(--blue)'},
+          {label:'Transition',k:'transition',col:'var(--text2)'},
+          {label:'Sh 1 / 2', k1:'s1',k2:'s2',col:'#a78bfa'},
+          {label:'Sh 3 / 4', k1:'s3',k2:'s4',col:'#a78bfa'},
+          {label:'Endgame',   k:'endgame',   col:'var(--orange)'},
+          {label:'Teleop',    k:'teleop',    col:'#00c8aa',sub:true},
+          {label:'Total',     k:'total',     col:'var(--green)',total:true},
+        ];
+        const f=(hs,p)=>p.k1!=null?((hs?hs[p.k1]:0)||0)+((hs?hs[p.k2]:0)||0):(hs?hs[p.k]:0)||0;
+        const maxV=Math.max(...bdPhases.map(p=>Math.max(f(rhs,p),f(bhs,p))),1);
+        const makeRow=(p)=>{
+          const rv=f(rhs,p),bv=f(bhs,p);
+          const isTotal=!!p.total,isSub=!!p.sub;
+          const pctR=Math.round((rv/maxV)*100),pctB=Math.round((bv/maxV)*100);
+          const rCol=rWin&&isTotal?'var(--loss)':rv>bv?'rgba(255,100,100,.9)':'var(--text3)';
+          const bCol=bWin&&isTotal?'var(--blue)':bv>rv?'rgba(80,180,255,.9)':'var(--text3)';
+          const barR=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctR}%;height:100%;background:var(--loss);opacity:${rWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;right:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${rCol}">${rv}</div></div>`;
+          const barB=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctB}%;height:100%;background:var(--blue);opacity:${bWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;left:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${bCol}">${bv}</div></div>`;
+          const topStyle=isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':isSub?'padding-top:5px;border-top:1px dashed rgba(255,255,255,.1);margin-top:2px;margin-bottom:4px':'margin-bottom:4px';
+          return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${topStyle}">${barR}<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal||isSub?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':p.col}">${p.label}${isSub?'<div style="font-size:8px;font-weight:400;color:var(--text3);letter-spacing:.04em;margin-top:1px">subtotal</div>':''}</div>${barB}</div>`;
+        };
+        return`<tr id="${bdId}" class="mx-bd"><td colspan="7" style="padding:0"><div style="padding:14px 24px 16px">
+          <div style="display:grid;grid-template-columns:1fr 90px 1fr;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            <div style="text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${rWin?'var(--loss)':'var(--text3)'}">RED ALLIANCE</div>
+            <div></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${bWin?'var(--blue)':'var(--text3)'}">BLUE ALLIANCE</div>
+          </div>
+          ${bdPhases.map(makeRow).join('')}
+          <div style="margin-top:10px;text-align:right;font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase">Alliance totals \xb7 click row to close</div>
+        </div></td></tr>`;
+      })();
+      const clickable=bdPanel?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
+      return`<tr class="${row.teams.some(t=>TRACKED.includes(parseInt(t)))?'hl':''}" ${clickable}>
+        <td class="dim">${i+1}</td>
+        <td class="dim" style="font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap">${(m._hev||m._ev||'').replace('2026','').toUpperCase()}</td>
+        <td class="dim" style="white-space:nowrap">${m.comp_level==='qm'?'QM'+m.match_number:'SF '+m.set_number+'-'+m.match_number} ${videoLink(matchVideoUrl(m))}</td>
+        <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${row.a==='red'?'var(--loss)':'var(--blue)'};margin-right:5px;vertical-align:middle"></span>${row.a}</td>
+        <td>${row.teams.map(t=>{const tc=teamColor(parseInt(t));return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${t}</span>`;}).join(' \xb7 ')}</td>
+        <td class="r" style="color:var(--green);font-weight:600">${row.sc}</td>
+        <td><span class="rp ${row.won?'rw':'rl'}">${row.won?'WIN':'LOSS'}</span></td>
+      </tr>${bdPanel}`;
+    }).join('')}</tbody>
   </table></div>
 </div>`;
 }
