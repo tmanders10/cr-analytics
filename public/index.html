@@ -1853,7 +1853,7 @@ function calcPhaseStats(matches, mode) {
 }
 
 function renderTPCard(t, sharedMax){
-  const fM=filteredMatches();
+  const fM=HOUSTON_MODE ? hallM : filteredMatches();
   const mode = CARD_MODE[t.n] || 'all';
   const mtype = MATCH_TYPE; // use global match type filter
   const s=teamStatsF(t.k, fM, mtype);
