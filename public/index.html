@@ -929,6 +929,22 @@ function phS(m,a,ph){
   if(ph==='endgame') return bd.endGameTowerPoints ??bd.endgamePoints ??bd.endgame_points ??bd.endGamePoints??null;
   return null;
 }
+// Houston phase score — reads from hubScore nested object
+function hPhS(m,a,ph){
+  const bd=m.score_breakdown?.[a];if(!bd)return null;
+  const hs=bd.hubScore;
+  if(hs){
+    if(ph==='auto')    return hs.autoPoints    ??null;
+    if(ph==='teleop')  return hs.teleopPoints  ??null;
+    if(ph==='endgame') return hs.endgamePoints ??null;
+  }
+  // Fallback to top-level fields
+  if(ph==='auto')    return bd.autoPoints    ??bd.auto_points    ??null;
+  if(ph==='teleop')  return bd.teleopPoints  ??bd.teleop_points  ??null;
+  if(ph==='endgame') return bd.endgamePoints ??bd.endgame_points ??null;
+  return null;
+}
+
 // Extract hubScore fields from a breakdown alliance
 function hubS(m,a){
   const bd=m.score_breakdown?.[a];
@@ -1211,6 +1227,8 @@ function teamStatsF(tk,fM,matchType='qm'){
   const filtered = matchType==='qm' ? fM.filter(m=>m.comp_level==='qm')
                  : matchType==='po' ? fM.filter(m=>m.comp_level!=='qm')
                  : fM;
+  // Use hPhS in Houston mode (reads from hubScore), phS otherwise
+  const getPhase=(m,al,ph)=>HOUSTON_MODE?hPhS(m,al,ph):phS(m,al,ph);
   filtered.forEach(m=>{
     const red=m.alliances?.red?.team_keys||[],blue=m.alliances?.blue?.team_keys||[];
     let al=null;if(red.includes(tk))al='red';else if(blue.includes(tk))al='blue';if(!al)return;
@@ -1218,14 +1236,15 @@ function teamStatsF(tk,fM,matchType='qm'){
     const my=m.alliances?.[al]?.score??0,op=m.alliances?.[opp]?.score??0;
     const w=m.winning_alliance;let res='tie';if(w===al)res='win';else if(w===opp)res='loss';
     if(res==='win')s.wins++;else if(res==='loss')s.losses++;else s.ties++;s.tot+=my;
-    const au=phS(m,al,'auto'),tl=phS(m,al,'teleop'),eg=phS(m,al,'endgame');
+    const au=getPhase(m,al,'auto'),tl=getPhase(m,al,'teleop'),eg=getPhase(m,al,'endgame');
     if(au!==null)s.aT+=au;if(tl!==null)s.tlT+=tl;if(eg!==null)s.egT+=eg;
     s.matches.push({m,al,res,my,op,au,tl,eg});
   });
-  // Sort: event week → quals before playoffs → set number → match number
+  // Sort: event week (_wk for PCH, _hweek for Houston) → match type → set → match number
   const poOrder={qm:0,qf:1,sf:2,f:3};
   s.matches.sort((a,b)=>{
-    const wk=(a.m._wk||0)-(b.m._wk||0); if(wk!==0)return wk;
+    const wkA=a.m._wk||a.m._hweek||0, wkB=b.m._wk||b.m._hweek||0;
+    if(wkA!==wkB) return wkA-wkB;
     const cl=(poOrder[a.m.comp_level]||0)-(poOrder[b.m.comp_level]||0); if(cl!==0)return cl;
     const sn=(a.m.set_number||0)-(b.m.set_number||0); if(sn!==0)return sn;
     return a.m.match_number-b.m.match_number;
@@ -1247,6 +1266,14 @@ function evStatus(ev){
 }
 // ── EPA HELPERS ──
 function getTeamEPAs(tk){
+  if(HOUSTON_MODE){
+    // In Houston mode, return EPA entries from HDB keyed by event
+    const evs=HDB.epa[tk]||{};
+    return Object.entries(evs).map(([evKey,e])=>{
+      const evName=(HDB.events[evKey]?.eventName||evKey).replace('2026','').toUpperCase();
+      return e?{ev:{key:evKey,short:evName,name:evName},...e}:null;
+    }).filter(Boolean);
+  }
   return EVENTS.filter(ev=>loadedEvents.has(ev.key))
     .map(ev=>{const e=DB.epa[tk]?.[ev.key];return e?{ev,...e}:null;}).filter(Boolean);
 }
@@ -1750,6 +1777,24 @@ let OPR_EXPANDED = false;
 
 // Get OPR/DPR/CCWM for a team across all loaded events
 function getTeamOPRs(tk){
+  if(HOUSTON_MODE){
+    // In Houston mode, read OPRs from HDB.events
+    const results=[];
+    const teamNum=parseInt(tk.replace('frc',''));
+    const evKeys=HDB.teamEventKeys[teamNum]||[];
+    evKeys.forEach(evKey=>{
+      const ev=HDB.events[evKey]||{};
+      const oprs=ev.oprs||{};
+      const opr=oprs.oprs?.[tk]??null;
+      const dpr=oprs.dprs?.[tk]??null;
+      const ccwm=oprs.ccwms?.[tk]??null;
+      if(opr!==null||dpr!==null||ccwm!==null){
+        const evName=(ev.eventName||evKey).replace('2026','').toUpperCase();
+        results.push({ev:{key:evKey,short:evName,name:ev.eventName||evKey},opr,dpr,ccwm});
+      }
+    });
+    return results;
+  }
   const results=[];
   EVENTS.forEach(ev=>{
     if(!loadedEvents.has(ev.key)) return;
@@ -1900,7 +1945,7 @@ function renderTPCard(t, sharedMax){
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
       <div class="drag-handle" title="Drag to reorder">⠿</div>
       <div class="tpn" style="color:${tc.text}">${t.n}</div>
-      <div><div class="tpname">${t.name}</div><div class="tpmeta">District Rank #${t.rank}${ACTIVE_FILTER.size?' · filtered view':''}</div>
+      <div><div class="tpname">${t.name}</div><div class="tpmeta">${HOUSTON_MODE?'Global Rank #'+(ACE_DATA[t.n]?.rank_global??'–'):'District Rank #'+t.rank}${!HOUSTON_MODE&&ACTIVE_FILTER.size?' · filtered view':''}</div>
       <div class="tprec" style="color:${tc.text}">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
     </div>
     ${hasData?`
@@ -2129,7 +2174,7 @@ function renderTm(){
   };
 
   const trkCards=TRACKED.length===0?`<div class="no-data-card">${HOUSTON_MODE?'No teams tracked yet — use the Team Tracking button in the status bar.':'No teams tracked yet — add team numbers below or click + Track in the table.'}</div>`
-    :TRACKED.map(n=>{const k=`frc${n}`;const dr=distRank.find(r=>r.team_key===k);return renderTPCard({n,k,name:tn(k),rank:dr?.rank??'–'},sharedMax);}).join('');
+    :TRACKED.map(n=>{const k=`frc${n}`;const dr=distRank.find(r=>r.team_key===k);const hName=HOUSTON_MODE?((HDB.teams||[]).find(t=>t.num===n)?.name||tn(k)):tn(k);return renderTPCard({n,k,name:hName,rank:dr?.rank??'–'},sharedMax);}).join('');
   const gridCols=Math.min(TRACKED.length,3)||1;
   document.getElementById('pg-teams').innerHTML=`
 <div class="sh"><h2>Team <span>Tracker</span></h2><span class="sub">${allTkeys.size} teams in match data${filterLabel()}</span></div>
