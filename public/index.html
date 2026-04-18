@@ -1990,10 +1990,10 @@ function renderTPCard(t, sharedMax){
           if(!ace) return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">ACE not available — run a Full Refresh to load Peekorobo data.</div>`;
       const confPct=Math.round((ace.confidence||0)*100);
       const confCol=confPct>=90?'var(--green)':confPct>=75?'#f0c040':'var(--loss)';
-      const stateRank=ace.rank_state!=null?`<span style="color:var(--green);font-weight:700">#${ace.rank_state}</span><span style="color:var(--text3)"> / ${ace.count_state} GA</span>`:'–';
-      const countryRank=ace.rank_country!=null?`<span style="color:var(--green);font-weight:700">#${ace.rank_country}</span><span style="color:var(--text3)"> / ${ace.count_country} US</span>`:'–';
-      const distRankAce=ace.rank_district!=null?`<span style="color:var(--green);font-weight:700">#${ace.rank_district}</span><span style="color:var(--text3)"> / ${ace.count_district} dist</span>`:'–';
-      const globalRank=ace.rank_global!=null?`<span style="color:var(--green);font-weight:700">#${ace.rank_global}</span><span style="color:var(--text3)"> / ${ace.count_global} 🌐</span>`:'–';
+      const stateRank=ace.rank_state!=null?`<span style=\"color:var(--green);font-weight:700\">#${ace.rank_state}</span>${ace.count_state!=null?`<span style=\"color:var(--text3)\"> / ${ace.count_state} GA</span>`:''}`:'–';
+      const countryRank=ace.rank_country!=null?`<span style=\"color:var(--green);font-weight:700\">#${ace.rank_country}</span>${ace.count_country!=null?`<span style=\"color:var(--text3)\"> / ${ace.count_country} US</span>`:''}`:'–';
+      const distRankAce=ace.rank_district!=null?`<span style=\"color:var(--green);font-weight:700\">#${ace.rank_district}</span>${ace.count_district!=null?`<span style=\"color:var(--text3)\"> / ${ace.count_district} dist</span>`:''}`:'–';
+      const globalRank=ace.rank_global!=null?`<span style=\"color:var(--green);font-weight:700\">#${ace.rank_global}</span>${ace.count_global!=null?`<span style=\"color:var(--text3)\"> / ${ace.count_global}</span>`:''}`:'–';
       const evPerfs=ace.event_perfs||[];
       return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
