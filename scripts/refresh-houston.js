@@ -414,26 +414,27 @@ async function main() {
     }
     await sleep(80);
 
-    // Fetch season-level team_year for global/US ranks
+    // Fetch season-level team_years for global/US ranks
     try {
-      const teamYear = await statboticsFetch(`/team_year?team=${team.num}&year=2026`);
-      if (teamYear) {
-        // teamYear.rank is global rank, teamYear.country_rank is US rank
-        // Also grab norm EPA for reference
+      const teamYears = await statboticsFetch(`/team_years?team=${team.num}&year=2026&limit=1`);
+      const teamYear = Array.isArray(teamYears) ? teamYears[0] : null;
+      if (teamYear && teamYear.epa?.ranks) {
+        const ranks = teamYear.epa.ranks;
         if (!output.sbRanks) output.sbRanks = {};
         output.sbRanks[team.num] = {
-          rank_global:  teamYear.rank         ?? null,
-          rank_country: teamYear.country_rank ?? null,
-          total_teams:  teamYear.total_teams  ?? null,
-          country:      teamYear.country      ?? null,
+          rank_global:        ranks.total?.rank        ?? null,
+          rank_country:       ranks.country?.rank      ?? null,
+          total_teams_global: ranks.total?.team_count  ?? null,
+          total_teams_country:ranks.country?.team_count?? null,
+          country:            teamYear.country         ?? null,
         };
-        process.stdout.write(` | Global #${teamYear.rank ?? '?'} US #${teamYear.country_rank ?? 'N/A'}\n`);
+        process.stdout.write(` | Global #${ranks.total?.rank ?? '?'} US #${ranks.country?.rank ?? 'N/A'}\n`);
       } else {
         process.stdout.write('\n');
       }
     } catch (e) {
       process.stdout.write('\n');
-      warn(`Statbotics team_year failed for team ${team.num}: ${e.message}`);
+      warn(`Statbotics team_years failed for team ${team.num}: ${e.message}`);
     }
     await sleep(80);
   }
