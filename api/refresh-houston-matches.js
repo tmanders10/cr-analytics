@@ -47,62 +47,6 @@ async function commitFile(url, content, sha, token, message) {
   }
 }
 
-function slimMatch(m) {
-  return {
-    key:               m.key,
-    comp_level:        m.comp_level,
-    match_number:      m.match_number,
-    set_number:        m.set_number       ?? 1,
-    winning_alliance:  m.winning_alliance ?? '',
-    predicted_time:    m.predicted_time   ?? null,
-    actual_time:       m.actual_time      ?? null,
-    videos:            (m.videos || []).filter(v => v.type === 'youtube').map(v => ({ key: v.key, type: v.type })),
-    alliances: {
-      red:  { team_keys: m.alliances?.red?.team_keys  || [], score: m.alliances?.red?.score  ?? -1 },
-      blue: { team_keys: m.alliances?.blue?.team_keys || [], score: m.alliances?.blue?.score ?? -1 },
-    },
-    score_breakdown: m.score_breakdown ? {
-      red:  slimBreakdown(m.score_breakdown.red),
-      blue: slimBreakdown(m.score_breakdown.blue),
-    } : null,
-  };
-}
-
-function slimBreakdown(bd) {
-  if (!bd) return null;
-  return {
-    autoPoints:           bd.autoPoints           ?? bd.auto_points     ?? null,
-    teleopPoints:         bd.teleopPoints         ?? bd.teleop_points   ?? null,
-    endgamePoints:        bd.endgamePoints        ?? bd.endgame_points  ?? null,
-    autoReef:             bd.autoReef             ?? null,
-    teleopReef:           bd.teleopReef           ?? null,
-    autoCoral:            bd.autoCoral            ?? null,
-    teleopCoral:          bd.teleopCoral          ?? null,
-    netAlgaePoints:       bd.netAlgaePoints       ?? null,
-    processorAlgaePoints: bd.processorAlgaePoints ?? null,
-    endGameBargePoints:   bd.endGameBargePoints   ?? null,
-    totalPoints:          bd.totalPoints          ?? bd.total_points    ?? null,
-    foulPoints:           bd.foulPoints           ?? bd.foul_points     ?? null,
-    rp:                   bd.rp                   ?? null,
-  };
-}
-
-function slimRankings(rankings) {
-  if (!rankings || !rankings.rankings) return rankings || {};
-  return {
-    sort_order_info:  rankings.sort_order_info  || [],
-    extra_stats_info: rankings.extra_stats_info || [],
-    rankings: (rankings.rankings || []).map(r => ({
-      rank:           r.rank,
-      team_key:       r.team_key,
-      record:         r.record,
-      sort_orders:    r.sort_orders,
-      extra_stats:    r.extra_stats,
-      matches_played: r.matches_played,
-      dq:             r.dq,
-    })),
-  };
-}
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
@@ -180,23 +124,22 @@ module.exports = async function handler(req, res) {
       matchPreds,
       divisionEvent: {
         ...(existing.divisionEvent || {}),
-        matches: (matches || []).map(slimMatch),
-        rankings: slimRankings(rankings),
+        matches: matches || [],
+        rankings: rankings || {},
       },
     };
 
-    // ── Write to GitHub ──
+    // ── Write to GitHub (public/houston.json only) ──
     const content = Buffer.from(JSON.stringify(output, null, 2)).toString('base64');
     const commitMsg = `chore: houston match update ${DIV_EVENT_KEY} ${new Date().toISOString()}`;
-    const files = [
+    const sha = await getFileSHA(
       `https://api.github.com/repos/${GITHUB_REPO}/contents/public/houston.json`,
-      `https://api.github.com/repos/${GITHUB_REPO}/contents/houston.json`,
-    ];
-    for (const fileUrl of files) {
-      const sha = await getFileSHA(fileUrl, GITHUB_TOKEN);
-      if (!sha) continue;
-      await commitFile(fileUrl, content, sha, GITHUB_TOKEN, commitMsg);
-    }
+      GITHUB_TOKEN
+    );
+    if (sha) await commitFile(
+      `https://api.github.com/repos/${GITHUB_REPO}/contents/public/houston.json`,
+      content, sha, GITHUB_TOKEN, commitMsg
+    );
 
     return res.status(200).json({
       success: true,
