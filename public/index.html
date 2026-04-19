@@ -2554,9 +2554,9 @@ function renderHRk(){
 </tr></thead>
 <tbody>${rows.map((r,i)=>{
   const sbr=r.sbr;
-  const isUS=sbr?.country==='USA'||sbr?.country==='US'||sbr?.country==null;
+  const isUS=sbr?.country==='USA';
   const glRank=sbr?.rank_global!=null?`#${sbr.rank_global}`:'–';
-  const usRank=sbr?.rank_country!=null?(isUS?`#${sbr.rank_country}`:'N/A'):'–';
+  const usRank=sbr==null?'–':isUS?(sbr.rank_country!=null?`#${sbr.rank_country}`:'–'):'N/A';
   const epaVal=r.epa?.total!=null?r.epa.total.toFixed(1):'–';
   const oprVal=r.opr!=null?r.opr.toFixed(1):'–';
   const aceVal=r.ace?.ace!=null?r.ace.ace.toFixed(1):'–';
@@ -2564,7 +2564,7 @@ function renderHRk(){
   const confCol=r.ace?.confidence!=null?(r.ace.confidence>=0.9?'var(--green)':r.ace.confidence>=0.75?'#f0c040':'var(--loss)'):'var(--text3)';
   const isTrk=isTr(`frc${r.num}`);
   return`<tr class="${isTrk?'hl':''}" style="${r.tc?'border-left:3px solid '+r.tc.border+';':''}">
-  <td><span class="rk ${i<3?'top':''}">${glRank}</span></td>
+  <td><span class="rk ${glRank!=='–'&&i<3?'top':''}">${glRank}</span></td>
   <td><a class="tlink" href="https://www.statbotics.io/team/${r.num}" target="_blank" style="${r.tc?'color:'+r.tc.text:''}">${r.name}</a><span class="tnsm">${r.num}</span>${r.tc?`<span style="margin-left:5px;font-size:11px;color:${r.tc.text}">★</span>`:''}</td>
   <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:${usRank==='N/A'?'var(--text3)':'var(--blue)'}">${usRank}</td>
   <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)">${epaVal}</td>
