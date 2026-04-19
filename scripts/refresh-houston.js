@@ -532,10 +532,6 @@ async function main() {
     log('Writing public/houston.json ...');
     await commitFile('public/houston.json', output, `chore: houston refresh ${output.fetchedAt}`);
     ok('public/houston.json committed');
-
-    log('Writing root houston.json ...');
-    await commitFile('houston.json', output, `chore: houston refresh root ${output.fetchedAt}`);
-    ok('houston.json committed');
   } catch (e) {
     console.error(`\nERROR committing to GitHub: ${e.message}`);
     process.exit(1);
