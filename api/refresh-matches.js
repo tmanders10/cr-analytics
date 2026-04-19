@@ -164,18 +164,17 @@ module.exports = async function handler(req, res) {
       },
     };
 
-    // Commit to both data files
+    // Commit to public/data.json only
     const content = Buffer.from(JSON.stringify(output, null, 2)).toString('base64');
     const commitMsg = `chore: quick match update ${activeEvent.short} ${new Date().toISOString()}`;
-    const files = [
+    const sha = await getFileSHA(
       `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
-      `https://api.github.com/repos/${GITHUB_REPO}/contents/data.json`,
-    ];
-    for (const fileUrl of files) {
-      const sha = await getFileSHA(fileUrl, GITHUB_TOKEN);
-      if (!sha) continue;
-      await commitFile(fileUrl, content, sha, GITHUB_TOKEN, commitMsg);
-    }
+      GITHUB_TOKEN
+    );
+    if (sha) await commitFile(
+      `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
+      content, sha, GITHUB_TOKEN, commitMsg
+    );
 
     return res.status(200).json({
       success: true,
