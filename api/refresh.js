@@ -279,18 +279,17 @@ module.exports = async function handler(req, res) {
     }
     output.matchPreds = matchPreds;
 
-    // ── Write to GitHub (both public/data.json and root data.json) ──
+    // ── Write to GitHub (public/data.json only) ──
     const content = Buffer.from(JSON.stringify(output, null, 2)).toString('base64');
     const commitMsg = `chore: refresh data ${new Date().toISOString()}`;
-    const files = [
+    const sha = await getFileSHA(
       `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
-      `https://api.github.com/repos/${GITHUB_REPO}/contents/data.json`,
-    ];
-    for (const fileUrl of files) {
-      const sha = await getFileSHA(fileUrl, GITHUB_TOKEN);
-      if (!sha) continue;
-      await commitFile(fileUrl, content, sha, GITHUB_TOKEN, commitMsg);
-    }
+      GITHUB_TOKEN
+    );
+    if (sha) await commitFile(
+      `https://api.github.com/repos/${GITHUB_REPO}/contents/public/data.json`,
+      content, sha, GITHUB_TOKEN, commitMsg
+    );
 
     const matchCount = Object.values(output.events)
       .reduce((s, ev) => s + (ev.matches?.length || 0), 0);
