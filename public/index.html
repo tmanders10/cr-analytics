@@ -71,7 +71,8 @@
   .mval{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:34px;color:var(--green);line-height:1}
   .msub{font-size:11px;color:var(--text3);margin-top:4px;font-family:'JetBrains Mono',monospace}
   .tw{overflow-x:auto}
-  .tw thead th{position:sticky;top:134px;z-index:10;background:var(--bg2);box-shadow:0 1px 0 var(--border2);}
+  .tw-scroll{overflow:auto;max-height:calc(100vh - 220px)}
+  .tw-scroll thead th{position:sticky;top:0;z-index:10;background:var(--bg2);box-shadow:0 1px 0 var(--border2);}
   table{width:100%;border-collapse:collapse;font-size:13px}
   thead th{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);padding:7px 11px;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap}
   thead th.r{text-align:right}
@@ -1507,7 +1508,7 @@ function renderRk(){
   const th=(c,l,cls)=>thSort('rk',c,l,cls);
   document.getElementById('pg-rankings').innerHTML=`
 <div class="sh"><h2>District <span>Rankings</span></h2><span class="sub">${rows.length} teams · 2026pch</span></div>
-<div class="card" style="padding:0 18px 0"><div class="tw"><table>
+<div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table>
   <thead><tr>
     ${th('rank','Rank','')}
     ${th('team','Team','')}
@@ -2188,7 +2189,7 @@ ${renderTrackerSetup()}
   <div class="sr">
     <input type="text" class="si" id="tmSearch" placeholder="Search team…" oninput="filterTm()"/>
   </div>
-  <div class="tw" id="tmTbl">${renderTmTable(allTm)}</div>
+  <div class="tw tw-scroll" id="tmTbl">${renderTmTable(allTm)}</div>
 </div>`;
   // Restore section expand states after DOM re-render
   TRACKED.forEach(n=>{
@@ -2241,7 +2242,7 @@ function renderAl(){
         }
         return (lo[a.comp_level]||0)-(lo[b.comp_level]||0)||(a.set_number-b.set_number)||(a.match_number-b.match_number);
       });
-      html+=`<div class="card" style="padding:0 18px 0"><div class="tw"><table style="table-layout:fixed;width:100%">
+      html+=`<div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table style="table-layout:fixed;width:100%">
         <colgroup>
           <col style="width:60px"/>
           <col style="width:48px"/>
@@ -2426,7 +2427,7 @@ ${rkList.length===0
       <span style="color:var(--blue)">■ Event data (TBA / Statbotics)</span>
       <span style="color:var(--green)">■ Season data (Statbotics / Peekorobo)</span>
     </div>
-    <div class="card" style="padding:0 18px 0"><div class="tw"><table>
+    <div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table>
   <thead>
     <tr>
       <th style="cursor:pointer;user-select:none" onclick="setSort('ev','rank')">Rank</th>
@@ -2543,7 +2544,7 @@ function renderHRk(){
   OPR via <a href="https://www.thebluealliance.com" target="_blank" style="color:var(--blue);text-decoration:none">TBA</a> ·
   ACE &amp; Conf via <a href="https://www.peekorobo.com" target="_blank" style="color:#b464ff;text-decoration:none">Peekorobo</a>
 </div>
-<div class="card" style="padding:0 18px 0"><div class="tw"><table>
+<div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table>
 <thead><tr>
   ${thH('globe','Global Rank','','','Statbotics worldwide rank')}
   <th>Team</th>
@@ -2761,7 +2762,7 @@ function renderHMx(){
   const aceLoaded=Object.keys(HDB.ace).length>0||Object.keys(HDB.matchPreds).length>0;
   document.getElementById('pg-matches').innerHTML=`
 <div class="sh"><h2>Match <span>Log</span></h2><span class="sub">${teamNums.length} team${teamNums.length!==1?'s':''} · ${totalMatches} matches · Houston 2026 season history</span></div>
-<div class="card" style="padding:0"><div class="tw">${renderHMxTable(teamNums,teamMatchMap,aceLoaded)}</div></div>`;
+<div class="card" style="padding:0"><div class="tw tw-scroll">${renderHMxTable(teamNums,teamMatchMap,aceLoaded)}</div></div>`;
 }
 
 function renderHMxTable(teamNums,teamMatchMap,aceLoaded){
@@ -2904,7 +2905,7 @@ function renderEv(evKey){
 <div class="sh"><h2>Event <span>Standings</span></h2><span class="sub">${HDB.division} · ${rkList.length||'–'} teams${rkList.length?'':' (pre-event)'}</span></div>
 ${!divKey?`<div class="pending-banner">Division event key not yet configured. Set HOUSTON_DIVISION_EVENT_KEY in Vercel env vars once division is announced.</div>`:
   rkList.length===0?`<div class="pending-banner" style="background:rgba(56,168,255,.06);border-color:rgba(56,168,255,.3)">Data available once event begins — run a Match Update to refresh.</div>`:
-  `<div class="card" style="padding:0 18px 0"><div class="tw"><table>
+  `<div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table>
   <thead><tr><th>Rank</th><th>Team</th><th class="r" style="color:var(--text3)">W-L-T</th><th class="r" style="color:var(--blue)">RS</th><th class="r" style="color:var(--green)">EPA</th><th class="r" style="color:var(--green)">ACE</th></tr></thead>
   <tbody>${rkList.map(r=>{
     const tk=`frc${(r.team_key||'').replace('frc','')}`;
@@ -2944,7 +2945,7 @@ ${ACTIVE_FILTER.size?`<div class="pending-banner" style="background:rgba(0,230,1
 <div class="sr">
   <input type="text" class="si" id="mxTm" placeholder="Filter by team #…" oninput="filterMx()" style="width:180px"/>
 </div>
-<div class="card" style="padding:0"><div class="tw" id="mxTbl">${renderMxTable(ms)}</div></div>`;}
+<div class="card" style="padding:0"><div class="tw tw-scroll" id="mxTbl">${renderMxTable(ms)}</div></div>`;}
 function filterMx(){
   const team=document.getElementById('mxTm').value.trim();
   let ms=filteredMatches();
