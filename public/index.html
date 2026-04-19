@@ -1948,7 +1948,7 @@ function renderTPCard(t, sharedMax){
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
       <div class="drag-handle" title="Drag to reorder">⠿</div>
       <div class="tpn" style="color:${tc.text}">${t.n}</div>
-      <div><div class="tpname">${t.name}</div><div class="tpmeta">${HOUSTON_MODE?'Global Rank #'+(ACE_DATA[t.n]?.rank_global??'–'):'District Rank #'+t.rank}${!HOUSTON_MODE&&ACTIVE_FILTER.size?' · filtered view':''}</div>
+      <div><div class="tpname">${t.name}</div><div class="tpmeta">${HOUSTON_MODE?'Global Rank #'+((HDB.sbRanks?.[t.n]?.rank_global)??'–'):'District Rank #'+t.rank}${!HOUSTON_MODE&&ACTIVE_FILTER.size?' · filtered view':''}</div>
       <div class="tprec" style="color:${tc.text}">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
     </div>
     ${hasData?`
