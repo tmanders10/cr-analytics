@@ -655,8 +655,8 @@ async function toggleHoustonMode(){
   applyHoustonMode();
   renderAll();
   if(HOUSTON_MODE){
-    const rkTab=document.querySelector('.nav-tab[onclick*="\'rankings\'"]');
-    if(rkTab) showPage('rankings',rkTab);
+    const ovTab=document.querySelector('.nav-tab[onclick*="\'overview\'"]');
+    if(ovTab) showPage('overview',ovTab);
   }
   setS('ok',HOUSTON_MODE?`Houston Mode ON — ${HDB.division}`:'PCH District Mode');
   setTimeout(()=>setS('ok',''),3000);
@@ -830,9 +830,9 @@ async function init(){
         sessionStorage.setItem('cr_houston','1');
         applyHoustonMode();
         renderAll();
-        // Default to Global Rankings tab in Houston mode
-        const rkTab=document.querySelector('.nav-tab[onclick*="\'rankings\'"]');
-        if(rkTab) showPage('rankings',rkTab);
+        // Default to Overview tab in Houston mode
+        const ovTab=document.querySelector('.nav-tab[onclick*="\'overview\'"]');
+        if(ovTab) showPage('overview',ovTab);
       }
     }
   }catch(err){
@@ -2616,7 +2616,7 @@ function renderHOv(){
   // ── Top 5 threats card ──
   function topThreatsCard(){
     return`<div class="card">
-      <div class="ctitle">Top 5 — Pre-Season EPA</div>
+      <div class="ctitle">Top 5 — Pre-Event EPA</div>
       ${top5.map((t,i)=>{
         const tc=teamColor(t.num);
         const epaVal=t.epa?.total!=null?t.epa.total.toFixed(1):'–';
@@ -2651,20 +2651,37 @@ function renderHOv(){
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:42px;color:${tc.text};line-height:1">1002</div>
         <div>
           <div style="font-weight:700;font-size:15px">CircuitRunners Robotics</div>
-          <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">Wheeler High School · Marietta, GA</div>
-          <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:2px">Global Rank #${glRank1002} · Qualified via PCH District Championship${divRecord}</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">Wheeler High School · Marietta, GA · Global Rank #${glRank1002}${divRecord}</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-        ${[
-          {l:'Pre-Season W',v:preSeason.wins,col:'var(--green)'},
-          {l:'Pre-Season L',v:preSeason.losses,col:'var(--loss)'},
-          {l:'EPA Total',v:epa1002?.total?.toFixed(1)??'–',col:'var(--green)'},
-          {l:'Avg Score',v:preSeason.avgS.toFixed(1),col:tc.text},
-        ].map(s=>`<div style="background:var(--bg3);border-radius:5px;padding:8px;text-align:center">
-          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;color:${s.col}">${s.v}</div>
-          <div style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:2px">${s.l}</div>
-        </div>`).join('')}
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">
+        ${(()=>{
+          // Full season record across all hallM qual matches
+          const fullS=teamStatsF('frc1002',hallM,'qm');
+          return[
+            {l:'Season W',v:fullS.wins,col:'var(--green)'},
+            {l:'Season L',v:fullS.losses,col:'var(--loss)'},
+            {l:'Season Avg',v:fullS.avgS.toFixed(1),col:tc.text},
+            {l:'Win Rate',v:fullS.n?Math.round(fullS.wins/fullS.n*100)+'%':'–',col:tc.text},
+          ].map(s=>`<div style="background:var(--bg3);border-radius:5px;padding:8px;text-align:center">
+            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;color:\${s.col}">\${s.v}</div>
+            <div style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:2px">\${s.l}</div>
+          </div>`).join('');
+        })()}
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:10px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">EPA Breakdown — via Statbotics</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+          ${[
+            {l:'Total',v:epa1002?.total?.toFixed(1)??'–',col:'var(--green)'},
+            {l:'Auto',v:epa1002?.auto?.toFixed(1)??'–',col:'var(--blue)'},
+            {l:'Teleop',v:epa1002?.teleop?.toFixed(1)??'–',col:'#00c8aa'},
+            {l:'Endgame',v:epa1002?.endgame?.toFixed(1)??'–',col:'var(--orange)'},
+          ].map(s=>`<div style="background:var(--bg3);border-radius:5px;padding:8px;text-align:center">
+            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:16px;color:${s.col}">${s.v}</div>
+            <div style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:2px">${s.l}</div>
+          </div>`).join('')}
+        </div>
       </div>
       ${hasDivData?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">Division Match History</div>
@@ -2689,7 +2706,7 @@ function renderHOv(){
     const fM=hasDivData?(HDB.divisionEvent?.matches||[]):hallM;
     const matchType=hasDivData?'all':'qm';
     return`<div class="card">
-      <div class="ctitle">★ Tracked Teams — ${hasDivData?'Division':'Pre-Season'} Stats</div>
+      <div class="ctitle">★ Tracked Teams — ${hasDivData?'Division':'Pre-Event'} Stats</div>
       ${TRACKED.map(n=>{
         const k=`frc${n}`;
         const s=teamStatsF(k,fM,matchType);
@@ -2725,7 +2742,7 @@ function renderHOv(){
   }
 
   document.getElementById('pg-overview').innerHTML=`
-<div class="sh"><h2>${divKnown?divName+' <span>Division</span>':'Houston <span>Championship</span>'}</h2><span class="sub">2026 FIRST Championship · Apr 29–May 1 · Houston, TX</span></div>
+<div class="sh"><h2>2026 FIRST <span>Championship</span></h2><span class="sub">${divKnown?divName+' Division · ':''}Apr 29–May 1 · Houston, TX</span></div>
 ${divBanner()}
 ${streamSection()}
 ${hasDivData?divStandingsSnippet():''}
