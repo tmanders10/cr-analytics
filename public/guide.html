@@ -205,6 +205,34 @@
     text-transform: uppercase;
   }
 
+  /* ── MODE TABS ── */
+  .mode-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border-bottom: 2px solid #e8e8e8;
+  }
+  .mode-tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #888;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all .2s;
+  }
+  .mode-tab:hover { color: #333; }
+  .mode-tab.active { color: #00913f; border-bottom-color: #00e664; }
+  .mode-tab.active.houston { color: #1a6fa8; border-bottom-color: #38a8ff; }
+  .mode-pane { display: none; }
+  .mode-pane.active { display: block; }
+
   /* ── FOOTER ── */
   .guide-footer {
     margin-top: 60px;
@@ -236,9 +264,18 @@
 
 <div class="guide-body">
 
-  <!-- TOC -->
+
+  <!-- MODE TABS -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="switchTab('pch',this)">🏆 Peachtree District</button>
+    <button class="mode-tab houston" onclick="switchTab('houston',this)">🚀 FIRST Championship Division</button>
+  </div>
+
+  <!-- PCH PANE -->
+  <div class="mode-pane active" id="pane-pch">
+  <!-- PCH TAB TOC -->
   <div class="toc">
-    <div class="toc-title">Contents</div>
+    <div class="toc-title">Contents — Peachtree District</div>
     <ol>
       <li><a href="#what-is">What is CR Analytics?</a></li>
       <li><a href="#tabs">Tabs Overview</a></li>
@@ -250,7 +287,6 @@
       <li><a href="#epa-ace-opr">EPA vs ACE vs OPR</a></li>
     </ol>
   </div>
-
   <!-- WHAT IS -->
   <div class="section">
     <span class="section-anchor" id="what-is"></span>
@@ -487,11 +523,189 @@
     </div>
   </div>
 
+  </div>
+
+  <!-- HOUSTON PANE -->
+  <div class="mode-pane" id="pane-houston">
+  <!-- HOUSTON TAB TOC -->
+  <div class="toc" style="border-color:#b8ddf7;background:#f5faff">
+    <div class="toc-title" style="color:#1a6fa8">Contents — FIRST Championship</div>
+    <ol>
+      <li><a href="#houston-mode">Houston Championship Mode</a></li>
+      <li><a href="#houston-tabs">Houston Tabs Overview</a></li>
+      <li><a href="#houston-tracking">Houston Team Tracking</a></li>
+      <li><a href="#houston-data">Houston Data Sources</a></li>
+    </ol>
+  </div>
+  <!-- HOUSTON MODE -->
+  <div class="section">
+    <span class="section-anchor" id="houston-mode"></span>
+    <h2>Houston <span>Championship Mode</span></h2>
+    <p>The FIRST Championship Division view is a dedicated scouting experience for the 2026 FIRST Championship (April 29 – May 1, Houston, TX). It covers all teams competing in Team 1002's assigned division, drawing on pre-championship event results, Statbotics, and Peekorobo.</p>
+
+    <h3>Switching modes</h3>
+    <p>Use the <strong>Houston Mode</strong> toggle button in the status bar to switch between Peachtree District view and FIRST Championship Division view. The button is visible once Houston Mode is enabled. Refreshing the page while in Championship mode will keep you in that view.</p>
+
+    <div class="callout">
+      <strong>Data is independent:</strong> The Championship view has its own dataset separate from the PCH district data. Switching modes does not affect either dataset.
+    </div>
+
+    <h3>Pre-event vs. live-event states</h3>
+    <p>Houston Mode has two display states that switch automatically based on whether division match data is available:</p>
+    <ul>
+      <li><strong>Pre-event</strong> — shows pre-championship season data for all division teams (EPA, ACE, OPR, rankings, match history from their last 2026 events). The Overview tab shows a division assignment banner and Team 1002's full PCH season record.</li>
+      <li><strong>Live-event</strong> — once division qualification matches begin, all tabs switch to division match data. Livestream embeds appear on the Overview tab, and division standings, match log, and scoring analysis all update in real time.</li>
+    </ul>
+
+    <h3>Match type filter</h3>
+    <p>The <strong>Quals / Playoffs / All</strong> pills in the status bar work the same as in PCH mode — they filter all tabs simultaneously by match type.</p>
+  </div>
+
+  <!-- HOUSTON TABS -->
+  <div class="section">
+    <span class="section-anchor" id="houston-tabs"></span>
+    <h2>Houston <span>Tabs Overview</span></h2>
+    <table class="guide-table">
+      <thead>
+        <tr><th style="width:160px">Tab</th><th>What it shows</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tab-name">Overview</td>
+          <td>
+            <strong>Pre-event:</strong> Division assignment banner (location, dates, event key once announced), Team 1002's full PCH 2026 season record (W/L/T, win rate, avg score, PCH seed), EPA breakdown (Total/Auto/Teleop/Endgame via Statbotics), and a Top 5 Pre-Event EPA ranking of the strongest teams in the division. Tracked team pre-event stats appear at the bottom.<br><br>
+            <strong>Live-event:</strong> Two embedded YouTube livestreams (Overhead and Field view) move to the top with a live pulse indicator. Division standings snapshot (top 10) replaces the banner. Team 1002's division W/L/T record and match history dots appear in the team card. Tracked teams switch to division match stats.
+          </td>
+        </tr>
+        <tr>
+          <td class="tab-name">Global Rankings</td>
+          <td>All teams in the division ranked by Statbotics global rank. Columns: Global Rank, Team, US Rank, EPA, OPR, ACE, Conf. Global and US Rank are sourced from Statbotics season-level data. Non-US teams display <code>N/A</code> in US Rank. All columns are sortable. Tracked teams are highlighted with their assigned color. Data source attribution appears below the tab heading.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Scoring Analysis</td>
+          <td>Top 20 matches ranked by winning alliance score. Each row shows both alliances — Red teams, Red score, Blue score, Blue teams, and a winner badge — so you can see where your tracked teams appeared on either side. Tracked team numbers are highlighted in their assigned color. When no teams are tracked, shows top 20 from all division teams. When teams are tracked, filters to matches involving those teams only. Respects the Quals / Playoffs / All pill. Click any row to expand a Red vs Blue phase breakdown panel.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Team Tracker</td>
+          <td>Same card-based experience as PCH mode. Up to 9 teams can be tracked simultaneously (3 additional slots vs PCH). Teams are selected via the <strong>Team Tracking</strong> popup in the top-right corner. Each card shows match history, phase averages, EPA, ACE, and Shifts — all sourced from pre-championship event data until division matches begin, then switching to division data. See the <a href="#houston-tracking">Houston Team Tracking</a> section for popup details.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Match Log</td>
+          <td>Shows division event matches grouped by tracked team once teams are selected. Each group shows that team's matches with both alliances displayed. Pre-event, the Match Log is blank with a prompt to select teams via the Team Tracking popup. Once the division event begins and teams are tracked, match rows populate with live data. Click any played match row to expand the phase breakdown panel.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Event Standings</td>
+          <td>Official division event rankings from TBA. Columns include Rank, Team, Record, and Ranking Score. Updates automatically during competition days. Pre-event, this tab is empty pending division data.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- HOUSTON TEAM TRACKING -->
+  <div class="section">
+    <span class="section-anchor" id="houston-tracking"></span>
+    <h2>Houston <span>Team Tracking</span></h2>
+
+    <h3>The Team Tracking popup</h3>
+    <p>In Houston Mode, team selection is handled through a dedicated popup rather than a text input. Click the <strong>Team Tracking</strong> button in the top-right corner of the status bar to open it. The popup lists all teams in the division with their EPA and global rank. Click any team to add or remove them from your tracked list.</p>
+
+    <h3>Capacity and colors</h3>
+    <p>Up to <strong>9 teams</strong> can be tracked simultaneously in Houston Mode (vs 6 in PCH mode). Each slot is assigned one of nine colors:
+      <span class="chip" style="background:rgba(0,230,100,.15);color:#00e664">Green</span>
+      <span class="chip" style="background:rgba(56,168,255,.15);color:#38a8ff">Blue</span>
+      <span class="chip" style="background:rgba(255,193,7,.15);color:#f0c040">Amber</span>
+      <span class="chip" style="background:rgba(167,139,250,.15);color:#a78bfa">Purple</span>
+      <span class="chip" style="background:rgba(255,140,66,.15);color:#ff8c42">Coral</span>
+      <span class="chip" style="background:rgba(236,72,153,.15);color:#ec4899">Pink</span>
+      <span class="chip" style="background:rgba(0,200,200,.15);color:#00c8c8">Cyan</span>
+      <span class="chip" style="background:rgba(180,230,50,.15);color:#b4e632">Lime</span>
+      <span class="chip" style="background:rgba(255,215,0,.15);color:#ffd700">Gold</span>.
+      When a team is added it fills the next available slot. The popup shows a count badge and color dots for all currently tracked teams. Once 9 teams are tracked, unselected teams in the popup are disabled until one is removed.
+    </p>
+
+    <h3>Color persistence across tabs</h3>
+    <p>Tracked team numbers appear in their assigned color throughout all Houston Mode tabs — in the Global Rankings table, within both alliance columns in Scoring Analysis, and in Match Log rows. This makes it easy to spot your teams at a glance regardless of which tab you are on.</p>
+
+    <h3>Reordering</h3>
+    <p>Drag tracked team cards on the Team Tracker tab to reorder them. Colors follow position — reordering reassigns colors to keep the most prominent teams in the most visible color slots.</p>
+
+    <h3>Livestream management</h3>
+    <p>On the Overview tab during the live event, two stream embeds appear — Overhead View and Field View. Click the pencil <strong>✎</strong> icon next to either stream to enter a YouTube URL or video ID. The stream saves to your browser session and persists across tab switches. To update a stream URL mid-event, click the pencil icon again.</p>
+
+    <div class="callout blue">
+      <strong>Streams are session-local:</strong> Livestream URLs are stored in your browser's session storage and are not shared with other users or persisted across page reloads. You will need to re-enter stream URLs if you close and reopen the browser.
+    </div>
+  </div>
+
+  <!-- HOUSTON DATA SOURCES -->
+  <div class="section">
+    <span class="section-anchor" id="houston-data"></span>
+    <h2>Houston <span>Data Sources</span></h2>
+    <p>The FIRST Championship Division view uses the same three external data sources as PCH mode. The table below shows exactly which source powers each column or feature.</p>
+
+    <table class="guide-table">
+      <thead>
+        <tr><th style="width:160px">Column / Feature</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tab-name">Global Rank</td>
+          <td><strong>Statbotics</strong> — worldwide rank among all active FRC teams in 2026.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">US Rank</td>
+          <td><strong>Statbotics</strong> — rank among all US teams. Non-US teams display N/A.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">EPA</td>
+          <td><strong>Statbotics</strong> — most recent 2026 event EPA (Total, Auto, Teleop, Endgame).</td>
+        </tr>
+        <tr>
+          <td class="tab-name">OPR</td>
+          <td><strong>The Blue Alliance</strong> — OPR from the team's most recent pre-championship 2026 event.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">ACE &amp; Conf</td>
+          <td><strong>Peekorobo</strong> — Adjusted Contribution Estimate and confidence score, including Auto, Teleop, and Endgame breakdowns.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Match history</td>
+          <td><strong>The Blue Alliance</strong> — match results and scores from each team's most recent pre-championship 2026 event.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Division matches &amp; standings</td>
+          <td><strong>The Blue Alliance</strong> — live division event matches and rankings during the championship.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">Match predictions</td>
+          <td><strong>Statbotics</strong> — pre-match win probability and predicted winner for division matches.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout blue">
+      <strong>Data freshness:</strong> Pre-championship data (EPA, ACE, OPR, match history) reflects each team's most recent 2026 event before Houston. Division match results and standings update in real time during competition days.
+    </div>
+  </div>
+
+  </div>
+
   <div class="guide-footer">
     CR Analytics · FRC Team 1002 Circuit Runners · Built with The Blue Alliance, Statbotics &amp; Peekorobo APIs<br>
     <span style="font-size:11px;margin-top:4px;display:block">To update this guide, edit <code>public/guide.html</code> directly in your GitHub repository.</span>
   </div>
 
 </div>
+<script>
+  function switchTab(mode, btn) {
+    document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.mode-pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('pane-' + mode).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Highlight houston tab links in blue
+  document.querySelectorAll('#pane-houston a').forEach(a => a.style.color = '#1a6fa8');
+</script>
 </body>
 </html>
