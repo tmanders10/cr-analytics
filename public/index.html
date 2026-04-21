@@ -2654,21 +2654,24 @@ function renderHOv(){
           <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">Wheeler High School · Marietta, GA · Global Rank #${glRank1002}${divRecord}</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">
-        ${(()=>{
-          // Full season record across all hallM qual matches
-          const fullS=teamStatsF('frc1002',hallM,'qm');
-          return[
-            {l:'Season W',v:fullS.wins,col:'var(--green)'},
-            {l:'Season L',v:fullS.losses,col:'var(--loss)'},
-            {l:'Season Avg',v:fullS.avgS.toFixed(1),col:tc.text},
-            {l:'Win Rate',v:fullS.n?Math.round(fullS.wins/fullS.n*100)+'%':'–',col:tc.text},
-          ].map(s=>`<div style="background:var(--bg3);border-radius:5px;padding:8px;text-align:center">
-            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;color:\${s.col}">\${s.v}</div>
-            <div style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:2px">\${s.l}</div>
-          </div>`).join('');
-        })()}
-      </div>
+      ${(()=>{
+        const fullS=teamStatsF('frc1002',hallM,'qm');
+        const winPct=fullS.n?Math.round(fullS.wins/fullS.n*100)+'%':'–';
+        const distR=distRank.find(r=>r.team_key==='frc1002');
+        const distRankNum=distR?.rank??'–';
+        function statBox(val,label,col){
+          return`<div style="background:var(--bg3);border-radius:5px;padding:8px;text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;color:${col}">${val}</div><div style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:2px">${label}</div></div>`;
+        }
+        return`<div style="margin-bottom:10px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">PCH 2026 Season Record</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+            ${statBox(fullS.wins+'W-'+fullS.losses+'L-'+fullS.ties+'T','Record','var(--green)')}
+            ${statBox(winPct,'Win Rate',tc.text)}
+            ${statBox(fullS.avgS.toFixed(1),'Avg Score',tc.text)}
+            ${statBox('#'+distRankNum,'PCH Rank','var(--green)')}
+          </div>
+        </div>`;
+      })()}
       <div style="border-top:1px solid var(--border);padding-top:10px">
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">EPA Breakdown — via Statbotics</div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
