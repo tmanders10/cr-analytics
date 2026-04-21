@@ -2655,20 +2655,32 @@ function renderHOv(){
         </div>
       </div>
       ${(()=>{
-        const fullS=teamStatsF('frc1002',hallM,'qm');
-        const winPct=fullS.n?Math.round(fullS.wins/fullS.n*100)+'%':'–';
-        const distR=distRank.find(r=>r.team_key==='frc1002');
-        const distRankNum=distR?.rank??'–';
+        // Use allM (PCH data) for full accurate season record — same as PCH banner
+        const t1002='frc1002';
+        const played=allM.filter(m=>{const rs=m.alliances?.red?.score??-1;const bs=m.alliances?.blue?.score??-1;return rs>=0&&bs>=0;});
+        const wins=played.filter(m=>{const rk=m.alliances?.red?.team_keys||[];const bk=m.alliances?.blue?.team_keys||[];const rs=m.alliances?.red?.score??0;const bs=m.alliances?.blue?.score??0;return(rk.includes(t1002)&&rs>bs)||(bk.includes(t1002)&&bs>rs);}).length;
+        const losses=played.filter(m=>{const rk=m.alliances?.red?.team_keys||[];const bk=m.alliances?.blue?.team_keys||[];const rs=m.alliances?.red?.score??0;const bs=m.alliances?.blue?.score??0;return(rk.includes(t1002)&&rs<bs)||(bk.includes(t1002)&&bs<rs);}).length;
+        const ties=played.filter(m=>{const rk=m.alliances?.red?.team_keys||[];const bk=m.alliances?.blue?.team_keys||[];const rs=m.alliances?.red?.score??0;const bs=m.alliances?.blue?.score??0;return(rk.includes(t1002)||bk.includes(t1002))&&rs===bs;}).length;
+        const myM=played.filter(m=>(m.alliances?.red?.team_keys||[]).includes(t1002)||(m.alliances?.blue?.team_keys||[]).includes(t1002));
+        const avgScore=myM.length?myM.reduce((s,m)=>{const rk=m.alliances?.red?.team_keys||[];return s+(rk.includes(t1002)?(m.alliances?.red?.score??0):(m.alliances?.blue?.score??0));},0)/myM.length:0;
+        const winPct=myM.length?Math.round((wins/myM.length)*100):0;
+        const distR=distRank.find(r=>r.team_key===t1002);
+        const seed=distR?'#'+distR.rank:'–';
         function statBox(val,label,col){
           return`<div style="background:var(--bg3);border-radius:5px;padding:8px;text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;color:${col}">${val}</div><div style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:2px">${label}</div></div>`;
         }
         return`<div style="margin-bottom:10px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">PCH 2026 Season Record</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-            ${statBox(fullS.wins+'W-'+fullS.losses+'L-'+fullS.ties+'T','Record','var(--green)')}
-            ${statBox(winPct,'Win Rate',tc.text)}
-            ${statBox(fullS.avgS.toFixed(1),'Avg Score',tc.text)}
-            ${statBox('#'+distRankNum,'PCH Rank','var(--green)')}
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">PCH 2026 Full Season Record</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
+            ${statBox(wins+'W','Wins','var(--green)')}
+            ${statBox(losses+'L','Losses','var(--loss)')}
+            ${statBox(ties+'T','Ties','var(--text3)')}
+            ${statBox(winPct+'%','Win Rate',tc.text)}
+            ${statBox(avgScore.toFixed(1),'Avg Score',tc.text)}
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px">
+            ${statBox(seed,'PCH Seed','var(--green)')}
+            ${statBox('HOU','Qualified','#38a8ff')}
           </div>
         </div>`;
       })()}
@@ -2732,12 +2744,12 @@ function renderHOv(){
   // ── Pre-event division info banner ──
   function divBanner(){
     if(hasDivData) return '';
-    return`<div style="background:rgba(56,168,255,.06);border:1px solid rgba(56,168,255,.3);border-radius:8px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+    return`<div style="background:rgba(56,168,255,.06);border:1px solid rgba(56,168,255,.3);border-radius:8px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;text-align:center">
       <div style="font-size:28px">🏆</div>
-      <div style="flex:1">
+      <div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;letter-spacing:.06em;text-transform:uppercase;color:#38a8ff">${divKnown?divName+' Division':'Division Assignment Pending'}</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);margin-top:3px">
-          ${divKnown?`Event key: ${divKey} · George R. Brown Convention Center, Houston TX · April 29 – May 1, 2026`:'Division assignments expected ~April 19. Update HOUSTON_DIVISION and HOUSTON_DIVISION_EVENT_KEY in Vercel once announced.'}
+          ${divKnown?`George R. Brown Convention Center · Houston, TX · April 29 – May 1, 2026`:'Division assignments expected ~April 19 · George R. Brown Convention Center · Houston, TX'}
         </div>
       </div>
       ${divKey?`<a href="https://www.thebluealliance.com/event/${divKey}" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:5px;color:#38a8ff;text-decoration:none;border:1px solid rgba(56,168,255,.4)">TBA ↗</a>`:''}
