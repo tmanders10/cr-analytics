@@ -564,7 +564,7 @@ function applyHoustonMode(){
   const subtitle=document.getElementById('headerSubtitle');
   if(subtitle) subtitle.textContent=HOUSTON_MODE?`2026 FIRST Championship — ${HDB.division} Analytics`:'2026 District Season Analytics';
   // Nav tab visibility
-  ['overview','alliances'].forEach(tab=>{
+  ['alliances'].forEach(tab=>{
     const el=document.querySelector(`.nav-tab[onclick*="'${tab}'"]`);
     if(el) el.style.display=HOUSTON_MODE?'none':'';
   });
@@ -629,7 +629,7 @@ function applyHoustonMode(){
   // If we're currently on a hidden tab, switch to a visible one
   if(HOUSTON_MODE){
     const activeTab=sessionStorage.getItem('cr_activePage');
-    if(activeTab==='overview'||activeTab==='alliances'){
+    if(activeTab==='alliances'){
       const rkTabEl=document.querySelector('.nav-tab[onclick*="\'rankings\'"]');
       if(rkTabEl) showPage('rankings',rkTabEl);
     }
@@ -1215,7 +1215,7 @@ function thSort(tbl,col,label,cls){
 }
 function renderAll(){
   if(HOUSTON_MODE){
-    renderHRk();renderHSc();renderTm();renderHMx();renderEv();
+    renderHOv();renderHRk();renderHSc();renderTm();renderHMx();renderEv();
   }else{
     renderOv();renderRk();renderSc();renderTm();renderAl();renderMx();renderEv();
   }
@@ -2498,6 +2498,271 @@ function hGetLatestOPR(teamNum){
     if(val!=null) return val;
   }
   return null;
+}
+
+// ── Houston Overview ──────────────────────────────────────────────────────────
+function renderHOv(){
+  const hasDivData=(HDB.divisionEvent?.matches||[]).filter(m=>(m.alliances?.red?.score??-1)>=0).length>0;
+  const divKey=HDB.divisionEventKey||'';
+  const divName=HDB.division||'Division TBD';
+  const divKnown=divKey&&divName!=='Division TBD';
+
+  // ── Helper: get 1002 division stats ──
+  function team1002DivStats(){
+    const ms=(HDB.divisionEvent?.matches||[]).filter(m=>(m.alliances?.red?.score??-1)>=0);
+    let w=0,l=0,t=0,tot=0,n=0;
+    ms.forEach(m=>{
+      const rk=m.alliances?.red?.team_keys||[], bk=m.alliances?.blue?.team_keys||[];
+      const side=rk.includes('frc1002')?'red':bk.includes('frc1002')?'blue':null;
+      if(!side) return;
+      const opp=side==='red'?'blue':'red';
+      const my=m.alliances[side].score, op=m.alliances[opp].score;
+      const wa=m.winning_alliance;
+      if(wa===side)w++;else if(wa===opp)l++;else t++;
+      tot+=my; n++;
+    });
+    return{w,l,t,avg:n?tot/n:0,n};
+  }
+
+  // ── Helper: top N teams by EPA ──
+  function topTeamsByEPA(n){
+    return (HDB.teams||[]).map(t=>{
+      const tk=`frc${t.num}`;
+      const epa=hGetLatestEPA(tk);
+      const sbr=HDB.sbRanks?.[t.num]||null;
+      const ace=HDB.ace?.[t.num]||null;
+      const glRank=sbr?.rank_global??ace?.rank_global??99999;
+      return{...t,tk,epa,glRank,ace};
+    }).sort((a,b)=>(b.epa?.total??-1)-(a.epa?.total??-1)).slice(0,n);
+  }
+
+  // ── Helper: 1002 pre-season EPA ──
+  const epa1002=hGetLatestEPA('frc1002');
+  const sbr1002=HDB.sbRanks?.[1002]||HDB.ace?.[1002]||null;
+  const glRank1002=HDB.sbRanks?.[1002]?.rank_global??sbr1002?.rank_global??'–';
+  const divStats=team1002DivStats();
+  const top5=topTeamsByEPA(5);
+
+  // ── Livestream section ──
+  function streamSection(){
+    if(!hasDivData&&!divKey) return '';
+    const divMatches=HDB.divisionEvent?.matches||[];
+    const allCasts=(divMatches[0]?.videos||[]).filter(v=>v.type==='youtube'); // placeholder
+    // Check sessionStorage for saved stream URLs
+    const ovKey=`cr_stream_houston`;
+    let overrides={};
+    try{ overrides=JSON.parse(sessionStorage.getItem(ovKey)||'{}'); }catch(e){}
+    const embedOverhead=overrides.overhead||null;
+    const embedField=overrides.field||null;
+
+    const streamCard=(label,embedUrl,slotKey)=>`<div class="card" style="padding:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)">${label}</span>
+        <button onclick="editHoustonStream('${slotKey}')" title="Edit stream URL" style="background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:12px;padding:0 2px;line-height:1" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text3)'">✎</button>
+      </div>
+      <div id="hstream-edit-${slotKey}" style="display:none;margin-bottom:6px">
+        <div style="display:flex;gap:5px">
+          <input id="hstream-input-${slotKey}" type="text" placeholder="Paste YouTube URL or video ID…" style="flex:1;font-size:11px;font-family:'JetBrains Mono',monospace;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:4px 8px;color:var(--text2)"/>
+          <button onclick="saveHoustonStream('${slotKey}')" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--green);color:#030803;border:none">Save</button>
+          <button onclick="document.getElementById('hstream-edit-${slotKey}').style.display='none'" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;padding:4px 8px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text3)">✕</button>
+        </div>
+      </div>
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:5px;background:#000">
+        ${embedUrl
+          ?`<iframe id="hstream-frame-${slotKey}" src="${embedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>`
+          :`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px">No stream yet<br><button onclick="editHoustonStream('${slotKey}')" style="margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text3)">+ Add URL</button></div>`}
+      </div>
+    </div>`;
+
+    return`<div style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        ${hasDivData?`<span style="width:8px;height:8px;border-radius:50%;background:#ff4444;animation:pulse 1.5s infinite;flex-shrink:0"></span>`:''}
+        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)">${divName} Division${hasDivData?' — Live':' — Streams'}</span>
+        ${divKey?`<a href="https://www.thebluealliance.com/event/${divKey}" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;color:var(--text3);text-decoration:none;border:1px solid var(--border2);margin-left:auto">TBA ↗</a>`:''}
+      </div>
+      <div class="g2">
+        ${streamCard('Overhead View',embedOverhead,'overhead')}
+        ${streamCard('Field View',embedField,'field')}
+      </div>
+    </div>`;
+  }
+
+  // ── Division standings snapshot (when live) ──
+  function divStandingsSnippet(){
+    if(!hasDivData) return '';
+    const rkList=(HDB.divisionEvent?.rankings?.rankings||[]).slice(0,10);
+    if(!rkList.length) return '';
+    return`<div class="card" style="margin-bottom:16px">
+      <div class="ctitle">${divName} — Current Standings (Top 10)</div>
+      ${rkList.map(r=>{
+        const teamNum=parseInt((r.team_key||'').replace('frc',''));
+        const tc=teamColor(teamNum);
+        const is1002=teamNum===1002;
+        const rec=r.record?`${r.record.wins}-${r.record.losses}-${r.record.ties}`:'–';
+        const rs=r.sort_orders?.[0]!=null?r.sort_orders[0].toFixed(2):'–';
+        const hTeam=(HDB.teams||[]).find(t=>t.num===teamNum);
+        const name=hTeam?hTeam.name:r.team_key;
+        return`<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);${tc?'border-left:3px solid '+tc.border+';padding-left:10px':''}${is1002?'background:rgba(0,230,100,.04)':''}">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:${r.rank<=3?'var(--green)':'var(--text3)'};width:28px">${r.rank}</span>
+          <span style="font-weight:600;flex:1;color:${tc?tc.text:is1002?'var(--green)':'var(--text2)'}">${name}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">${teamNum}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2)">${rec}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue)">${rs}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  // ── Top 5 threats card ──
+  function topThreatsCard(){
+    return`<div class="card">
+      <div class="ctitle">Top 5 — Pre-Season EPA</div>
+      ${top5.map((t,i)=>{
+        const tc=teamColor(t.num);
+        const epaVal=t.epa?.total!=null?t.epa.total.toFixed(1):'–';
+        const glRank=HDB.sbRanks?.[t.num]?.rank_global??t.ace?.rank_global??null;
+        return`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)${tc?';border-left:3px solid '+tc.border+';padding-left:10px':''}">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:${i===0?'var(--green)':'var(--text3)'};width:24px">${i+1}</span>
+          <div style="flex:1">
+            <div style="font-weight:600;color:${tc?tc.text:'var(--text2)'}">${t.name} <span style="color:var(--text3);font-weight:400;font-size:11px">${t.num}</span></div>
+            <div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">${t.location}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:15px;color:var(--green)">${epaVal}</div>
+            <div style="font-size:10px;color:var(--text3)">EPA</div>
+          </div>
+          ${glRank?`<div style="text-align:right">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#b464ff">#${glRank}</div>
+            <div style="font-size:10px;color:var(--text3)">global</div>
+          </div>`:''}
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  // ── 1002 status card ──
+  function team1002Card(){
+    const tc=teamColor(1002)||TEAM_COLORS[0];
+    // Pre-season record from hallM
+    const preSeason=teamStatsF('frc1002', hallM.filter(m=>m.comp_level==='qm'), 'qm');
+    const divRecord=hasDivData?`<span style="color:var(--text3);font-size:11px;margin-left:8px">Division: ${divStats.w}W-${divStats.l}L-${divStats.t}T (${divStats.avg.toFixed(1)} avg)</span>`:'';
+    return`<div class="card" style="border-color:${tc.border}">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:42px;color:${tc.text};line-height:1">1002</div>
+        <div>
+          <div style="font-weight:700;font-size:15px">CircuitRunners Robotics</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">Wheeler High School · Marietta, GA</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:2px">Global Rank #${glRank1002} · Qualified via PCH District Championship${divRecord}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        ${[
+          {l:'Pre-Season W',v:preSeason.wins,col:'var(--green)'},
+          {l:'Pre-Season L',v:preSeason.losses,col:'var(--loss)'},
+          {l:'EPA Total',v:epa1002?.total?.toFixed(1)??'–',col:'var(--green)'},
+          {l:'Avg Score',v:preSeason.avgS.toFixed(1),col:tc.text},
+        ].map(s=>`<div style="background:var(--bg3);border-radius:5px;padding:8px;text-align:center">
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;color:${s.col}">${s.v}</div>
+          <div style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:2px">${s.l}</div>
+        </div>`).join('')}
+      </div>
+      ${hasDivData?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">Division Match History</div>
+        <div class="mhd">${(HDB.divisionEvent?.matches||[]).filter(m=>{
+          const rk=m.alliances?.red?.team_keys||[], bk=m.alliances?.blue?.team_keys||[];
+          return rk.includes('frc1002')||bk.includes('frc1002');
+        }).map(m=>{
+          const side=m.alliances?.red?.team_keys?.includes('frc1002')?'red':'blue';
+          const opp=side==='red'?'blue':'red';
+          const my=m.alliances[side].score, op=m.alliances[opp].score;
+          const w=m.winning_alliance;
+          const res=w===side?'win':w===opp?'loss':'tie';
+          return`<div class="mhdot ${res==='win'?'mw':res==='loss'?'ml':'mt'}" title="${m.comp_level==='qm'?'QM':'PO'}${m.match_number} · ${my}-${op}">${res==='win'?'W':res==='loss'?'L':'T'}</div>`;
+        }).join('')}</div>
+      </div>`:''}
+    </div>`;
+  }
+
+  // ── Tracked teams quick summary ──
+  function trackedSummary(){
+    if(TRACKED.length===0) return '';
+    const fM=hasDivData?(HDB.divisionEvent?.matches||[]):hallM;
+    const matchType=hasDivData?'all':'qm';
+    return`<div class="card">
+      <div class="ctitle">★ Tracked Teams — ${hasDivData?'Division':'Pre-Season'} Stats</div>
+      ${TRACKED.map(n=>{
+        const k=`frc${n}`;
+        const s=teamStatsF(k,fM,matchType);
+        const tc=teamColor(n)||TEAM_COLORS[0];
+        const name=(HDB.teams||[]).find(t=>t.num===n)?.name||String(n);
+        const epa=hGetLatestEPA(k);
+        return`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border);border-left:3px solid ${tc.border};padding-left:10px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:${tc.text};width:46px;flex-shrink:0;line-height:1">${n}</div>
+          <div style="flex:1"><div style="font-weight:500">${name}</div>
+            <div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px">${s.n>0?`${s.wins}W-${s.losses}L-${s.ties}T`:'No data yet'}</div>
+          </div>
+          <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:14px;color:${tc.text}">${s.n>0?s.avgS.toFixed(1):'–'}</div><div style="font-size:10px;color:var(--text3)">avg</div></div>
+          <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue)">${s.n>0?s.avgA.toFixed(1):'–'}</div><div style="font-size:10px;color:var(--text3)">auto</div></div>
+          <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)">${epa?.total!=null?epa.total.toFixed(1):'–'}</div><div style="font-size:10px;color:var(--text3)">EPA</div></div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  // ── Pre-event division info banner ──
+  function divBanner(){
+    if(hasDivData) return '';
+    return`<div style="background:rgba(56,168,255,.06);border:1px solid rgba(56,168,255,.3);border-radius:8px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="font-size:28px">🏆</div>
+      <div style="flex:1">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;letter-spacing:.06em;text-transform:uppercase;color:#38a8ff">${divKnown?divName+' Division':'Division Assignment Pending'}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);margin-top:3px">
+          ${divKnown?`Event key: ${divKey} · George R. Brown Convention Center, Houston TX · April 29 – May 1, 2026`:'Division assignments expected ~April 19. Update HOUSTON_DIVISION and HOUSTON_DIVISION_EVENT_KEY in Vercel once announced.'}
+        </div>
+      </div>
+      ${divKey?`<a href="https://www.thebluealliance.com/event/${divKey}" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:5px;color:#38a8ff;text-decoration:none;border:1px solid rgba(56,168,255,.4)">TBA ↗</a>`:''}
+    </div>`;
+  }
+
+  document.getElementById('pg-overview').innerHTML=`
+<div class="sh"><h2>${divKnown?divName+' <span>Division</span>':'Houston <span>Championship</span>'}</h2><span class="sub">2026 FIRST Championship · Apr 29–May 1 · Houston, TX</span></div>
+${divBanner()}
+${streamSection()}
+${hasDivData?divStandingsSnippet():''}
+<div class="g2" style="margin-bottom:16px">
+  ${team1002Card()}
+  ${topThreatsCard()}
+</div>
+${trackedSummary()}`;
+}
+
+// ── Houston stream helpers ──────────────────────────────────────────────────
+function editHoustonStream(slot){
+  const editDiv=document.getElementById(`hstream-edit-${slot}`);
+  const input=document.getElementById(`hstream-input-${slot}`);
+  if(!editDiv||!input) return;
+  editDiv.style.display='block';
+  input.focus();
+  input.select();
+}
+function saveHoustonStream(slot){
+  const input=document.getElementById(`hstream-input-${slot}`);
+  if(!input) return;
+  const raw=input.value.trim();
+  if(!raw) return;
+  let embedUrl;
+  const m=raw.match(/(?:v=|youtu\.be\/|embed\/)([^&?/\s]+)/);
+  if(m) embedUrl=`https://www.youtube.com/embed/${m[1]}?autoplay=0`;
+  else if(/^[a-zA-Z0-9_-]{11}$/.test(raw)) embedUrl=`https://www.youtube.com/embed/${raw}?autoplay=0`;
+  else embedUrl=raw;
+  let overrides={};
+  try{ overrides=JSON.parse(sessionStorage.getItem('cr_stream_houston')||'{}'); }catch(e){}
+  overrides[slot]=embedUrl;
+  sessionStorage.setItem('cr_stream_houston', JSON.stringify(overrides));
+  const frame=document.getElementById(`hstream-frame-${slot}`);
+  if(frame) frame.src=embedUrl;
+  else renderHOv(); // re-render to show iframe
+  document.getElementById(`hstream-edit-${slot}`).style.display='none';
 }
 
 // ── Global Rankings (Houston) ──
