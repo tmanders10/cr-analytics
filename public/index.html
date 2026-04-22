@@ -262,6 +262,7 @@
     </button>
   </div>
   <div class="data-info" id="dataInfo">Loading…</div>
+  <button id="modeToggleBtn" onclick="toggleHoustonMode()" style="margin-left:10px;background:transparent;border:1px solid rgba(56,168,255,.45);color:#38a8ff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:5px;cursor:pointer;flex-shrink:0;transition:all .2s;white-space:nowrap" onmouseover="this.style.background='rgba(56,168,255,.12)'" onmouseout="this.style.background='transparent'">⚡ Houston</button>
   <a href="/guide.html" target="_blank" rel="noopener" style="margin-left:10px;background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:5px;cursor:pointer;flex-shrink:0;transition:all .2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'"><span class="guide-btn-text">User Guide</span><span class="guide-btn-icon">?</span></a>
 </div>
 
@@ -610,6 +611,23 @@ function applyHoustonMode(){
   }else{
     if(hBtn) hBtn.style.display='none';
     if(hInitBtn) hInitBtn.style.display='none';
+  }
+  // Mode toggle button label
+  const modeToggleBtn=document.getElementById('modeToggleBtn');
+  if(modeToggleBtn){
+    if(HOUSTON_MODE){
+      modeToggleBtn.textContent='← Peachtree';
+      modeToggleBtn.style.borderColor='rgba(0,230,100,.45)';
+      modeToggleBtn.style.color='var(--green)';
+      modeToggleBtn.onmouseover=function(){this.style.background='rgba(0,230,100,.1)'};
+      modeToggleBtn.onmouseout=function(){this.style.background='transparent'};
+    } else {
+      modeToggleBtn.textContent='⚡ Houston';
+      modeToggleBtn.style.borderColor='rgba(56,168,255,.45)';
+      modeToggleBtn.style.color='#38a8ff';
+      modeToggleBtn.onmouseover=function(){this.style.background='rgba(56,168,255,.12)'};
+      modeToggleBtn.onmouseout=function(){this.style.background='transparent'};
+    }
   }
   // Mode indicator in status bar
   let modeIndicator=document.getElementById('houstonModeIndicator');
