@@ -312,9 +312,9 @@ async function main() {
   };
 
   // ── STEP 1: Find most recent 2026 event per team ───────────────────────────
+  const teamEventMap = {};
   if (!STEPS.has(1)) { console.log('STEP 1/5 — Skipped'); }
   else { console.log(`STEP 1/5 — Finding most recent 2026 event for each team...`);
-  const teamEventMap = {};
 
   for (let i = 0; i < HOUSTON_TEAMS.length; i++) {
     const team = HOUSTON_TEAMS[i];
@@ -348,8 +348,7 @@ async function main() {
     if ((i + 1) % 5 === 0) await sleep(200);
   }
 
-  const uniqueEventKeys = [...new Set(Object.values(teamEventMap).map(ev => ev.key))];
-  ok(`Step 1 complete — ${uniqueEventKeys.length} unique events across ${HOUSTON_TEAMS.length} teams`);
+  ok(`Step 1 complete — ${Object.keys(teamEventMap).length} teams mapped to ${new Set(Object.values(teamEventMap).map(ev=>ev.key)).size} unique events`);
   } // end STEP 1
   console.log('');
 
