@@ -170,8 +170,21 @@ function tbaFetch(path) {
   return fetchJSON(`https://www.thebluealliance.com/api/v3${path}`, { 'X-TBA-Auth-Key': TBA_KEY });
 }
 
-function statboticsFetch(path) {
-  return fetchJSON(`https://api.statbotics.io/v3${path}`, { 'Accept': 'application/json' });
+async function statboticsFetch(path, retries = 3) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const result = await fetchJSON(`https://api.statbotics.io/v3${path}`, { 'Accept': 'application/json' });
+      return result;
+    } catch (e) {
+      if (attempt < retries && (e.message.includes('Timeout') || e.message.includes('timeout') || e.message.includes('429'))) {
+        const wait = attempt * 1500; // 1.5s, 3s backoff
+        process.stdout.write(` [retry ${attempt}/${retries-1} in ${wait}ms]`);
+        await sleep(wait);
+      } else {
+        throw e;
+      }
+    }
+  }
 }
 
 // ── Data shaping (identical to Vercel script) ─────────────────────────────────
@@ -409,7 +422,7 @@ async function main() {
     } catch (e) {
       warn(`Statbotics EPA failed for team ${team.num}: ${e.message}`);
     }
-    await sleep(80);
+    await sleep(300);
 
     // Fetch season-level team_years for global/US ranks
     try {
@@ -433,7 +446,7 @@ async function main() {
       process.stdout.write('\n');
       warn(`Statbotics team_years failed for team ${team.num}: ${e.message}`);
     }
-    await sleep(80);
+    await sleep(300);
   }
 
   ok('Step 3 complete');
