@@ -563,7 +563,7 @@ async function loadHoustonData(){
 function applyHoustonMode(){
   // Header subtitle
   const subtitle=document.getElementById('headerSubtitle');
-  if(subtitle) subtitle.textContent=HOUSTON_MODE?`2026 FIRST Championship — ${HDB.division} Analytics`:'2026 FIRST FRC — Rebuilt';
+  if(subtitle) subtitle.textContent=HOUSTON_MODE?`2026 FIRST Championship — ${HDB.division} Division`:'2026 FIRST FRC — Rebuilt';
   // Nav tab visibility
   ['alliances'].forEach(tab=>{
     const el=document.querySelector(`.nav-tab[onclick*="'${tab}'"]`);
