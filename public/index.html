@@ -2169,7 +2169,7 @@ function renderTmTable(teams){
     <td class="r" style="color:${lastCol};font-family:'JetBrains Mono',monospace;font-size:12px">${lastVal}</td>
     <td>${isTr(t.key)
       ? `<button onclick="removeTrackedTeam(${t.num})" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--loss);color:var(--loss);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em">− Remove</button>`
-      : HOUSTON_MODE?'':`<button onclick="if(!TRACKED.includes(${t.num}))TRACKED.push(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${TRACKED.length>=MAX_TRACKED?'disabled':''}>+ Track</button>`
+      : `<button onclick="if(!TRACKED.includes(${t.num})){TRACKED.push(${t.num});syncTrackedFilter();renderAll();}" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${TRACKED.length>=(HOUSTON_MODE?9:MAX_TRACKED)?'disabled title="Max teams reached"':''}>+ Track</button>`
     }</td>
   </tr>`;}).join('')}</tbody></table>`;}
 function renderTm(){
