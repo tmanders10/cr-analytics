@@ -2091,7 +2091,14 @@ function renderTmTable(teams){
   const {col,dir}=SORT.tm;
   const allTotals=allLatestEPAs();
   const sorted=[...teams].sort((a,b)=>{
-    if(!col) return a.rank-b.rank;
+    if(!col){
+      if(HOUSTON_MODE){
+        const aGl=HDB.sbRanks?.[a.num]?.rank_global??99999;
+        const bGl=HDB.sbRanks?.[b.num]?.rank_global??99999;
+        return aGl-bGl;
+      }
+      return a.rank-b.rank;
+    }
     const epaA=getLatestEPA(a.key),epaB=getLatestEPA(b.key);
     const aceA=ACE_DATA[a.num],aceB=ACE_DATA[b.num];
     let av,bv;
@@ -2111,8 +2118,10 @@ function renderTmTable(teams){
     return (av-bv)*dir;
   });
   const th=(c,l,cls,sty)=>`<th class="${cls||''}" style="cursor:pointer;user-select:none${sty?';'+sty:''}" onclick="setSort('tm','${c}')">${l}</th>`;
+  const rankLabel=HOUSTON_MODE?'Global':'Rank';
+  const lastCol=HOUSTON_MODE?th('ga','US Rank','r','color:#b464ff'):th('ga','GA','r','color:#b464ff');
   return`<table><thead><tr>
-    ${th('rank','Rank','')}${th('team','Team','')}
+    ${th('rank',rankLabel,'')}${th('team','Team','')}
     ${th('w','W','r')}${th('l','L','r')}${th('t','T','r')}
     ${th('avg','Avg Score','r')}${th('auto','Avg Auto','r','color:var(--blue)')}
     ${th('tl','Avg Teleop','r')}${th('eg','Avg Endgame','r','color:var(--orange)')}
@@ -2120,19 +2129,32 @@ function renderTmTable(teams){
     ${th('epa_auto','EPA Auto','r','color:var(--blue)')}
     ${th('epa_eg','EPA EG','r','color:var(--orange)')}
     ${th('ace','ACE','r','color:var(--green)')}
-    ${th('ga','GA','r','color:#b464ff')}
+    ${lastCol}
     <th></th>
   </tr></thead>
   <tbody>${sorted.map(t=>{
-    const epa=getLatestEPA(t.key);
+    const epa=HOUSTON_MODE?hGetLatestEPA(t.key):getLatestEPA(t.key);
     const tc=teamColorByKey(t.key);
-    const ace=ACE_DATA[t.num];
+    const ace=HOUSTON_MODE?(HDB.ace?.[t.num]||null):ACE_DATA[t.num];
     const aceVal=ace?.ace!=null?ace.ace.toFixed(1):'–';
-    const stRank=ace?.rank_state!=null?`#${ace.rank_state}`:'–';
-    const stCol=ace?.rank_state!=null?(ace.rank_state<=5?'var(--green)':ace.rank_state<=15?'#f0c040':'var(--text3)'):'var(--text3)';
+    // Last column: Houston=US rank, PCH=GA state rank
+    let lastVal='–', lastCol='var(--text3)';
+    if(HOUSTON_MODE){
+      const sbr=HDB.sbRanks?.[t.num];
+      const isUS=sbr?.country==='USA';
+      lastVal=sbr==null?'–':isUS?(sbr.rank_country!=null?`#${sbr.rank_country}`:'–'):'N/A';
+      lastCol=lastVal==='N/A'?'var(--text3)':'#b464ff';
+    } else {
+      const sr=ace?.rank_state;
+      lastVal=sr!=null?`#${sr}`:'–';
+      lastCol=sr!=null?(sr<=5?'var(--green)':sr<=15?'#f0c040':'var(--text3)'):'var(--text3)';
+    }
+    // Rank column: Houston=global rank, PCH=district rank
+    const rankVal=HOUSTON_MODE?(HDB.sbRanks?.[t.num]?.rank_global??'–'):(t.rank===999?'–':t.rank);
+    const rankTop=HOUSTON_MODE?(typeof rankVal==='number'&&rankVal<=3):(t.rank<=3);
     return`<tr style="${tc?'border-left:3px solid '+tc.border+';':''}" class="${isTr(t.key)?'hl':''}">
-    <td><span class="rk ${t.rank<=3?'top':''}">${t.rank===999?'–':t.rank}</span></td>
-    <td><a class="tlink" href="https://www.thebluealliance.com/team/${t.num}" target="_blank" style="${tc?'color:'+tc.text:''}">${t.name}</a><span class="tnsm">${t.num}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
+    <td><span class="rk ${rankTop?'top':''}">${rankVal}</span></td>
+    <td><a class="tlink" href="${HOUSTON_MODE?`https://www.statbotics.io/team/${t.num}`:`https://www.thebluealliance.com/team/${t.num}`}" target="_blank" style="${tc?'color:'+tc.text:''}">${t.name}</a><span class="tnsm">${t.num}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
     <td class="r" style="color:var(--win)">${t.stats.wins}</td>
     <td class="r" style="color:var(--loss)">${t.stats.losses}</td>
     <td class="r dim">${t.stats.ties}</td>
@@ -2144,7 +2166,7 @@ function renderTmTable(teams){
     <td class="r" style="color:var(--blue)">${fmtEPA(epa?.auto??null)}</td>
     <td class="r" style="color:var(--orange)">${fmtEPA(epa?.endgame??null)}</td>
     <td class="r" style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:12px">${aceVal}</td>
-    <td class="r" style="color:${stCol};font-family:'JetBrains Mono',monospace;font-size:12px">${stRank}</td>
+    <td class="r" style="color:${lastCol};font-family:'JetBrains Mono',monospace;font-size:12px">${lastVal}</td>
     <td>${isTr(t.key)
       ? `<button onclick="removeTrackedTeam(${t.num})" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--loss);color:var(--loss);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em">− Remove</button>`
       : HOUSTON_MODE?'':`<button onclick="if(!TRACKED.includes(${t.num}))TRACKED.push(${t.num});renderAll()" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${TRACKED.length>=MAX_TRACKED?'disabled':''}>+ Track</button>`
@@ -2164,7 +2186,8 @@ function renderTm(){
     const num=parseInt(tnum(k));
     const name=HOUSTON_MODE?((HDB.teams||[]).find(t=>t.num===num)?.name||tn(k)):tn(k);
     const dr=distRank.find(r=>r.team_key===k);
-    return{key:k,num,name,stats,rank:dr?.rank??999};
+    const hRank=HOUSTON_MODE?(HDB.sbRanks?.[num]?.rank_global??99999):(dr?.rank??999);
+    return{key:k,num,name,stats,rank:hRank};
   }).sort((a,b)=>a.rank-b.rank);
   window._allTm=allTm;
 
