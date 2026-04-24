@@ -666,7 +666,7 @@ async function toggleHoustonMode(){
   }else{
     // Switching OFF
     HOUSTON_MODE=false;
-    sessionStorage.removeItem('cr_houston');
+    sessionStorage.setItem('cr_houston','0');
     hallM=[];
     // Reset ACE_DATA to PCH data
     ACE_DATA={};
@@ -839,11 +839,11 @@ async function init(){
 
     // Auto-fetch ACE on init removed — ACE now loads from data.json via loadACEFromDB()
 
-    // ── Houston Mode auto-activation ──
+    // ── Houston Mode auto-activation (default) ──
     const urlParams=new URLSearchParams(window.location.search);
-    const houstonParam=urlParams.get('houston')==='1';
-    const houstonSession=sessionStorage.getItem('cr_houston')==='1';
-    if(houstonParam||houstonSession){
+    const pchParam=urlParams.get('pch')==='1';
+    const pchSession=sessionStorage.getItem('cr_houston')==='0';
+    if(!pchParam&&!pchSession){
       const ok=await loadHoustonData();
       if(ok){
         HOUSTON_MODE=true;
