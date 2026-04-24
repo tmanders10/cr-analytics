@@ -2565,7 +2565,7 @@ function renderHOv(){
 
   // ── Livestream section ──
   function streamSection(){
-    if(!hasDivData&&!divKey) return '';
+    if(!hasDivData) return '';
     const divMatches=HDB.divisionEvent?.matches||[];
     const allCasts=(divMatches[0]?.videos||[]).filter(v=>v.type==='youtube'); // placeholder
     // Check sessionStorage for saved stream URLs
