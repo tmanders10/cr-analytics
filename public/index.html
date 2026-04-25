@@ -1969,7 +1969,15 @@ function renderTPCard(t, sharedMax){
       <div class="drag-handle" title="Drag to reorder">⠿</div>
       <div class="tpn" style="color:${tc.text}">${t.n}</div>
       <div><div class="tpname">${t.name}</div><div class="tpmeta">${HOUSTON_MODE?'Global Rank #'+((HDB.sbRanks?.[t.n]?.rank_global)??'–'):'District Rank #'+t.rank}${!HOUSTON_MODE&&ACTIVE_FILTER.size?' · filtered view':''}</div>
-      <div class="tprec" style="color:${tc.text}">${hasData?`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
+      ${HOUSTON_MODE?(()=>{
+        const sbr=HDB.sbRanks?.[t.n];
+        const rec=sbr?.record;
+        if(!rec) return '';
+        const tot=rec.wins+rec.losses+rec.ties;
+        const pct=tot?Math.round(rec.wins/tot*100):0;
+        return`<div class="tprec" style="color:var(--text2);font-size:10px">2026 Season: <span style="color:var(--green)">${rec.wins}W</span> · <span style="color:var(--loss)">${rec.losses}L</span> · ${rec.ties}T · ${pct}% win rate</div>`;
+      })():''}
+      <div class="tprec" style="color:${tc.text}">${hasData?(HOUSTON_MODE?'Last Event: ':'')+`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
     </div>
     ${hasData?`
     <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
@@ -1980,7 +1988,17 @@ function renderTPCard(t, sharedMax){
       <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-left:2px">${modeLabel}</span>
     </div>
     <div class="tp-ph">${phases.map(p=>`<div class="tp-phr"><div class="tp-phl">${p.l}</div><div class="bt"><div class="bf ${p.cl}" style="width:${Math.min(p.v/p.mx*100,100)}%"></div></div><div class="tp-phv" style="color:${p.col}">${p.v.toFixed(1)}</div></div>`).join('')}</div>
-    <div class="mhl">Match History — ${mtypeLabel}${!HOUSTON_MODE&&ACTIVE_FILTER.size?' (filtered)':''}</div>
+    <div class="mhl">${(()=>{
+      if(HOUSTON_MODE){
+        // Get the last event name for this team
+        const evKeys=HDB.teamEventKeys?.[t.n]||[];
+        const lastEvKey=evKeys[evKeys.length-1]||'';
+        const lastEv=HDB.events?.[lastEvKey];
+        const evShort=lastEv?.meta?.short||lastEvKey.replace('2026','').toUpperCase()||'Last Event';
+        return evShort+' Match History — '+mtypeLabel;
+      }
+      return'Match History — '+mtypeLabel+(ACTIVE_FILTER.size?' (filtered)':'');
+    })()}</div>
     <div class="mhd">${s.matches.map(mx=>`<div class="mhdot ${dotClass(mx)}" style="${dotBorder(mx)}" title="${mx.m._esh} ${mx.m.comp_level==='qm'?'QM':'PO'}${mx.m.match_number} · ${mx.my}-${mx.op}">${mx.res==='win'?'W':mx.res==='loss'?'L':'T'}</div>`).join('')}</div>`
     :`<div style="color:var(--text3);font-size:12px;font-family:'JetBrains Mono',monospace;padding:8px 0">No ${mtypeLabel.toLowerCase()} data in current filter.</div>`}
     <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:2px">
