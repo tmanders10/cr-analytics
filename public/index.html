@@ -1223,10 +1223,10 @@ function closeTeamTrackingPopup(){
 function setSort(tbl,col){
   if(SORT[tbl].col===col){SORT[tbl].dir*=-1;}
   else{SORT[tbl].col=col;SORT[tbl].dir=1;}
-  if(tbl==='rk')renderRk();
-  else if(tbl==='sc')renderSc();
+  if(tbl==='rk')     HOUSTON_MODE?renderHRk():renderRk();
+  else if(tbl==='sc')HOUSTON_MODE?renderHSc():renderSc();
   else if(tbl==='tm')renderTm();
-  else if(tbl==='mx')renderMx();
+  else if(tbl==='mx')HOUSTON_MODE?renderHMx():renderMx();
   else if(tbl==='al')renderAl();
   else if(tbl==='ev')renderEv();
 }
