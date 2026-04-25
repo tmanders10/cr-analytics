@@ -340,14 +340,35 @@ async function main() {
       const regEvents = (events || [])
         // Exclude FIRST Champs (3,4), District CMP Divisions (5), offseason (99)
         // Type 6 = District CMP Division also excluded — only 2-3 matches per team
-        .filter(ev => ![3, 4, 5, 6, 99].includes(ev.event_type))
+        // Also exclude any event key containing 'cmp' that isn't a full district CMP (type 2)
+        // and exclude the Houston championship itself
+        .filter(ev => {
+          if ([3, 4, 5, 6, 99].includes(ev.event_type)) return false;
+          if (ev.key === '2026cmptx' || ev.key?.startsWith('2026txcmp')) return false;
+          return true;
+        })
         .sort((a, b) => {
           // Prioritize District CMP (type 2) over regular events (type 1)
           const aScore = (a.event_type === 2) ? 1000 + (a.week ?? 0) : (a.week ?? 0);
           const bScore = (b.event_type === 2) ? 1000 + (b.week ?? 0) : (b.week ?? 0);
           return bScore - aScore;
         });
-      const mostRecent = regEvents[0] || null;
+      // Pick most recent event where team played at least 10 matches; fall back to most recent if none qualify
+      let bestEvent = null;
+      for (const ev of regEvents) {
+        try {
+          const evMatches = await tbaFetch(`/event/${ev.key}/matches/simple`);
+          const teamMatches = (evMatches || []).filter(m =>
+            (m.alliances?.red?.team_keys || []).includes(teamKey) ||
+            (m.alliances?.blue?.team_keys || []).includes(teamKey)
+          ).length;
+          process.stdout.write(` (${ev.key}: ${teamMatches} matches)`);
+          if (teamMatches >= 10) { bestEvent = ev; break; }
+        } catch(e) { break; }
+        await sleep(100);
+      }
+      if (!bestEvent) bestEvent = regEvents[0] || null; // fallback to most recent
+      const mostRecent = bestEvent;
       if (mostRecent) {
         teamEventMap[team.num] = mostRecent;
         output.teamEventKeys[team.num] = [mostRecent.key];
