@@ -462,6 +462,12 @@ async function main() {
           total_teams_global: ranks.total?.team_count     ?? null,
           total_teams_country:ranks.country?.team_count   ?? null,
           country:            teamYear.country            ?? null,
+          // Season W/L/T record
+          record: teamYear.record ? {
+            wins:   teamYear.record.wins   ?? 0,
+            losses: teamYear.record.losses ?? 0,
+            ties:   teamYear.record.ties   ?? 0,
+          } : null,
           // Season-level EPA (matches Statbotics website exactly)
           epa_total:   seasonEpa.total_points?.mean       ?? null,
           epa_auto:    seasonBd.auto_points               ?? null,
