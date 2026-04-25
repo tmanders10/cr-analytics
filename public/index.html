@@ -1968,7 +1968,7 @@ function renderTPCard(t, sharedMax){
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
       <div class="drag-handle" title="Drag to reorder">⠿</div>
       <div class="tpn" style="color:${tc.text}">${t.n}</div>
-      <div><div class="tpname">${t.name}</div><div class="tpmeta">${HOUSTON_MODE?'Global Rank #'+((HDB.sbRanks?.[t.n]?.rank_global)??'–'):'District Rank #'+t.rank}${!HOUSTON_MODE&&ACTIVE_FILTER.size?' · filtered view':''}</div>
+      <div><div class="tpname">${t.name}</div><div class="tpmeta">${HOUSTON_MODE?'Global Rank #'+((HDB.sbRanks?.[t.n]?.rank_global)??'–'):'District Rank #'+t.rank}${!HOUSTON_MODE&&ACTIVE_FILTER.size?' · filtered view':''}</div>${HOUSTON_MODE?(()=>{const loc=(HDB.teams||[]).find(tt=>tt.num===t.n)?.location||'';return loc?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px">${loc}</div>`:''})():''}
       ${HOUSTON_MODE?(()=>{
         const sbr=HDB.sbRanks?.[t.n];
         const rec=sbr?.record;
