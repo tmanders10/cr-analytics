@@ -338,11 +338,13 @@ async function main() {
     try {
       const events = await tbaFetch(`/team/${teamKey}/events/2026/simple`);
       const regEvents = (events || [])
-        .filter(ev => ev.event_type !== 3 && ev.event_type !== 4)
+        // Exclude FIRST Champs (3,4), District CMP Divisions (5), offseason (99)
+        // Type 6 = District CMP Division also excluded — only 2-3 matches per team
+        .filter(ev => ![3, 4, 5, 6, 99].includes(ev.event_type))
         .sort((a, b) => {
-          // Prioritize District CMP (type 2) and District CMP Division (type 6) over regular events
-          const aScore = (a.event_type === 2 || a.event_type === 6) ? 1000 + (a.week ?? 0) : (a.week ?? 0);
-          const bScore = (b.event_type === 2 || b.event_type === 6) ? 1000 + (b.week ?? 0) : (b.week ?? 0);
+          // Prioritize District CMP (type 2) over regular events (type 1)
+          const aScore = (a.event_type === 2) ? 1000 + (a.week ?? 0) : (a.week ?? 0);
+          const bScore = (b.event_type === 2) ? 1000 + (b.week ?? 0) : (b.week ?? 0);
           return bScore - aScore;
         });
       const mostRecent = regEvents[0] || null;
