@@ -2522,10 +2522,23 @@ function hTeamMatches(teamNum){
 
 // Helper: get latest EPA for a team from HDB
 function hGetLatestEPA(teamKey){
+  // Prefer season-level EPA from sbRanks (matches Statbotics website exactly)
+  const teamNum=parseInt(teamKey.replace('frc',''));
+  const sbr=HDB.sbRanks?.[teamNum];
+  if(sbr?.epa_total!=null){
+    return{
+      total:   sbr.epa_total,
+      auto:    sbr.epa_auto,
+      teleop:  sbr.epa_teleop,
+      endgame: sbr.epa_endgame,
+      norm:    sbr.epa_norm,
+      sd:      null,
+    };
+  }
+  // Fallback to per-event EPA if sbRanks not yet populated
   const evs=HDB.epa[teamKey]||{};
   const keys=Object.keys(evs);
   if(!keys.length) return null;
-  // Return last event's EPA
   return evs[keys[keys.length-1]]||null;
 }
 
