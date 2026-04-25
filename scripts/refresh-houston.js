@@ -431,14 +431,22 @@ async function main() {
       if (teamYear && teamYear.epa?.ranks) {
         const ranks = teamYear.epa.ranks;
         if (!output.sbRanks) output.sbRanks = {};
+        const seasonEpa = teamYear.epa || {};
+        const seasonBd  = seasonEpa.breakdown || {};
         output.sbRanks[team.num] = {
-          rank_global:        ranks.total?.rank        ?? null,
-          rank_country:       ranks.country?.rank      ?? null,
-          total_teams_global: ranks.total?.team_count  ?? null,
-          total_teams_country:ranks.country?.team_count?? null,
-          country:            teamYear.country         ?? null,
+          rank_global:        ranks.total?.rank           ?? null,
+          rank_country:       ranks.country?.rank         ?? null,
+          total_teams_global: ranks.total?.team_count     ?? null,
+          total_teams_country:ranks.country?.team_count   ?? null,
+          country:            teamYear.country            ?? null,
+          // Season-level EPA (matches Statbotics website exactly)
+          epa_total:   seasonEpa.total_points?.mean       ?? null,
+          epa_auto:    seasonBd.auto_points               ?? null,
+          epa_teleop:  seasonBd.teleop_points             ?? null,
+          epa_endgame: seasonBd.endgame_points            ?? null,
+          epa_norm:    seasonEpa.norm                     ?? null,
         };
-        process.stdout.write(` | Global #${ranks.total?.rank ?? '?'} US #${ranks.country?.rank ?? 'N/A'}\n`);
+        process.stdout.write(` | Global #${ranks.total?.rank ?? '?'} US #${ranks.country?.rank ?? 'N/A'} EPA:${seasonEpa.total_points?.mean?.toFixed(1) ?? '?'}\n`);
       } else {
         process.stdout.write('\n');
       }
