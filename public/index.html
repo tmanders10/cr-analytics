@@ -2794,24 +2794,76 @@ function renderHOv(){
     if(TRACKED.length===0) return '';
     const fM=hasDivData?(HDB.divisionEvent?.matches||[]):hallM;
     const matchType=hasDivData?'all':'qm';
-    return`<div class="card">
-      <div class="ctitle">★ Tracked Teams — ${hasDivData?'Division':'Pre-Event'} Stats</div>
-      ${TRACKED.map(n=>{
-        const k=`frc${n}`;
-        const s=teamStatsF(k,fM,matchType);
-        const tc=teamColor(n)||TEAM_COLORS[0];
-        const name=(HDB.teams||[]).find(t=>t.num===n)?.name||String(n);
-        const epa=hGetLatestEPA(k);
-        return`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border);border-left:3px solid ${tc.border};padding-left:10px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:${tc.text};width:46px;flex-shrink:0;line-height:1">${n}</div>
-          <div style="flex:1"><div style="font-weight:500">${name}</div>
-            <div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px">${s.n>0?`${s.wins}W-${s.losses}L-${s.ties}T`:'No data yet'}</div>
-          </div>
-          <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:14px;color:${tc.text}">${s.n>0?s.avgS.toFixed(1):'–'}</div><div style="font-size:10px;color:var(--text3)">avg</div></div>
-          <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue)">${s.n>0?s.avgA.toFixed(1):'–'}</div><div style="font-size:10px;color:var(--text3)">auto</div></div>
-          <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)">${epa?.total!=null?epa.total.toFixed(1):'–'}</div><div style="font-size:10px;color:var(--text3)">EPA</div></div>
-        </div>`;
+    const label=hasDivData?'Division':'Pre-Event';
+
+    // Build team data array for both list and chart
+    const tData=TRACKED.map(n=>{
+      const k=`frc${n}`;
+      const s=teamStatsF(k,fM,matchType);
+      const tc=teamColor(n)||TEAM_COLORS[0];
+      const name=(HDB.teams||[]).find(t=>t.num===n)?.name||String(n);
+      const epa=hGetLatestEPA(k);
+      return{n,k,s,tc,name,epa};
+    });
+
+    // Chart: grouped bars — EPA, Avg Score, Auto, Endgame per team
+    const metrics=[
+      {key:'epa',   label:'EPA',     col:'#00e664', fn:t=>t.epa?.total??0},
+      {key:'avg',   label:'Avg',     col:'#c8d8ce', fn:t=>t.s.avgS},
+      {key:'auto',  label:'Auto',    col:'#38a8ff', fn:t=>t.s.avgA},
+      {key:'endgame',label:'EG',     col:'#ff8c00', fn:t=>t.s.avgEg},
+    ];
+    const maxVal=Math.max(...tData.flatMap(t=>metrics.map(m=>m.fn(t))),1);
+    const barW=Math.max(8, Math.floor(340/Math.max(tData.length,1)/metrics.length)-2);
+    const groupW=barW*metrics.length+6;
+    const chartW=groupW*tData.length+40;
+    const chartH=160;
+
+    const chartSvg=`<svg viewBox="0 0 ${chartW} ${chartH+50}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+      <style>.cl{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;fill:#8aa090;text-anchor:middle;letter-spacing:.06em;text-transform:uppercase}</style>
+      ${tData.map((t,gi)=>{
+        const gx=gi*groupW+20;
+        const bars=metrics.map((m,mi)=>{
+          const val=m.fn(t);
+          const bh=Math.max(2,Math.round((val/maxVal)*chartH));
+          const bx=gx+mi*(barW+1);
+          const by=chartH-bh;
+          return`<rect x="${bx}" y="${by}" width="${barW}" height="${bh}" fill="${m.col}" opacity="0.85" rx="1">
+            <title>${t.name} ${m.label}: ${val.toFixed(1)}</title>
+          </rect>`;
+        }).join('');
+        const labelX=gx+groupW/2-6;
+        return`${bars}
+          <text x="${labelX}" y="${chartH+12}" class="cl" style="fill:${t.tc.text};font-size:10px">${t.n}</text>`;
       }).join('')}
+      <line x1="18" y1="${chartH}" x2="${chartW-4}" y2="${chartH}" stroke="#2a3830" stroke-width="1"/>
+      <g transform="translate(4,${chartH+28})">
+        ${metrics.map((m,i)=>`<rect x="${i*52}" y="-6" width="8" height="8" fill="${m.col}" rx="1"/>
+        <text x="${i*52+11}" y="2" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;fill:#8aa090;font-weight:700">${m.label}</text>`).join('')}
+      </g>
+    </svg>`;
+
+    // Team list
+    const teamList=tData.map(t=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);border-left:3px solid ${t.tc.border};padding-left:10px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;color:${t.tc.text};width:42px;flex-shrink:0;line-height:1">${t.n}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.name}</div>
+        <div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px">${t.s.n>0?`${t.s.wins}W-${t.s.losses}L-${t.s.ties}T`:'No data yet'}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0"><div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;color:${t.tc.text}">${t.s.n>0?t.s.avgS.toFixed(1):'–'}</div><div style="font-size:9px;color:var(--text3)">avg</div></div>
+      <div style="text-align:right;flex-shrink:0"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue)">${t.s.n>0?t.s.avgA.toFixed(1):'–'}</div><div style="font-size:9px;color:var(--text3)">auto</div></div>
+      <div style="text-align:right;flex-shrink:0"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)">${t.epa?.total!=null?t.epa.total.toFixed(1):'–'}</div><div style="font-size:9px;color:var(--text3)">EPA</div></div>
+    </div>`).join('');
+
+    return`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div class="card" style="min-width:0">
+        <div class="ctitle">★ Tracked Teams — ${label} Stats</div>
+        ${teamList}
+      </div>
+      <div class="card" style="min-width:0">
+        <div class="ctitle">Tracked Teams — Score Comparison</div>
+        <div style="padding:8px 0 0">${chartSvg}</div>
+      </div>
     </div>`;
   }
 
