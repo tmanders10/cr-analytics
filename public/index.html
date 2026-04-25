@@ -1975,7 +1975,7 @@ function renderTPCard(t, sharedMax){
         if(!rec) return '';
         const tot=rec.wins+rec.losses+rec.ties;
         const pct=tot?Math.round(rec.wins/tot*100):0;
-        return`<div class="tprec" style="color:var(--text2);font-size:10px">2026 Season: <span style="color:var(--green)">${rec.wins}W</span> · <span style="color:var(--loss)">${rec.losses}L</span> · ${rec.ties}T · ${pct}% win rate</div>`;
+        return`<div class="tprec" style="color:${tc.text}">2026 Season: ${rec.wins}W · ${rec.losses}L · ${rec.ties}T · ${pct}% win rate</div>`;
       })():''}
       <div class="tprec" style="color:${tc.text}">${hasData?(HOUSTON_MODE?'Last Event: ':'')+`${s.wins}W · ${s.losses}L · ${s.ties}T · ${wpt}% win rate (${mtypeLabel})`:'No match data yet'}</div></div>
     </div>
