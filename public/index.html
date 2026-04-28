@@ -2620,43 +2620,51 @@ function renderHOv(){
   // ── Livestream section ──
   function streamSection(){
     if(!hasDivData) return '';
-    const divMatches=HDB.divisionEvent?.matches||[];
-    const allCasts=(divMatches[0]?.videos||[]).filter(v=>v.type==='youtube'); // placeholder
-    // Check sessionStorage for saved stream URLs
-    const ovKey=`cr_stream_houston`;
-    let overrides={};
-    try{ overrides=JSON.parse(sessionStorage.getItem(ovKey)||'{}'); }catch(e){}
-    const embedOverhead=overrides.overhead||null;
-    const embedField=overrides.field||null;
 
-    const streamCard=(label,embedUrl,slotKey)=>`<div class="card" style="padding:10px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)">${label}</span>
-        <button onclick="editHoustonStream('${slotKey}')" title="Edit stream URL" style="background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:12px;padding:0 2px;line-height:1" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text3)'">✎</button>
-      </div>
-      <div id="hstream-edit-${slotKey}" style="display:none;margin-bottom:6px">
-        <div style="display:flex;gap:5px">
-          <input id="hstream-input-${slotKey}" type="text" placeholder="Paste YouTube URL or video ID…" style="flex:1;font-size:11px;font-family:'JetBrains Mono',monospace;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:4px 8px;color:var(--text2)"/>
-          <button onclick="saveHoustonStream('${slotKey}')" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--green);color:#030803;border:none">Save</button>
-          <button onclick="document.getElementById('hstream-edit-${slotKey}').style.display='none'" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;padding:4px 8px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text3)">✕</button>
-        </div>
-      </div>
-      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:5px;background:#000">
-        ${embedUrl
-          ?`<iframe id="hstream-frame-${slotKey}" src="${embedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>`
-          :`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px">No stream yet<br><button onclick="editHoustonStream('${slotKey}')" style="margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text3)">+ Add URL</button></div>`}
-      </div>
-    </div>`;
+    // Johnson Division — one stream per day, pre-loaded YouTube IDs
+    // Single FIRST Webcast Unit stream: Wed Apr 29 – Sat May 2
+    const JOHNSON_STREAM_ID = 'PqyFF_0QMTE'; // youtube.com/watch?v=PqyFF_0QMTE
+    const JOHNSON_STREAM_DAYS = {
+      3: 'Wednesday, April 29',  // getDay() === 3
+      4: 'Thursday, April 30',
+      5: 'Friday, May 1',
+      6: 'Saturday, May 2',
+    };
+
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const dayLabel = JOHNSON_STREAM_DAYS[dayOfWeek] || 'Johnson Division — Live';
+
+    // Check sessionStorage for user override
+    let overrides={};
+    try{ overrides=JSON.parse(sessionStorage.getItem('cr_stream_houston')||'{}'); }catch(e){}
+    const defaultEmbed=`https://www.youtube.com/embed/${JOHNSON_STREAM_ID}`;
+    const embedUrl=overrides.main||defaultEmbed;
 
     return`<div style="margin-bottom:16px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        ${hasDivData?`<span style="width:8px;height:8px;border-radius:50%;background:#ff4444;animation:pulse 1.5s infinite;flex-shrink:0"></span>`:''}
-        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)">${divName} Division${hasDivData?' — Live':' — Streams'}</span>
-        ${divKey?`<a href="https://www.thebluealliance.com/event/${divKey}" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;color:var(--text3);text-decoration:none;border:1px solid var(--border2);margin-left:auto">TBA ↗</a>`:''}
+        <span style="width:8px;height:8px;border-radius:50%;background:#ff4444;animation:pulse 1.5s infinite;flex-shrink:0"></span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)">${divName} Division — Live · ${dayLabel}</span>
+        <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+          <a href="https://www.youtube.com/watch?v=${JOHNSON_STREAM_ID}" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;color:#ff4444;text-decoration:none;border:1px solid rgba(255,68,68,.4)">YT ↗</a>
+          ${divKey?`<a href="https://www.thebluealliance.com/event/${divKey}" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;color:var(--text3);text-decoration:none;border:1px solid var(--border2)">TBA ↗</a>`:''}
+          <button onclick="editHoustonStream('main')" title="Override stream URL" style="background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:12px;padding:0 2px;line-height:1" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text3)'">✎</button>
+        </div>
       </div>
-      <div class="g2">
-        ${streamCard('Overhead View',embedOverhead,'overhead')}
-        ${streamCard('Field View',embedField,'field')}
+      <div id="hstream-edit-main" style="display:none;margin-bottom:8px">
+        <div style="display:flex;gap:5px">
+          <input id="hstream-input-main" type="text" placeholder="Paste YouTube URL or video ID to override…" style="flex:1;font-size:11px;font-family:'JetBrains Mono',monospace;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:4px 8px;color:var(--text2)"/>
+          <button onclick="saveHoustonStream('main')" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--green);color:#030803;border:none">Save</button>
+          <button onclick="document.getElementById('hstream-edit-main').style.display='none'" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;padding:4px 8px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text3)">✕</button>
+        </div>
+      </div>
+      <div class="card" style="padding:10px">
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:5px;background:#000">
+          <iframe src="${embedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+        </div>
+        <div style="margin-top:8px;font-size:10px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-align:center">
+          FIRST Webcast Unit · Johnson Division · via @FIRSTRoboticsCompetition
+        </div>
       </div>
     </div>`;
   }
