@@ -2622,18 +2622,18 @@ function renderHOv(){
     if(!hasDivData) return '';
 
     // Johnson Division — one stream per day, pre-loaded YouTube IDs
-    // Single FIRST Webcast Unit stream: Wed Apr 29 – Sat May 2
-    const JOHNSON_STREAM_ID = 'PqyFF_0QMTE'; // youtube.com/watch?v=PqyFF_0QMTE
-    const JOHNSON_STREAM_DAYS = {
-      3: 'Wednesday, April 29',  // getDay() === 3
-      4: 'Thursday, April 30',
-      5: 'Friday, May 1',
-      6: 'Saturday, May 2',
+    const JOHNSON_STREAMS = {
+      3: { id: 'PqyFF_0QMTE', label: 'Wednesday, April 29' },
+      4: { id: 'KTlZmUXbwfA', label: 'Thursday, April 30' },
+      5: { id: 'skZTO76_SB4', label: 'Friday, May 1'      },
+      6: { id: '_6BhNlBWvw4', label: 'Saturday, May 2'    },
     };
 
     const today = new Date();
     const dayOfWeek = today.getDay();
-    const dayLabel = JOHNSON_STREAM_DAYS[dayOfWeek] || 'Johnson Division — Live';
+    const dayStream = JOHNSON_STREAMS[dayOfWeek] || JOHNSON_STREAMS[3]; // default to Wed if unknown
+    const dayLabel = dayStream.label;
+    const JOHNSON_STREAM_ID = dayStream.id;
 
     // Check sessionStorage for user override
     let overrides={};
