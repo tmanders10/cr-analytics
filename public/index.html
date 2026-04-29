@@ -3191,23 +3191,29 @@ function matchTrack(matchKey, redKeys, blueKeys) {
 
   TRACKED = newTracked;
   H_TRACKED_FILTER = new Set(newTracked);
+  // Save filter value before renderAll destroys it
+  const _dmfVal = (document.getElementById('divmx-filter')||{}).value||'';
   syncTrackedFilter();
   renderAll();
-  // Re-apply div matches filter after render
-  const dmf = document.getElementById('divmx-filter');
-  if (dmf && dmf.value.trim()) filterDivMatches(dmf.value);
+  // Re-apply div matches filter after DOM settles
+  if (_dmfVal.trim()) setTimeout(()=>{
+    const f=document.getElementById('divmx-filter');
+    if(f){f.value=_dmfVal;filterDivMatches(_dmfVal);}
+  },0);
 }
 
 function clearMatchTrack() {
+  const _dmfVal = (document.getElementById('divmx-filter')||{}).value||'';
   MATCH_TRACK_KEY = null;
   MATCH_TRACK_ALLIANCES = {};
   TRACKED = [];
   H_TRACKED_FILTER = new Set();
   syncTrackedFilter();
   renderAll();
-  // Re-apply div matches filter after render
-  const dmf = document.getElementById('divmx-filter');
-  if (dmf && dmf.value.trim()) filterDivMatches(dmf.value);
+  if (_dmfVal.trim()) setTimeout(()=>{
+    const f=document.getElementById('divmx-filter');
+    if(f){f.value=_dmfVal;filterDivMatches(_dmfVal);}
+  },0);
 }
 
 function allianceBadge(teamNum) {
