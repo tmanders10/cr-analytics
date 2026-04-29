@@ -3346,7 +3346,7 @@ function renderHDivMatches() {
     return `<tr class="${hasTracked?'hl':''}" ${clickable}>
       <td class="dim" style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;white-space:nowrap">${typeLabel}</td>
       <td class="r dim" style="white-space:nowrap">${matchLabel}</td>
-      <td class="r" style="padding:0 4px">${timeCell}</td>
+      <td style="font-size:10px;padding:0 6px;white-space:nowrap">${timeCell}</td>
       <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;${rWin?'background:rgba(255,61,90,.04)':''}">${rt}</td>
       <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${rWin?700:400};color:${rWin?'var(--loss)':isPlayed?'var(--text3)':'var(--text3)'};${rWin?'background:rgba(255,61,90,.04)':''}">${isPlayed?rs:'–'}</td>
       <td style="text-align:center;color:var(--text3);font-size:10px;padding:0 2px">–</td>
@@ -3360,21 +3360,21 @@ function renderHDivMatches() {
   document.getElementById('pg-divmatches').innerHTML = `
 <div class="sh"><h2>${divName} <span>Matches</span></h2><span class="sub">${played} of ${total} matches played</span></div>
 <div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table style="table-layout:fixed;width:100%"><colgroup>
+    <col style="width:38px"/>
     <col style="width:40px"/>
-    <col style="width:46px"/>
-    <col style="width:28px"/>
-    <col style="width:calc(50% - 181px)"/>
+    <col style="width:58px"/>
+    <col style="width:calc(50% - 192px)"/>
     <col style="width:44px"/>
     <col style="width:14px"/>
     <col style="width:44px"/>
-    <col style="width:calc(50% - 181px)"/>
-    <col style="width:86px"/>
+    <col style="width:calc(50% - 192px)"/>
+    <col style="width:90px"/>
     <col style="width:88px"/>
   </colgroup>
   <thead><tr>
     <th style="font-size:10px">Type</th>
     <th class="r" style="font-size:10px">#</th>
-    <th></th>
+    <th style="font-size:10px;color:var(--text3)">Time</th>
     <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
     <th class="r" style="color:var(--loss)">Red</th>
     <th style="text-align:center;color:var(--text3);font-size:10px">–</th>
@@ -3429,11 +3429,17 @@ function renderHMx(){
   const lo={qm:0,qf:1,sf:2,f:3};
   teamNums.forEach(num=>{
     if(!teamMatchMap[num]) teamMatchMap[num]=[];
-    teamMatchMap[num].sort((a,b)=>
-      (lo[a.comp_level]||0)-(lo[b.comp_level]||0)||
-      (a.set_number||0)-(b.set_number||0)||
-      a.match_number-b.match_number
-    );
+    const divKey=HDB.divisionEventKey||'';
+    teamMatchMap[num].sort((a,b)=>{
+      // Division event (JOH) first, then other events
+      const aIsDiv=a._hev===divKey?0:1;
+      const bIsDiv=b._hev===divKey?0:1;
+      if(aIsDiv!==bIsDiv) return aIsDiv-bIsDiv;
+      // Within same event: sort by comp level, set, match number
+      return (lo[a.comp_level]||0)-(lo[b.comp_level]||0)||
+             (a.set_number||0)-(b.set_number||0)||
+             a.match_number-b.match_number;
+    });
   });
 
   const totalMatches=new Set(teamNums.flatMap(n=>(teamMatchMap[n]||[]).map(m=>m.key))).size;
