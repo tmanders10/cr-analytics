@@ -3359,6 +3359,7 @@ function renderHDivMatches() {
 
   document.getElementById('pg-divmatches').innerHTML = `
 <div class="sh"><h2>${divName} <span>Matches</span></h2><span class="sub">${played} of ${total} matches played</span></div>
+<div style="margin-bottom:10px"><input id="divmx-filter" type="text" placeholder="Filter by team #…" oninput="filterDivMatches(this.value)" style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg2);border:1px solid var(--border2);border-radius:5px;padding:6px 12px;color:var(--text2);width:180px;outline:none" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border2)'"/></div>
 <div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table style="table-layout:fixed;width:100%"><colgroup>
     <col style="width:38px"/>
     <col style="width:40px"/>
@@ -3386,6 +3387,23 @@ function renderHDivMatches() {
   <tbody>${rows}</tbody>
 </table></div></div>`;
 }
+// ── Filter Johnson Matches by team number ──────────────────────────────────
+function filterDivMatches(val){
+  const q=val.trim();
+  const rows=document.querySelectorAll('#pg-divmatches tbody tr');
+  rows.forEach(row=>{
+    if(row.classList.contains('mx-bd')){row.style.display='';return;}
+    if(!q){row.style.display='';return;}
+    const text=row.textContent||'';
+    // Match if the team number appears as a standalone token
+    const re=new RegExp('(?:^|[^0-9])'+q+'(?:[^0-9]|$)');
+    row.style.display=re.test(text)?'':'none';
+    // Also hide the breakdown panel below if its row is hidden
+    const next=row.nextElementSibling;
+    if(next&&next.classList.contains('mx-bd')) next.style.display=row.style.display;
+  });
+}
+
 // ── Match Log (Houston) — full season for all 75 teams ──
 function renderHMx(){
   // If no teams selected, show prompt — avoids rendering 3000+ matches
