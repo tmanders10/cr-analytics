@@ -297,6 +297,7 @@
   <button class="nav-tab" onclick="showPage('teams',this)" data-short="Teams">Team Tracker</button>
   <button class="nav-tab" onclick="showPage('alliances',this)" data-short="Alliances">Alliances & Playoffs</button>
   <button class="nav-tab" onclick="showPage('matches',this)" data-short="Matches">Match Log</button>
+  <button class="nav-tab houston-only" onclick="showPage('divmatches',this)" data-short="Div" style="display:none">Division Matches</button>
   <button class="nav-tab" onclick="showPage('standings',this)" data-short="Standings">Event Standings</button>
 </div>
 
@@ -307,6 +308,7 @@
   <div class="page" id="pg-teams"></div>
   <div class="page" id="pg-alliances"></div>
   <div class="page" id="pg-matches"></div>
+  <div class="page" id="pg-divmatches"></div>
   <div class="page" id="pg-standings"></div>
 </div>
 
@@ -341,6 +343,8 @@ const EVENTS=[
 ];
 
 let TRACKED=[];  // ordered array instead of Set for drag-and-drop support
+let MATCH_TRACK_KEY=null;  // currently match-tracked match key (null = not in match-track mode)
+let MATCH_TRACK_ALLIANCES={};  // {teamNum: 'red'|'blue'}
 let ACTIVE_FILTER=new Set();
 let DB={matches:{},rankings:{},alliances:{},teams:{},epa:{},webcasts:{},ace:{},oprs:{},matchPreds:{}};
 let allM=[],distRank=[];
@@ -562,6 +566,19 @@ async function loadHoustonData(){
 
 function applyHoustonMode(){
   // Header subtitle
+  // Update tab labels for Houston mode
+  const matchesTab=document.querySelector('.nav-tab[onclick*="\'matches\'"]');
+  const standingsTab=document.querySelector('.nav-tab[onclick*="\'standings\'"]');
+  const divMatchesTab=document.querySelector('.nav-tab[onclick*="\'divmatches\'"]');
+  if(HOUSTON_MODE){
+    if(matchesTab) matchesTab.textContent='Match History';
+    if(standingsTab) standingsTab.textContent=(HDB.division||'Division')+' Standings';
+    if(divMatchesTab){ divMatchesTab.textContent=(HDB.division||'Division')+' Matches'; divMatchesTab.style.display=''; }
+  } else {
+    if(matchesTab) matchesTab.textContent='Match Log';
+    if(standingsTab) standingsTab.textContent='Event Standings';
+    if(divMatchesTab) divMatchesTab.style.display='none';
+  }
   const subtitle=document.getElementById('headerSubtitle');
   if(subtitle) subtitle.textContent=HOUSTON_MODE?`2026 FIRST Championship — ${HDB.division} Division`:'2026 FIRST FRC — Rebuilt';
   // Nav tab visibility
@@ -1223,19 +1240,20 @@ function closeTeamTrackingPopup(){
 function setSort(tbl,col){
   if(SORT[tbl].col===col){SORT[tbl].dir*=-1;}
   else{SORT[tbl].col=col;SORT[tbl].dir=1;}
-  if(tbl==='rk')     HOUSTON_MODE?renderHRk():renderRk();
-  else if(tbl==='sc')HOUSTON_MODE?renderHSc():renderSc();
-  else if(tbl==='tm')renderTm();
-  else if(tbl==='mx')HOUSTON_MODE?renderHMx():renderMx();
-  else if(tbl==='al')renderAl();
-  else if(tbl==='ev')renderEv();
+  if(tbl==='rk')       HOUSTON_MODE?renderHRk():renderRk();
+  else if(tbl==='sc')  HOUSTON_MODE?renderHSc():renderSc();
+  else if(tbl==='tm')  renderTm();
+  else if(tbl==='mx')  HOUSTON_MODE?renderHMx():renderMx();
+  else if(tbl==='divmx')renderHDivMatches();
+  else if(tbl==='al')  renderAl();
+  else if(tbl==='ev')  renderEv();
 }
 function thSort(tbl,col,label,cls){
   return`<th class="${cls||''}" style="cursor:pointer;user-select:none" onclick="setSort('${tbl}','${col}')">${label}</th>`;
 }
 function renderAll(){
   if(HOUSTON_MODE){
-    renderHOv();renderHRk();renderHSc();renderTm();renderHMx();renderEv();
+    renderHOv();renderHRk();renderHSc();renderTm();renderHMx();renderHDivMatches();renderEv();
   }else{
     renderOv();renderRk();renderSc();renderTm();renderAl();renderMx();renderEv();
   }
@@ -1779,7 +1797,7 @@ function addTrackedTeam(){
   if(HOUSTON_MODE) H_TRACKED_FILTER.add(n);
   inp.value='';renderAll();
 }
-function removeTrackedTeam(n){const i=TRACKED.indexOf(n);if(i>-1)TRACKED.splice(i,1);if(HOUSTON_MODE)H_TRACKED_FILTER.delete(n);renderStatusPills();renderAll();}
+function removeTrackedTeam(n){const i=TRACKED.indexOf(n);if(i>-1)TRACKED.splice(i,1);if(HOUSTON_MODE)H_TRACKED_FILTER.delete(n);MATCH_TRACK_KEY=null;MATCH_TRACK_ALLIANCES={};renderStatusPills();renderAll();}
 function renderTrackerSetup(){return`<div class="tracker-setup">
   <div class="tracker-setup-title">★ Tracked Teams — highlights across all tabs</div>
   <div class="team-selector-wrap">
@@ -1968,7 +1986,7 @@ function renderTPCard(t, sharedMax){
     <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
       <div class="drag-handle" title="Drag to reorder">⠿</div>
       <div class="tpn" style="color:${tc.text}">${t.n}</div>
-      <div><div class="tpname">${t.name}</div><div class="tpmeta">${HOUSTON_MODE?'Global Rank #'+((HDB.sbRanks?.[t.n]?.rank_global)??'–'):'District Rank #'+t.rank}${!HOUSTON_MODE&&ACTIVE_FILTER.size?' · filtered view':''}</div>${HOUSTON_MODE?(()=>{const loc=(HDB.teams||[]).find(tt=>tt.num===t.n)?.location||'';return loc?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px">${loc}</div>`:''})():''}
+      <div><div class="tpname">${t.name}${MATCH_TRACK_KEY?allianceBadge(t.n):''}</div><div class="tpmeta">${HOUSTON_MODE?'Global Rank #'+((HDB.sbRanks?.[t.n]?.rank_global)??'–'):'District Rank #'+t.rank}${!HOUSTON_MODE&&ACTIVE_FILTER.size?' · filtered view':''}</div>${HOUSTON_MODE?(()=>{const loc=(HDB.teams||[]).find(tt=>tt.num===t.n)?.location||'';return loc?`<div style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px">${loc}</div>`:''})():''}
       ${HOUSTON_MODE?(()=>{
         const sbr=HDB.sbRanks?.[t.n];
         const rec=sbr?.record;
@@ -2172,7 +2190,7 @@ function renderTmTable(teams){
     const rankTop=HOUSTON_MODE?(typeof rankVal==='number'&&rankVal<=3):(t.rank<=3);
     return`<tr style="${tc?'border-left:3px solid '+tc.border+';':''}" class="${isTr(t.key)?'hl':''}">
     <td><span class="rk ${rankTop?'top':''}">${rankVal}</span></td>
-    <td><a class="tlink" href="${HOUSTON_MODE?`https://www.statbotics.io/team/${t.num}`:`https://www.thebluealliance.com/team/${t.num}`}" target="_blank" style="${tc?'color:'+tc.text:''}">${t.name}</a><span class="tnsm">${t.num}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}</td>
+    <td><a class="tlink" href="${HOUSTON_MODE?`https://www.statbotics.io/team/${t.num}`:`https://www.thebluealliance.com/team/${t.num}`}" target="_blank" style="${tc?'color:'+tc.text:''}">${t.name}</a><span class="tnsm">${t.num}</span>${tc?`<span style="margin-left:5px;font-size:11px;color:${tc.text}">★</span>`:''}${MATCH_TRACK_KEY?allianceBadge(t.num):''}</td>
     <td class="r" style="color:var(--win)">${t.stats.wins}</td>
     <td class="r" style="color:var(--loss)">${t.stats.losses}</td>
     <td class="r dim">${t.stats.ties}</td>
@@ -2187,7 +2205,7 @@ function renderTmTable(teams){
     <td class="r" style="color:${lastCol};font-family:'JetBrains Mono',monospace;font-size:12px">${lastVal}</td>
     <td>${isTr(t.key)
       ? `<button onclick="removeTrackedTeam(${t.num})" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--loss);color:var(--loss);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em">− Remove</button>`
-      : `<button onclick="if(!TRACKED.includes(${t.num})){TRACKED.push(${t.num});syncTrackedFilter();renderAll();}" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${TRACKED.length>=(HOUSTON_MODE?9:MAX_TRACKED)?'disabled title="Max teams reached"':''}>+ Track</button>`
+      : `<button onclick="if(!TRACKED.includes(${t.num})){TRACKED.push(${t.num});MATCH_TRACK_KEY=null;MATCH_TRACK_ALLIANCES={};syncTrackedFilter();renderAll();}" style="font-size:10px;padding:2px 7px;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em" ${TRACKED.length>=(HOUSTON_MODE?9:MAX_TRACKED)?'disabled title="Max teams reached"':''}>+ Track</button>`
     }</td>
   </tr>`;}).join('')}</tbody></table>`;}
 function renderTm(){
@@ -3139,6 +3157,208 @@ ${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06
 </div>`;
 }
 
+
+// ── Match Track ──────────────────────────────────────────────────────────────
+function matchTrack(matchKey, redKeys, blueKeys) {
+  // No-op if same match already tracked
+  if (MATCH_TRACK_KEY === matchKey) return;
+
+  MATCH_TRACK_KEY = matchKey;
+  MATCH_TRACK_ALLIANCES = {};
+
+  // Build new tracked list: red teams first, then blue teams
+  const newTracked = [];
+  redKeys.forEach(k => {
+    const n = parseInt(k.replace('frc',''));
+    if (!isNaN(n)) { newTracked.push(n); MATCH_TRACK_ALLIANCES[n] = 'red'; }
+  });
+  blueKeys.forEach(k => {
+    const n = parseInt(k.replace('frc',''));
+    if (!isNaN(n)) { newTracked.push(n); MATCH_TRACK_ALLIANCES[n] = 'blue'; }
+  });
+
+  TRACKED = newTracked;
+  H_TRACKED_FILTER = new Set(newTracked);
+  syncTrackedFilter();
+  renderAll();
+}
+
+function clearMatchTrack() {
+  MATCH_TRACK_KEY = null;
+  MATCH_TRACK_ALLIANCES = {};
+  TRACKED = [];
+  H_TRACKED_FILTER = new Set();
+  syncTrackedFilter();
+  renderAll();
+}
+
+function allianceBadge(teamNum) {
+  const alliance = MATCH_TRACK_ALLIANCES[teamNum];
+  if (!alliance) return '';
+  const isRed = alliance === 'red';
+  return `<span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:${isRed?'var(--loss)':'var(--blue)'};background:${isRed?'rgba(255,61,90,.12)':'rgba(56,168,255,.12)'};border:1px solid ${isRed?'rgba(255,61,90,.4)':'rgba(56,168,255,.4)'};border-radius:4px;padding:1px 5px;margin-left:5px;white-space:nowrap">${isRed?'Red':'Blue'} Alliance</span>`;
+}
+
+// ── Division Matches (Houston) ────────────────────────────────────────────────
+function renderHDivMatches() {
+  const divMatches = HDB.divisionEvent?.matches || [];
+  const divName = HDB.division || 'Division';
+  const lo = {qm:0, qf:1, sf:2, f:3};
+
+  // Sort: by comp_level order, then set_number, then match_number
+  const sorted = [...divMatches].sort((a,b) =>
+    (lo[a.comp_level]||0)-(lo[b.comp_level]||0) ||
+    (a.set_number||0)-(b.set_number||0) ||
+    a.match_number - b.match_number
+  );
+
+  if (!document.getElementById('pg-divmatches')) return;
+
+  if (sorted.length === 0) {
+    document.getElementById('pg-divmatches').innerHTML = `
+<div class="sh"><h2>${divName} <span>Matches</span></h2><span class="sub">Schedule not yet posted</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;gap:16px">
+  <div style="font-size:32px;opacity:.4">📅</div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2)">Schedule Not Yet Posted</div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);max-width:360px;line-height:1.6">The ${divName} Division match schedule will appear here once posted. Use Match Update to refresh.</div>
+</div>`;
+    return;
+  }
+
+  const played = sorted.filter(m=>(m.alliances?.red?.score??-1)>=0).length;
+  const total = sorted.length;
+
+  function aceWinProb(redKeys, blueKeys, matchKey) {
+    const sbPred = HDB.matchPreds[matchKey];
+    if (sbPred && sbPred.winner && sbPred.prob != null) {
+      return {red: sbPred.prob, blue: 1-sbPred.prob, source:'epa'};
+    }
+    const redAce = redKeys.reduce((s,k)=>{const a=HDB.ace[parseInt(k.replace('frc',''))];return s+(a?.ace??0);},0);
+    const blueAce = blueKeys.reduce((s,k)=>{const a=HDB.ace[parseInt(k.replace('frc',''))];return s+(a?.ace??0);},0);
+    if (!redAce && !blueAce) return null;
+    const redProb = 1/(1+Math.exp(-(redAce-blueAce)/30));
+    return {red:redProb, blue:1-redProb, source:'ace'};
+  }
+
+  const rows = sorted.map(m => {
+    const redKeys = m.alliances?.red?.team_keys || [];
+    const blueKeys = m.alliances?.blue?.team_keys || [];
+    const rs = m.alliances?.red?.score ?? -1;
+    const bs = m.alliances?.blue?.score ?? -1;
+    const isPlayed = rs >= 0 && bs >= 0;
+    const w = m.winning_alliance;
+    const rWin = w==='red', bWin = w==='blue';
+
+    const rt = redKeys.map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${k.replace('frc','')}</span>`;}).join(' · ');
+    const bt = blueKeys.map(k=>{const tc=teamColorByKey(k);return`<span style="${tc?'color:'+tc.text+';font-weight:600':''}">${k.replace('frc','')}</span>`;}).join(' · ');
+
+    const hasTracked = [...redKeys,...blueKeys].some(k=>isTr(k));
+    const typeLabel = {qm:'QUAL',qf:'QF',sf:'SF',f:'FINAL'}[m.comp_level]||m.comp_level.toUpperCase();
+    const matchLabel = m.comp_level==='qm'?'QM'+m.match_number:`${m.comp_level.toUpperCase()} ${m.set_number}-${m.match_number}`;
+
+    // Time or video
+    let timeCell = '';
+    if (isPlayed) {
+      timeCell = videoLink(matchVideoUrl(m));
+    } else if (m.predicted_time) {
+      const d = new Date(m.predicted_time * 1000);
+      const hh = d.getHours()%12||12, mm=String(d.getMinutes()).padStart(2,'0'), ampm=d.getHours()<12?'am':'pm';
+      timeCell = `<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3)">${hh}:${mm}${ampm}</span>`;
+    }
+
+    // Prediction
+    const prob = aceWinProb(redKeys, blueKeys, m.key);
+    let predCell = '';
+    if (isPlayed) {
+      predCell = rWin?`<span class="rp" style="background:rgba(255,61,90,.12);color:var(--loss)">RED</span>`:bWin?`<span class="rp" style="background:rgba(56,168,255,.12);color:var(--blue)">BLUE</span>`:`<span class="rp rt">TIE</span>`;
+    } else if (prob) {
+      const predRed = prob.red >= 0.5;
+      const pct = Math.round((predRed?prob.red:prob.blue)*100);
+      const src = prob.source==='epa'?`<span style="font-size:8px;color:var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em"> EPA</span>`:`<span style="font-size:8px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em"> ACE</span>`;
+      predCell = `${predRed?`<span style="color:var(--loss);font-family:'JetBrains Mono',monospace;font-size:11px">RED</span>`:`<span style="color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:11px">BLUE</span>`}<span style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px"> ${pct}%</span>${src}`;
+    }
+
+    // Match Track button
+    const isCurrentlyTracked = MATCH_TRACK_KEY === m.key;
+    const mtOnclick = isCurrentlyTracked
+      ? 'clearMatchTrack()'
+      : `matchTrack('${m.key}',${JSON.stringify(redKeys)},${JSON.stringify(blueKeys)})`;
+    const mtStyle = isCurrentlyTracked
+      ? 'background:var(--green);color:#030803;border:1px solid var(--green)'
+      : 'background:transparent;color:var(--text3);border:1px solid var(--border2)';
+    const mtBtn = `<button onclick="event.stopPropagation();${mtOnclick}" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;cursor:pointer;white-space:nowrap;${mtStyle}">${isCurrentlyTracked?'★ Tracking':'Match Track'}</button>`;
+
+    // Breakdown panel
+    const bdId = `divbd-${m.key}`;
+    const bdPanel = (()=>{
+      if (!isPlayed) return '';
+      const rhs=hubS(m,'red'), bhs=hubS(m,'blue');
+      if (!rhs && !bhs) return '';
+      const bdPhases=[
+        {label:'Auto',k:'auto',col:'var(--blue)'},
+        {label:'Transition',k:'transition',col:'var(--text2)'},
+        {label:'Sh 1/2',k1:'s1',k2:'s2',col:'#a78bfa'},
+        {label:'Sh 3/4',k1:'s3',k2:'s4',col:'#a78bfa'},
+        {label:'Endgame',k:'endgame',col:'var(--orange)'},
+        {label:'Teleop',k:'teleop',col:'#00c8aa',sub:true},
+        {label:'Total',k:'total',col:'var(--green)',total:true},
+      ];
+      const f=(hs,p)=>p.k1!=null?((hs?hs[p.k1]:0)||0)+((hs?hs[p.k2]:0)||0):(hs?hs[p.k]:0)||0;
+      const maxV=Math.max(...bdPhases.map(p=>Math.max(f(rhs,p),f(bhs,p))),1);
+      const makeRow=(p)=>{
+        const rv=f(rhs,p),bv=f(bhs,p);
+        const isTotal=!!p.total,isSub=!!p.sub;
+        const pctR=Math.round((rv/maxV)*100),pctB=Math.round((bv/maxV)*100);
+        const rCol=rWin&&isTotal?'var(--loss)':rv>bv?'rgba(255,100,100,.9)':'var(--text3)';
+        const bCol=bWin&&isTotal?'var(--blue)':bv>rv?'rgba(80,180,255,.9)':'var(--text3)';
+        const barR=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctR}%;height:100%;background:var(--loss);opacity:${rWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;right:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${rCol}">${rv}</div></div>`;
+        const barB=`<div style="flex:1;background:var(--bg3);border-radius:3px;height:${isTotal?'20':'16'}px;overflow:hidden;position:relative"><div style="width:${pctB}%;height:100%;background:var(--blue);opacity:${bWin&&isTotal?'.35':'.2'};border-radius:3px;position:absolute;left:0;top:0"></div><div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:7px;font-family:'JetBrains Mono',monospace;font-size:${isTotal?'13':'11'}px;font-weight:${isTotal||isSub?700:400};color:${bCol}">${bv}</div></div>`;
+        const topStyle=isTotal?'padding-top:8px;border-top:1px solid var(--border);margin-top:6px':isSub?'padding-top:5px;border-top:1px dashed rgba(255,255,255,.1);margin-top:2px;margin-bottom:4px':'margin-bottom:4px';
+        return`<div style="display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;${topStyle}">${barR}<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:${isTotal||isSub?900:700};font-size:${isTotal?'11':'10'}px;letter-spacing:.08em;text-transform:uppercase;color:${isTotal?'var(--text2)':p.col}">${p.label}</div>${barB}</div>`;
+      };
+      return`<tr id="${bdId}" class="mx-bd"><td colspan="9" style="padding:0"><div style="padding:14px 24px 16px">
+        <div style="display:grid;grid-template-columns:1fr 90px 1fr;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+          <div style="text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${rWin?'var(--loss)':'var(--text3)'}">RED ALLIANCE</div>
+          <div></div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;letter-spacing:.1em;color:${bWin?'var(--blue)':'var(--text3)'}">BLUE ALLIANCE</div>
+        </div>
+        ${bdPhases.map(makeRow).join('')}
+        <div style="margin-top:10px;text-align:right;font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase">Click row to close</div>
+      </div></td></tr>`;
+    })();
+
+    const clickable = isPlayed&&bdPanel?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
+
+    return `<tr class="${hasTracked?'hl':''}" ${clickable}>
+      <td class="dim" style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;white-space:nowrap">${typeLabel}</td>
+      <td class="r dim" style="white-space:nowrap">${matchLabel}</td>
+      <td class="r" style="padding:0 4px">${timeCell}</td>
+      <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;${rWin?'background:rgba(255,61,90,.04)':''}">${rt}</td>
+      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${rWin?700:400};color:${rWin?'var(--loss)':isPlayed?'var(--text3)':'var(--text3)'};${rWin?'background:rgba(255,61,90,.04)':''}">${isPlayed?rs:'–'}</td>
+      <td style="text-align:center;color:var(--text3);font-size:10px;padding:0 2px">–</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:${bWin?700:400};color:${bWin?'var(--blue)':isPlayed?'var(--text3)':'var(--text3)'};${bWin?'background:rgba(56,168,255,.04)':''}">${isPlayed?bs:'–'}</td>
+      <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;${bWin?'background:rgba(56,168,255,.04)':''}">${bt}</td>
+      <td class="r" style="white-space:nowrap">${predCell}</td>
+      <td class="r" style="padding-right:8px">${mtBtn}</td>
+    </tr>${bdPanel}`;
+  }).join('');
+
+  document.getElementById('pg-divmatches').innerHTML = `
+<div class="sh"><h2>${divName} <span>Matches</span></h2><span class="sub">${played} of ${total} matches played</span></div>
+<div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table>
+  <thead><tr>
+    <th>Type</th><th class="r">Match</th><th></th>
+    <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
+    <th class="r" style="color:var(--loss)">Red</th>
+    <th></th>
+    <th style="color:var(--blue)">Blue</th>
+    <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
+    <th class="r">Pred / Result</th>
+    <th class="r"></th>
+  </tr></thead>
+  <tbody>${rows}</tbody>
+</table></div></div>`;
+}
 // ── Match Log (Houston) — full season for all 75 teams ──
 function renderHMx(){
   // If no teams selected, show prompt — avoids rendering 3000+ matches
@@ -3333,7 +3553,7 @@ function renderEv(evKey){
   const rkData=HDB.divisionEvent?.rankings||{};
   const rkList=rkData.rankings||[];
   document.getElementById('pg-standings').innerHTML=`
-<div class="sh"><h2>Event <span>Standings</span></h2><span class="sub">${HDB.division} · ${rkList.length||'–'} teams${rkList.length?'':' (pre-event)'}</span></div>
+<div class="sh"><h2>${HDB.division||'Division'} <span>Standings</span></h2><span class="sub">${HDB.division} · ${rkList.length||'–'} teams${rkList.length?'':' (pre-event)'}</span></div>
 ${!divKey?`<div class="pending-banner">Division event key not yet configured. Set HOUSTON_DIVISION_EVENT_KEY in Vercel env vars once division is announced.</div>`:
   rkList.length===0?`<div class="pending-banner" style="background:rgba(56,168,255,.06);border-color:rgba(56,168,255,.3)">Data available once event begins — run a Match Update to refresh.</div>`:
   `<div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table>
@@ -3465,6 +3685,7 @@ function renderMxTable(matches){
     <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
     <th class="r" style="cursor:pointer;user-select:none" onclick="setSort('mx','pred')">${aceLoaded?'Pred':'Winner'}</th>
     ${aceLoaded?'<th class="r" style="cursor:pointer;user-select:none" onclick="setSort(\'mx\',\'result\')">Result</th>':''}
+    <th class="r"></th>
   </tr></thead>
   <tbody>${(()=>{ let lastEv=null; return sorted.map(m=>{
     const redKeys=m.alliances?.red?.team_keys||[];
@@ -3560,6 +3781,12 @@ function renderMxTable(matches){
       <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${bWin?'background:rgba(56,168,255,.04)':''}">${bt}</td>
       <td class="r" style="white-space:nowrap">${aceLoaded?predCell:resultBadge}</td>
       ${aceLoaded?`<td class="r">${resultCell}</td>`:''}
+      <td class="r" style="padding-right:8px">${(()=>{
+        const isCT=MATCH_TRACK_KEY===m.key;
+        const oc=isCT?'clearMatchTrack()':`matchTrack('${m.key}',${JSON.stringify(redKeys)},${JSON.stringify(blueKeys)})`;
+        const st=isCT?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)';
+        return`<button onclick="event.stopPropagation();${oc}" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;cursor:pointer;white-space:nowrap;${st}">${isCT?'★ Tracking':'Match Track'}</button>`;
+      })()}</td>
     </tr>${bdPanel}`;}).join('')})()}</tbody></table>`;}
 
 // Double-tap logo on mobile / triple-click on desktop to toggle admin mode
