@@ -3193,6 +3193,9 @@ function matchTrack(matchKey, redKeys, blueKeys) {
   H_TRACKED_FILTER = new Set(newTracked);
   syncTrackedFilter();
   renderAll();
+  // Re-apply div matches filter after render
+  const dmf = document.getElementById('divmx-filter');
+  if (dmf && dmf.value.trim()) filterDivMatches(dmf.value);
 }
 
 function clearMatchTrack() {
@@ -3202,6 +3205,9 @@ function clearMatchTrack() {
   H_TRACKED_FILTER = new Set();
   syncTrackedFilter();
   renderAll();
+  // Re-apply div matches filter after render
+  const dmf = document.getElementById('divmx-filter');
+  if (dmf && dmf.value.trim()) filterDivMatches(dmf.value);
 }
 
 function allianceBadge(teamNum) {
