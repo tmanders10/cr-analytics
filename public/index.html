@@ -3139,7 +3139,7 @@ ${!hasDivData?`<div class="pending-banner" style="background:rgba(56,168,255,.06
           <div style="margin-top:10px;text-align:right;font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase">Alliance totals · click row to close</div>
         </div></td></tr>`;
       })();
-      const clickable=bdPanel?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
+      const clickable=bdPanel?`style="cursor:pointer" onclick="if(event.target.tagName!=='BUTTON'){const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')}"` :'';
       return`<tr ${clickable}>
         <td class="dim">${i+1}</td>
         <td class="dim" style="font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap">${row.evShort}</td>
@@ -3327,7 +3327,7 @@ function renderHDivMatches() {
       </div></td></tr>`;
     })();
 
-    const clickable = isPlayed&&bdPanel?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
+    const clickable = isPlayed&&bdPanel?`style="cursor:pointer" onclick="if(event.target.tagName!=='BUTTON'){const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')}"` :'';
 
     return `<tr class="${hasTracked?'hl':''}" ${clickable}>
       <td class="dim" style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;white-space:nowrap">${typeLabel}</td>
@@ -3768,7 +3768,7 @@ function renderMxTable(matches){
         <div style="margin-top:10px;text-align:right;font-size:9px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase">Alliance totals · click row to close</div>
       </div></td></tr>`;
     })();
-    const clickable=!isUnplayed&&bdPanel?`style="cursor:pointer" onclick="const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')"` :'';
+    const clickable=!isUnplayed&&bdPanel?`style="cursor:pointer" onclick="if(event.target.tagName!=='BUTTON'){const r=document.getElementById('${bdId}');if(r)r.classList.toggle('open')}"` :'';
     return`${evBoundary}<tr class="${hasT?'hl':''}" ${clickable}>
       <td><span class="badge ${m._ec}">${m._esh}</span></td>
       <td><span style="font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;color:var(--text3)">${m.comp_level==='qm'?'QUAL':m.comp_level==='f'?'FINAL':m.comp_level==='sf'?'SF':m.comp_level.toUpperCase()}</span></td>
