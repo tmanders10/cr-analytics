@@ -3280,13 +3280,15 @@ function renderHDivMatches() {
 
     // Match Track button
     const isCurrentlyTracked = MATCH_TRACK_KEY === m.key;
+    const rkS=JSON.stringify(redKeys).replace(/"/g,"'");
+    const bkS=JSON.stringify(blueKeys).replace(/"/g,"'");
     const mtOnclick = isCurrentlyTracked
       ? 'clearMatchTrack()'
-      : `matchTrack('${m.key}',${JSON.stringify(redKeys)},${JSON.stringify(blueKeys)})`;
+      : `matchTrack('${m.key}',${rkS},${bkS})`;
     const mtStyle = isCurrentlyTracked
       ? 'background:var(--green);color:#030803;border:1px solid var(--green)'
       : 'background:transparent;color:var(--text3);border:1px solid var(--border2)';
-    const mtBtn = `<button onclick="event.stopPropagation();${mtOnclick}" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;cursor:pointer;white-space:nowrap;${mtStyle}">${isCurrentlyTracked?'★ Tracking':'Match Track'}</button>`;
+    const mtBtn = `<button onclick="${mtOnclick}" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;cursor:pointer;white-space:nowrap;${mtStyle}">${isCurrentlyTracked?'★ Tracking':'Match Track'}</button>`;
 
     // Breakdown panel
     const bdId = `divbd-${m.key}`;
@@ -3783,9 +3785,11 @@ function renderMxTable(matches){
       ${aceLoaded?`<td class="r">${resultCell}</td>`:''}
       <td class="r" style="padding-right:8px">${(()=>{
         const isCT=MATCH_TRACK_KEY===m.key;
-        const oc=isCT?'clearMatchTrack()':`matchTrack('${m.key}',${JSON.stringify(redKeys)},${JSON.stringify(blueKeys)})`;
+        const rk=JSON.stringify(redKeys).replace(/"/g,"'");
+        const bk=JSON.stringify(blueKeys).replace(/"/g,"'");
+        const oc=isCT?'clearMatchTrack()':`matchTrack('${m.key}',${rk},${bk})`;
         const st=isCT?'background:var(--green);color:#030803;border:1px solid var(--green)':'background:transparent;color:var(--text3);border:1px solid var(--border2)';
-        return`<button onclick="event.stopPropagation();${oc}" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;cursor:pointer;white-space:nowrap;${st}">${isCT?'★ Tracking':'Match Track'}</button>`;
+        return`<button onclick="${oc}" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;cursor:pointer;white-space:nowrap;${st}">${isCT?'★ Tracking':'Match Track'}</button>`;
       })()}</td>
     </tr>${bdPanel}`;}).join('')})()}</tbody></table>`;}
 
