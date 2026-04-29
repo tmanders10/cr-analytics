@@ -689,6 +689,12 @@ async function toggleHoustonMode(){
     ACE_DATA={};
     loadACEFromDB();
   }
+  // Clear tracked teams and match track state on every mode switch
+  TRACKED=[];
+  H_TRACKED_FILTER=new Set();
+  MATCH_TRACK_KEY=null;
+  MATCH_TRACK_ALLIANCES={};
+  syncTrackedFilter();
   applyHoustonMode();
   renderAll();
   if(HOUSTON_MODE){
