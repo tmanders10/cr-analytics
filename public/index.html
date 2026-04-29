@@ -927,6 +927,7 @@ async function manualRefresh(){
 }
 
 async function quickRefresh(){
+  if(HOUSTON_MODE){ houstonMatchRefresh(); return; }
   const btn=document.getElementById('quickRefreshBtn');
   btn.disabled=true;
   btn.classList.add('loading');
