@@ -2643,7 +2643,12 @@ function renderHOv(){
 
   // ── Livestream section ──
   function streamSection(){
-    if(!hasDivData) return '';
+    // Show streams from April 29 through May 2 regardless of division match data
+    const now = new Date();
+    const eventStart = new Date('2026-04-29T00:00:00');
+    const eventEnd   = new Date('2026-05-03T00:00:00'); // end of May 2
+    const isEventWeek = now >= eventStart && now < eventEnd;
+    if(!isEventWeek) return '';
 
     // Johnson Division — one stream per day, pre-loaded YouTube IDs
     const JOHNSON_STREAMS = {
