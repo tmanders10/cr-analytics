@@ -3347,16 +3347,29 @@ function renderHDivMatches() {
 
   document.getElementById('pg-divmatches').innerHTML = `
 <div class="sh"><h2>${divName} <span>Matches</span></h2><span class="sub">${played} of ${total} matches played</span></div>
-<div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table>
+<div class="card" style="padding:0 18px 0"><div class="tw tw-scroll"><table style="table-layout:fixed;width:100%"><colgroup>
+    <col style="width:40px"/>
+    <col style="width:46px"/>
+    <col style="width:28px"/>
+    <col style="width:calc(50% - 181px)"/>
+    <col style="width:44px"/>
+    <col style="width:14px"/>
+    <col style="width:44px"/>
+    <col style="width:calc(50% - 181px)"/>
+    <col style="width:86px"/>
+    <col style="width:88px"/>
+  </colgroup>
   <thead><tr>
-    <th>Type</th><th class="r">Match</th><th></th>
+    <th style="font-size:10px">Type</th>
+    <th class="r" style="font-size:10px">#</th>
+    <th></th>
     <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
     <th class="r" style="color:var(--loss)">Red</th>
-    <th></th>
+    <th style="text-align:center;color:var(--text3);font-size:10px">–</th>
     <th style="color:var(--blue)">Blue</th>
     <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
     <th class="r">Pred / Result</th>
-    <th class="r"></th>
+    <th class="r" style="font-size:10px;color:var(--text3)">Track</th>
   </tr></thead>
   <tbody>${rows}</tbody>
 </table></div></div>`;
@@ -3663,31 +3676,32 @@ function renderMxTable(matches){
     return {red:redProb, blue:1-redProb, redAce, blueAce, source: 'ace'};
   }
   return`<table style="table-layout:fixed;width:100%"><colgroup>
-    <col style="width:52px"/>
+    <col style="width:44px"/>
+    <col style="width:40px"/>
     <col style="width:46px"/>
-    <col style="width:54px"/>
-    <col style="width:58px"/>
-    <col style="width:calc(50% - 187px)"/>
-    <col style="width:48px"/>
-    <col style="width:10px"/>
-    <col style="width:48px"/>
-    <col style="width:calc(50% - 187px)"/>
-    <col style="width:${aceLoaded?'80px':'56px'}"/>
-    <col style="width:${aceLoaded?'52px':'0px'}"/>
+    <col style="width:28px"/>
+    <col style="width:calc(50% - 195px)"/>
+    <col style="width:44px"/>
+    <col style="width:14px"/>
+    <col style="width:44px"/>
+    <col style="width:calc(50% - 195px)"/>
+    <col style="width:${aceLoaded?'86px':'56px'}"/>
+    <col style="width:${aceLoaded?'46px':'0px'}"/>
+    <col style="width:88px"/>
   </colgroup>
   <thead><tr>
-    <th style="cursor:pointer;user-select:none" onclick="setSort('mx','ev')">Event</th>
-    <th style="cursor:pointer;user-select:none" onclick="setSort('mx','type')">Type</th>
-    <th class="r" style="cursor:pointer;user-select:none" onclick="setSort('mx','match')">Match</th>
+    <th style="cursor:pointer;user-select:none;font-size:10px" onclick="setSort('mx','ev')">Event</th>
+    <th style="cursor:pointer;user-select:none;font-size:10px" onclick="setSort('mx','type')">Type</th>
+    <th class="r" style="cursor:pointer;user-select:none;font-size:10px" onclick="setSort('mx','match')">#</th>
     <th></th>
     <th style="color:rgba(255,61,90,.7)">Red Alliance</th>
     <th class="r" style="color:var(--loss);cursor:pointer;user-select:none" onclick="setSort('mx','red')">Red</th>
-    <th></th>
+    <th style="text-align:center;color:var(--text3);font-size:10px">–</th>
     <th style="color:var(--blue)">Blue</th>
     <th style="color:rgba(56,168,255,.7)">Blue Alliance</th>
     <th class="r" style="cursor:pointer;user-select:none" onclick="setSort('mx','pred')">${aceLoaded?'Pred':'Winner'}</th>
-    ${aceLoaded?'<th class="r" style="cursor:pointer;user-select:none" onclick="setSort(\'mx\',\'result\')">Result</th>':''}
-    <th class="r"></th>
+    ${aceLoaded?'<th class="r" style="cursor:pointer;user-select:none;font-size:10px" onclick="setSort(\'mx\',\'result\')">Result</th>':''}
+    <th class="r" style="font-size:10px;color:var(--text3)">Track</th>
   </tr></thead>
   <tbody>${(()=>{ let lastEv=null; return sorted.map(m=>{
     const redKeys=m.alliances?.red?.team_keys||[];
