@@ -3565,7 +3565,16 @@ function renderHMxTable(teamNums,teamMatchMap,aceLoaded){
       <td class="dim" style="font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${(m._hev||'').replace('2026','').toUpperCase()}</td>
       <td class="dim" style="font-size:10px;font-family:'Barlow Condensed',monospace;font-weight:700;letter-spacing:.06em">${typeLabel}</td>
       <td class="r dim" style="white-space:nowrap">${m.comp_level==='qm'?m.match_number:`${m.set_number}-${m.match_number}`}</td>
-      <td class="r" style="padding:0 2px">${videoLink(matchVideoUrl(m))}</td>
+      <td style="padding:0 4px;white-space:nowrap">${(()=>{
+        const vl=videoLink(matchVideoUrl(m));
+        if(vl) return vl;
+        if(isUnplayed&&m.predicted_time){
+          const d=new Date(m.predicted_time*1000);
+          const hh=d.getHours()%12||12,mm=String(d.getMinutes()).padStart(2,'0'),ap=d.getHours()<12?'am':'pm';
+          return`<span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3)">${hh}:${mm}${ap}</span>`;
+        }
+        return '';
+      })()}</td>
       <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${rt}</td>
       <td class="r" style="${rWin?'color:var(--win);font-weight:600':bWin?'color:var(--text3)':'color:var(--text3)'}">${rs}</td>
       <td class="dim" style="text-align:center;font-size:10px">–</td>
