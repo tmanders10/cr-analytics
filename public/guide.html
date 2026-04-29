@@ -371,7 +371,7 @@
     <p>The status bar contains two groups of filter pills on the right side, separated by a thin divider:</p>
 
     <h3>Match type pills (green) — Quals · Playoffs · All</h3>
-    <p>Controls which match type is shown across the entire site. The active pill is filled green. This affects: Scoring Analysis, Team Tracker cards, Match Log, and the Overview phase stats. Defaults to <strong>Quals</strong> on each page load.</p>
+    <p>Controls which match type is shown across the entire site. The active pill is filled green. This affects: Scoring Analysis, Team Tracker cards, Match Log, and the Overview phase stats. Defaults to <strong>All</strong> on each page load.</p>
 
     <h3>Event pills (blue) — DAL · GWI · COL · ALB · GAI · CMP</h3>
     <p>Filters all statistics and views to one or more specific events. Click a pill to activate it — click again to deselect. Multiple pills can be active simultaneously. Active pills are filled blue. Unloaded events appear dimmed and are not clickable.</p>
@@ -475,6 +475,16 @@
 
     <h3>Filtering</h3>
     <p>Use the <strong>Filter by team #</strong> input above the table to narrow matches to a specific team. Match type (Quals / Playoffs / All) and event filtering are both controlled by the global status bar pills.</p>
+
+    <h3>Match Track</h3>
+    <p>Every match row has a <strong>Match Track</strong> button on the right. Clicking it instantly clears any currently tracked teams and loads all six teams from that match into the Team Tracker — red alliance teams first (slots 1–3), then blue alliance teams (slots 4–6). This lets you quickly pivot the Team Tracker, Scoring Analysis, and Match History views to focus on a specific match's participants without manually adding each team.</p>
+    <ul>
+      <li>Tracked team cards display a <strong>Red Alliance</strong> or <strong>Blue Alliance</strong> badge in the appropriate color while Match Track is active.</li>
+      <li>The active Match Track row is highlighted with a green <strong>★ Tracking</strong> button. Clicking it again clears tracking.</li>
+      <li>Manually removing any tracked team clears Match Track mode and all alliance badges.</li>
+      <li>Clicking Match Track on a different row replaces all six teams with the new match's participants.</li>
+      <li>Tracked teams are cleared automatically when switching between PCH and Championship modes.</li>
+    </ul>
   </div>
 
   <!-- EVENT STANDINGS -->
@@ -533,7 +543,7 @@
     <ol>
       <li><a href="#houston-mode">Houston Championship Mode</a></li>
       <li><a href="#houston-tabs">Houston Tabs Overview</a></li>
-      <li><a href="#houston-tracking">Houston Team Tracking</a></li>
+      <li><a href="#houston-tracking">Houston Team Tracking &amp; Match Track</a></li>
       <li><a href="#houston-data">Houston Data Sources</a></li>
     </ol>
   </div>
@@ -590,12 +600,16 @@
           <td>Same card-based experience as PCH mode. Up to 9 teams can be tracked simultaneously (3 additional slots vs PCH). Teams are selected via the <strong>Team Tracking</strong> popup in the top-right corner. Each card shows match history, phase averages, EPA, ACE, and Shifts — all sourced from pre-championship event data until division matches begin, then switching to division data. See the <a href="#houston-tracking">Houston Team Tracking</a> section for popup details.</td>
         </tr>
         <tr>
-          <td class="tab-name">Match Log</td>
-          <td>Shows division event matches grouped by tracked team once teams are selected. Each group shows that team's matches with both alliances displayed. Pre-event, the Match Log is blank with a prompt to select teams via the Team Tracking popup. Once the division event begins and teams are tracked, match rows populate with live data. Click any played match row to expand the phase breakdown panel.</td>
+          <td class="tab-name">Match History</td>
+          <td>Pre-event match data for tracked teams only — same behavior as the PCH Match Log but sourced from each team's most recent 2026 pre-championship event. Shows no matches until at least one team is tracked (individually or via Match Track). Includes AVG/LAST 10/TRIMMED filters, phase breakdown panels, and win predictions. The tab header shows the event name the data comes from (e.g. <em>GACMP Match History</em>).</td>
         </tr>
         <tr>
-          <td class="tab-name">Event Standings</td>
-          <td>Official division event rankings from TBA. Columns include Rank, Team, Record, and Ranking Score. Updates automatically during competition days. Pre-event, this tab is empty pending division data.</td>
+          <td class="tab-name">[Division] Matches</td>
+          <td>Full division event schedule — all matches, played and unplayed, sorted by match number (Quals → Semis → Finals). Each row shows both alliances with team numbers highlighted in tracked colors. Unplayed matches show predicted start time and Statbotics win probability. Played matches show scores and the phase breakdown panel on click. Every row has a <strong>Match Track</strong> button — see the Match Track section below.</td>
+        </tr>
+        <tr>
+          <td class="tab-name">[Division] Standings</td>
+          <td>Official division event rankings from TBA. Updates automatically during competition days. Pre-event, this tab is empty pending division data.</td>
         </tr>
       </tbody>
     </table>
@@ -604,7 +618,7 @@
   <!-- HOUSTON TEAM TRACKING -->
   <div class="section">
     <span class="section-anchor" id="houston-tracking"></span>
-    <h2>Houston <span>Team Tracking</span></h2>
+    <h2>Houston <span>Team Tracking &amp; Match Track</span></h2>
 
     <h3>The Team Tracking popup</h3>
     <p>In Houston Mode, team selection is handled through a dedicated popup rather than a text input. Click the <strong>Team Tracking</strong> button in the top-right corner of the status bar to open it. The popup lists all teams in the division with their EPA and global rank. Click any team to add or remove them from your tracked list.</p>
@@ -628,6 +642,19 @@
 
     <h3>Reordering</h3>
     <p>Drag tracked team cards on the Team Tracker tab to reorder them. Colors follow position — reordering reassigns colors to keep the most prominent teams in the most visible color slots.</p>
+
+    <h3>Match Track</h3>
+    <p>The <strong>[Division] Matches</strong> tab has a <strong>Match Track</strong> button on every row. Clicking it clears all current tracked teams and loads the six teams from that match — red alliance teams first (slots 1–3), then blue alliance teams (slots 4–6). This is the fastest way to load a specific upcoming or recent match for analysis.</p>
+    <ul>
+      <li>Team cards show a <strong>Red Alliance</strong> or <strong>Blue Alliance</strong> badge (in red or blue) while Match Track is active.</li>
+      <li>The badge also appears in the Team Tracker summary table next to the team name.</li>
+      <li>Clicking the active match's <strong>★ Tracking</strong> button clears all six teams.</li>
+      <li>Clicking Match Track on a different match replaces all six with the new match's teams.</li>
+      <li>Manually removing any tracked team exits Match Track mode and clears all badges.</li>
+    </ul>
+
+    <h3>Tracked teams and mode switching</h3>
+    <p>Tracked teams do not persist between modes. Switching from PCH to Championship mode (or back) automatically clears all tracked teams, alliance badges, and any active Match Track state — giving you a clean slate in the new mode.</p>
 
     <h3>Livestream management</h3>
     <p>On the Overview tab during the live event, two stream embeds appear — Overhead View and Field View. Click the pencil <strong>✎</strong> icon next to either stream to enter a YouTube URL or video ID. The stream saves to your browser session and persists across tab switches. To update a stream URL mid-event, click the pencil icon again.</p>
